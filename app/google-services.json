@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1084910122185",
+    "project_id": "mobi-ledger",
+    "storage_bucket": "mobi-ledger.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1084910122185:android:9d1deb32bd4b84d7bb8918",
+        "android_client_info": {
+          "package_name": "com.example.mobiledger"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1084910122185-cph4j8lqr3rqnu57moqdmiamks6igcmd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAzAihB9UToinvpc300F_LqEBhRH-StmfI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1084910122185-cph4j8lqr3rqnu57moqdmiamks6igcmd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
