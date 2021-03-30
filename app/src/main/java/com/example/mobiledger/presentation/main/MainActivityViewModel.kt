@@ -1,4 +1,4 @@
-package com.example.mobiledger.presenation.main
+package com.example.mobiledger.presentation.main
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

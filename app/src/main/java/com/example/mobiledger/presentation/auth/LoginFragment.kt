@@ -1,29 +1,22 @@
 package com.example.mobiledger.presentation.auth
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import com.example.mobiledger.R
+import com.example.mobiledger.common.base.BaseFragment
+import com.example.mobiledger.common.base.BaseNavigator
+import com.example.mobiledger.databinding.FragmentLoginBinding
 
 
-class LoginFragment : Fragment() {
+class LoginFragment : BaseFragment<FragmentLoginBinding, BaseNavigator>(R.layout.fragment_login) {
+
+    private val viewModel: LoginViewModel by viewModels { viewModelFactory }
 
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-
-        }
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_login, container, false)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        viewModel.loginUserViaEmail()
     }
 
     companion object {

@@ -1,8 +1,7 @@
-package com.example.mobiledger.presenation.home
+package com.example.mobiledger.presentation.home
 
 import android.os.Bundle
 import android.view.View
-import androidx.fragment.app.viewModels
 import com.example.mobiledger.R
 import com.example.mobiledger.common.base.BaseFragment
 import com.example.mobiledger.databinding.FragmentHomeBinding

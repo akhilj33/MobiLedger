@@ -1,10 +1,10 @@
-package com.example.mobiledger.presenation.main
+package com.example.mobiledger.presentation.main
 
 import androidx.annotation.IdRes
 import androidx.fragment.app.FragmentManager
 import com.example.mobiledger.common.utils.FragmentTransactionHelper
-import com.example.mobiledger.presenation.home.HomeFragment
-import com.example.mobiledger.presenation.home.HomeNavigator
+import com.example.mobiledger.presentation.home.HomeFragment
+import com.example.mobiledger.presentation.home.HomeNavigator
 import com.example.mobiledger.presentation.auth.LoginFragment
 
 class MainActivityNavigator constructor(
