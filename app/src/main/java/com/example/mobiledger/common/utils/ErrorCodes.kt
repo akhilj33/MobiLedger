@@ -19,6 +19,9 @@ object ErrorCodes {
     const val HTTP_SERVICE_UNAVAILABLE = "503"
     const val HTTP_GATEWAY_TIMEOUT = "504"
 
+    //firebase errors
+    const val FIREBASE_ERROR = "505"
+
 
     //Api error
 }

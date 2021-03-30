@@ -1,20 +1,23 @@
 package com.example.mobiledger.data
 
-import com.example.mobiledger.common.utils.JsonUtils
 import com.example.mobiledger.common.utils.ErrorCodes
+import com.example.mobiledger.common.utils.JsonUtils
 import com.example.mobiledger.data.sources.api.model.response.ErrorResponse
 import com.example.mobiledger.domain.AppError
+import com.example.mobiledger.domain.FireBaseResult
 import com.example.mobiledger.domain.RetrofitResult
+import com.google.firebase.FirebaseException
 import retrofit2.HttpException
 import retrofit2.Response
 import java.net.ConnectException
 
 object ErrorMapper {
-    fun <T> checkAndMapError(response: Response<T>?, exception: Exception?): RetrofitResult<T> {
+    fun <T> checkAndMapRESTApiError(response: Response<T>?, exception: Exception?): RetrofitResult<T> {
 
         return when {
             exception != null -> {
-                mapExceptionToError(exception)
+                val error = mapExceptionToError(exception)
+                RetrofitResult.Failure(error)
             }
             response != null -> {
                 checkAndMapApiError(response)
@@ -40,6 +43,22 @@ object ErrorMapper {
             )
         }
     }
+
+    fun <T> checkAndMapFirebaseApiError(response: T?, exception: Exception?): FireBaseResult<T> {
+
+        return when {
+            exception != null -> {
+                val error = mapExceptionToError(exception)
+                FireBaseResult.Failure(error)
+            }
+            response != null -> {
+                FireBaseResult.Success(response)
+            }
+            else -> {
+                FireBaseResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
+            }
+        }
+    }
 }
 
 private fun mapErrorCode(code: Int, message: String? = null): AppError {
@@ -58,17 +77,20 @@ private fun mapErrorCode(code: Int, message: String? = null): AppError {
     }
 }
 
-private fun mapExceptionToError(exception: Exception?): RetrofitResult.Failure {
-    val error = when (exception) {
+private fun mapExceptionToError(exception: Exception?): AppError {
+    return when (exception) {
         is HttpException -> {
             mapErrorCode(exception.code())
         }
         is ConnectException -> {
             AppError(ErrorCodes.OFFLINE)
         }
+        is FirebaseException -> {
+            val errorMessage = exception.localizedMessage ?: ErrorCodes.GENERIC_ERROR
+            AppError(code = ErrorCodes.FIREBASE_ERROR, message = errorMessage)
+        }
         else -> {
             AppError(ErrorCodes.GENERIC_ERROR)
         }
     }
-    return RetrofitResult.Failure(error)
 }

@@ -11,3 +11,8 @@ sealed class RetrofitResult<out T> {
     data class Success<out T>(val data: T?) : RetrofitResult<T>()
     data class Failure(val error: AppError) : RetrofitResult<Nothing>()
 }
+
+sealed class FireBaseResult<out T> {
+    data class Success<out T>(val data: T?) : FireBaseResult<T>()
+    data class Failure(val error: AppError) : FireBaseResult<Nothing>()
+}

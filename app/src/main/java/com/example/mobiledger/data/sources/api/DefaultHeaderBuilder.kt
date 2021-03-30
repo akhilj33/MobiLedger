@@ -2,8 +2,8 @@ package com.example.mobiledger.data.sources.api
 
 object DefaultHeaderBuilder {
     fun getDefaultHeaders(
-            contentType: ContentType,
-            accessToken: String
+        contentType: ContentType,
+        accessToken: String
     ): MutableMap<String, String> {
         val content = when (contentType) {
             ContentType.JSON -> ContentType.JSON.type

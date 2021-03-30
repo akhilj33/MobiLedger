@@ -11,8 +11,9 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import com.example.mobiledger.common.di.DependencyProvider
 import com.example.mobiledger.common.showToast
-import com.example.mobiledger.presenation.main.MainActivityViewModel
+import com.example.mobiledger.presentation.main.MainActivityViewModel
 import timber.log.Timber
 
 abstract class BaseFragment<B : ViewDataBinding, NV : BaseNavigator>(
@@ -23,7 +24,7 @@ abstract class BaseFragment<B : ViewDataBinding, NV : BaseNavigator>(
     private var _viewBinding: B? = null
     protected var navigator: NV? = null
 
-    //    protected val viewModelFactory = DependencyProvider.provideViewModelFactory()
+        protected val viewModelFactory = DependencyProvider.provideViewModelFactory()
     protected val activityViewModel: MainActivityViewModel by activityViewModels()
 
     val viewBinding get() = _viewBinding!!

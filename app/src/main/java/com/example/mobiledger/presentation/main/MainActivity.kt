@@ -4,7 +4,6 @@ import android.os.Bundle
 import com.example.mobiledger.R
 import com.example.mobiledger.common.base.BaseActivity
 import com.example.mobiledger.databinding.ActivityMainBinding
-import com.example.mobiledger.presenation.main.MainActivityNavigator
 
 
 class MainActivity :
@@ -24,7 +23,7 @@ class MainActivity :
                 supportFragmentManager
             )
 
-        mainActivityNavigator?.navigateToHomeScreen()
+        mainActivityNavigator?.navigateToLoginScreen()
 
     }
 
