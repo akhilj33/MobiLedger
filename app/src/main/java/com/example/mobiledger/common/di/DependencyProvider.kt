@@ -19,10 +19,12 @@ object DependencyProvider {
     /*-------------------------------Sources------------------------------------------*/
 
     private val retrofitProvider: RetrofitProvider = RetrofitProvider()
+    private val firebaseAuthProvider : FirebaseAuthProvider = FirebaseAuthProvider()
 
     private val apiSourceProvider: ApiSourceProvider by lazy {
         ApiSourceProvider(
-            retrofitProvider
+            retrofitProvider,
+            firebaseAuthProvider
         )
     }
 

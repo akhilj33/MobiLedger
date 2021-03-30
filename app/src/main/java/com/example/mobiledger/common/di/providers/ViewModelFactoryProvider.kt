@@ -16,7 +16,9 @@ class ViewModelFactoryProvider(private val useCaseProvider: UseCaseProvider) :
             }
 
             modelClass.isAssignableFrom(HomeViewModel::class.java) -> {
-                return HomeViewModel() as T
+                return HomeViewModel(
+                    useCaseProvider.provideAuthUseCase()
+                ) as T
             }
             else -> throw IllegalArgumentException("Unknown ViewModel Class")
         }

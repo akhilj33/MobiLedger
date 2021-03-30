@@ -24,7 +24,7 @@ class MainActivity :
                 supportFragmentManager
             )
 
-        mainActivityNavigator?.navigateToHomeScreen()
+        mainActivityNavigator?.navigateToLoginScreen()
 
     }
 
