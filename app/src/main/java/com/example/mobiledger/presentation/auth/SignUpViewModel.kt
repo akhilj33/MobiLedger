@@ -11,19 +11,19 @@ import com.example.mobiledger.domain.usecases.AuthUseCase
 import com.example.mobiledger.presentation.Event
 import kotlinx.coroutines.launch
 
-class LoginViewModel(private val authUseCase: AuthUseCase) : BaseViewModel() {
+class SignUpViewModel(private val authUseCase: AuthUseCase) : BaseViewModel() {
 
-    val signInResult: LiveData<Event<AuthEntity>> get() = _signInResultLiveData
-    private val _signInResultLiveData: MutableLiveData<Event<AuthEntity>> = MutableLiveData()
+    val signUpResult: LiveData<Event<AuthEntity>> get() = _signUpResultLiveData
+    private val _signUpResultLiveData: MutableLiveData<Event<AuthEntity>> = MutableLiveData()
 
     private val _errorLiveData: MutableLiveData<Event<AppError>> = MutableLiveData()
     val errorLiveData: LiveData<Event<AppError>> = _errorLiveData
 
-    fun loginUserViaEmail(email: String, password: String) {
+    fun signUpViaEmail(email: String, password: String) {
         viewModelScope.launch {
-            when (val result = authUseCase.loginViaEmail(email, password)) {
+            when (val result = authUseCase.signUpViaEmail(email = email, password = password)) {
                 is AppResult.Success -> {
-                    _signInResultLiveData.value = Event(result.data)
+                    _signUpResultLiveData.value = Event(result.data)
                 }
                 is AppResult.Failure -> {
                     _errorLiveData.value = Event(result.error)
