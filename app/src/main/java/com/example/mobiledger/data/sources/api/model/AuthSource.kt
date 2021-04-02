@@ -37,7 +37,9 @@ class AuthSourceImpl(
                     AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
                 }
             }
-            is FireBaseResult.Failure -> AppResult.Failure(result.error)
+            is FireBaseResult.Failure -> {
+                AppResult.Failure(result.error)
+            }
         }
     }
 
@@ -59,7 +61,9 @@ class AuthSourceImpl(
                     AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
                 }
             }
-            is FireBaseResult.Failure -> AppResult.Failure(result.error)
+            is FireBaseResult.Failure -> {
+                AppResult.Failure(result.error)
+            }
         }
     }
 }

@@ -24,7 +24,7 @@ abstract class BaseFragment<B : ViewDataBinding, NV : BaseNavigator>(
     private var _viewBinding: B? = null
     protected var navigator: NV? = null
 
-        protected val viewModelFactory = DependencyProvider.provideViewModelFactory()
+    protected val viewModelFactory = DependencyProvider.provideViewModelFactory()
     protected val activityViewModel: MainActivityViewModel by activityViewModels()
 
     val viewBinding get() = _viewBinding!!

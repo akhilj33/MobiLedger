@@ -9,4 +9,6 @@
     <string name="forget_password">Forget Password</string>
     <string name="login">Login</string>
     <string name="new_user_sign_up">New user? SIGN UP</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="sign_up">Sign Up</string>
 </resources>
