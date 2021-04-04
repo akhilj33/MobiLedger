@@ -120,7 +120,6 @@
                     android:textColorHint="@color/colorPrimary"
                     android:hint="@string/password"
                     android:textSize="@dimen/sp_16" />
-
             </com.google.android.material.textfield.TextInputLayout>
 
             <Button
@@ -148,6 +147,16 @@
                 app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_90"
                 android:textSize="@dimen/sp_16" />
 
+        <ImageView
+            android:id="@+id/btnGoogleSignIn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/common_google_signin_btn_icon_dark"
+            app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_10"
+            app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_90"
+            app:layout_constraintTop_toBottomOf="@id/tvForgetPassword"
+            app:layout_constraintBottom_toTopOf="@id/tvSignUp"/>
+
             <TextView
                 android:id="@+id/tvSignUp"
                 android:layout_width="wrap_content"
@@ -158,7 +167,6 @@
                 app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_10"
                 app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_90"
                 android:textSize="@dimen/sp_16" />
-
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

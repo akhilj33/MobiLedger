@@ -7,6 +7,7 @@ import com.example.mobiledger.domain.entities.AuthEntity
 interface AuthUseCase {
     suspend fun loginViaEmail(email: String, password: String): AppResult<AuthEntity>
     suspend fun signUpViaEmail(email: String, password: String): AppResult<AuthEntity>
+    suspend fun signInViaGoogle(idToken: String?): AppResult<AuthEntity>
 }
 
 class AuthUseCaseImpl(
@@ -17,4 +18,7 @@ class AuthUseCaseImpl(
 
     override suspend fun signUpViaEmail(email: String, password: String): AppResult<AuthEntity>  =
         AuthRepository.signUpViaEmail(email, password)
+
+    override suspend fun signInViaGoogle(idToken: String?): AppResult<AuthEntity> =
+        AuthRepository.signInViaGoogle(idToken)
 }

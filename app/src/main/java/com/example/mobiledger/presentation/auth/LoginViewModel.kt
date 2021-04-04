@@ -31,4 +31,17 @@ class LoginViewModel(private val authUseCase: AuthUseCase) : BaseViewModel() {
             }
         }
     }
+
+    fun signInUserViaGoogle(idToken: String?) {
+        viewModelScope.launch {
+            when(val result = authUseCase.signInViaGoogle(idToken)){
+                is AppResult.Success -> {
+                    val a = result.data
+                }
+                is AppResult.Failure -> {
+                    val error = result.error
+                }
+            }
+        }
+    }
 }

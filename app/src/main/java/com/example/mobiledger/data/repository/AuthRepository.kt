@@ -11,7 +11,7 @@ import kotlinx.coroutines.withContext
 interface AuthRepository {
     suspend fun loginUsingEmail(email: String, password: String): AppResult<AuthEntity>
     suspend fun signUpViaEmail(email: String, password: String): AppResult<AuthEntity>
-
+    suspend fun signInViaGoogle(idToken: String?): AppResult<AuthEntity>
 }
 
 class AuthRepositoryImpl(
@@ -27,6 +27,12 @@ class AuthRepositoryImpl(
     override suspend fun signUpViaEmail(email: String, password: String): AppResult<AuthEntity> {
         return withContext(dispatcher) {
             authSource.signUpViaEmail(email, password)
+        }
+    }
+
+    override suspend fun signInViaGoogle(idToken: String?): AppResult<AuthEntity> {
+        return withContext(dispatcher) {
+            authSource.signInViaGoogle(idToken)
         }
     }
 }

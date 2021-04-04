@@ -9,11 +9,13 @@ import com.example.mobiledger.domain.entities.AuthEntity
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.GoogleAuthProvider
 import kotlinx.coroutines.tasks.await
 
 interface AuthSource {
     suspend fun loginUserViaEmail(email: String, password: String): AppResult<AuthEntity>
     suspend fun signUpViaEmail(email: String, password: String): AppResult<AuthEntity>
+    suspend fun signInViaGoogle(idToken: String?): AppResult<AuthEntity>
 }
 
 class AuthSourceImpl(
@@ -64,6 +66,28 @@ class AuthSourceImpl(
             is FireBaseResult.Failure -> {
                 AppResult.Failure(result.error)
             }
+        }
+    }
+
+    override suspend fun signInViaGoogle(idToken: String?): AppResult<AuthEntity> {
+        var response: AuthResult? = null
+        var exception: Exception? = null
+        val credential = GoogleAuthProvider.getCredential(idToken, null)
+        try {
+            response = firebaseAuth.signInWithCredential(credential).await()
+        } catch (e: Exception) {
+            exception = e
+        }
+
+        return when (val result = ErrorMapper.checkAndMapFirebaseApiError(response, exception)) {
+            is FireBaseResult.Success -> {
+                if (result.data != null && result.data.user != null) {
+                    AppResult.Success(authResultEntityMapper(result.data.user!!))
+                } else {
+                    AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
+                }
+            }
+            is FireBaseResult.Failure -> AppResult.Failure(result.error)
         }
     }
 }
