@@ -40,7 +40,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, LoginNavigator>(R.layou
             }
 
             tvSignUp.setOnClickListener {
-                navigator?.navigateToSignUpScreen()
+                navigator?.navigateLoginToSignUpScreen()
             }
 
             btnGoogleSignIn.setOnClickListener{
@@ -53,7 +53,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, LoginNavigator>(R.layou
         viewModel.signInResult.observe(
             viewLifecycleOwner,
             OneTimeObserver {
-                navigator?.navigateToHomeScreen()
+                navigator?.navigateAuthToHomeScreen()
             })
 
         viewModel.errorLiveData.observe(viewLifecycleOwner, OneTimeObserver {

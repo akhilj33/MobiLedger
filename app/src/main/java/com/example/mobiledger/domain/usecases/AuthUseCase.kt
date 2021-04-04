@@ -8,6 +8,8 @@ interface AuthUseCase {
     suspend fun loginViaEmail(email: String, password: String): AppResult<AuthEntity>
     suspend fun signUpViaEmail(email: String, password: String): AppResult<AuthEntity>
     suspend fun signInViaGoogle(idToken: String?): AppResult<AuthEntity>
+    suspend fun getCurrentUser(): AppResult<AuthEntity>
+    suspend fun logOut(): AppResult<Boolean>
 }
 
 class AuthUseCaseImpl(
@@ -21,4 +23,10 @@ class AuthUseCaseImpl(
 
     override suspend fun signInViaGoogle(idToken: String?): AppResult<AuthEntity> =
         AuthRepository.signInViaGoogle(idToken)
+
+    override suspend fun getCurrentUser(): AppResult<AuthEntity> =
+        AuthRepository.getCurrentUser()
+
+    override suspend fun logOut() =
+        AuthRepository.logOut()
 }

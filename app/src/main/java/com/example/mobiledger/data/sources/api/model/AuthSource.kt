@@ -16,6 +16,8 @@ interface AuthSource {
     suspend fun loginUserViaEmail(email: String, password: String): AppResult<AuthEntity>
     suspend fun signUpViaEmail(email: String, password: String): AppResult<AuthEntity>
     suspend fun signInViaGoogle(idToken: String?): AppResult<AuthEntity>
+    suspend fun getCurrentUser(): AppResult<AuthEntity>
+    suspend fun logOut(): AppResult<Boolean>
 }
 
 class AuthSourceImpl(
@@ -83,6 +85,48 @@ class AuthSourceImpl(
             is FireBaseResult.Success -> {
                 if (result.data != null && result.data.user != null) {
                     AppResult.Success(authResultEntityMapper(result.data.user!!))
+                } else {
+                    AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
+                }
+            }
+            is FireBaseResult.Failure -> AppResult.Failure(result.error)
+        }
+    }
+
+    override suspend fun getCurrentUser(): AppResult<AuthEntity> {
+        var response: FirebaseUser? = null
+        var exception: Exception? = null
+        try{
+            response = firebaseAuth.currentUser
+        } catch (e:Exception){
+            exception = e
+        }
+
+        return when (val result = ErrorMapper.checkAndMapFirebaseApiError(response, exception)) {
+            is FireBaseResult.Success -> {
+                if (result.data != null) {
+                    AppResult.Success(authResultEntityMapper(result.data))
+                } else {
+                    AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
+                }
+            }
+            is FireBaseResult.Failure -> AppResult.Failure(result.error)
+        }
+    }
+
+    override suspend fun logOut(): AppResult<Boolean> {
+        var response: Unit? = null
+        var exception: Exception? = null
+        try{
+            response = firebaseAuth.signOut()
+        } catch (e:Exception){
+            exception = e
+        }
+
+        return when (val result = ErrorMapper.checkAndMapFirebaseApiError(response, exception)) {
+            is FireBaseResult.Success -> {
+                if (result.data != null) {
+                    AppResult.Success(true)
                 } else {
                     AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
                 }

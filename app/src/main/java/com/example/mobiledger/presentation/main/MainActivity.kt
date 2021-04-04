@@ -23,7 +23,7 @@ class MainActivity :
                 supportFragmentManager
             )
 
-        mainActivityNavigator?.navigateToLoginScreen()
+        mainActivityNavigator?.navigateToSplashScreen()
 
     }
 
