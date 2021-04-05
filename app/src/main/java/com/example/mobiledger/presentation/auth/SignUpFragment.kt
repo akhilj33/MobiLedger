@@ -30,7 +30,7 @@ class SignUpFragment :
             viewLifecycleOwner,
             OneTimeObserver { isSignUpSuccess ->
                 if (isSignUpSuccess != null) {
-                    navigator?.navigateToHomeScreen()
+                    navigator?.navigateAuthToHomeScreen()
                 }
             })
 

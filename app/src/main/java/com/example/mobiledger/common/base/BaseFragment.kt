@@ -32,6 +32,16 @@ abstract class BaseFragment<B : ViewDataBinding, NV : BaseNavigator>(
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         activity?.onBackPressedDispatcher?.addCallback(this, backPressCallback)
+
+        val activity = activity
+        if (activity is BaseActivity<*, *>) {
+            try {
+                @Suppress("UNCHECKED_CAST")
+                navigator = activity.getFragmentNavigator() as NV
+            } catch (e: Exception) {
+                Timber.e("Activity Navigator should implement Fragment navigator")
+            }
+        }
     }
 
     override fun onCreateView(
@@ -85,19 +95,6 @@ abstract class BaseFragment<B : ViewDataBinding, NV : BaseNavigator>(
 //        }
 //        registerForAuthResult()
 //    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        val activity = activity
-        if (activity is BaseActivity<*, *>) {
-            try {
-                @Suppress("UNCHECKED_CAST")
-                navigator = activity.getFragmentNavigator() as NV
-            } catch (e: Exception) {
-                Timber.e("Activity Navigator should implement Fragment navigator")
-            }
-        }
-    }
 
     override fun onDestroyView() {
         super.onDestroyView()

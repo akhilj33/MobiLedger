@@ -9,11 +9,13 @@ import com.example.mobiledger.presentation.auth.SignUpFragment
 import com.example.mobiledger.presentation.auth.SignUpNavigator
 import com.example.mobiledger.presentation.home.HomeFragment
 import com.example.mobiledger.presentation.home.HomeNavigator
+import com.example.mobiledger.presentation.splash.SplashFragment
+import com.example.mobiledger.presentation.splash.SplashNavigator
 
 class MainActivityNavigator constructor(
     @IdRes private val containerId: Int,
     private val fragmentManager: FragmentManager
-) : HomeNavigator, LoginNavigator, SignUpNavigator {
+) : HomeNavigator, LoginNavigator, SignUpNavigator, SplashNavigator {
 
 
     /*---------------------------------Main Activity-------------------------------------*/
@@ -26,18 +28,9 @@ class MainActivityNavigator constructor(
         FragmentTransactionHelper.dismissAllDialogs(fragmentManager)
     }
 
-    fun navigateToLoginScreen() {
-        popAllFragments()
-        FragmentTransactionHelper.replaceFragment(
-            fragmentManager,
-            LoginFragment.newInstance(),
-            containerId, addToBackStack = true
-        )
-    }
-
     /*---------------------------------In App Navigation-------------------------------------*/
 
-    override fun navigateToHomeScreen() {
+    override fun navigateAuthToHomeScreen() {
         popAllFragments()
         FragmentTransactionHelper.replaceFragment(
             fragmentManager,
@@ -46,12 +39,29 @@ class MainActivityNavigator constructor(
         )
     }
 
-    override fun navigateToSignUpScreen() {
-//        popAllFragments()
+    override fun navigateLoginToSignUpScreen() {
         FragmentTransactionHelper.replaceFragment(
             fragmentManager,
             SignUpFragment.newInstance(),
             containerId, addToBackStack = true
+        )
+    }
+
+    override fun navigateSplashToLoginScreen() {
+        popAllFragments()
+        FragmentTransactionHelper.replaceFragment(
+            fragmentManager,
+            LoginFragment.newInstance(),
+            containerId, addToBackStack = true
+        )
+    }
+
+    fun navigateToSplashScreen() {
+        popAllFragments()
+        FragmentTransactionHelper.replaceFragment(
+            fragmentManager,
+            SplashFragment.newInstance(),
+            containerId, addToBackStack = false
         )
     }
 }
