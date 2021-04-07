@@ -2,12 +2,13 @@ package com.example.mobiledger.presentation.main
 
 import androidx.annotation.IdRes
 import androidx.fragment.app.FragmentManager
+import com.example.mobiledger.common.utils.FragmentTagUtil
 import com.example.mobiledger.common.utils.FragmentTransactionHelper
 import com.example.mobiledger.presentation.auth.LoginFragment
 import com.example.mobiledger.presentation.auth.LoginNavigator
 import com.example.mobiledger.presentation.auth.SignUpFragment
 import com.example.mobiledger.presentation.auth.SignUpNavigator
-import com.example.mobiledger.presentation.home.HomeFragment
+import com.example.mobiledger.presentation.dashboard.DashboardFragment
 import com.example.mobiledger.presentation.home.HomeNavigator
 import com.example.mobiledger.presentation.splash.SplashFragment
 import com.example.mobiledger.presentation.splash.SplashNavigator
@@ -28,13 +29,20 @@ class MainActivityNavigator constructor(
         FragmentTransactionHelper.dismissAllDialogs(fragmentManager)
     }
 
+    fun popUpToDashBoard(removeDashboard: Boolean = false) {
+        FragmentTransactionHelper.popFragmentFromBackStack(
+            fragmentManager,
+            FragmentTagUtil.DASHBOARD_FRAGMENT_TAG, isExclusive = !removeDashboard
+        )
+    }
+
     /*---------------------------------In App Navigation-------------------------------------*/
 
-    override fun navigateAuthToHomeScreen() {
+    override fun launchDashboard() {
         popAllFragments()
         FragmentTransactionHelper.replaceFragment(
             fragmentManager,
-            HomeFragment.newInstance(),
+            DashboardFragment.newInstance(),
             containerId, addToBackStack = true
         )
     }
