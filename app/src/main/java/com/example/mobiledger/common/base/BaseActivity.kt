@@ -16,7 +16,7 @@ abstract class BaseActivity<B : ViewDataBinding, out NV>(
 
     lateinit var viewBinding: B
 
-//    protected val viewModelFactory = DependencyProvidervider.provideViewModelFactory()
+    protected val viewModelFactory = DependencyProvider.provideViewModelFactory()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

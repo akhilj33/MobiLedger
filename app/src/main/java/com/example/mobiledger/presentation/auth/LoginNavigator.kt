@@ -4,5 +4,5 @@ import com.example.mobiledger.common.base.BaseNavigator
 
 interface LoginNavigator : BaseNavigator {
     fun navigateLoginToSignUpScreen()
-    fun navigateAuthToHomeScreen()
+    fun launchDashboard()
 }

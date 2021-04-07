@@ -25,12 +25,14 @@ class SignUpFragment :
         setUpObserver()
     }
 
+    override fun isBottomNavVisible(): Boolean = false
+
     private fun setUpObserver() {
         viewModel.signUpResult.observe(
             viewLifecycleOwner,
             OneTimeObserver { isSignUpSuccess ->
                 if (isSignUpSuccess != null) {
-                    navigator?.navigateAuthToHomeScreen()
+                    navigator?.launchDashboard()
                 }
             })
 
