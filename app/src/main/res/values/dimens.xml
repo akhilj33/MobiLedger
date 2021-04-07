@@ -3,13 +3,24 @@
 
     <dimen name="dp_8">8dp</dimen>
     <dimen name="dp_10">10dp</dimen>
+    <dimen name="dp_11">11dp</dimen>
+    <dimen name="dp_12">12dp</dimen>
     <dimen name="dp_16">16dp</dimen>
+    <dimen name="dp_28">28dp</dimen>
+    <dimen name="dp_30">30dp</dimen>
+    <dimen name="dp_70">70dp</dimen>
 
+
+    <dimen name="sp_12">12sp</dimen>
+    <dimen name="sp_14">14sp</dimen>
     <dimen name="sp_16">16sp</dimen>
     <dimen name="sp_24">24sp</dimen>
     <dimen name="sp_20">20sp</dimen>
     <dimen name="sp_36">36sp</dimen>
 
+    <dimen name="bottom_nav_height">@dimen/dp_70</dimen>
+    <dimen name="bottom_nav_image_margin">@dimen/dp_12</dimen>
+    <dimen name="bottom_nav_text_margin">@dimen/dp_10</dimen>
 
 
 </resources>

@@ -27,6 +27,8 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, LoginNavigator>(R.layou
         setUpObserver()
     }
 
+    override fun isBottomNavVisible(): Boolean = false
+
     private fun setOnClickListener() {
 
         viewBinding.apply {
@@ -53,7 +55,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, LoginNavigator>(R.layou
         viewModel.signInResult.observe(
             viewLifecycleOwner,
             OneTimeObserver {
-                navigator?.navigateAuthToHomeScreen()
+                navigator?.launchDashboard()
             })
 
         viewModel.errorLiveData.observe(viewLifecycleOwner, OneTimeObserver {

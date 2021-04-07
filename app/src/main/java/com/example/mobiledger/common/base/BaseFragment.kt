@@ -56,27 +56,24 @@ abstract class BaseFragment<B : ViewDataBinding, NV : BaseNavigator>(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        initSwipeRefreshLayout()
-//        initHelpAndSupport()
-//        observeInternetState()
-//        setBottomNavVisibility()
+        setBottomNavVisibility()
     }
 
-//    private fun setBottomNavVisibility() {
-//        if (isBottomNavVisible()) {
-//            showBottomNav()
-//        } else {
-//            hideBottomNav()
-//        }
-//    }
+    private fun setBottomNavVisibility() {
+        if (isBottomNavVisible()) {
+            showBottomNav()
+        } else {
+            hideBottomNav()
+        }
+    }
 
-//    protected fun showBottomNav() {
-//        activityViewModel.showBottomNavigationView()
-//    }
-//
-//    protected fun hideBottomNav() {
-//        activityViewModel.hideBottomNavigationView()
-//    }
+    protected fun showBottomNav() {
+        activityViewModel.showBottomNavigationView()
+    }
+
+    protected fun hideBottomNav() {
+        activityViewModel.hideBottomNavigationView()
+    }
 
 //    private fun observeInternetState() {
 //        activityViewModel.isInternetAvailableLiveData.observe(viewLifecycleOwner, NormalObserver {
@@ -101,7 +98,7 @@ abstract class BaseFragment<B : ViewDataBinding, NV : BaseNavigator>(
         _viewBinding = null
     }
 
-//    protected open fun isBottomNavVisible(): Boolean = true
+    protected open fun isBottomNavVisible(): Boolean = true
 
     /*----------------------------------------Back Press----------------------------------------*/
 
