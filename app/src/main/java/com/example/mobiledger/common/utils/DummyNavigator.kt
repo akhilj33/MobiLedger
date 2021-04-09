@@ -1,3 +1,5 @@
 package com.example.mobiledger.common.utils
 
-interface DummyNavigator
+import com.example.mobiledger.common.base.BaseNavigator
+
+interface DummyNavigator : BaseNavigator

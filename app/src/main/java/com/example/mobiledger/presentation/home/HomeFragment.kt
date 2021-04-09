@@ -15,6 +15,13 @@ class HomeFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setOnClickListener()
+    }
+
+    private fun setOnClickListener() {
+        viewBinding.homeToolbar.btnProfile.setOnClickListener {
+            navigator?.navigateToProfileScreen()
+        }
     }
 
     companion object {

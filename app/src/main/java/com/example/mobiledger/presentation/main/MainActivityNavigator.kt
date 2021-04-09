@@ -10,13 +10,16 @@ import com.example.mobiledger.presentation.auth.SignUpFragment
 import com.example.mobiledger.presentation.auth.SignUpNavigator
 import com.example.mobiledger.presentation.dashboard.DashboardFragment
 import com.example.mobiledger.presentation.home.HomeNavigator
+import com.example.mobiledger.presentation.profile.EditProfileFragment
+import com.example.mobiledger.presentation.profile.ProfileFragment
+import com.example.mobiledger.presentation.profile.ProfileNavigator
 import com.example.mobiledger.presentation.splash.SplashFragment
 import com.example.mobiledger.presentation.splash.SplashNavigator
 
 class MainActivityNavigator constructor(
     @IdRes private val containerId: Int,
     private val fragmentManager: FragmentManager
-) : HomeNavigator, LoginNavigator, SignUpNavigator, SplashNavigator {
+) : HomeNavigator, LoginNavigator, SignUpNavigator, SplashNavigator, ProfileNavigator {
 
 
     /*---------------------------------Main Activity-------------------------------------*/
@@ -43,7 +46,7 @@ class MainActivityNavigator constructor(
         FragmentTransactionHelper.replaceFragment(
             fragmentManager,
             DashboardFragment.newInstance(),
-            containerId, addToBackStack = true
+            containerId, addToBackStack = false
         )
     }
 
@@ -70,6 +73,22 @@ class MainActivityNavigator constructor(
             fragmentManager,
             SplashFragment.newInstance(),
             containerId, addToBackStack = false
+        )
+    }
+
+    override fun navigateToProfileScreen() {
+        FragmentTransactionHelper.replaceFragment(
+            fragmentManager,
+            ProfileFragment.newInstance(),
+            containerId, addToBackStack = true
+        )
+    }
+
+    override fun navigateToEditProfileScreen() {
+        FragmentTransactionHelper.replaceFragment(
+            fragmentManager,
+            EditProfileFragment.newInstance(),
+            containerId, addToBackStack = true
         )
     }
 }
