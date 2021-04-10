@@ -8,10 +8,14 @@ import com.example.mobiledger.domain.AppError
 import com.example.mobiledger.domain.AppResult
 import com.example.mobiledger.domain.entities.AuthEntity
 import com.example.mobiledger.domain.usecases.AuthUseCase
+import com.example.mobiledger.domain.usecases.UserSettingsUseCase
 import com.example.mobiledger.presentation.Event
 import kotlinx.coroutines.launch
 
-class LoginViewModel(private val authUseCase: AuthUseCase) : BaseViewModel() {
+class LoginViewModel(
+    private val authUseCase: AuthUseCase,
+    private val userSettingsUseCase: UserSettingsUseCase
+) : BaseViewModel() {
 
     val signInResult: LiveData<Event<AuthEntity>> get() = _signInResultLiveData
     private val _signInResultLiveData: MutableLiveData<Event<AuthEntity>> = MutableLiveData()
@@ -23,6 +27,7 @@ class LoginViewModel(private val authUseCase: AuthUseCase) : BaseViewModel() {
         viewModelScope.launch {
             when (val result = authUseCase.loginViaEmail(email, password)) {
                 is AppResult.Success -> {
+                    saveUIDOnLogin(result.data.uId)
                     _signInResultLiveData.value = Event(result.data)
                 }
                 is AppResult.Failure -> {
@@ -34,7 +39,7 @@ class LoginViewModel(private val authUseCase: AuthUseCase) : BaseViewModel() {
 
     fun signInUserViaGoogle(idToken: String?) {
         viewModelScope.launch {
-            when(val result = authUseCase.signInViaGoogle(idToken)){
+            when (val result = authUseCase.signInViaGoogle(idToken)) {
                 is AppResult.Success -> {
                     val a = result.data
                 }
@@ -42,6 +47,12 @@ class LoginViewModel(private val authUseCase: AuthUseCase) : BaseViewModel() {
                     val error = result.error
                 }
             }
+        }
+    }
+
+    private fun saveUIDOnLogin(uid: String?) {
+        viewModelScope.launch {
+            userSettingsUseCase.saveUID(uid)
         }
     }
 }
