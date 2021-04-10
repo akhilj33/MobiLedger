@@ -37,7 +37,8 @@ object DependencyProvider {
 
     private val repositoryProvider: RepositoryProvider by lazy {
         RepositoryProvider(
-            apiSourceProvider
+            apiSourceProvider,
+            cacheSourceProvider
         )
     }
 

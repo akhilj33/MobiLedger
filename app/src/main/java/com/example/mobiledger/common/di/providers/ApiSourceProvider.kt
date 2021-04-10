@@ -13,4 +13,5 @@ class ApiSourceProvider(
 ) {
 
     fun provideFirebaseAuth(): AuthSource = AuthSourceImpl(firebaseAuthProvider.provideFirebaseAuth())
+
 }

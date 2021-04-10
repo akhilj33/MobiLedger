@@ -6,6 +6,7 @@ import com.example.mobiledger.presentation.auth.LoginViewModel
 import com.example.mobiledger.presentation.auth.SignUpViewModel
 import com.example.mobiledger.presentation.home.HomeViewModel
 import com.example.mobiledger.presentation.main.MainActivityViewModel
+import com.example.mobiledger.presentation.profile.ProfileViewModel
 import com.example.mobiledger.presentation.splash.SplashViewModel
 
 @Suppress("UNCHECKED_CAST")
@@ -22,7 +23,10 @@ class ViewModelFactoryProvider(private val useCaseProvider: UseCaseProvider) :
             }
 
             modelClass.isAssignableFrom(LoginViewModel::class.java) -> {
-                LoginViewModel(useCaseProvider.provideAuthUseCase()) as T
+                LoginViewModel(
+                    useCaseProvider.provideAuthUseCase(),
+                    useCaseProvider.provideUserSettingsUseCase()
+                ) as T
             }
 
             modelClass.isAssignableFrom(SignUpViewModel::class.java) -> {
@@ -31,6 +35,10 @@ class ViewModelFactoryProvider(private val useCaseProvider: UseCaseProvider) :
 
             modelClass.isAssignableFrom(SplashViewModel::class.java) -> {
                 SplashViewModel(useCaseProvider.provideAuthUseCase()) as T
+            }
+
+            modelClass.isAssignableFrom(ProfileViewModel::class.java) -> {
+                ProfileViewModel(useCaseProvider.provideUserSettingsUseCase()) as T
             }
             else -> throw IllegalArgumentException("Unknown ViewModel Class")
         }
