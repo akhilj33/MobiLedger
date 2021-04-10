@@ -23,7 +23,7 @@
                 android:id="@+id/btnSettings"
                 android:layout_width="@dimen/dp_24"
                 android:layout_height="@dimen/dp_24"
-                android:src="@drawable/ic_settings"
+                android:src="@drawable/settings_icon"
                 android:layout_alignParentEnd="true"
                 android:layout_marginEnd="@dimen/dp_12" />
 
@@ -31,7 +31,7 @@
                 android:id="@+id/btnProfile"
                 android:layout_width="@dimen/dp_24"
                 android:layout_height="@dimen/dp_24"
-                android:src="@drawable/ic_user"
+                android:src="@drawable/user_icon"
                 android:layout_toStartOf="@id/btnSettings"
                 android:layout_marginEnd="@dimen/dp_12" />
 
