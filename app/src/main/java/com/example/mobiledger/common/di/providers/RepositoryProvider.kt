@@ -1,18 +1,16 @@
 package com.example.mobiledger.common.di.providers
 
-import com.example.mobiledger.data.repository.AuthRepository
-import com.example.mobiledger.data.repository.AuthRepositoryImpl
-import com.example.mobiledger.data.repository.UserSettingsRepository
-import com.example.mobiledger.data.repository.UserSettingsRepositoryImpl
+import com.example.mobiledger.data.repository.*
 
 class RepositoryProvider(
+    authSourceProvider: AuthSourceProvider,
     apiSourceProvider: ApiSourceProvider,
     cacheSourceProvider: CacheSourceProvider
 ) {
 
     private val authRepository: AuthRepository by lazy {
         AuthRepositoryImpl(
-            apiSourceProvider.provideFirebaseAuth()
+            authSourceProvider.provideAuthSource()
         )
     }
 
@@ -22,10 +20,17 @@ class RepositoryProvider(
         )
     }
 
+    private val userRepository: UserRepository by lazy {
+        UserRepositoryImpl(apiSourceProvider.provideUserApiSource()
+        )
+    }
+
     /*-------------------------------Public -----------------------------*/
 
     fun provideAuthRepository(): AuthRepository = authRepository
 
     fun provideUserSettingsRepository(): UserSettingsRepository = userSettingsRepository
+
+    fun provideUserRepository(): UserRepository = userRepository
 
 }

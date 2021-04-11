@@ -18,9 +18,6 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, LoginNavigator>(R.layou
 
     private val viewModel: LoginViewModel by viewModels { viewModelFactory }
 
-    private var email: String? = null
-    private var password: String? = null
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setOnClickListener()
@@ -33,12 +30,12 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, LoginNavigator>(R.layou
 
         viewBinding.apply {
             btnLogin.setOnClickListener {
-                email = viewBinding.textEmail.text.toString()
-                password = viewBinding.textPassword.text.toString()
-                if (email.isNullOrEmpty() || password.isNullOrEmpty())
+                val email = viewBinding.textEmail.text.toString()
+               val  password = viewBinding.textPassword.text.toString()
+                if (email.isEmpty() || password.isEmpty())
                     activity?.showToast("No field can be empty")
                 else
-                    viewModel.loginUserViaEmail(email!!, password!!)
+                    viewModel.loginUserViaEmail(email, password)
             }
 
             tvSignUp.setOnClickListener {

@@ -2,7 +2,7 @@ package com.example.mobiledger.domain.entities
 
 import android.net.Uri
 
-data class AuthEntity(
+data class UserEntity(
     val uId: String,
     val userName: String? = null,
     val photoUrl: Uri? = null,

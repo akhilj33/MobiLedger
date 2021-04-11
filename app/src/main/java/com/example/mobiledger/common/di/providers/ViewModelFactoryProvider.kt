@@ -30,7 +30,8 @@ class ViewModelFactoryProvider(private val useCaseProvider: UseCaseProvider) :
             }
 
             modelClass.isAssignableFrom(SignUpViewModel::class.java) -> {
-                SignUpViewModel(useCaseProvider.provideAuthUseCase()) as T
+                SignUpViewModel(useCaseProvider.provideAuthUseCase(),
+                                useCaseProvider.provideUserUseCase()) as T
             }
 
             modelClass.isAssignableFrom(SplashViewModel::class.java) -> {

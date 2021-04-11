@@ -1,11 +1,13 @@
 package com.example.mobiledger.presentation.auth
 
 import android.os.Bundle
+import android.util.Patterns
 import android.view.View
 import androidx.fragment.app.viewModels
 import com.example.mobiledger.R
 import com.example.mobiledger.common.base.BaseFragment
 import com.example.mobiledger.common.showToast
+import com.example.mobiledger.common.utils.ValidationUtils
 import com.example.mobiledger.databinding.FragmentSignUpBinding
 import com.example.mobiledger.presentation.OneTimeObserver
 import java.util.regex.Pattern
@@ -16,9 +18,6 @@ class SignUpFragment :
 
     private val viewModel: SignUpViewModel by viewModels { viewModelFactory }
 
-    private var email: String? = null
-    private var password: String? = null
-    private var confirmPassword: String? = null
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setOnClick()
@@ -30,15 +29,13 @@ class SignUpFragment :
     private fun setUpObserver() {
         viewModel.signUpResult.observe(
             viewLifecycleOwner,
-            OneTimeObserver { isSignUpSuccess ->
-                if (isSignUpSuccess != null) {
-                    navigator?.launchDashboard()
-                }
+            OneTimeObserver {
+                navigator?.launchDashboard()
             })
 
         viewModel.errorLiveData.observe(viewLifecycleOwner, OneTimeObserver {
             it.let {
-                activity?.showToast("Sign up Failed")
+                activity?.showToast(getString(R.string.signup_failed))
             }
         })
     }
@@ -46,63 +43,30 @@ class SignUpFragment :
     private fun setOnClick() {
 
         viewBinding.btnSignup.setOnClickListener {
-            email = viewBinding.textEmail.text.toString()
-            password = viewBinding.textPassword.text.toString()
-            confirmPassword = viewBinding.textConfirmPassword.text.toString()
-            emailAndPasswordValidation(email, password, confirmPassword)
+            val name = viewBinding.nameEditText.text.toString()
+            val email = viewBinding.textEmail.text.toString()
+           val password = viewBinding.textPassword.text.toString()
+           val  phoneNo = viewBinding.phoneEditText.text.toString()
+           val confirmPassword = viewBinding.textConfirmPassword.text.toString()
+            doValidations(name, email, password, confirmPassword, phoneNo)
         }
     }
 
-    private fun emailAndPasswordValidation(
-        email: String?,
-        password: String?,
-        confirmPassword: String?
-    ) {
-        if (email.isNullOrEmpty() || password.isNullOrEmpty() || confirmPassword.isNullOrEmpty())
-            activity?.showToast("You cannot leave any field empty")
+    private fun doValidations(name:String, email:String, password:String, confirmPassword:String, phoneNo:String) {
+        if (name.isBlank() || email.isBlank() || password.isBlank() || confirmPassword.isBlank())
+            activity?.showToast(getString(R.string.empty_field_msg))
         else if (password != confirmPassword)
-            activity?.showToast("Password and Conform password should be same")
-        else if (!emailValidator(email))
-            activity?.showToast("Incorrect Email")
-        else if (!passwordValidator(password))
-            activity?.showToast(
-                "Password should be of size 8-20 \n" +
-                        "It should contain at least a digit \n" +
-                        "It should have a lower case letter and upper case letter \n" +
-                        "It should have a special character"
-            )
+            activity?.showToast(getString(R.string.confirm_password_mismatched_msg))
+        else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches())
+            activity?.showToast(getString(R.string.incorrect_email))
+        else if (!ValidationUtils.passwordValidator(password))
+            activity?.showToast(getString(R.string.password_requirement))
+        else if(phoneNo.isNotBlank() && !ValidationUtils.phoneNoValidator(phoneNo))
+            activity?.showToast(getString(R.string.incorrect_phone_no))
         else {
-            viewModel.signUpViaEmail(email, password)
+            viewModel.signUpViaEmail(name, phoneNo, email, password)
         }
-
     }
-
-    private fun emailValidator(email: String?): Boolean {
-
-        val emailPattern: Pattern = Pattern.compile(
-            "[a-zA-Z0-9\\+\\.\\_\\%\\-\\+]{1,256}" +
-                    "\\@" +
-                    "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,64}" +
-                    "(" +
-                    "\\." +
-                    "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,25}" +
-                    ")+"
-        )
-        return emailPattern.matcher(email).matches()
-    }
-
-    private fun passwordValidator(password: String?): Boolean {
-
-        val emailPattern: Pattern = Pattern.compile(
-            "^(?=.*[0-9])"
-                    + "(?=.*[a-z])(?=.*[A-Z])"
-                    + "(?=.*[@#$%^&+=])"
-                    + "(?=\\S+$).{8,20}$"
-        )
-
-        return emailPattern.matcher(password).matches()
-    }
-
 
     companion object {
         fun newInstance() = SignUpFragment()

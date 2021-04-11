@@ -6,22 +6,24 @@ import androidx.lifecycle.viewModelScope
 import com.example.mobiledger.common.base.BaseViewModel
 import com.example.mobiledger.domain.AppError
 import com.example.mobiledger.domain.AppResult
-import com.example.mobiledger.domain.entities.AuthEntity
+import com.example.mobiledger.domain.entities.UserEntity
 import com.example.mobiledger.domain.usecases.AuthUseCase
+import com.example.mobiledger.domain.usecases.UserUseCase
 import com.example.mobiledger.presentation.Event
 import kotlinx.coroutines.launch
 
-class SignUpViewModel(private val authUseCase: AuthUseCase) : BaseViewModel() {
+class SignUpViewModel(private val authUseCase: AuthUseCase,
+                        private val userUseCase: UserUseCase) : BaseViewModel() {
 
-    val signUpResult: LiveData<Event<AuthEntity>> get() = _signUpResultLiveData
-    private val _signUpResultLiveData: MutableLiveData<Event<AuthEntity>> = MutableLiveData()
+    val signUpResult: LiveData<Event<UserEntity>> get() = _signUpResultLiveData
+    private val _signUpResultLiveData: MutableLiveData<Event<UserEntity>> = MutableLiveData()
 
     private val _errorLiveData: MutableLiveData<Event<AppError>> = MutableLiveData()
     val errorLiveData: LiveData<Event<AppError>> = _errorLiveData
 
-    fun signUpViaEmail(email: String, password: String) {
+    fun signUpViaEmail(name: String, phoneNo: String, email: String, password: String) {
         viewModelScope.launch {
-            when (val result = authUseCase.signUpViaEmail(email = email, password = password)) {
+            when (val result = authUseCase.signUpViaEmail(name, phoneNo, email, password)) {
                 is AppResult.Success -> {
                     _signUpResultLiveData.value = Event(result.data)
                 }

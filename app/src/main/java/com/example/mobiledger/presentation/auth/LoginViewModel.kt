@@ -6,7 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.mobiledger.common.base.BaseViewModel
 import com.example.mobiledger.domain.AppError
 import com.example.mobiledger.domain.AppResult
-import com.example.mobiledger.domain.entities.AuthEntity
+import com.example.mobiledger.domain.entities.UserEntity
 import com.example.mobiledger.domain.usecases.AuthUseCase
 import com.example.mobiledger.domain.usecases.UserSettingsUseCase
 import com.example.mobiledger.presentation.Event
@@ -17,8 +17,8 @@ class LoginViewModel(
     private val userSettingsUseCase: UserSettingsUseCase
 ) : BaseViewModel() {
 
-    val signInResult: LiveData<Event<AuthEntity>> get() = _signInResultLiveData
-    private val _signInResultLiveData: MutableLiveData<Event<AuthEntity>> = MutableLiveData()
+    val signInResult: LiveData<Event<UserEntity>> get() = _signInResultLiveData
+    private val _signInResultLiveData: MutableLiveData<Event<UserEntity>> = MutableLiveData()
 
     private val _errorLiveData: MutableLiveData<Event<AppError>> = MutableLiveData()
     val errorLiveData: LiveData<Event<AppError>> = _errorLiveData
@@ -27,7 +27,7 @@ class LoginViewModel(
         viewModelScope.launch {
             when (val result = authUseCase.loginViaEmail(email, password)) {
                 is AppResult.Success -> {
-                    saveUIDOnLogin(result.data.uId)
+                    saveUIDInCache(result.data.uId)
                     _signInResultLiveData.value = Event(result.data)
                 }
                 is AppResult.Failure -> {
@@ -50,7 +50,7 @@ class LoginViewModel(
         }
     }
 
-    private fun saveUIDOnLogin(uid: String?) {
+    private fun saveUIDInCache(uid: String?) {
         viewModelScope.launch {
             userSettingsUseCase.saveUID(uid)
         }
