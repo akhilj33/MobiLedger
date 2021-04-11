@@ -1,9 +1,6 @@
 package com.example.mobiledger.common.di.providers
 
-import com.example.mobiledger.domain.usecases.AuthUseCase
-import com.example.mobiledger.domain.usecases.AuthUseCaseImpl
-import com.example.mobiledger.domain.usecases.UserSettingsUseCase
-import com.example.mobiledger.domain.usecases.UserSettingsUseCaseImpl
+import com.example.mobiledger.domain.usecases.*
 
 class UseCaseProvider(private val repositoryProvider: RepositoryProvider) {
 
@@ -16,4 +13,7 @@ class UseCaseProvider(private val repositoryProvider: RepositoryProvider) {
         UserSettingsUseCaseImpl(
             repositoryProvider.provideUserSettingsRepository()
         )
+
+    fun provideUserUseCase(): UserUseCase =
+        UserUseCaseImpl(repositoryProvider.provideUserRepository())
 }

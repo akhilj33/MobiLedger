@@ -1,21 +1,40 @@
 <resources>
+
+
+    <!--General-->
     <string name="app_name">MobiLedger</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="mobi_ledger">Mobi Ledger</string>
     <string name="join_a_creative_solution_for_a_better_tomorrow">Join a creative solution for a better tomorrow</string>
-    <string name="email_id_or_contact_number">Email Id or Contact Number</string>
-    <string name="password">Password</string>
+
+    <!--Login Screen-->
+    <string name="email_id">Email Id*</string>
+    <string name="password">Password*</string>
     <string name="forget_password">Forget Password</string>
     <string name="login">Login</string>
     <string name="new_user_sign_up">New user? SIGN UP</string>
-    <string name="confirm_password">Confirm Password</string>
+
+    <!--SignUp Screen-->
+    <string name="confirm_password">Confirm Password*</string>
     <string name="sign_up">Sign Up</string>
+    <string name="signup_failed">Sign up Failed</string>
+    <string name="empty_field_msg">You cannot leave any field empty</string>
+    <string name="confirm_password_mismatched_msg">Password and Confirm password should be same</string>
+    <string name="incorrect_email">Incorrect Email</string>
+    <string name="incorrect_phone_no">Incorrect Phone No</string>
+    <string name="password_requirement">"Password should be of size 8-20 \n" +
+                        "It should contain at least a digit \n" +
+                        "It should have a lower case letter and upper case letter \n" +
+                        "It should have a special character"</string>
+
+
+    <!--Home Screen-->
     <string name="home">Home</string>
     <string name="budget">Budget</string>
     <string name="insight">Insight</string>
     <string name="split">Split</string>
     <string name="add_transaction">Add transaction</string>
+
+    <!--Profile Screen-->
     <string name="back">Back</string>
     <string name="profile">Profile</string>
     <string name="user_image">User Image</string>
@@ -23,7 +42,9 @@
     <string name="email">Email</string>
     <string name="contact_number">Contact Number</string>
     <string name="edit">Edit</string>
-    <string name="name">Name</string>
+    <string name="name">Name*</string>
     <string name="edit_profile">Edit Profile</string>
     <string name="save">Save</string>
+    <string name="mobile_no">Mobile No</string>
+
 </resources>

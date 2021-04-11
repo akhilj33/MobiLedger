@@ -98,7 +98,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColorHint="@color/colorPrimary"
-                    android:hint="@string/email_id_or_contact_number"
+                    android:hint="@string/email_id"
                     android:textSize="@dimen/sp_16" />
 
             </com.google.android.material.textfield.TextInputLayout>
