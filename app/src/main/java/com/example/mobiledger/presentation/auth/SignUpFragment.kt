@@ -10,7 +10,6 @@ import com.example.mobiledger.common.showToast
 import com.example.mobiledger.common.utils.ValidationUtils
 import com.example.mobiledger.databinding.FragmentSignUpBinding
 import com.example.mobiledger.presentation.OneTimeObserver
-import java.util.regex.Pattern
 
 
 class SignUpFragment :
@@ -45,15 +44,15 @@ class SignUpFragment :
         viewBinding.btnSignup.setOnClickListener {
             val name = viewBinding.nameEditText.text.toString()
             val email = viewBinding.textEmail.text.toString()
-           val password = viewBinding.textPassword.text.toString()
-           val  phoneNo = viewBinding.phoneEditText.text.toString()
-           val confirmPassword = viewBinding.textConfirmPassword.text.toString()
+            val password = viewBinding.textPassword.text.toString()
+            val phoneNo = viewBinding.phoneEditText.text.toString()
+            val confirmPassword = viewBinding.textConfirmPassword.text.toString()
             doValidations(name, email, password, confirmPassword, phoneNo)
         }
     }
 
-    private fun doValidations(name:String, email:String, password:String, confirmPassword:String, phoneNo:String) {
-        if (name.isBlank() || email.isBlank() || password.isBlank() || confirmPassword.isBlank())
+    private fun doValidations(name: String, email: String, password: String, confirmPassword: String, phoneNo: String) {
+        if (name.isBlank() || email.isBlank() || password.isBlank() || confirmPassword.isBlank() || phoneNo.isBlank())
             activity?.showToast(getString(R.string.empty_field_msg))
         else if (password != confirmPassword)
             activity?.showToast(getString(R.string.confirm_password_mismatched_msg))
@@ -61,7 +60,7 @@ class SignUpFragment :
             activity?.showToast(getString(R.string.incorrect_email))
         else if (!ValidationUtils.passwordValidator(password))
             activity?.showToast(getString(R.string.password_requirement))
-        else if(phoneNo.isNotBlank() && !ValidationUtils.phoneNoValidator(phoneNo))
+        else if (!ValidationUtils.phoneNoValidator(phoneNo))
             activity?.showToast(getString(R.string.incorrect_phone_no))
         else {
             viewModel.signUpViaEmail(name, phoneNo, email, password)

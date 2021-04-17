@@ -27,7 +27,7 @@ class LoginViewModel(
         viewModelScope.launch {
             when (val result = authUseCase.loginViaEmail(email, password)) {
                 is AppResult.Success -> {
-                    saveUIDInCache(result.data.uId)
+                    saveUIDInCache(result.data.uid)
                     _signInResultLiveData.value = Event(result.data)
                 }
                 is AppResult.Failure -> {
