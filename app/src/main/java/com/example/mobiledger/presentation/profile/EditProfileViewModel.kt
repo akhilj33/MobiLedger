@@ -12,13 +12,16 @@ import com.example.mobiledger.domain.usecases.UserSettingsUseCase
 import com.example.mobiledger.presentation.Event
 import kotlinx.coroutines.launch
 
-class ProfileViewModel(
+class EditProfileViewModel(
     private val userSettingsUseCase: UserSettingsUseCase,
     private val profileUseCase: ProfileUseCase
 ) : BaseViewModel() {
 
     val userFromFirestoreResult: LiveData<Event<UserInfoEntity>> get() = _userFromFirestoreResult
     private val _userFromFirestoreResult: MutableLiveData<Event<UserInfoEntity>> = MutableLiveData()
+
+    val dataUpdatedResult: LiveData<Boolean> get() = _dataUpdatedResult
+    private val _dataUpdatedResult: MutableLiveData<Boolean> = MutableLiveData()
 
     private val _errorLiveData: MutableLiveData<Event<AppError>> = MutableLiveData()
     val errorLiveData: LiveData<Event<AppError>> = _errorLiveData
@@ -44,6 +47,36 @@ class ProfileViewModel(
                     _errorLiveData.value = Event(result.error)
                 }
             }
+        }
+    }
+
+    fun updateUserName(userName: String) {
+        viewModelScope.launch {
+            val uid = userSettingsUseCase.getUID()
+            if (uid != null)
+                _dataUpdatedResult.value = profileUseCase.updateUserNameInFirebase(userName, uid)
+        }
+    }
+
+    fun updateEmail(email: String) {
+        viewModelScope.launch {
+            val uid = userSettingsUseCase.getUID()
+            if (uid != null)
+                _dataUpdatedResult.value = profileUseCase.updateEmailInFirebase(email, uid)
+        }
+    }
+
+    fun updatePhoneNo(phone: String) {
+        viewModelScope.launch {
+            val uid = userSettingsUseCase.getUID()
+            if (uid != null)
+                _dataUpdatedResult.value = profileUseCase.updatePhoneInFirebaseDB(phone, uid)
+        }
+    }
+
+    fun updatePassword(password: String) {
+        viewModelScope.launch {
+            _dataUpdatedResult.value = profileUseCase.updatePasswordInFirebase(password)
         }
     }
 }

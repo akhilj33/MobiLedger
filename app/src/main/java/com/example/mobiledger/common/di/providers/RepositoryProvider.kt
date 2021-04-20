@@ -21,10 +21,16 @@ class RepositoryProvider(
     }
 
     private val userRepository: UserRepository by lazy {
-        UserRepositoryImpl(apiSourceProvider.provideUserApiSource()
+        UserRepositoryImpl(
+            apiSourceProvider.provideUserApiSource()
         )
     }
 
+    private val profileRepository: ProfileRepository by lazy {
+        ProfileRepositoryImpl(
+            apiSourceProvider.provideUserApiSource()
+        )
+    }
     /*-------------------------------Public -----------------------------*/
 
     fun provideAuthRepository(): AuthRepository = authRepository
@@ -32,5 +38,7 @@ class RepositoryProvider(
     fun provideUserSettingsRepository(): UserSettingsRepository = userSettingsRepository
 
     fun provideUserRepository(): UserRepository = userRepository
+
+    fun provideProfileRepository(): ProfileRepository = profileRepository
 
 }

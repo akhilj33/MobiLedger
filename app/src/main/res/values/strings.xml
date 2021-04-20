@@ -17,7 +17,8 @@
     <string name="confirm_password">Confirm Password*</string>
     <string name="sign_up">Sign Up</string>
     <string name="signup_failed">Sign up Failed</string>
-    <string name="empty_field_msg">You cannot leave any field empty</string>
+    <string name="empty_field_msg">Any field cannot be empty</string>
+    <string name="single_empty_field_msg">This field cannot be empty</string>
     <string name="confirm_password_mismatched_msg">Password and Confirm password should be same</string>
     <string name="incorrect_email">Incorrect Email</string>
     <string name="incorrect_phone_no">Incorrect Phone No</string>
@@ -42,9 +43,12 @@
     <string name="email">Email</string>
     <string name="contact_number">Contact Number</string>
     <string name="edit">Edit</string>
-    <string name="name">Name*</string>
+    <string name="name">Name</string>
     <string name="edit_profile">Edit Profile</string>
     <string name="save">Save</string>
     <string name="mobile_no">Mobile No</string>
+    <string name="update">Update</string>
+    <string name="updated">UPDATED !!</string>
+    <string name="profile_image">Profile Image</string>
 
 </resources>
