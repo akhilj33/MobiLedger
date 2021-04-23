@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
@@ -6,5 +6,33 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
+
+    <!-- Full Screen Dialogs -->
+    <style name="FullScreenDialog" parent="Theme.AppCompat.Light.Dialog">
+        <item name="android:backgroundDimEnabled">false</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:padding">0dp</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:windowBackground">@color/colorWhite</item>
+        <item name="android:windowCloseOnTouchOutside">false</item>
+        <item name="android:statusBarColor">@color/colorPrimary</item>
+    </style>
+
+    <style name="FullScreenDialogStatusBarGrey" parent="FullScreenDialog">
+        <item name="android:windowBackground">@color/colorGray</item>
+        <item name="android:statusBarColor">@color/colorGray</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
+    </style>
+
+    <!-- SPINNER -->
+    <style name="SpinnerTheme" parent="Widget.AppCompat.Light.DropDownItem.Spinner">
+        <item name="android:textColor">@color/colorTextDark</item>
+        <item name="android:textSize">@dimen/sp_16</item>
+        <item name="android:textColorHint">@color/colorTextDark</item>
+        <item name="android:textColorPrimary">@color/colorTextDark</item>
+        <item name="backgroundTint">@color/colorPrimaryDark</item>
+    </style>
+
 
 </resources>

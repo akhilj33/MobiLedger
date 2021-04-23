@@ -50,5 +50,6 @@
     <string name="update">Update</string>
     <string name="updated">UPDATED !!</string>
     <string name="profile_image">Profile Image</string>
+    <string name="amount_rs">Amount(Rs)</string>
 
 </resources>
