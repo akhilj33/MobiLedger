@@ -66,3 +66,4 @@ fun Activity.closePreviousDialogFragment(dialogFragmentName: String) {
         df.dismiss()
     }
 }
+

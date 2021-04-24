@@ -5,6 +5,8 @@ import com.example.mobiledger.data.ErrorMapper
 import com.example.mobiledger.domain.AppError
 import com.example.mobiledger.domain.AppResult
 import com.example.mobiledger.domain.FireBaseResult
+import com.example.mobiledger.domain.entities.MonthlyTransactionSummaryEntity
+import com.example.mobiledger.domain.entities.TransactionEntity
 import com.example.mobiledger.domain.entities.UserEntity
 import com.example.mobiledger.domain.entities.UserInfoEntity
 import com.google.firebase.auth.ktx.auth
@@ -17,6 +19,18 @@ const val USERS = "Users"
 const val EMAIL_ID = "emailId"
 const val USER_NAME = "userName"
 const val PHONE_NUMBER = "phoneNo"
+const val MONTH = "Months"
+const val TRANSACTION = "Transaction"
+const val INCOME = "income"
+const val EXPENSE = "expense"
+const val NO_OF_EXPENSE_TRANSACTION = "noOfExpenseTransaction"
+const val NO_OF_INCOME_TRANSACTION = "noOfIncomeTransaction"
+const val NO_OF_TRANSACTION = "noOfTransaction"
+const val TOTAL_BALANCE = "totalBalance"
+const val TOTAL_INCOME = "totalIncome"
+const val TOTAL_EXPENSE = "totalExpense"
+const val NULL_STRING = "null"
+const val ONE = "1"
 
 interface UserApi {
     suspend fun addUserToFirebaseDb(user: UserEntity): Boolean
@@ -25,6 +39,14 @@ interface UserApi {
     suspend fun updateEmailInFirebase(email: String, uid: String): Boolean
     suspend fun updateContactInFirebaseDB(contact: String, uid: String): Boolean
     suspend fun updatePasswordInFirebase(password: String): Boolean
+    suspend fun getMonthlyTransactionDetail(uid: String, monthYear: String): AppResult<MonthlyTransactionSummaryEntity?>
+    suspend fun addUserTransactionToFirebase(
+        uid: String,
+        monthYear: String,
+        transactionId: String,
+        transaction: TransactionEntity,
+        monthlyTransactionSummaryEntity: MonthlyTransactionSummaryEntity?
+    ): Boolean
 }
 
 class UserApiImpl(private val firebaseDb: FirebaseFirestore) : UserApi {
@@ -44,6 +66,7 @@ class UserApiImpl(private val firebaseDb: FirebaseFirestore) : UserApi {
         try {
             val docRef = firebaseDb.collection(USERS).document(uid)
             response = docRef.get().await()
+
         } catch (e: Exception) {
             exception = e
         }
@@ -120,6 +143,34 @@ class UserApiImpl(private val firebaseDb: FirebaseFirestore) : UserApi {
         }
     }
 
+    override suspend fun getMonthlyTransactionDetail(uid: String, monthYear: String): AppResult<MonthlyTransactionSummaryEntity?> {
+        var response: DocumentSnapshot? = null
+        var exception: Exception? = null
+        try {
+            val docRef = firebaseDb.collection(USERS)
+                .document(uid)
+                .collection(MONTH)
+                .document(monthYear)
+
+            response = docRef.get().await()
+        } catch (e: Exception) {
+            exception = e
+        }
+
+        return when (val result = ErrorMapper.checkAndMapFirebaseApiError(response, exception)) {
+            is FireBaseResult.Success -> {
+                if (result.data != null) {
+                    AppResult.Success(monthlySummaryEntityMapper(result.data))
+                } else {
+                    AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
+                }
+            }
+            is FireBaseResult.Failure -> {
+                AppResult.Failure(result.error)
+            }
+        }
+    }
+
     private suspend fun updateEmailInDB(email: String, uid: String): Boolean {
         return try {
             val docRef = firebaseDb.collection(USERS).document(uid)
@@ -130,10 +181,94 @@ class UserApiImpl(private val firebaseDb: FirebaseFirestore) : UserApi {
             false
         }
     }
+
+    override suspend fun addUserTransactionToFirebase(
+        uid: String,
+        monthYear: String,
+        transactionId: String,
+        transaction: TransactionEntity,
+        monthlyTransactionSummaryEntity: MonthlyTransactionSummaryEntity?
+    ): Boolean {
+        lateinit var newMonthlySummary: MonthlyTransactionSummaryEntity
+        val transID: String = if (transactionId == NULL_STRING)
+            ONE
+        else
+            transactionId
+
+        if (transactionId == NULL_STRING) {
+            val docMonthRef = firebaseDb.collection(USERS)
+                .document(uid)
+                .collection(MONTH)
+                .document(monthYear)
+
+            newMonthlySummary = MonthlyTransactionSummaryEntity(0, 0, 0, 0, 0, 0)
+            docMonthRef.set(newMonthlySummary).await()
+        }
+
+        val docRef = firebaseDb.collection(USERS)
+            .document(uid)
+            .collection(MONTH)
+            .document(monthYear)
+            .collection(TRANSACTION)
+            .document(transID)
+
+        return try {
+            docRef.set(transaction).await()
+            if (transactionId != NULL_STRING)
+                updateMonthlySummary(uid, monthYear, monthlyTransactionSummaryEntity!!, transaction)
+            else
+                updateMonthlySummary(uid, monthYear, newMonthlySummary, transaction)
+
+        } catch (e: Exception) {
+            false
+        }
+    }
+
+    private suspend fun updateMonthlySummary(
+        uid: String, monthYear: String,
+        monthlyTransactionSummaryEntity: MonthlyTransactionSummaryEntity,
+        transaction: TransactionEntity
+    ): Boolean {
+        val noOfTransaction = monthlyTransactionSummaryEntity.noOfTransaction?.plus(1)
+        var noOfIncome = monthlyTransactionSummaryEntity.noOfIncomeTransaction
+        var noOfExpense = monthlyTransactionSummaryEntity.noOfExpenseTransaction
+        var totalIncome = monthlyTransactionSummaryEntity.totalIncome
+        var totalExpense = monthlyTransactionSummaryEntity.totalExpense
+        if (transaction.transactionType == INCOME) {
+            noOfIncome = noOfIncome?.plus(1)
+            totalIncome = totalIncome?.plus(transaction.amount!!)
+        } else {
+            noOfExpense = noOfExpense?.plus(1)
+            totalExpense = totalExpense?.plus(transaction.amount!!)
+        }
+        return try {
+            val docRef = firebaseDb.collection(USERS)
+                .document(uid)
+                .collection(MONTH)
+                .document(monthYear)
+
+            docRef.update(NO_OF_TRANSACTION, noOfTransaction).await()
+            docRef.update(NO_OF_INCOME_TRANSACTION, noOfIncome).await()
+            docRef.update(NO_OF_EXPENSE_TRANSACTION, noOfExpense).await()
+            docRef.update(TOTAL_INCOME, totalIncome).await()
+            docRef.update(TOTAL_EXPENSE, totalExpense).await()
+            docRef.update(TOTAL_BALANCE, totalIncome!! - totalExpense!!).await()
+            true
+        } catch (e: Exception) {
+            false
+        }
+
+    }
 }
 
 private fun userResultEntityMapper(user: DocumentSnapshot?): UserInfoEntity? {
     user.apply {
         return user?.toObject(UserInfoEntity::class.java)
+    }
+}
+
+private fun monthlySummaryEntityMapper(user: DocumentSnapshot?): MonthlyTransactionSummaryEntity? {
+    user.apply {
+        return user?.toObject(MonthlyTransactionSummaryEntity::class.java)
     }
 }

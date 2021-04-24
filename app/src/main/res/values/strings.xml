@@ -52,4 +52,10 @@
     <string name="profile_image">Profile Image</string>
     <string name="amount_rs">Amount(Rs)</string>
 
+    <!--Record Transaction Dialog Fragment-->
+    <string name="transaction_added">Transaction Added</string>
+    <string name="expense">Expense</string>
+    <string name="income">Income</string>
+    <string name="description">Description</string>
+
 </resources>

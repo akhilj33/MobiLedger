@@ -56,7 +56,10 @@ class ViewModelFactoryProvider(private val useCaseProvider: UseCaseProvider) :
                 ) as T
             }
             modelClass.isAssignableFrom(RecordTransactionDialogFragmentViewModel::class.java) -> {
-                RecordTransactionDialogFragmentViewModel() as T
+                RecordTransactionDialogFragmentViewModel(
+                    useCaseProvider.provideTransactionUseCase(),
+                    useCaseProvider.provideUserSettingsUseCase()
+                ) as T
             }
             else -> throw IllegalArgumentException("Unknown ViewModel Class")
         }
