@@ -1,5 +1,19 @@
 package com.example.mobiledger.data.sources.api.model
 
+import com.example.mobiledger.common.utils.ConstantUtils.EMAIL_ID
+import com.example.mobiledger.common.utils.ConstantUtils.INCOME
+import com.example.mobiledger.common.utils.ConstantUtils.MONTH
+import com.example.mobiledger.common.utils.ConstantUtils.NO_OF_EXPENSE_TRANSACTION
+import com.example.mobiledger.common.utils.ConstantUtils.NO_OF_INCOME_TRANSACTION
+import com.example.mobiledger.common.utils.ConstantUtils.NO_OF_TRANSACTION
+import com.example.mobiledger.common.utils.ConstantUtils.NULL_STRING
+import com.example.mobiledger.common.utils.ConstantUtils.PHONE_NUMBER
+import com.example.mobiledger.common.utils.ConstantUtils.TOTAL_BALANCE
+import com.example.mobiledger.common.utils.ConstantUtils.TOTAL_EXPENSE
+import com.example.mobiledger.common.utils.ConstantUtils.TOTAL_INCOME
+import com.example.mobiledger.common.utils.ConstantUtils.TRANSACTION
+import com.example.mobiledger.common.utils.ConstantUtils.USERS
+import com.example.mobiledger.common.utils.ConstantUtils.USER_NAME
 import com.example.mobiledger.common.utils.ErrorCodes
 import com.example.mobiledger.data.ErrorMapper
 import com.example.mobiledger.domain.AppError
@@ -14,23 +28,6 @@ import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.tasks.await
-
-const val USERS = "Users"
-const val EMAIL_ID = "emailId"
-const val USER_NAME = "userName"
-const val PHONE_NUMBER = "phoneNo"
-const val MONTH = "Months"
-const val TRANSACTION = "Transaction"
-const val INCOME = "income"
-const val EXPENSE = "expense"
-const val NO_OF_EXPENSE_TRANSACTION = "noOfExpenseTransaction"
-const val NO_OF_INCOME_TRANSACTION = "noOfIncomeTransaction"
-const val NO_OF_TRANSACTION = "noOfTransaction"
-const val TOTAL_BALANCE = "totalBalance"
-const val TOTAL_INCOME = "totalIncome"
-const val TOTAL_EXPENSE = "totalExpense"
-const val NULL_STRING = "null"
-const val ONE = "1"
 
 interface UserApi {
     suspend fun addUserToFirebaseDb(user: UserEntity): Boolean
@@ -190,10 +187,8 @@ class UserApiImpl(private val firebaseDb: FirebaseFirestore) : UserApi {
         monthlyTransactionSummaryEntity: MonthlyTransactionSummaryEntity?
     ): Boolean {
         lateinit var newMonthlySummary: MonthlyTransactionSummaryEntity
-        val transID: String = if (transactionId == NULL_STRING)
-            ONE
-        else
-            transactionId
+
+        val timeInMills = transaction.transactionTime?.seconds.toString()
 
         if (transactionId == NULL_STRING) {
             val docMonthRef = firebaseDb.collection(USERS)
@@ -210,7 +205,7 @@ class UserApiImpl(private val firebaseDb: FirebaseFirestore) : UserApi {
             .collection(MONTH)
             .document(monthYear)
             .collection(TRANSACTION)
-            .document(transID)
+            .document(timeInMills)
 
         return try {
             docRef.set(transaction).await()
