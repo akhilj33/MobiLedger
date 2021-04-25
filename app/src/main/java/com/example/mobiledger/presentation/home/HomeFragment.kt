@@ -5,6 +5,7 @@ import android.view.View
 import androidx.fragment.app.viewModels
 import com.example.mobiledger.R
 import com.example.mobiledger.common.base.BaseFragment
+import com.example.mobiledger.common.utils.showRecordTransactionDialogFragment
 import com.example.mobiledger.databinding.FragmentHomeBinding
 
 class HomeFragment :
@@ -21,6 +22,10 @@ class HomeFragment :
     private fun setOnClickListener() {
         viewBinding.homeToolbar.btnProfile.setOnClickListener {
             navigator?.navigateToProfileScreen()
+        }
+
+        viewBinding.btnAddTransaction.setOnClickListener {
+            showRecordTransactionDialogFragment(requireActivity().supportFragmentManager)
         }
     }
 

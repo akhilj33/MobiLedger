@@ -17,5 +17,4 @@ class UserRepositoryImpl(private val userApi: UserApi, private val dispatcher: C
         }
     }
 
-
 }
