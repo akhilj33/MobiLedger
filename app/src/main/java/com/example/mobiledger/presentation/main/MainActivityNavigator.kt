@@ -24,6 +24,10 @@ class MainActivityNavigator constructor(
 
     /*---------------------------------Main Activity-------------------------------------*/
 
+    fun isDashBoardOnTopOfStack(): Boolean {
+        return FragmentTransactionHelper.isFragmentOnTopOfStack(fragmentManager, FragmentTagUtil.DASHBOARD_FRAGMENT_TAG, containerId)
+    }
+
     private fun popAllFragments() {
         FragmentTransactionHelper.popAllFragments(fragmentManager)
     }
@@ -46,7 +50,7 @@ class MainActivityNavigator constructor(
         FragmentTransactionHelper.replaceFragment(
             fragmentManager,
             DashboardFragment.newInstance(),
-            containerId, addToBackStack = false
+            containerId, addToBackStack = true
         )
     }
 

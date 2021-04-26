@@ -123,6 +123,15 @@ class MainActivity :
         }
     }
 
+    override fun onBackPressed() {
+        if (mainActivityNavigator?.isDashBoardOnTopOfStack() == true) {
+            if (viewModel.currentTab.value?.peekContent() != NavTab.HOME) highlightTab(NavTab.HOME)
+            else finish()
+        } else {
+            if (supportFragmentManager.backStackEntryCount == 1) finish() else super.onBackPressed()
+        }
+    }
+
 
     /*------------------------------------------------Live Data Observers----------------------------------------------------*/
 

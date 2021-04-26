@@ -26,13 +26,13 @@ class ProfileRepositoryImpl(private val userApi: UserApi, private val dispatcher
 
     override suspend fun updateUserNameInFirebase(username: String, uid: String): Boolean {
         return withContext(dispatcher) {
-            userApi.updateUserNameInFirebase(username, uid)
+            userApi.updateUserNameInAuth(username, uid)
         }
     }
 
     override suspend fun updateEmailInFirebase(email: String, uid: String): Boolean {
         return withContext(dispatcher) {
-            userApi.updateEmailInFirebase(email, uid)
+            userApi.updateEmailInAuth(email, uid)
         }
     }
 
@@ -44,7 +44,7 @@ class ProfileRepositoryImpl(private val userApi: UserApi, private val dispatcher
 
     override suspend fun updatePasswordInFirebase(password: String): Boolean {
         return withContext(dispatcher) {
-            userApi.updatePasswordInFirebase(password)
+            userApi.updatePasswordInAuth(password)
         }
     }
 }

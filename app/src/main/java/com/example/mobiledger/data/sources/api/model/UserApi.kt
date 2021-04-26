@@ -1,5 +1,6 @@
 package com.example.mobiledger.data.sources.api.model
 
+import android.net.Uri
 import com.example.mobiledger.common.utils.ConstantUtils.EMAIL_ID
 import com.example.mobiledger.common.utils.ConstantUtils.INCOME
 import com.example.mobiledger.common.utils.ConstantUtils.MONTH
@@ -23,6 +24,7 @@ import com.example.mobiledger.domain.entities.MonthlyTransactionSummaryEntity
 import com.example.mobiledger.domain.entities.TransactionEntity
 import com.example.mobiledger.domain.entities.UserEntity
 import com.example.mobiledger.domain.entities.UserInfoEntity
+import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
@@ -32,10 +34,10 @@ import kotlinx.coroutines.tasks.await
 interface UserApi {
     suspend fun addUserToFirebaseDb(user: UserEntity): Boolean
     suspend fun fetchUserDataFromFirebaseDb(uid: String): AppResult<UserInfoEntity?>
-    suspend fun updateUserNameInFirebase(userName: String, uid: String): Boolean
-    suspend fun updateEmailInFirebase(email: String, uid: String): Boolean
+    suspend fun updateUserNameInAuth(userName: String, uid: String): Boolean
+    suspend fun updateEmailInAuth(email: String, uid: String): Boolean
     suspend fun updateContactInFirebaseDB(contact: String, uid: String): Boolean
-    suspend fun updatePasswordInFirebase(password: String): Boolean
+    suspend fun updatePasswordInAuth(password: String): Boolean
     suspend fun getMonthlyTransactionDetail(uid: String, monthYear: String): AppResult<MonthlyTransactionSummaryEntity?>
     suspend fun addUserTransactionToFirebase(
         uid: String,
@@ -70,8 +72,9 @@ class UserApiImpl(private val firebaseDb: FirebaseFirestore) : UserApi {
 
         return when (val result = ErrorMapper.checkAndMapFirebaseApiError(response, exception)) {
             is FireBaseResult.Success -> {
-                if (result.data != null) {
-                    AppResult.Success(userResultEntityMapper(result.data))
+                val userInfo = userResultEntityMapper(result.data)
+                if (userInfo != null) {
+                    AppResult.Success(userInfo)
                 } else {
                     AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
                 }
@@ -82,15 +85,13 @@ class UserApiImpl(private val firebaseDb: FirebaseFirestore) : UserApi {
         }
     }
 
-    override suspend fun updateUserNameInFirebase(userName: String, uid: String): Boolean {
+    override suspend fun updateUserNameInAuth(userName: String, uid: String): Boolean {
         return try {
-            //todo
-//            val user = Firebase.auth.currentUser
-//            val profileUpdates = userProfileChangeRequest {
-//                displayName = userName
-//                photoUri = Uri.parse("https://example.com/jane-q-user/profile.jpg")
-//            }
-//            user?.updateProfile(profileUpdates)?.await()
+            val user = Firebase.auth.currentUser
+            val userProfileChangeRequest = UserProfileChangeRequest.Builder()
+            userProfileChangeRequest.displayName = userName
+            userProfileChangeRequest.photoUri = Uri.parse("https://example.com/jane-q-user/profile.jpg")
+            user?.updateProfile(userProfileChangeRequest.build())?.await()
             updateUserNameInDB(userName, uid)
         } catch (e: Exception) {
             false
@@ -109,7 +110,7 @@ class UserApiImpl(private val firebaseDb: FirebaseFirestore) : UserApi {
         }
     }
 
-    override suspend fun updateEmailInFirebase(email: String, uid: String): Boolean {
+    override suspend fun updateEmailInAuth(email: String, uid: String): Boolean {
         return try {
             val user = Firebase.auth.currentUser
             user?.updateEmail(email)?.await()
@@ -130,7 +131,7 @@ class UserApiImpl(private val firebaseDb: FirebaseFirestore) : UserApi {
         }
     }
 
-    override suspend fun updatePasswordInFirebase(password: String): Boolean {
+    override suspend fun updatePasswordInAuth(password: String): Boolean {
         return try {
             val user = Firebase.auth.currentUser
             user?.updatePassword(password)?.await()
@@ -171,8 +172,7 @@ class UserApiImpl(private val firebaseDb: FirebaseFirestore) : UserApi {
     private suspend fun updateEmailInDB(email: String, uid: String): Boolean {
         return try {
             val docRef = firebaseDb.collection(USERS).document(uid)
-            docRef
-                .update(EMAIL_ID, email).await()
+            docRef.update(EMAIL_ID, email).await()
             true
         } catch (e: java.lang.Exception) {
             false
@@ -257,13 +257,9 @@ class UserApiImpl(private val firebaseDb: FirebaseFirestore) : UserApi {
 }
 
 private fun userResultEntityMapper(user: DocumentSnapshot?): UserInfoEntity? {
-    user.apply {
-        return user?.toObject(UserInfoEntity::class.java)
-    }
+    return user?.toObject(UserInfoEntity::class.java)
 }
 
 private fun monthlySummaryEntityMapper(user: DocumentSnapshot?): MonthlyTransactionSummaryEntity? {
-    user.apply {
-        return user?.toObject(MonthlyTransactionSummaryEntity::class.java)
-    }
+    return user?.toObject(MonthlyTransactionSummaryEntity::class.java)
 }

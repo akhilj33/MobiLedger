@@ -13,6 +13,7 @@ interface AuthRepository {
     suspend fun signUpViaEmail(name: String, phoneNo: String, email: String, password: String): AppResult<UserEntity>
     suspend fun signInViaGoogle(idToken: String?): AppResult<UserEntity>
     suspend fun getCurrentUser(): AppResult<UserEntity>
+    suspend fun isUserAuthorized(): Boolean
     suspend fun logOut(): AppResult<Boolean>
 }
 
@@ -44,8 +45,14 @@ class AuthRepositoryImpl(
         }
     }
 
+    override suspend fun isUserAuthorized(): Boolean {
+        return withContext(dispatcher) {
+            authSource.isUserAuthorized()
+        }
+    }
+
     override suspend fun logOut(): AppResult<Boolean> {
-        return withContext(dispatcher){
+        return withContext(dispatcher) {
             authSource.logOut()
         }
     }
