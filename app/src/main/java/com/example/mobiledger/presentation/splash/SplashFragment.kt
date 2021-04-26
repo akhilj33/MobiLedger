@@ -15,8 +15,8 @@ class SplashFragment : BaseFragment<FragmentSplashBinding, SplashNavigator>(R.la
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.isUserSignedIn()
-//        setUpObservers()
-        navigator?.navigateSplashToLoginScreen()
+        setUpObservers()
+//        navigator?.navigateSplashToLoginScreen()
     }
 
     override fun isBottomNavVisible(): Boolean = false

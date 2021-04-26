@@ -4,6 +4,7 @@ import androidx.annotation.IdRes
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import com.example.mobiledger.common.extention.getName
 
 object FragmentTransactionHelper {
     fun replaceFragment(
@@ -14,9 +15,9 @@ object FragmentTransactionHelper {
     ) {
         val transaction = manager.beginTransaction()
         if (addToBackStack) {
-            transaction.addToBackStack(fragment::class.java.simpleName)
+            transaction.addToBackStack(fragment.getName())
         }
-        transaction.replace(frameId, fragment, fragment::class.java.simpleName)
+        transaction.replace(frameId, fragment, fragment.getName())
         transaction.commit()
     }
 
