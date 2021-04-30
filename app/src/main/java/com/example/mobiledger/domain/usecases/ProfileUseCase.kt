@@ -6,10 +6,10 @@ import com.example.mobiledger.domain.entities.UserInfoEntity
 
 interface ProfileUseCase {
     suspend fun fetchUserFromFirestoreDb(uid: String): AppResult<UserInfoEntity?>
-    suspend fun updateUserNameInFirebase(username: String, uid: String): Boolean
-    suspend fun updateEmailInFirebase(email: String, uid: String): Boolean
-    suspend fun updatePhoneInFirebaseDB(phoneNo: String, uid: String): Boolean
-    suspend fun updatePasswordInFirebase(password: String): Boolean
+    suspend fun updateUserNameInFirebase(username: String, uid: String): AppResult<Unit>
+    suspend fun updateEmailInFirebase(email: String, uid: String): AppResult<Unit>
+    suspend fun updatePhoneInFirebaseDB(phoneNo: String, uid: String): AppResult<Unit>
+    suspend fun updatePasswordInFirebase(password: String): AppResult<Unit>
 }
 
 class ProfileUseCaseImpl(private val profileRepository: ProfileRepository) : ProfileUseCase {
@@ -17,19 +17,19 @@ class ProfileUseCaseImpl(private val profileRepository: ProfileRepository) : Pro
         return profileRepository.fetchUserFromFirestoreDb(uid)
     }
 
-    override suspend fun updateUserNameInFirebase(username: String, uid: String): Boolean {
+    override suspend fun updateUserNameInFirebase(username: String, uid: String): AppResult<Unit> {
         return profileRepository.updateUserNameInFirebase(username, uid)
     }
 
-    override suspend fun updateEmailInFirebase(email: String, uid: String): Boolean {
+    override suspend fun updateEmailInFirebase(email: String, uid: String): AppResult<Unit> {
         return profileRepository.updateEmailInFirebase(email, uid)
     }
 
-    override suspend fun updatePhoneInFirebaseDB(phoneNo: String, uid: String): Boolean {
+    override suspend fun updatePhoneInFirebaseDB(phoneNo: String, uid: String): AppResult<Unit> {
         return profileRepository.updatePhoneNoInFirebaseDB(phoneNo, uid)
     }
 
-    override suspend fun updatePasswordInFirebase(password: String): Boolean {
+    override suspend fun updatePasswordInFirebase(password: String): AppResult<Unit> {
         return profileRepository.updatePasswordInFirebase(password)
     }
 }

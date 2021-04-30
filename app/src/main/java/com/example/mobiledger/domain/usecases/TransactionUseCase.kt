@@ -13,7 +13,7 @@ interface TransactionUseCase {
         transactionId: String,
         transaction: TransactionEntity,
         monthlyTransactionSummaryEntity: MonthlyTransactionSummaryEntity?
-    ): Boolean
+    ): AppResult<Unit>
 }
 
 class TransactionUseCaseImpl(private val transactionRepository: TransactionRepository) : TransactionUseCase {
@@ -27,7 +27,7 @@ class TransactionUseCaseImpl(private val transactionRepository: TransactionRepos
         transactionId: String,
         transaction: TransactionEntity,
         monthlyTransactionSummaryEntity: MonthlyTransactionSummaryEntity?
-    ): Boolean {
+    ): AppResult<Unit> {
         return transactionRepository.addUserTransactionToFirebase(
             uid,
             monthYear,

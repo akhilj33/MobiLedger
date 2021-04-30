@@ -6,6 +6,7 @@ import com.example.mobiledger.domain.AppError
 import com.example.mobiledger.domain.AppResult
 import com.example.mobiledger.domain.FireBaseResult
 import com.example.mobiledger.domain.entities.UserEntity
+import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.*
 import kotlinx.coroutines.tasks.await
 
@@ -13,28 +14,29 @@ interface AuthSource {
     suspend fun loginUserViaEmail(email: String, password: String): AppResult<UserEntity>
     suspend fun signUpViaEmail(name: String, phoneNo: String, email: String, password: String): AppResult<UserEntity>
     suspend fun signInViaGoogle(idToken: String?): AppResult<UserEntity>
-    suspend fun getCurrentUser(): AppResult<UserEntity>
     suspend fun isUserAuthorized(): Boolean
     suspend fun logOut(): AppResult<Boolean>
+    suspend fun getCurrentUser(): FirebaseUser?
 }
 
 class AuthSourceImpl(
-    private val firebaseAuth: FirebaseAuth, private val userApi: UserApi
+    private val firebaseAuth: FirebaseAuth
 ) : AuthSource {
 
     override suspend fun loginUserViaEmail(email: String, password: String): AppResult<UserEntity> {
-        var response: AuthResult? = null
+        var response: Task<AuthResult>? = null
         var exception: Exception? = null
         try {
-            response = firebaseAuth.signInWithEmailAndPassword(email, password).await()
+            response = firebaseAuth.signInWithEmailAndPassword(email, password)
+            response.await()
         } catch (e: Exception) {
             exception = e
         }
 
         return when (val result = ErrorMapper.checkAndMapFirebaseApiError(response, exception)) {
             is FireBaseResult.Success -> {
-                if (result.data != null && result.data.user != null) {
-                    AppResult.Success(authResultEntityMapper(result.data.user!!))
+                if (result.data != null && result.data.result != null && result.data.result?.user != null) {
+                    AppResult.Success(authResultEntityMapper(result.data.result?.user as FirebaseUser))
                 } else {
                     AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
                 }
@@ -46,21 +48,19 @@ class AuthSourceImpl(
     }
 
     override suspend fun signUpViaEmail(name: String, phoneNo: String, email: String, password: String): AppResult<UserEntity> {
-        var response: AuthResult? = null
+        var response: Task<AuthResult>? = null
         var exception: Exception? = null
         try {
-            response = firebaseAuth.createUserWithEmailAndPassword(email, password).await()
+            response = firebaseAuth.createUserWithEmailAndPassword(email, password)
+            response.await()
         } catch (e: Exception) {
             exception = e
         }
 
         return when (val result = ErrorMapper.checkAndMapFirebaseApiError(response, exception)) {
             is FireBaseResult.Success -> {
-                if (result.data != null && result.data.user != null) {
-                    val user = signUpResultEntityMapper(result.data.user!!, name, phoneNo)
-                    val isUserAddedToFirebase = userApi.addUserToFirebaseDb(user)
-                    if (isUserAddedToFirebase) AppResult.Success(user)
-                    else AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
+                if (result.data != null && result.data.result != null && result.data.result?.user != null) {
+                    AppResult.Success(signUpResultEntityMapper(result.data.result?.user as FirebaseUser, name, phoneNo))
                 } else {
                     AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
                 }
@@ -72,40 +72,20 @@ class AuthSourceImpl(
     }
 
     override suspend fun signInViaGoogle(idToken: String?): AppResult<UserEntity> {
-        var response: AuthResult? = null
+        var response: Task<AuthResult>? = null
         var exception: Exception? = null
         val credential = GoogleAuthProvider.getCredential(idToken, null)
         try {
-            response = firebaseAuth.signInWithCredential(credential).await()
+            response = firebaseAuth.signInWithCredential(credential)
+            response.await()
         } catch (e: Exception) {
             exception = e
         }
 
         return when (val result = ErrorMapper.checkAndMapFirebaseApiError(response, exception)) {
             is FireBaseResult.Success -> {
-                if (result.data != null && result.data.user != null) {
-                    AppResult.Success(authResultEntityMapper(result.data.user!!))
-                } else {
-                    AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
-                }
-            }
-            is FireBaseResult.Failure -> AppResult.Failure(result.error)
-        }
-    }
-
-    override suspend fun getCurrentUser(): AppResult<UserEntity> {
-        var response: FirebaseUser? = null
-        var exception: Exception? = null
-        try {
-            response = firebaseAuth.currentUser
-        } catch (e: Exception) {
-            exception = e
-        }
-
-        return when (val result = ErrorMapper.checkAndMapFirebaseApiError(response, exception)) {
-            is FireBaseResult.Success -> {
-                if (result.data != null) {
-                    AppResult.Success(authResultEntityMapper(result.data))
+                if (result.data != null && result.data.result != null && result.data.result?.user != null) {
+                    AppResult.Success(authResultEntityMapper(result.data.result?.user as FirebaseUser))
                 } else {
                     AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
                 }
@@ -115,17 +95,18 @@ class AuthSourceImpl(
     }
 
     override suspend fun isUserAuthorized(): Boolean {
-        var response: GetTokenResult? = null
+        var response: Task<GetTokenResult>? = null
         var exception: Exception? = null
         try {
-            response = firebaseAuth.currentUser?.getIdToken(true)?.await()
+            response = firebaseAuth.currentUser?.getIdToken(true)
+            response?.await()
         } catch (e: Exception) {
             exception = e
         }
 
         return when (val result = ErrorMapper.checkAndMapFirebaseApiError(response, exception)) {
             is FireBaseResult.Success -> {
-                result.data != null
+                result.data?.result != null
             }
             is FireBaseResult.Failure -> false
         }
@@ -150,6 +131,10 @@ class AuthSourceImpl(
             }
             is FireBaseResult.Failure -> AppResult.Failure(result.error)
         }
+    }
+
+    override suspend fun getCurrentUser(): FirebaseUser? {
+        return firebaseAuth.currentUser
     }
 }
 

@@ -8,12 +8,14 @@ import com.example.mobiledger.domain.AppError
 import com.example.mobiledger.domain.AppResult
 import com.example.mobiledger.domain.entities.UserEntity
 import com.example.mobiledger.domain.usecases.AuthUseCase
+import com.example.mobiledger.domain.usecases.UserSettingsUseCase
 import com.example.mobiledger.domain.usecases.UserUseCase
 import com.example.mobiledger.presentation.Event
 import kotlinx.coroutines.launch
 
-class SignUpViewModel(private val authUseCase: AuthUseCase,
-                        private val userUseCase: UserUseCase) : BaseViewModel() {
+class SignUpViewModel(private val authUseCase: AuthUseCase, private val userUseCase: UserUseCase,
+                      private val userSettingsUseCase: UserSettingsUseCase
+) : BaseViewModel() {
 
     val signUpResult: LiveData<Event<UserEntity>> get() = _signUpResultLiveData
     private val _signUpResultLiveData: MutableLiveData<Event<UserEntity>> = MutableLiveData()
@@ -25,12 +27,34 @@ class SignUpViewModel(private val authUseCase: AuthUseCase,
         viewModelScope.launch {
             when (val result = authUseCase.signUpViaEmail(name, phoneNo, email, password)) {
                 is AppResult.Success -> {
-                    _signUpResultLiveData.value = Event(result.data)
+                    addUserToFirebaseDB(result.data)
                 }
                 is AppResult.Failure -> {
                     _errorLiveData.value = Event(result.error)
                 }
             }
+        }
+    }
+
+    //todo how to handle case when user is successfully signed up by isn't added to db
+    private fun addUserToFirebaseDB(user: UserEntity){
+        viewModelScope.launch {
+            when(val result = userUseCase.addUserToFirebaseDb(user)){
+                is AppResult.Success -> {
+                    saveUIDInCache(user.uid)
+                    _signUpResultLiveData.value = Event(user)
+                }
+
+                is AppResult.Failure -> {
+                    _errorLiveData.value = Event(result.error)
+                }
+            }
+        }
+    }
+
+    private fun saveUIDInCache(uid: String?) {
+        viewModelScope.launch {
+            userSettingsUseCase.saveUID(uid)
         }
     }
 }

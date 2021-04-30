@@ -17,6 +17,7 @@ import com.example.mobiledger.common.extention.setWidthPercent
 import com.example.mobiledger.common.showToast
 import com.example.mobiledger.databinding.DialogFragmentRecordTransactionBinding
 import com.example.mobiledger.domain.enums.TransactionType
+import com.example.mobiledger.presentation.OneTimeObserver
 import com.google.firebase.Timestamp
 import java.text.SimpleDateFormat
 import java.util.*
@@ -78,7 +79,7 @@ class RecordTransactionDialogFragment :
     private fun setUpObserver() {
         viewModel.dataUpdatedResult.observe(
             viewLifecycleOwner,
-            Observer {
+            OneTimeObserver {
                 activity?.showToast(getString(R.string.transaction_added))
                 dialog?.dismiss()
             }

@@ -18,5 +18,6 @@ object ConstantUtils {
     const val TOTAL_EXPENSE = "totalExpense"
     const val NULL_STRING = "null"
     const val ONE = "1"
+    const val UNAUTHORIZED_ERROR_MSG = "User Not Authenticated"
 
 }

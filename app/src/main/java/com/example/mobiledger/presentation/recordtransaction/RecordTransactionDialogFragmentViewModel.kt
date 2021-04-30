@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.mobiledger.common.base.BaseViewModel
 import com.example.mobiledger.domain.AppError
 import com.example.mobiledger.domain.AppResult
+import com.example.mobiledger.domain.entities.MonthlyTransactionSummaryEntity
 import com.example.mobiledger.domain.entities.TransactionEntity
 import com.example.mobiledger.domain.usecases.TransactionUseCase
 import com.example.mobiledger.domain.usecases.UserSettingsUseCase
@@ -20,8 +21,8 @@ class RecordTransactionDialogFragmentViewModel(
 
     private var categoryList = arrayListOf<String>()
 
-    val dataUpdatedResult: LiveData<Boolean> get() = _dataUpdatedResult
-    private val _dataUpdatedResult: MutableLiveData<Boolean> = MutableLiveData()
+    val dataUpdatedResult: LiveData<Event<Unit>> get() = _dataUpdatedResult
+    private val _dataUpdatedResult: MutableLiveData<Event<Unit>> = MutableLiveData()
 
     private val _errorLiveData: MutableLiveData<Event<AppError>> = MutableLiveData()
     val errorLiveData: LiveData<Event<AppError>> = _errorLiveData
@@ -61,8 +62,24 @@ class RecordTransactionDialogFragmentViewModel(
                 val transactionData = result.data
                 val transactionId = transactionData?.noOfTransaction?.plus(1)
                 val transaction = TransactionEntity(amount, category, description, transactionType, transactionTime)
-                _dataUpdatedResult.value =
-                    transactionUseCase.addUserTransactionToFirebase(uid, monthYear, transactionId.toString(), transaction, transactionData)
+                addTransactionToFireBase(uid, monthYear, transactionId.toString(), transaction, transactionData)
+            }
+            is AppResult.Failure -> {
+                _errorLiveData.value = Event(result.error)
+            }
+        }
+    }
+
+    private suspend fun addTransactionToFireBase(
+        uid: String,
+        monthYear: String,
+        transactionId: String,
+        transaction: TransactionEntity,
+        transactionData: MonthlyTransactionSummaryEntity?
+    ) {
+        when (val result = transactionUseCase.addUserTransactionToFirebase(uid, monthYear, transactionId, transaction, transactionData)) {
+            is AppResult.Success -> {
+                _dataUpdatedResult.value = Event(result.data)
             }
             is AppResult.Failure -> {
                 _errorLiveData.value = Event(result.error)

@@ -1,6 +1,6 @@
 package com.example.mobiledger.data.sources.api.model
 
-import android.net.Uri
+import android.security.identity.UnknownAuthenticationKeyException
 import com.example.mobiledger.common.utils.ConstantUtils.EMAIL_ID
 import com.example.mobiledger.common.utils.ConstantUtils.INCOME
 import com.example.mobiledger.common.utils.ConstantUtils.MONTH
@@ -13,6 +13,7 @@ import com.example.mobiledger.common.utils.ConstantUtils.TOTAL_BALANCE
 import com.example.mobiledger.common.utils.ConstantUtils.TOTAL_EXPENSE
 import com.example.mobiledger.common.utils.ConstantUtils.TOTAL_INCOME
 import com.example.mobiledger.common.utils.ConstantUtils.TRANSACTION
+import com.example.mobiledger.common.utils.ConstantUtils.UNAUTHORIZED_ERROR_MSG
 import com.example.mobiledger.common.utils.ConstantUtils.USERS
 import com.example.mobiledger.common.utils.ConstantUtils.USER_NAME
 import com.example.mobiledger.common.utils.ErrorCodes
@@ -24,20 +25,19 @@ import com.example.mobiledger.domain.entities.MonthlyTransactionSummaryEntity
 import com.example.mobiledger.domain.entities.TransactionEntity
 import com.example.mobiledger.domain.entities.UserEntity
 import com.example.mobiledger.domain.entities.UserInfoEntity
+import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.UserProfileChangeRequest
-import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.tasks.await
 
 interface UserApi {
-    suspend fun addUserToFirebaseDb(user: UserEntity): Boolean
+    suspend fun addUserToFirebaseDb(user: UserEntity): AppResult<Unit>
     suspend fun fetchUserDataFromFirebaseDb(uid: String): AppResult<UserInfoEntity?>
-    suspend fun updateUserNameInAuth(userName: String, uid: String): Boolean
-    suspend fun updateEmailInAuth(email: String, uid: String): Boolean
-    suspend fun updateContactInFirebaseDB(contact: String, uid: String): Boolean
-    suspend fun updatePasswordInAuth(password: String): Boolean
+    suspend fun updateUserNameInAuth(userName: String, uid: String): AppResult<Unit>
+    suspend fun updateEmailInAuth(email: String, uid: String): AppResult<Unit>
+    suspend fun updateContactInFirebaseDB(contact: String, uid: String): AppResult<Unit>
+    suspend fun updatePasswordInAuth(password: String): AppResult<Unit>
     suspend fun getMonthlyTransactionDetail(uid: String, monthYear: String): AppResult<MonthlyTransactionSummaryEntity?>
     suspend fun addUserTransactionToFirebase(
         uid: String,
@@ -45,26 +45,39 @@ interface UserApi {
         transactionId: String,
         transaction: TransactionEntity,
         monthlyTransactionSummaryEntity: MonthlyTransactionSummaryEntity?
-    ): Boolean
+    ): AppResult<Unit>
 }
 
-class UserApiImpl(private val firebaseDb: FirebaseFirestore) : UserApi {
+class UserApiImpl(private val firebaseDb: FirebaseFirestore, private val authSource: AuthSource) : UserApi {
 
-    override suspend fun addUserToFirebaseDb(user: UserEntity): Boolean {
-        return try {
-            firebaseDb.collection(USERS).document(user.uid!!).set(user).await()
-            true
+    override suspend fun addUserToFirebaseDb(user: UserEntity): AppResult<Unit> {
+        var response: Task<Void>? = null
+        var exception: Exception? = null
+        try {
+            if (!authSource.isUserAuthorized()) throw UnknownAuthenticationKeyException(UNAUTHORIZED_ERROR_MSG)
+            response = firebaseDb.collection(USERS).document(user.uid!!).set(user)
+            response.await()
         } catch (e: Exception) {
-            false
+            exception = e
+        }
+
+        return when (val result = ErrorMapper.checkAndMapFirebaseApiError(response, exception)) {
+            is FireBaseResult.Success -> {
+                AppResult.Success(Unit)
+            }
+            is FireBaseResult.Failure -> {
+                AppResult.Failure(result.error)
+            }
         }
     }
 
     override suspend fun fetchUserDataFromFirebaseDb(uid: String): AppResult<UserInfoEntity?> {
-        var response: DocumentSnapshot? = null
+        var response: Task<DocumentSnapshot>? = null
         var exception: Exception? = null
         try {
-            val docRef = firebaseDb.collection(USERS).document(uid)
-            response = docRef.get().await()
+            if (!authSource.isUserAuthorized()) throw UnknownAuthenticationKeyException(UNAUTHORIZED_ERROR_MSG)
+            response = firebaseDb.collection(USERS).document(uid).get()
+            response.await()
 
         } catch (e: Exception) {
             exception = e
@@ -72,7 +85,7 @@ class UserApiImpl(private val firebaseDb: FirebaseFirestore) : UserApi {
 
         return when (val result = ErrorMapper.checkAndMapFirebaseApiError(response, exception)) {
             is FireBaseResult.Success -> {
-                val userInfo = userResultEntityMapper(result.data)
+                val userInfo = userResultEntityMapper(result.data?.result)
                 if (userInfo != null) {
                     AppResult.Success(userInfo)
                 } else {
@@ -85,16 +98,29 @@ class UserApiImpl(private val firebaseDb: FirebaseFirestore) : UserApi {
         }
     }
 
-    override suspend fun updateUserNameInAuth(userName: String, uid: String): Boolean {
-        return try {
-            val user = Firebase.auth.currentUser
+    override suspend fun updateUserNameInAuth(userName: String, uid: String): AppResult<Unit> {
+        var response: Task<Void>? = null
+        var exception: Exception? = null
+        try {
+            if (!authSource.isUserAuthorized()) throw UnknownAuthenticationKeyException(UNAUTHORIZED_ERROR_MSG)
+            val user = authSource.getCurrentUser()
             val userProfileChangeRequest = UserProfileChangeRequest.Builder()
             userProfileChangeRequest.displayName = userName
-            userProfileChangeRequest.photoUri = Uri.parse("https://example.com/jane-q-user/profile.jpg")
-            user?.updateProfile(userProfileChangeRequest.build())?.await()
-            updateUserNameInDB(userName, uid)
+            response = user?.updateProfile(userProfileChangeRequest.build())
+            response?.await()
         } catch (e: Exception) {
-            false
+            exception = e
+        }
+
+        return when (val result = ErrorMapper.checkAndMapFirebaseApiError(response, exception)) {
+            is FireBaseResult.Success -> {
+                val isUpdated = updateUserNameInDB(userName, uid)
+                if (isUpdated) AppResult.Success(Unit)
+                else AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
+            }
+            is FireBaseResult.Failure -> {
+                AppResult.Failure(result.error)
+            }
         }
     }
 
@@ -110,47 +136,86 @@ class UserApiImpl(private val firebaseDb: FirebaseFirestore) : UserApi {
         }
     }
 
-    override suspend fun updateEmailInAuth(email: String, uid: String): Boolean {
-        return try {
-            val user = Firebase.auth.currentUser
-            user?.updateEmail(email)?.await()
-            updateEmailInDB(email, uid)
+    override suspend fun updateEmailInAuth(email: String, uid: String): AppResult<Unit> {
+        var response: Task<Void>? = null
+        var exception: Exception? = null
+        try {
+            if (!authSource.isUserAuthorized()) throw UnknownAuthenticationKeyException(UNAUTHORIZED_ERROR_MSG)
+            val user = authSource.getCurrentUser()
+            response = user?.updateEmail(email)
+            response?.await()
         } catch (e: Exception) {
-            false
+            exception = e
+        }
+
+        return when (val result = ErrorMapper.checkAndMapFirebaseApiError(response, exception)) {
+            is FireBaseResult.Success -> {
+                val isUpdated = updateEmailInDB(email, uid)
+                if (isUpdated) AppResult.Success(Unit)
+                else AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
+            }
+            is FireBaseResult.Failure -> {
+                AppResult.Failure(result.error)
+            }
         }
     }
 
-    override suspend fun updateContactInFirebaseDB(contact: String, uid: String): Boolean {
-        return try {
+    override suspend fun updateContactInFirebaseDB(contact: String, uid: String): AppResult<Unit> {
+        var response: Task<Void>? = null
+        var exception: Exception? = null
+        try {
+            if (!authSource.isUserAuthorized()) throw UnknownAuthenticationKeyException(UNAUTHORIZED_ERROR_MSG)
             val docRef = firebaseDb.collection(USERS).document(uid)
-            docRef
-                .update(PHONE_NUMBER, contact).await()
-            true
+            response = docRef.update(PHONE_NUMBER, contact)
+            response.await()
         } catch (e: Exception) {
-            false
+            exception = e
+        }
+
+        return when (val result = ErrorMapper.checkAndMapFirebaseApiError(response, exception)) {
+            is FireBaseResult.Success -> {
+                AppResult.Success(Unit)
+            }
+            is FireBaseResult.Failure -> {
+                AppResult.Failure(result.error)
+            }
         }
     }
 
-    override suspend fun updatePasswordInAuth(password: String): Boolean {
-        return try {
-            val user = Firebase.auth.currentUser
-            user?.updatePassword(password)?.await()
-            true
+    override suspend fun updatePasswordInAuth(password: String): AppResult<Unit> {
+        var response: Task<Void>? = null
+        var exception: Exception? = null
+        try {
+            if (!authSource.isUserAuthorized()) throw UnknownAuthenticationKeyException(UNAUTHORIZED_ERROR_MSG)
+            val user = authSource.getCurrentUser()
+            response = user?.updatePassword(password)
+            response?.await()
         } catch (e: Exception) {
-            false
+            exception = e
+        }
+
+        return when (val result = ErrorMapper.checkAndMapFirebaseApiError(response, exception)) {
+            is FireBaseResult.Success -> {
+                AppResult.Success(Unit)
+            }
+            is FireBaseResult.Failure -> {
+                AppResult.Failure(result.error)
+            }
         }
     }
 
     override suspend fun getMonthlyTransactionDetail(uid: String, monthYear: String): AppResult<MonthlyTransactionSummaryEntity?> {
-        var response: DocumentSnapshot? = null
+        var response: Task<DocumentSnapshot>? = null
         var exception: Exception? = null
         try {
-            val docRef = firebaseDb.collection(USERS)
+            if (!authSource.isUserAuthorized()) throw UnknownAuthenticationKeyException(UNAUTHORIZED_ERROR_MSG)
+            response = firebaseDb.collection(USERS)
                 .document(uid)
                 .collection(MONTH)
                 .document(monthYear)
+                .get()
 
-            response = docRef.get().await()
+            response.await()
         } catch (e: Exception) {
             exception = e
         }
@@ -158,7 +223,7 @@ class UserApiImpl(private val firebaseDb: FirebaseFirestore) : UserApi {
         return when (val result = ErrorMapper.checkAndMapFirebaseApiError(response, exception)) {
             is FireBaseResult.Success -> {
                 if (result.data != null) {
-                    AppResult.Success(monthlySummaryEntityMapper(result.data))
+                    AppResult.Success(monthlySummaryEntityMapper(result.data.result))
                 } else {
                     AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
                 }
@@ -174,7 +239,7 @@ class UserApiImpl(private val firebaseDb: FirebaseFirestore) : UserApi {
             val docRef = firebaseDb.collection(USERS).document(uid)
             docRef.update(EMAIL_ID, email).await()
             true
-        } catch (e: java.lang.Exception) {
+        } catch (e: Exception) {
             false
         }
     }
@@ -185,37 +250,51 @@ class UserApiImpl(private val firebaseDb: FirebaseFirestore) : UserApi {
         transactionId: String,
         transaction: TransactionEntity,
         monthlyTransactionSummaryEntity: MonthlyTransactionSummaryEntity?
-    ): Boolean {
+    ): AppResult<Unit> {
         lateinit var newMonthlySummary: MonthlyTransactionSummaryEntity
+        var response: Task<Void>? = null
+        var exception: Exception? = null
 
         val timeInMills = transaction.transactionTime?.seconds.toString()
 
-        if (transactionId == NULL_STRING) {
-            val docMonthRef = firebaseDb.collection(USERS)
+        try {
+            if (!authSource.isUserAuthorized()) throw UnknownAuthenticationKeyException(UNAUTHORIZED_ERROR_MSG)
+            if (transactionId == NULL_STRING) {
+                val docMonthRef = firebaseDb.collection(USERS)
+                    .document(uid)
+                    .collection(MONTH)
+                    .document(monthYear)
+
+                newMonthlySummary = MonthlyTransactionSummaryEntity(0, 0, 0, 0, 0, 0)
+                docMonthRef.set(newMonthlySummary).await()
+            }
+
+            response = firebaseDb.collection(USERS)
                 .document(uid)
                 .collection(MONTH)
                 .document(monthYear)
+                .collection(TRANSACTION)
+                .document(timeInMills)
+                .set(transaction)
 
-            newMonthlySummary = MonthlyTransactionSummaryEntity(0, 0, 0, 0, 0, 0)
-            docMonthRef.set(newMonthlySummary).await()
+            response.await()
+        } catch (e: Exception) {
+            exception = e
         }
 
-        val docRef = firebaseDb.collection(USERS)
-            .document(uid)
-            .collection(MONTH)
-            .document(monthYear)
-            .collection(TRANSACTION)
-            .document(timeInMills)
+        return when (val result = ErrorMapper.checkAndMapFirebaseApiError(response, exception)) {
+            is FireBaseResult.Success -> {
+                if (transactionId != NULL_STRING)
+                    updateMonthlySummary(uid, monthYear, monthlyTransactionSummaryEntity!!, transaction)
+                else
+                    updateMonthlySummary(uid, monthYear, newMonthlySummary, transaction)
 
-        return try {
-            docRef.set(transaction).await()
-            if (transactionId != NULL_STRING)
-                updateMonthlySummary(uid, monthYear, monthlyTransactionSummaryEntity!!, transaction)
-            else
-                updateMonthlySummary(uid, monthYear, newMonthlySummary, transaction)
+                AppResult.Success(Unit)
 
-        } catch (e: Exception) {
-            false
+            }
+            is FireBaseResult.Failure -> {
+                AppResult.Failure(result.error)
+            }
         }
     }
 

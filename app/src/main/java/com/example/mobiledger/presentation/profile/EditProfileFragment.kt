@@ -4,13 +4,13 @@ import android.os.Bundle
 import android.util.Patterns
 import android.view.View
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import com.example.mobiledger.R
 import com.example.mobiledger.common.base.BaseFragment
 import com.example.mobiledger.common.base.BaseNavigator
 import com.example.mobiledger.common.showToast
 import com.example.mobiledger.common.utils.ValidationUtils
 import com.example.mobiledger.databinding.FragmentEditProfileBinding
+import com.example.mobiledger.presentation.OneTimeObserver
 
 
 class EditProfileFragment : BaseFragment<FragmentEditProfileBinding, BaseNavigator>(R.layout.fragment_edit_profile) {
@@ -31,7 +31,7 @@ class EditProfileFragment : BaseFragment<FragmentEditProfileBinding, BaseNavigat
     private fun setUpObserver() {
         viewModel.dataUpdatedResult.observe(
             viewLifecycleOwner,
-            Observer {
+            OneTimeObserver {
                 activity?.showToast(getString(R.string.updated))
             }
         )
