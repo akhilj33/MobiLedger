@@ -1,6 +1,6 @@
 package com.example.mobiledger.data.repository
 
-import com.example.mobiledger.data.sources.api.model.AuthSource
+import com.example.mobiledger.data.sources.auth.AuthSource
 import com.example.mobiledger.domain.AppResult
 import com.example.mobiledger.domain.entities.UserEntity
 import kotlinx.coroutines.CoroutineDispatcher

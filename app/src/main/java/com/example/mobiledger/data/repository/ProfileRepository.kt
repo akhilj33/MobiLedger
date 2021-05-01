@@ -1,6 +1,9 @@
 package com.example.mobiledger.data.repository
 
-import com.example.mobiledger.data.sources.api.model.UserApi
+import com.example.mobiledger.common.utils.ErrorCodes
+import com.example.mobiledger.data.sources.api.UserApi
+import com.example.mobiledger.data.sources.cache.CacheSource
+import com.example.mobiledger.domain.AppError
 import com.example.mobiledger.domain.AppResult
 import com.example.mobiledger.domain.entities.UserInfoEntity
 import kotlinx.coroutines.CoroutineDispatcher
@@ -8,37 +11,47 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 interface ProfileRepository {
-    suspend fun fetchUserFromFirestoreDb(uid: String): AppResult<UserInfoEntity?>
-    suspend fun updateUserNameInFirebase(username: String, uid: String): AppResult<Unit>
-    suspend fun updateEmailInFirebase(email: String, uid: String): AppResult<Unit>
-    suspend fun updatePhoneNoInFirebaseDB(phoneNo: String, uid: String): AppResult<Unit>
+    suspend fun fetchUserFromFirebase(): AppResult<UserInfoEntity>
+    suspend fun updateUserNameInFirebase(username: String): AppResult<Unit>
+    suspend fun updateEmailInFirebase(email: String): AppResult<Unit>
+    suspend fun updatePhoneNoInFirebase(phoneNo: String): AppResult<Unit>
     suspend fun updatePasswordInFirebase(password: String): AppResult<Unit>
 }
 
-class ProfileRepositoryImpl(private val userApi: UserApi, private val dispatcher: CoroutineDispatcher = Dispatchers.IO) :
-    ProfileRepository {
+class ProfileRepositoryImpl(
+    private val userApi: UserApi, private val cacheSource: CacheSource,
+    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
+) : ProfileRepository {
 
-    override suspend fun fetchUserFromFirestoreDb(uid: String): AppResult<UserInfoEntity?> {
+    override suspend fun fetchUserFromFirebase(): AppResult<UserInfoEntity> {
         return withContext(dispatcher) {
-            userApi.fetchUserDataFromFirebaseDb(uid)
+            val uId = cacheSource.getUID()
+            if (uId != null) userApi.fetchUserDataFromFirebaseDb(uId)
+            else AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
         }
     }
 
-    override suspend fun updateUserNameInFirebase(username: String, uid: String): AppResult<Unit> {
+    override suspend fun updateUserNameInFirebase(username: String): AppResult<Unit> {
         return withContext(dispatcher) {
-            userApi.updateUserNameInAuth(username, uid)
+            val uId = cacheSource.getUID()
+            if (uId != null) userApi.updateUserNameInAuth(username, uId)
+            else AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
         }
     }
 
-    override suspend fun updateEmailInFirebase(email: String, uid: String): AppResult<Unit> {
+    override suspend fun updateEmailInFirebase(email: String): AppResult<Unit> {
         return withContext(dispatcher) {
-            userApi.updateEmailInAuth(email, uid)
+            val uId = cacheSource.getUID()
+            if (uId != null) userApi.updateEmailInAuth(email, uId)
+            else AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
         }
     }
 
-    override suspend fun updatePhoneNoInFirebaseDB(phoneNo: String, uid: String): AppResult<Unit> {
+    override suspend fun updatePhoneNoInFirebase(phoneNo: String): AppResult<Unit> {
         return withContext(dispatcher) {
-            userApi.updateContactInFirebaseDB(phoneNo, uid)
+            val uId = cacheSource.getUID()
+            if (uId != null) userApi.updateContactInFirebaseDB(phoneNo, uId)
+            else AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
         }
     }
 

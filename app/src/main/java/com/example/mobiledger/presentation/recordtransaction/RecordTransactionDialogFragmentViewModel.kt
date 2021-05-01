@@ -14,10 +14,7 @@ import com.example.mobiledger.presentation.Event
 import com.google.firebase.Timestamp
 import kotlinx.coroutines.launch
 
-class RecordTransactionDialogFragmentViewModel(
-    private val transactionUseCase: TransactionUseCase,
-    private val userSettingsUseCase: UserSettingsUseCase
-) : BaseViewModel() {
+class RecordTransactionDialogFragmentViewModel(private val transactionUseCase: TransactionUseCase) : BaseViewModel() {
 
     private var categoryList = arrayListOf<String>()
 
@@ -48,21 +45,18 @@ class RecordTransactionDialogFragmentViewModel(
         transactionTime: Timestamp, transactionType: String
     ) {
         viewModelScope.launch {
-            val uid = userSettingsUseCase.getUID()
-            getMonthlyTransactionDetail(uid!!, monthYear, amount, category, description, transactionTime, transactionType)
+            getMonthlyTransactionDetail(monthYear, amount, category, description, transactionTime, transactionType)
         }
     }
 
-    private suspend fun getMonthlyTransactionDetail(
-        uid: String, monthYear: String, amount: Long, category: String, description: String,
+    private suspend fun getMonthlyTransactionDetail(monthYear: String, amount: Long, category: String, description: String,
         transactionTime: Timestamp, transactionType: String
     ) {
-        when (val result = transactionUseCase.getMonthlyTransactionSummaryFromDb(uid, monthYear)) {
+        when (val result = transactionUseCase.getMonthlyTransactionSummaryFromDb(monthYear)) {
             is AppResult.Success -> {
-                val transactionData = result.data
-                val transactionId = transactionData?.noOfTransaction?.plus(1)
-                val transaction = TransactionEntity(amount, category, description, transactionType, transactionTime)
-                addTransactionToFireBase(uid, monthYear, transactionId.toString(), transaction, transactionData)
+                val monthlySummaryEntity = result.data
+                val transactionEntity = TransactionEntity(amount, category, description, transactionType, transactionTime)
+                addTransactionToFireBase(monthYear, transactionEntity, monthlySummaryEntity)
             }
             is AppResult.Failure -> {
                 _errorLiveData.value = Event(result.error)
@@ -71,13 +65,11 @@ class RecordTransactionDialogFragmentViewModel(
     }
 
     private suspend fun addTransactionToFireBase(
-        uid: String,
         monthYear: String,
-        transactionId: String,
-        transaction: TransactionEntity,
-        transactionData: MonthlyTransactionSummaryEntity?
+        transactionEntity: TransactionEntity,
+        monthlySummaryEntity: MonthlyTransactionSummaryEntity?
     ) {
-        when (val result = transactionUseCase.addUserTransactionToFirebase(uid, monthYear, transactionId, transaction, transactionData)) {
+        when (val result = transactionUseCase.addUserTransactionToFirebase(monthYear, transactionEntity, monthlySummaryEntity)) {
             is AppResult.Success -> {
                 _dataUpdatedResult.value = Event(result.data)
             }

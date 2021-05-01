@@ -18,15 +18,13 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding, ProfileNavigator>(R
 
         setOnClickListener()
         setObserver()
-        viewModel.getUIDForProfile()
+        viewModel.fetchUserData()
     }
 
     override fun isBottomNavVisible(): Boolean = false
 
     private fun setObserver() {
-        viewModel.userFromFirestoreResult.observe(
-            viewLifecycleOwner,
-            NormalObserver {
+        viewModel.userFromFirestoreResult.observe(viewLifecycleOwner, {
                 updateProfileUI(it)
             }
         )
@@ -39,12 +37,9 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding, ProfileNavigator>(R
     }
 
     private fun updateProfileUI(user: UserInfoEntity) {
-        if (!user.userName.isNullOrEmpty())
-            viewBinding.displayName.text = user.userName
-        if (!user.emailId.isNullOrEmpty())
-            viewBinding.emailTv.text = user.emailId
-        if (!user.phoneNo.isNullOrEmpty())
-            viewBinding.contactNumTv.text = user.phoneNo
+        viewBinding.displayName.text = user.userName?:""
+        viewBinding.emailTv.text = user.emailId?:""
+        viewBinding.contactNumTv.text = user.phoneNo?:""
     }
 
     companion object {
