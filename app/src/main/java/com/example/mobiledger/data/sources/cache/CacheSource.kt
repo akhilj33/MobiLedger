@@ -5,7 +5,7 @@ import android.content.SharedPreferences
 
 interface CacheSource {
 
-    suspend fun saveUid(uid: String?)
+    suspend fun saveUid(uid: String)
     suspend fun getUID(): String?
 }
 
@@ -19,7 +19,7 @@ class SharedPreferenceSource(val context: Context) : CacheSource {
     private val sharedPref: SharedPreferences =
         context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
 
-    override suspend fun saveUid(uid: String?) {
+    override suspend fun saveUid(uid: String) {
         sharedPref.edit().putString(UID, uid).apply()
     }
 

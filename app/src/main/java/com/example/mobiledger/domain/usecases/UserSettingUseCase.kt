@@ -4,7 +4,7 @@ import com.example.mobiledger.data.repository.UserSettingsRepository
 
 interface UserSettingsUseCase {
     suspend fun getUID(): String?
-    suspend fun saveUID(uid: String?)
+    suspend fun saveUID(uid: String)
 }
 
 class UserSettingsUseCaseImpl(
@@ -14,7 +14,7 @@ class UserSettingsUseCaseImpl(
         return userSettingsRepository.getUID()
     }
 
-    override suspend fun saveUID(uid: String?) {
+    override suspend fun saveUID(uid: String) {
         userSettingsRepository.saveUID(uid)
     }
 }

@@ -11,9 +11,7 @@ import com.example.mobiledger.domain.usecases.ProfileUseCase
 import com.example.mobiledger.presentation.Event
 import kotlinx.coroutines.launch
 
-class EditProfileViewModel(
-    private val profileUseCase: ProfileUseCase
-) : BaseViewModel() {
+class EditProfileViewModel(private val profileUseCase: ProfileUseCase) : BaseViewModel() {
 
     val userFromFirebaseResult: LiveData<Event<UserInfoEntity?>> get() = _userFromFirebaseResult
     private val _userFromFirebaseResult: MutableLiveData<Event<UserInfoEntity?>> = MutableLiveData()

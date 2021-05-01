@@ -4,7 +4,7 @@ import com.example.mobiledger.data.sources.cache.CacheSource
 
 interface UserSettingsRepository {
     suspend fun getUID(): String?
-    suspend fun saveUID(uid: String?)
+    suspend fun saveUID(uid: String)
 }
 
 class UserSettingsRepositoryImpl(
@@ -16,7 +16,7 @@ class UserSettingsRepositoryImpl(
         return cacheSource.getUID()
     }
 
-    override suspend fun saveUID(uid: String?) {
+    override suspend fun saveUID(uid: String) {
         cacheSource.saveUid(uid)
     }
 }

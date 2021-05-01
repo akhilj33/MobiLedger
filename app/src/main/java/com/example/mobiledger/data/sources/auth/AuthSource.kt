@@ -6,6 +6,7 @@ import com.example.mobiledger.domain.AppError
 import com.example.mobiledger.domain.AppResult
 import com.example.mobiledger.domain.FireBaseResult
 import com.example.mobiledger.domain.entities.UserEntity
+import com.example.mobiledger.domain.enums.SignInType
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.*
 import kotlinx.coroutines.tasks.await
@@ -13,7 +14,7 @@ import kotlinx.coroutines.tasks.await
 interface AuthSource {
     suspend fun loginUserViaEmail(email: String, password: String): AppResult<UserEntity>
     suspend fun signUpViaEmail(name: String, phoneNo: String, email: String, password: String): AppResult<UserEntity>
-    suspend fun signInViaGoogle(idToken: String?): AppResult<UserEntity>
+    suspend fun signInViaGoogle(idToken: String?): AppResult<Pair<Boolean, UserEntity>>
     suspend fun isUserAuthorized(): Boolean
     suspend fun logOut(): AppResult<Boolean>
     suspend fun getCurrentUser(): FirebaseUser?
@@ -36,7 +37,8 @@ class AuthSourceImpl(
         return when (val result = ErrorMapper.checkAndMapFirebaseApiError(response, exception)) {
             is FireBaseResult.Success -> {
                 if (result.data != null && result.data.result != null && result.data.result?.user != null) {
-                    AppResult.Success(authResultEntityMapper(result.data.result?.user as FirebaseUser))
+                    val signInType = SignInType.Email
+                    AppResult.Success(authResultEntityMapper(result.data.result?.user as FirebaseUser, signInType))
                 } else {
                     AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
                 }
@@ -60,7 +62,7 @@ class AuthSourceImpl(
         return when (val result = ErrorMapper.checkAndMapFirebaseApiError(response, exception)) {
             is FireBaseResult.Success -> {
                 if (result.data != null && result.data.result != null && result.data.result?.user != null) {
-                    AppResult.Success(signUpResultEntityMapper(result.data.result?.user as FirebaseUser, name, phoneNo))
+                    AppResult.Success(signUpResultEntityMapper(result.data.result?.user as FirebaseUser, name, phoneNo, SignInType.Email))
                 } else {
                     AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
                 }
@@ -71,7 +73,7 @@ class AuthSourceImpl(
         }
     }
 
-    override suspend fun signInViaGoogle(idToken: String?): AppResult<UserEntity> {
+    override suspend fun signInViaGoogle(idToken: String?): AppResult<Pair<Boolean, UserEntity>> {
         var response: Task<AuthResult>? = null
         var exception: Exception? = null
         val credential = GoogleAuthProvider.getCredential(idToken, null)
@@ -84,8 +86,12 @@ class AuthSourceImpl(
 
         return when (val result = ErrorMapper.checkAndMapFirebaseApiError(response, exception)) {
             is FireBaseResult.Success -> {
-                if (result.data != null && result.data.result != null && result.data.result?.user != null) {
-                    AppResult.Success(authResultEntityMapper(result.data.result?.user as FirebaseUser))
+                if (result.data != null && result.data.result != null && result.data.result?.user != null && result.data.result?.additionalUserInfo != null) {
+                    val isNewUser = result.data.result?.additionalUserInfo!!.isNewUser
+                    val signInType = SignInType.Google
+                    val photo = result.data.result?.additionalUserInfo?.profile?.get("picture")
+                    val userEntity = authResultEntityMapper(result.data.result?.user as FirebaseUser, signInType, photo)
+                    AppResult.Success(Pair(isNewUser, userEntity))
                 } else {
                     AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
                 }
@@ -140,14 +146,14 @@ class AuthSourceImpl(
 
 /*----------------------------------------Entity Mappers------------------------------------------------*/
 
-private fun authResultEntityMapper(user: FirebaseUser): UserEntity {
+private fun authResultEntityMapper(user: FirebaseUser, signInType: SignInType, photo: Any? = null): UserEntity {
     user.apply {
-        return UserEntity(uid, displayName, photoUrl, email, phoneNumber)
+        return UserEntity(uid, displayName, photo?.toString(), email, phoneNumber, signInType)
     }
 }
 
-private fun signUpResultEntityMapper(user: FirebaseUser, name: String, phoneNo: String): UserEntity {
+private fun signUpResultEntityMapper(user: FirebaseUser, name: String, phoneNo: String, signInType: SignInType): UserEntity {
     user.apply {
-        return UserEntity(uid, name, photoUrl, email, phoneNo)
+        return UserEntity(uid, name, photoUrl?.toString(), email, phoneNo, signInType)
     }
 }
