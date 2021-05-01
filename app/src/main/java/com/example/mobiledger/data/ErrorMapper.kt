@@ -1,11 +1,13 @@
 package com.example.mobiledger.data
 
+import android.security.identity.UnknownAuthenticationKeyException
 import com.example.mobiledger.common.utils.ErrorCodes
 import com.example.mobiledger.common.utils.JsonUtils
 import com.example.mobiledger.data.sources.api.model.response.ErrorResponse
 import com.example.mobiledger.domain.AppError
 import com.example.mobiledger.domain.FireBaseResult
 import com.example.mobiledger.domain.RetrofitResult
+import com.google.android.gms.tasks.Task
 import com.google.firebase.FirebaseException
 import retrofit2.HttpException
 import retrofit2.Response
@@ -45,11 +47,14 @@ object ErrorMapper {
     }
 
     fun <T> checkAndMapFirebaseApiError(response: T?, exception: Exception?): FireBaseResult<T> {
-
         return when {
             exception != null -> {
                 val error = mapExceptionToError(exception)
                 FireBaseResult.Failure(error)
+            }
+            response is Task<*> -> {
+                if (response.isSuccessful) FireBaseResult.Success(response)
+                else FireBaseResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
             }
             response != null -> {
                 FireBaseResult.Success(response)
@@ -79,6 +84,9 @@ private fun mapErrorCode(code: Int, message: String? = null): AppError {
 
 private fun mapExceptionToError(exception: Exception?): AppError {
     return when (exception) {
+        is UnknownAuthenticationKeyException -> {
+            AppError(ErrorCodes.HTTP_UNAUTHORIZED, exception.message)
+        }
         is HttpException -> {
             mapErrorCode(exception.code())
         }

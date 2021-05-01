@@ -16,7 +16,7 @@ interface TransactionRepository {
         transactionId: String,
         transaction: TransactionEntity,
         monthlyTransactionSummaryEntity: MonthlyTransactionSummaryEntity?
-    ): Boolean
+    ): AppResult<Unit>
 }
 
 class TransactionRepositoryImpl(private val userApi: UserApi, private val dispatcher: CoroutineDispatcher = Dispatchers.IO) :
@@ -34,7 +34,7 @@ class TransactionRepositoryImpl(private val userApi: UserApi, private val dispat
         transactionId: String,
         transaction: TransactionEntity,
         monthlyTransactionSummaryEntity: MonthlyTransactionSummaryEntity?
-    ): Boolean {
+    ): AppResult<Unit> {
         return withContext(dispatcher) {
             userApi.addUserTransactionToFirebase(uid, monthYear, transactionId, transaction, monthlyTransactionSummaryEntity)
         }

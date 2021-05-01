@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.mobiledger.common.base.BaseViewModel
+import com.example.mobiledger.common.utils.ErrorCodes
 import com.example.mobiledger.domain.AppError
 import com.example.mobiledger.domain.AppResult
 import com.example.mobiledger.domain.entities.UserInfoEntity
@@ -20,8 +21,8 @@ class EditProfileViewModel(
     val userFromFirestoreResult: LiveData<Event<UserInfoEntity>> get() = _userFromFirestoreResult
     private val _userFromFirestoreResult: MutableLiveData<Event<UserInfoEntity>> = MutableLiveData()
 
-    val dataUpdatedResult: LiveData<Boolean> get() = _dataUpdatedResult
-    private val _dataUpdatedResult: MutableLiveData<Boolean> = MutableLiveData()
+    val dataUpdatedResult: LiveData<Event<Unit>> get() = _dataUpdatedResult
+    private val _dataUpdatedResult: MutableLiveData<Event<Unit>> = MutableLiveData()
 
     private val _errorLiveData: MutableLiveData<Event<AppError>> = MutableLiveData()
     val errorLiveData: LiveData<Event<AppError>> = _errorLiveData
@@ -37,7 +38,7 @@ class EditProfileViewModel(
         }
     }
 
-    fun fetchUserData(uid: String) {
+    private fun fetchUserData(uid: String) {
         viewModelScope.launch {
             when (val result = profileUseCase.fetchUserFromFirestoreDb(uid)) {
                 is AppResult.Success -> {
@@ -53,30 +54,61 @@ class EditProfileViewModel(
     fun updateUserName(userName: String) {
         viewModelScope.launch {
             val uid = userSettingsUseCase.getUID()
-            if (uid != null)
-                _dataUpdatedResult.value = profileUseCase.updateUserNameInFirebase(userName, uid)
+            if (uid != null) {
+                when (val result = profileUseCase.updateUserNameInFirebase(userName, uid)) {
+                    is AppResult.Success -> {
+                        _dataUpdatedResult.value = Event(result.data)
+                    }
+                    is AppResult.Failure -> {
+                        _errorLiveData.value = Event(result.error)
+                    }
+                }
+            } else _errorLiveData.value = Event(AppError(ErrorCodes.GENERIC_ERROR))
         }
     }
 
     fun updateEmail(email: String) {
         viewModelScope.launch {
             val uid = userSettingsUseCase.getUID()
-            if (uid != null)
-                _dataUpdatedResult.value = profileUseCase.updateEmailInFirebase(email, uid)
+            if (uid != null) {
+                when (val result = profileUseCase.updateEmailInFirebase(email, uid)) {
+                    is AppResult.Success -> {
+                        _dataUpdatedResult.value = Event(result.data)
+                    }
+                    is AppResult.Failure -> {
+                        _errorLiveData.value = Event(result.error)
+                    }
+                }
+            } else _errorLiveData.value = Event(AppError(ErrorCodes.GENERIC_ERROR))
         }
     }
 
     fun updatePhoneNo(phone: String) {
         viewModelScope.launch {
             val uid = userSettingsUseCase.getUID()
-            if (uid != null)
-                _dataUpdatedResult.value = profileUseCase.updatePhoneInFirebaseDB(phone, uid)
+            if (uid != null) {
+                when (val result = profileUseCase.updatePhoneInFirebaseDB(phone, uid)) {
+                    is AppResult.Success -> {
+                        _dataUpdatedResult.value = Event(result.data)
+                    }
+                    is AppResult.Failure -> {
+                        _errorLiveData.value = Event(result.error)
+                    }
+                }
+            } else _errorLiveData.value = Event(AppError(ErrorCodes.GENERIC_ERROR))
         }
     }
 
     fun updatePassword(password: String) {
         viewModelScope.launch {
-            _dataUpdatedResult.value = profileUseCase.updatePasswordInFirebase(password)
+            when (val result = profileUseCase.updatePasswordInFirebase(password)) {
+                is AppResult.Success -> {
+                    _dataUpdatedResult.value = Event(result.data)
+                }
+                is AppResult.Failure -> {
+                    _errorLiveData.value = Event(result.error)
+                }
+            }
         }
     }
 }

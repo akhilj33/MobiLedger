@@ -1,7 +1,5 @@
 package com.example.mobiledger.common.di.providers
 
-import com.example.mobiledger.data.sources.api.model.AuthSource
-import com.example.mobiledger.data.sources.api.model.AuthSourceImpl
 import com.example.mobiledger.data.sources.api.model.UserApi
 import com.example.mobiledger.data.sources.api.model.UserApiImpl
 
@@ -11,8 +9,9 @@ import com.example.mobiledger.data.sources.api.model.UserApiImpl
 
 class ApiSourceProvider(
     private val retrofitProvider: RetrofitProvider,
-    private val firebaseProvider: FirebaseProvider
+    private val firebaseProvider: FirebaseProvider,
+    private val authSourceProvider: AuthSourceProvider
 ) {
-    fun provideUserApiSource(): UserApi = UserApiImpl(firebaseProvider.provideFirebaseDatabase())
+    fun provideUserApiSource(): UserApi = UserApiImpl(firebaseProvider.provideFirebaseDatabase(), authSourceProvider.provideAuthSource())
 
 }
