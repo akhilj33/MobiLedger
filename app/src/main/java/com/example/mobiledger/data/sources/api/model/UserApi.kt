@@ -288,9 +288,7 @@ class UserApiImpl(private val firebaseDb: FirebaseFirestore, private val authSou
                     updateMonthlySummary(uid, monthYear, monthlyTransactionSummaryEntity!!, transaction)
                 else
                     updateMonthlySummary(uid, monthYear, newMonthlySummary, transaction)
-
                 AppResult.Success(Unit)
-
             }
             is FireBaseResult.Failure -> {
                 AppResult.Failure(result.error)
