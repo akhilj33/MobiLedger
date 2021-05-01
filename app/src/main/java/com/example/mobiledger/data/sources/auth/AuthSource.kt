@@ -1,4 +1,4 @@
-package com.example.mobiledger.data.sources.api.model
+package com.example.mobiledger.data.sources.auth
 
 import com.example.mobiledger.common.utils.ErrorCodes
 import com.example.mobiledger.data.ErrorMapper
