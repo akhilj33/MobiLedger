@@ -3,11 +3,14 @@ package com.example.mobiledger.presentation.profile
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import com.example.mobiledger.R
 import com.example.mobiledger.common.base.BaseFragment
 import com.example.mobiledger.databinding.FragmentProfileBinding
+import com.example.mobiledger.databinding.SnackViewErrorBinding
 import com.example.mobiledger.domain.entities.UserInfoEntity
 import com.example.mobiledger.presentation.NormalObserver
+import com.example.mobiledger.presentation.OneTimeObserver
 
 class ProfileFragment : BaseFragment<FragmentProfileBinding, ProfileNavigator>(R.layout.fragment_profile) {
 
@@ -22,6 +25,7 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding, ProfileNavigator>(R
     }
 
     override fun isBottomNavVisible(): Boolean = false
+    override fun getSnackBarErrorView(): SnackViewErrorBinding = viewBinding.includeErrorView
 
     private fun setObserver() {
         viewModel.userFromFirestoreResult.observe(
@@ -30,6 +34,22 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding, ProfileNavigator>(R
                 updateProfileUI(it)
             }
         )
+
+        viewModel.loadingState.observe(viewLifecycleOwner, Observer {
+            if (it) {
+                viewBinding.profileProgressBar.visibility = View.VISIBLE
+            } else {
+                viewBinding.profileProgressBar.visibility = View.GONE
+            }
+        })
+
+        viewModel.errorLiveData.observe(viewLifecycleOwner, OneTimeObserver {
+            when (it.viewErrorType) {
+                ProfileViewModel.ViewErrorType.NON_BLOCKING -> {
+                    showSnackBarErrorView(it.message ?: getString(it.resID), true)
+                }
+            }
+        })
     }
 
     private fun setOnClickListener() {

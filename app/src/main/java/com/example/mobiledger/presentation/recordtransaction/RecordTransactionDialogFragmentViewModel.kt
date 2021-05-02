@@ -1,10 +1,11 @@
 package com.example.mobiledger.presentation.recordtransaction
 
+import androidx.annotation.StringRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.example.mobiledger.R
 import com.example.mobiledger.common.base.BaseViewModel
-import com.example.mobiledger.domain.AppError
 import com.example.mobiledger.domain.AppResult
 import com.example.mobiledger.domain.entities.MonthlyTransactionSummaryEntity
 import com.example.mobiledger.domain.entities.TransactionEntity
@@ -24,8 +25,11 @@ class RecordTransactionDialogFragmentViewModel(
     val dataUpdatedResult: LiveData<Event<Unit>> get() = _dataUpdatedResult
     private val _dataUpdatedResult: MutableLiveData<Event<Unit>> = MutableLiveData()
 
-    private val _errorLiveData: MutableLiveData<Event<AppError>> = MutableLiveData()
-    val errorLiveData: LiveData<Event<AppError>> = _errorLiveData
+    private val _errorLiveData: MutableLiveData<Event<ViewError>> = MutableLiveData()
+    val errorLiveData: LiveData<Event<ViewError>> = _errorLiveData
+
+    private val _loadingState = MutableLiveData<Boolean>(false)
+    val loadingState: LiveData<Boolean> get() = _loadingState
 
     //todo : Fetch it from Firebase later
     fun provideCategoryList(): ArrayList<String> {
@@ -48,6 +52,7 @@ class RecordTransactionDialogFragmentViewModel(
         transactionTime: Timestamp, transactionType: String
     ) {
         viewModelScope.launch {
+            _loadingState.value = true
             val uid = userSettingsUseCase.getUID()
             getMonthlyTransactionDetail(uid!!, monthYear, amount, category, description, transactionTime, transactionType)
         }
@@ -65,7 +70,12 @@ class RecordTransactionDialogFragmentViewModel(
                 addTransactionToFireBase(uid, monthYear, transactionId.toString(), transaction, transactionData)
             }
             is AppResult.Failure -> {
-                _errorLiveData.value = Event(result.error)
+                _errorLiveData.value = Event(
+                    ViewError(
+                        viewErrorType = ViewErrorType.NON_BLOCKING,
+                        message = result.error.message
+                    )
+                )
             }
         }
     }
@@ -82,8 +92,22 @@ class RecordTransactionDialogFragmentViewModel(
                 _dataUpdatedResult.value = Event(result.data)
             }
             is AppResult.Failure -> {
-                _errorLiveData.value = Event(result.error)
+                _errorLiveData.value = Event(
+                    ViewError(
+                        viewErrorType = ViewErrorType.NON_BLOCKING,
+                        message = result.error.message
+                    )
+                )
             }
         }
+        _loadingState.value = false
     }
+
+    enum class ViewErrorType { NON_BLOCKING }
+
+    data class ViewError(
+        val viewErrorType: ViewErrorType,
+        var message: String? = null,
+        @StringRes val resID: Int = R.string.generic_error_message
+    )
 }

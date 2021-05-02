@@ -1,6 +1,5 @@
 package com.example.mobiledger.data.sources.api.model
 
-import android.security.identity.UnknownAuthenticationKeyException
 import com.example.mobiledger.common.utils.ConstantUtils.EMAIL_ID
 import com.example.mobiledger.common.utils.ConstantUtils.INCOME
 import com.example.mobiledger.common.utils.ConstantUtils.MONTH
@@ -26,6 +25,7 @@ import com.example.mobiledger.domain.entities.TransactionEntity
 import com.example.mobiledger.domain.entities.UserEntity
 import com.example.mobiledger.domain.entities.UserInfoEntity
 import com.google.android.gms.tasks.Task
+import com.google.firebase.FirebaseException
 import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
@@ -54,7 +54,7 @@ class UserApiImpl(private val firebaseDb: FirebaseFirestore, private val authSou
         var response: Task<Void>? = null
         var exception: Exception? = null
         try {
-            if (!authSource.isUserAuthorized()) throw UnknownAuthenticationKeyException(UNAUTHORIZED_ERROR_MSG)
+            if (!authSource.isUserAuthorized()) throw  FirebaseException(UNAUTHORIZED_ERROR_MSG)
             response = firebaseDb.collection(USERS).document(user.uid!!).set(user)
             response.await()
         } catch (e: Exception) {
@@ -75,7 +75,7 @@ class UserApiImpl(private val firebaseDb: FirebaseFirestore, private val authSou
         var response: Task<DocumentSnapshot>? = null
         var exception: Exception? = null
         try {
-            if (!authSource.isUserAuthorized()) throw UnknownAuthenticationKeyException(UNAUTHORIZED_ERROR_MSG)
+            if (!authSource.isUserAuthorized()) throw FirebaseException(UNAUTHORIZED_ERROR_MSG)
             response = firebaseDb.collection(USERS).document(uid).get()
             response.await()
 
@@ -102,7 +102,7 @@ class UserApiImpl(private val firebaseDb: FirebaseFirestore, private val authSou
         var response: Task<Void>? = null
         var exception: Exception? = null
         try {
-            if (!authSource.isUserAuthorized()) throw UnknownAuthenticationKeyException(UNAUTHORIZED_ERROR_MSG)
+            if (!authSource.isUserAuthorized()) throw FirebaseException(UNAUTHORIZED_ERROR_MSG)
             val user = authSource.getCurrentUser()
             val userProfileChangeRequest = UserProfileChangeRequest.Builder()
             userProfileChangeRequest.displayName = userName
@@ -140,7 +140,7 @@ class UserApiImpl(private val firebaseDb: FirebaseFirestore, private val authSou
         var response: Task<Void>? = null
         var exception: Exception? = null
         try {
-            if (!authSource.isUserAuthorized()) throw UnknownAuthenticationKeyException(UNAUTHORIZED_ERROR_MSG)
+            if (!authSource.isUserAuthorized()) throw FirebaseException(UNAUTHORIZED_ERROR_MSG)
             val user = authSource.getCurrentUser()
             response = user?.updateEmail(email)
             response?.await()
@@ -164,7 +164,7 @@ class UserApiImpl(private val firebaseDb: FirebaseFirestore, private val authSou
         var response: Task<Void>? = null
         var exception: Exception? = null
         try {
-            if (!authSource.isUserAuthorized()) throw UnknownAuthenticationKeyException(UNAUTHORIZED_ERROR_MSG)
+            if (!authSource.isUserAuthorized()) throw FirebaseException(UNAUTHORIZED_ERROR_MSG)
             val docRef = firebaseDb.collection(USERS).document(uid)
             response = docRef.update(PHONE_NUMBER, contact)
             response.await()
@@ -186,7 +186,7 @@ class UserApiImpl(private val firebaseDb: FirebaseFirestore, private val authSou
         var response: Task<Void>? = null
         var exception: Exception? = null
         try {
-            if (!authSource.isUserAuthorized()) throw UnknownAuthenticationKeyException(UNAUTHORIZED_ERROR_MSG)
+            if (!authSource.isUserAuthorized()) throw FirebaseException(UNAUTHORIZED_ERROR_MSG)
             val user = authSource.getCurrentUser()
             response = user?.updatePassword(password)
             response?.await()
@@ -208,7 +208,7 @@ class UserApiImpl(private val firebaseDb: FirebaseFirestore, private val authSou
         var response: Task<DocumentSnapshot>? = null
         var exception: Exception? = null
         try {
-            if (!authSource.isUserAuthorized()) throw UnknownAuthenticationKeyException(UNAUTHORIZED_ERROR_MSG)
+            if (!authSource.isUserAuthorized()) throw FirebaseException(UNAUTHORIZED_ERROR_MSG)
             response = firebaseDb.collection(USERS)
                 .document(uid)
                 .collection(MONTH)
@@ -258,7 +258,7 @@ class UserApiImpl(private val firebaseDb: FirebaseFirestore, private val authSou
         val timeInMills = transaction.transactionTime?.seconds.toString()
 
         try {
-            if (!authSource.isUserAuthorized()) throw UnknownAuthenticationKeyException(UNAUTHORIZED_ERROR_MSG)
+            if (!authSource.isUserAuthorized()) throw FirebaseException(UNAUTHORIZED_ERROR_MSG)
             if (transactionId == NULL_STRING) {
                 val docMonthRef = firebaseDb.collection(USERS)
                     .document(uid)

@@ -4,11 +4,13 @@ import android.os.Bundle
 import android.util.Patterns
 import android.view.View
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import com.example.mobiledger.R
 import com.example.mobiledger.common.base.BaseFragment
 import com.example.mobiledger.common.showToast
 import com.example.mobiledger.common.utils.ValidationUtils
 import com.example.mobiledger.databinding.FragmentSignUpBinding
+import com.example.mobiledger.databinding.SnackViewErrorBinding
 import com.example.mobiledger.presentation.OneTimeObserver
 
 
@@ -24,6 +26,7 @@ class SignUpFragment :
     }
 
     override fun isBottomNavVisible(): Boolean = false
+    override fun getSnackBarErrorView(): SnackViewErrorBinding = viewBinding.includeErrorView
 
     private fun setUpObserver() {
         viewModel.signUpResult.observe(
@@ -33,8 +36,18 @@ class SignUpFragment :
             })
 
         viewModel.errorLiveData.observe(viewLifecycleOwner, OneTimeObserver {
-            it.let {
-                activity?.showToast(getString(R.string.signup_failed))
+            when (it.viewErrorType) {
+                SignUpViewModel.ViewErrorType.NON_BLOCKING -> {
+                    showSnackBarErrorView(it.message ?: getString(it.resID), true)
+                }
+            }
+        })
+
+        viewModel.loadingState.observe(viewLifecycleOwner, Observer {
+            if (it) {
+                viewBinding.signUpProgressBar.visibility = View.VISIBLE
+            } else {
+                viewBinding.signUpProgressBar.visibility = View.GONE
             }
         })
     }

@@ -4,18 +4,21 @@ import android.os.Bundle
 import android.util.Patterns
 import android.view.View
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import com.example.mobiledger.R
 import com.example.mobiledger.common.base.BaseFragment
 import com.example.mobiledger.common.base.BaseNavigator
 import com.example.mobiledger.common.showToast
 import com.example.mobiledger.common.utils.ValidationUtils
 import com.example.mobiledger.databinding.FragmentEditProfileBinding
+import com.example.mobiledger.databinding.SnackViewErrorBinding
 import com.example.mobiledger.presentation.OneTimeObserver
 
 
 class EditProfileFragment : BaseFragment<FragmentEditProfileBinding, BaseNavigator>(R.layout.fragment_edit_profile) {
 
     override fun isBottomNavVisible(): Boolean = false
+    override fun getSnackBarErrorView(): SnackViewErrorBinding = viewBinding.includeErrorView
 
     private val viewModel: EditProfileViewModel by viewModels { viewModelFactory }
 
@@ -35,6 +38,22 @@ class EditProfileFragment : BaseFragment<FragmentEditProfileBinding, BaseNavigat
                 activity?.showToast(getString(R.string.updated))
             }
         )
+
+        viewModel.loadingState.observe(viewLifecycleOwner, Observer {
+            if (it) {
+                viewBinding.editProfileProgressBar.visibility = View.VISIBLE
+            } else {
+                viewBinding.editProfileProgressBar.visibility = View.GONE
+            }
+        })
+
+        viewModel.errorLiveData.observe(viewLifecycleOwner, OneTimeObserver {
+            when (it.viewErrorType) {
+                EditProfileViewModel.ViewErrorType.NON_BLOCKING -> {
+                    showSnackBarErrorView(it.message ?: getString(it.resID), true)
+                }
+            }
+        })
     }
 
 

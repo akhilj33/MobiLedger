@@ -1,6 +1,5 @@
 package com.example.mobiledger.data
 
-import android.security.identity.UnknownAuthenticationKeyException
 import com.example.mobiledger.common.utils.ErrorCodes
 import com.example.mobiledger.common.utils.JsonUtils
 import com.example.mobiledger.data.sources.api.model.response.ErrorResponse
@@ -82,11 +81,9 @@ private fun mapErrorCode(code: Int, message: String? = null): AppError {
     }
 }
 
+
 private fun mapExceptionToError(exception: Exception?): AppError {
     return when (exception) {
-        is UnknownAuthenticationKeyException -> {
-            AppError(ErrorCodes.HTTP_UNAUTHORIZED, exception.message)
-        }
         is HttpException -> {
             mapErrorCode(exception.code())
         }
