@@ -9,7 +9,6 @@ import com.example.mobiledger.common.base.BaseFragment
 import com.example.mobiledger.databinding.FragmentProfileBinding
 import com.example.mobiledger.databinding.SnackViewErrorBinding
 import com.example.mobiledger.domain.entities.UserInfoEntity
-import com.example.mobiledger.presentation.NormalObserver
 import com.example.mobiledger.presentation.OneTimeObserver
 
 class ProfileFragment : BaseFragment<FragmentProfileBinding, ProfileNavigator>(R.layout.fragment_profile) {
@@ -21,18 +20,16 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding, ProfileNavigator>(R
 
         setOnClickListener()
         setObserver()
-        viewModel.getUIDForProfile()
+        viewModel.fetchUserData()
     }
 
     override fun isBottomNavVisible(): Boolean = false
     override fun getSnackBarErrorView(): SnackViewErrorBinding = viewBinding.includeErrorView
 
     private fun setObserver() {
-        viewModel.userFromFirestoreResult.observe(
-            viewLifecycleOwner,
-            NormalObserver {
-                updateProfileUI(it)
-            }
+        viewModel.userFromFirestoreResult.observe(viewLifecycleOwner, {
+            updateProfileUI(it)
+        }
         )
 
         viewModel.loadingState.observe(viewLifecycleOwner, Observer {
@@ -59,12 +56,9 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding, ProfileNavigator>(R
     }
 
     private fun updateProfileUI(user: UserInfoEntity) {
-        if (!user.userName.isNullOrEmpty())
-            viewBinding.displayName.text = user.userName
-        if (!user.emailId.isNullOrEmpty())
-            viewBinding.emailTv.text = user.emailId
-        if (!user.phoneNo.isNullOrEmpty())
-            viewBinding.contactNumTv.text = user.phoneNo
+        viewBinding.displayName.text = user.userName ?: ""
+        viewBinding.emailTv.text = user.emailId ?: ""
+        viewBinding.contactNumTv.text = user.phoneNo ?: ""
     }
 
     companion object {

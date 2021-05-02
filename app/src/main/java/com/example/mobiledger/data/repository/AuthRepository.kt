@@ -1,6 +1,6 @@
 package com.example.mobiledger.data.repository
 
-import com.example.mobiledger.data.sources.api.model.AuthSource
+import com.example.mobiledger.data.sources.auth.AuthSource
 import com.example.mobiledger.domain.AppResult
 import com.example.mobiledger.domain.entities.UserEntity
 import kotlinx.coroutines.CoroutineDispatcher
@@ -11,7 +11,7 @@ import kotlinx.coroutines.withContext
 interface AuthRepository {
     suspend fun loginUsingEmail(email: String, password: String): AppResult<UserEntity>
     suspend fun signUpViaEmail(name: String, phoneNo: String, email: String, password: String): AppResult<UserEntity>
-    suspend fun signInViaGoogle(idToken: String?): AppResult<UserEntity>
+    suspend fun signInViaGoogle(idToken: String?): AppResult<Pair<Boolean, UserEntity>>
     suspend fun isUserAuthorized(): Boolean
     suspend fun logOut(): AppResult<Boolean>
 }
@@ -32,7 +32,7 @@ class AuthRepositoryImpl(
         }
     }
 
-    override suspend fun signInViaGoogle(idToken: String?): AppResult<UserEntity> {
+    override suspend fun signInViaGoogle(idToken: String?): AppResult<Pair<Boolean, UserEntity>> {
         return withContext(dispatcher) {
             authSource.signInViaGoogle(idToken)
         }

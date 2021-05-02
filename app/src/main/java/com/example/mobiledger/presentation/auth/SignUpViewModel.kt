@@ -43,6 +43,7 @@ class SignUpViewModel(private val authUseCase: AuthUseCase, private val userUseC
                     )
                 }
             }
+            _loadingState.value = false
         }
     }
 
@@ -68,7 +69,7 @@ class SignUpViewModel(private val authUseCase: AuthUseCase, private val userUseC
         }
     }
 
-    private fun saveUIDInCache(uid: String?) {
+    private fun saveUIDInCache(uid: String) {
         viewModelScope.launch {
             userSettingsUseCase.saveUID(uid)
         }

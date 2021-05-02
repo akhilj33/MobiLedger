@@ -1,6 +1,9 @@
 package com.example.mobiledger.data.repository
 
-import com.example.mobiledger.data.sources.api.model.UserApi
+import com.example.mobiledger.common.utils.ErrorCodes
+import com.example.mobiledger.data.sources.api.TransactionApi
+import com.example.mobiledger.data.sources.cache.CacheSource
+import com.example.mobiledger.domain.AppError
 import com.example.mobiledger.domain.AppResult
 import com.example.mobiledger.domain.entities.MonthlyTransactionSummaryEntity
 import com.example.mobiledger.domain.entities.TransactionEntity
@@ -9,34 +12,37 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 interface TransactionRepository {
-    suspend fun getMonthlyTransactionFromFirebaseDb(uid: String, monthYear: String): AppResult<MonthlyTransactionSummaryEntity?>
+    suspend fun getMonthlyTransactionFromFirebaseDb(monthYear: String): AppResult<MonthlyTransactionSummaryEntity?>
     suspend fun addUserTransactionToFirebase(
-        uid: String,
         monthYear: String,
-        transactionId: String,
-        transaction: TransactionEntity,
+        transactionEntity: TransactionEntity,
         monthlyTransactionSummaryEntity: MonthlyTransactionSummaryEntity?
     ): AppResult<Unit>
 }
 
-class TransactionRepositoryImpl(private val userApi: UserApi, private val dispatcher: CoroutineDispatcher = Dispatchers.IO) :
-    TransactionRepository {
+class TransactionRepositoryImpl(
+    private val transactionApi: TransactionApi, private val cacheSource: CacheSource,
+    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
+) : TransactionRepository {
 
-    override suspend fun getMonthlyTransactionFromFirebaseDb(uid: String, monthYear: String): AppResult<MonthlyTransactionSummaryEntity?> {
+    override suspend fun getMonthlyTransactionFromFirebaseDb(monthYear: String): AppResult<MonthlyTransactionSummaryEntity?> {
         return withContext(dispatcher) {
-            userApi.getMonthlyTransactionDetail(uid, monthYear)
+            val uId = cacheSource.getUID()
+            if (uId != null) transactionApi.getMonthlyTransactionDetail(uId, monthYear)
+            else AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
         }
     }
 
     override suspend fun addUserTransactionToFirebase(
-        uid: String,
         monthYear: String,
-        transactionId: String,
-        transaction: TransactionEntity,
+        transactionEntity: TransactionEntity,
         monthlyTransactionSummaryEntity: MonthlyTransactionSummaryEntity?
     ): AppResult<Unit> {
         return withContext(dispatcher) {
-            userApi.addUserTransactionToFirebase(uid, monthYear, transactionId, transaction, monthlyTransactionSummaryEntity)
+            val uId = cacheSource.getUID()
+            if (uId != null)
+                transactionApi.addUserTransactionToFirebase(uId, monthYear, transactionEntity, monthlyTransactionSummaryEntity)
+            else AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
         }
     }
 }

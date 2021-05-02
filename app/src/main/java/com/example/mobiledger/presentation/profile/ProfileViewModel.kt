@@ -9,17 +9,15 @@ import com.example.mobiledger.common.base.BaseViewModel
 import com.example.mobiledger.domain.AppResult
 import com.example.mobiledger.domain.entities.UserInfoEntity
 import com.example.mobiledger.domain.usecases.ProfileUseCase
-import com.example.mobiledger.domain.usecases.UserSettingsUseCase
 import com.example.mobiledger.presentation.Event
 import kotlinx.coroutines.launch
 
 class ProfileViewModel(
-    private val userSettingsUseCase: UserSettingsUseCase,
     private val profileUseCase: ProfileUseCase
 ) : BaseViewModel() {
 
-    val userFromFirestoreResult: LiveData<Event<UserInfoEntity>> get() = _userFromFirestoreResult
-    private val _userFromFirestoreResult: MutableLiveData<Event<UserInfoEntity>> = MutableLiveData()
+    val userFromFirestoreResult: LiveData<UserInfoEntity> get() = _userFromFirestoreResult
+    private val _userFromFirestoreResult: MutableLiveData<UserInfoEntity> = MutableLiveData()
 
     private val _errorLiveData: MutableLiveData<Event<ViewError>> = MutableLiveData()
     val errorLiveData: LiveData<Event<ViewError>> = _errorLiveData
@@ -27,23 +25,12 @@ class ProfileViewModel(
     private val _loadingState = MutableLiveData<Boolean>(false)
     val loadingState: LiveData<Boolean> get() = _loadingState
 
-    init {
-        getUIDForProfile()
-    }
-
-    fun getUIDForProfile() {
+    fun fetchUserData() {
         viewModelScope.launch {
-            _loadingState.value = true
-            val uid = userSettingsUseCase.getUID()
-            fetchUserData(uid!!)
-        }
-    }
-
-    private fun fetchUserData(uid: String) {
-        viewModelScope.launch {
-            when (val result = profileUseCase.fetchUserFromFirestoreDb(uid)) {
+            _loadingState.value = false
+            when (val result = profileUseCase.fetchUserFromFirebase()) {
                 is AppResult.Success -> {
-                    _userFromFirestoreResult.value = Event(result.data!!)
+                    _userFromFirestoreResult.value = result.data
                 }
                 is AppResult.Failure -> {
                     _errorLiveData.value = Event(

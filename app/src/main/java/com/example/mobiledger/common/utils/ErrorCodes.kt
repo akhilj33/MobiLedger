@@ -21,6 +21,7 @@ object ErrorCodes {
 
     //firebase errors
     const val FIREBASE_ERROR = "505"
+    const val FIREBASE_UNAUTHORIZED = "506"
 
 
     //Api error

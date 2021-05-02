@@ -28,13 +28,15 @@ class RepositoryProvider(
 
     private val profileRepository: ProfileRepository by lazy {
         ProfileRepositoryImpl(
-            apiSourceProvider.provideUserApiSource()
+            apiSourceProvider.provideUserApiSource(),
+            cacheSourceProvider.provideCacheSource()
         )
     }
 
     private val transactionRepository: TransactionRepository by lazy {
         TransactionRepositoryImpl(
-            apiSourceProvider.provideUserApiSource()
+            apiSourceProvider.provideTransactionApiSource(),
+            cacheSourceProvider.provideCacheSource()
         )
     }
 

@@ -2,6 +2,7 @@ package com.example.mobiledger.common.base
 
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -167,7 +168,7 @@ abstract class BaseFragment<B : ViewDataBinding, NV : BaseNavigator>(
         }
 
         if (isVanishing) {
-            Handler().postDelayed({
+            Handler(Looper.getMainLooper()).postDelayed({
                 hideSnackBarErrorView()
             }, errorTimeOut)
 

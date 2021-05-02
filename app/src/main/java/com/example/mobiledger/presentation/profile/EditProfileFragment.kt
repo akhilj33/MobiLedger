@@ -27,7 +27,7 @@ class EditProfileFragment : BaseFragment<FragmentEditProfileBinding, BaseNavigat
 
         setOnClickListener()
         setUpObserver()
-        viewModel.getUIDForProfile()
+        viewModel.fetchUserData()
     }
 
 

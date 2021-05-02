@@ -26,8 +26,8 @@ class ViewModelFactoryProvider(private val useCaseProvider: UseCaseProvider) :
 
             modelClass.isAssignableFrom(LoginViewModel::class.java) -> {
                 LoginViewModel(
-                    useCaseProvider.provideAuthUseCase(),
-                    useCaseProvider.provideUserSettingsUseCase()
+                    useCaseProvider.provideAuthUseCase(), useCaseProvider.provideUserSettingsUseCase(),
+                    useCaseProvider.provideUserUseCase()
                 ) as T
             }
 
@@ -40,27 +40,18 @@ class ViewModelFactoryProvider(private val useCaseProvider: UseCaseProvider) :
             }
 
             modelClass.isAssignableFrom(SplashViewModel::class.java) -> {
-                SplashViewModel(useCaseProvider.provideAuthUseCase()) as T
+                SplashViewModel(useCaseProvider.provideUserSettingsUseCase()) as T
             }
 
             modelClass.isAssignableFrom(ProfileViewModel::class.java) -> {
-                ProfileViewModel(
-                    useCaseProvider.provideUserSettingsUseCase(),
-                    useCaseProvider.provideProfileUseCase()
-                ) as T
+                ProfileViewModel(useCaseProvider.provideProfileUseCase()) as T
             }
 
             modelClass.isAssignableFrom(EditProfileViewModel::class.java) -> {
-                EditProfileViewModel(
-                    useCaseProvider.provideUserSettingsUseCase(),
-                    useCaseProvider.provideProfileUseCase()
-                ) as T
+                EditProfileViewModel(useCaseProvider.provideProfileUseCase()) as T
             }
             modelClass.isAssignableFrom(RecordTransactionDialogFragmentViewModel::class.java) -> {
-                RecordTransactionDialogFragmentViewModel(
-                    useCaseProvider.provideTransactionUseCase(),
-                    useCaseProvider.provideUserSettingsUseCase()
-                ) as T
+                RecordTransactionDialogFragmentViewModel(useCaseProvider.provideTransactionUseCase()) as T
             }
             else -> throw IllegalArgumentException("Unknown ViewModel Class")
         }

@@ -6,33 +6,27 @@ import com.example.mobiledger.domain.entities.MonthlyTransactionSummaryEntity
 import com.example.mobiledger.domain.entities.TransactionEntity
 
 interface TransactionUseCase {
-    suspend fun getMonthlyTransactionSummaryFromDb(uid: String, monthYear: String): AppResult<MonthlyTransactionSummaryEntity?>
+    suspend fun getMonthlyTransactionSummaryFromDb(monthYear: String): AppResult<MonthlyTransactionSummaryEntity?>
     suspend fun addUserTransactionToFirebase(
-        uid: String,
         monthYear: String,
-        transactionId: String,
-        transaction: TransactionEntity,
+        transactionEntity: TransactionEntity,
         monthlyTransactionSummaryEntity: MonthlyTransactionSummaryEntity?
     ): AppResult<Unit>
 }
 
 class TransactionUseCaseImpl(private val transactionRepository: TransactionRepository) : TransactionUseCase {
-    override suspend fun getMonthlyTransactionSummaryFromDb(uid: String, monthYear: String): AppResult<MonthlyTransactionSummaryEntity?> {
-        return transactionRepository.getMonthlyTransactionFromFirebaseDb(uid, monthYear)
+    override suspend fun getMonthlyTransactionSummaryFromDb(monthYear: String): AppResult<MonthlyTransactionSummaryEntity?> {
+        return transactionRepository.getMonthlyTransactionFromFirebaseDb(monthYear)
     }
 
     override suspend fun addUserTransactionToFirebase(
-        uid: String,
         monthYear: String,
-        transactionId: String,
-        transaction: TransactionEntity,
+        transactionEntity: TransactionEntity,
         monthlyTransactionSummaryEntity: MonthlyTransactionSummaryEntity?
     ): AppResult<Unit> {
         return transactionRepository.addUserTransactionToFirebase(
-            uid,
             monthYear,
-            transactionId,
-            transaction,
+            transactionEntity,
             monthlyTransactionSummaryEntity
         )
     }
