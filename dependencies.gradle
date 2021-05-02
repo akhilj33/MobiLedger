@@ -5,14 +5,11 @@ ext{
     minSdk = 21
     targetSdk = 30
     buildTools = "30.0.3"
-    versionCodeVal = 16
-    versionNameVal = "1.0.9"
     gradleVersion = '4.1.3'
-    prodVersionCodeVal = 16
-    prodVersionNameVal = "1.0.9"
+
 
     //Dependencies versions
-    kotlinVersion = '1.4.31'
+    kotlinVersion = '1.4.32'
     gmsVersion = "4.3.3"
     constraintLayoutVersion = "2.0.4"
     appCompatVersion = "1.2.0"
@@ -32,18 +29,8 @@ ext{
     timber = "4.7.1"
     swipeLayoutVersion = "1.4.1"
     glideVersion = '4.12.0'
-    roomVersion = "2.2.6"
+    roomVersion = "2.3.0"
     playCoreVersion = "1.10.0"
-
-    //microsoft login
-    msalVersion = "2.0.4"
-
-    //mixed panel analytics
-    mixedPanelVersion = '5.8.7'
-
-    zenDeskVersion = '5.0.1'
-
-    billing_version = "3.0.3"
 
     //test dependencies
     junit4Version = "4.13.2"
