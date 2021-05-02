@@ -1,6 +1,5 @@
 package com.example.mobiledger.data
 
-import android.security.identity.UnknownAuthenticationKeyException
 import com.example.mobiledger.common.utils.ErrorCodes
 import com.example.mobiledger.common.utils.JsonUtils
 import com.example.mobiledger.data.sources.api.model.response.ErrorResponse
@@ -9,6 +8,7 @@ import com.example.mobiledger.domain.FireBaseResult
 import com.example.mobiledger.domain.RetrofitResult
 import com.google.android.gms.tasks.Task
 import com.google.firebase.FirebaseException
+import com.google.firebase.auth.FirebaseAuthException
 import retrofit2.HttpException
 import retrofit2.Response
 import java.net.ConnectException
@@ -84,14 +84,15 @@ private fun mapErrorCode(code: Int, message: String? = null): AppError {
 
 private fun mapExceptionToError(exception: Exception?): AppError {
     return when (exception) {
-        is UnknownAuthenticationKeyException -> {
-            AppError(ErrorCodes.HTTP_UNAUTHORIZED, exception.message)
-        }
         is HttpException -> {
             mapErrorCode(exception.code())
         }
         is ConnectException -> {
             AppError(ErrorCodes.OFFLINE)
+        }
+        is FirebaseAuthException -> {
+            val errorMessage = exception.localizedMessage ?: ErrorCodes.GENERIC_ERROR
+            AppError(code = ErrorCodes.FIREBASE_UNAUTHORIZED, message = errorMessage)
         }
         is FirebaseException -> {
             val errorMessage = exception.localizedMessage ?: ErrorCodes.GENERIC_ERROR
