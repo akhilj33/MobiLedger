@@ -16,6 +16,7 @@ import com.example.mobiledger.common.base.BaseNavigator
 import com.example.mobiledger.common.extention.setWidthPercent
 import com.example.mobiledger.common.showToast
 import com.example.mobiledger.databinding.DialogFragmentRecordTransactionBinding
+import com.example.mobiledger.databinding.SnackViewErrorBinding
 import com.example.mobiledger.domain.enums.TransactionType
 import com.example.mobiledger.presentation.OneTimeObserver
 import com.google.firebase.Timestamp
@@ -40,6 +41,8 @@ class RecordTransactionDialogFragment :
     private var monthYear: String? = null
 
     private val viewModel: RecordTransactionDialogFragmentViewModel by viewModels { viewModelFactory }
+
+    override fun getSnackBarErrorView(): SnackViewErrorBinding = viewBinding.includeErrorView
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -84,6 +87,23 @@ class RecordTransactionDialogFragment :
                 dialog?.dismiss()
             }
         )
+
+        viewModel.loadingState.observe(viewLifecycleOwner, Observer {
+            if (it) {
+                viewBinding.transactionProgressBar.visibility = View.VISIBLE
+            } else {
+                viewBinding.transactionProgressBar.visibility = View.GONE
+            }
+        })
+
+        viewModel.errorLiveData.observe(viewLifecycleOwner, OneTimeObserver {
+            when (it.viewErrorType) {
+                RecordTransactionDialogFragmentViewModel.ViewErrorType.NON_BLOCKING -> {
+                    showSnackBarErrorView(it.message ?: getString(it.resID), true)
+                }
+            }
+        })
+
     }
 
     private fun initDate() {

@@ -5,10 +5,12 @@ import android.os.Bundle
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import com.example.mobiledger.R
 import com.example.mobiledger.common.base.BaseFragment
 import com.example.mobiledger.common.showToast
 import com.example.mobiledger.databinding.FragmentLoginBinding
+import com.example.mobiledger.databinding.SnackViewErrorBinding
 import com.example.mobiledger.presentation.OneTimeObserver
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -25,13 +27,14 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, LoginNavigator>(R.layou
     }
 
     override fun isBottomNavVisible(): Boolean = false
+    override fun getSnackBarErrorView(): SnackViewErrorBinding = viewBinding.includeErrorView
 
     private fun setOnClickListener() {
 
         viewBinding.apply {
             btnLogin.setOnClickListener {
                 val email = viewBinding.textEmail.text.toString()
-               val  password = viewBinding.textPassword.text.toString()
+                val password = viewBinding.textPassword.text.toString()
                 if (email.isEmpty() || password.isEmpty())
                     activity?.showToast("No field can be empty")
                 else
@@ -42,7 +45,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, LoginNavigator>(R.layou
                 navigator?.navigateLoginToSignUpScreen()
             }
 
-            btnGoogleSignIn.setOnClickListener{
+            btnGoogleSignIn.setOnClickListener {
                 initSignInWithGoogle()
             }
         }
@@ -55,9 +58,21 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, LoginNavigator>(R.layou
                 navigator?.launchDashboard()
             })
 
+
+
+        viewModel.loadingState.observe(viewLifecycleOwner, Observer {
+            if (it) {
+                viewBinding.loginProgressBar.visibility = View.VISIBLE
+            } else {
+                viewBinding.loginProgressBar.visibility = View.GONE
+            }
+        })
+
         viewModel.errorLiveData.observe(viewLifecycleOwner, OneTimeObserver {
-            it.let {
-                activity?.showToast("Login Failed")
+            when (it.viewErrorType) {
+                LoginViewModel.ViewErrorType.NON_BLOCKING -> {
+                    showSnackBarErrorView(it.message ?: getString(it.resID), true)
+                }
             }
         })
     }

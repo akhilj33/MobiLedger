@@ -14,6 +14,6 @@ enum class TransactionType(val type: String) {
     }
 }
 
-enum class SignInType(val type: String){
+enum class SignInType(val type: String) {
     Google("google"), Email("email")
 }

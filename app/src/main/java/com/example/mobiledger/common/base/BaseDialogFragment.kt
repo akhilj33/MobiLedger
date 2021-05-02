@@ -1,6 +1,7 @@
 package com.example.mobiledger.common.base
 
 import android.os.Bundle
+import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,7 +11,10 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
+import com.cegidflow.android.common.extensions.gone
+import com.cegidflow.android.common.extensions.visible
 import com.example.mobiledger.common.di.DependencyProvider
+import com.example.mobiledger.databinding.SnackViewErrorBinding
 import com.example.mobiledger.presentation.main.MainActivityViewModel
 import timber.log.Timber
 
@@ -27,6 +31,8 @@ abstract class BaseDialogFragment<B : ViewDataBinding, NV : BaseNavigator>(
       This object returns _binding but thanks to !!(non-null asserted)
       we don't have to use ?(safe operator) everywhere in the code.*/
     val viewBinding get() = _viewBinding!!
+
+    private val errorTimeOut: Long = 5000
 
     protected var navigator: NV? = null
 
@@ -71,4 +77,33 @@ abstract class BaseDialogFragment<B : ViewDataBinding, NV : BaseNavigator>(
         //garbage collection
         _viewBinding = null
     }
+
+    /*------------------------------------Snack Bar error ----------------------------------------*/
+
+    protected open fun getSnackBarErrorView(): SnackViewErrorBinding? = null
+
+    protected fun showSnackBarErrorView(message: String, isVanishing: Boolean) {
+        getSnackBarErrorView()?.apply {
+            root.visible()
+            tvWarning.text = message
+        }
+
+        if (isVanishing) {
+            Handler().postDelayed({
+                hideSnackBarErrorView()
+            }, errorTimeOut)
+
+        }
+    }
+
+    protected fun hideSnackBarErrorView(forceHide: Boolean = false) {
+        val isInternetAvailable: Boolean =
+            activityViewModel.isInternetAvailableLiveData.value?.peekContent() ?: true
+        if (!forceHide && isInternetAvailable) {
+            getSnackBarErrorView()?.root?.gone()
+        } else if (forceHide) {
+            getSnackBarErrorView()?.root?.gone()
+        }
+    }
+
 }

@@ -6,6 +6,10 @@
     <string name="mobi_ledger">Mobi Ledger</string>
     <string name="join_a_creative_solution_for_a_better_tomorrow">Join a creative solution for a better tomorrow</string>
 
+    <!--Error messages-->
+    <string name="generic_error_message">Something went wrong</string>
+    <string name="device_offline_error_message">You are not connected to the internet.</string>
+
     <!--Login Screen-->
     <string name="email_id">Email Id*</string>
     <string name="password">Password*</string>

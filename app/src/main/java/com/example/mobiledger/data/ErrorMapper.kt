@@ -82,6 +82,7 @@ private fun mapErrorCode(code: Int, message: String? = null): AppError {
     }
 }
 
+
 private fun mapExceptionToError(exception: Exception?): AppError {
     return when (exception) {
         is HttpException -> {

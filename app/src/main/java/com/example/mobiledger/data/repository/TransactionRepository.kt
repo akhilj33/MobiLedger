@@ -2,7 +2,6 @@ package com.example.mobiledger.data.repository
 
 import com.example.mobiledger.common.utils.ErrorCodes
 import com.example.mobiledger.data.sources.api.TransactionApi
-import com.example.mobiledger.data.sources.api.UserApi
 import com.example.mobiledger.data.sources.cache.CacheSource
 import com.example.mobiledger.domain.AppError
 import com.example.mobiledger.domain.AppResult
@@ -21,13 +20,15 @@ interface TransactionRepository {
     ): AppResult<Unit>
 }
 
-class TransactionRepositoryImpl(private val transactionApi: TransactionApi, private val cacheSource: CacheSource,
-                                private val dispatcher: CoroutineDispatcher = Dispatchers.IO) : TransactionRepository {
+class TransactionRepositoryImpl(
+    private val transactionApi: TransactionApi, private val cacheSource: CacheSource,
+    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
+) : TransactionRepository {
 
     override suspend fun getMonthlyTransactionFromFirebaseDb(monthYear: String): AppResult<MonthlyTransactionSummaryEntity?> {
         return withContext(dispatcher) {
             val uId = cacheSource.getUID()
-            if(uId !=null) transactionApi.getMonthlyTransactionDetail(uId, monthYear)
+            if (uId != null) transactionApi.getMonthlyTransactionDetail(uId, monthYear)
             else AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
         }
     }
@@ -39,8 +40,8 @@ class TransactionRepositoryImpl(private val transactionApi: TransactionApi, priv
     ): AppResult<Unit> {
         return withContext(dispatcher) {
             val uId = cacheSource.getUID()
-            if(uId !=null)
-            transactionApi.addUserTransactionToFirebase(uId, monthYear, transactionEntity, monthlyTransactionSummaryEntity)
+            if (uId != null)
+                transactionApi.addUserTransactionToFirebase(uId, monthYear, transactionEntity, monthlyTransactionSummaryEntity)
             else AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
         }
     }

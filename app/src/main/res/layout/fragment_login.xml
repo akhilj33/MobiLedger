@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -11,162 +12,184 @@
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/horizontalScreenGuideline_45"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                app:layout_constraintGuide_percent="0.45" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.45" />
 
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/horizontalScreenGuideline_20"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                app:layout_constraintGuide_percent="0.20" />
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/horizontalScreenGuideline_20"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.20" />
 
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/horizontalScreenGuideline_90"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                app:layout_constraintGuide_percent="0.90" />
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/horizontalScreenGuideline_90"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.90" />
 
-            <!--          VERTICAL GUIDELINES          -->
+        <!--          VERTICAL GUIDELINES          -->
 
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/verticalScreenGuideline_10"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.10" />
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/verticalScreenGuideline_10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.10" />
 
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/verticalScreenGuideline_90"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.90" />
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/verticalScreenGuideline_90"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.90" />
 
 
-            <com.google.android.material.appbar.MaterialToolbar
-                android:id="@+id/toolbarLogin"
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbarLogin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimaryDark"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:title="@string/app_name"
+            app:titleTextColor="@color/colorWhite" />
+
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/mobi_ledger"
+            android:textAlignment="center"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="@dimen/sp_36"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_90"
+            app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_10"
+            app:layout_constraintTop_toBottomOf="@id/horizontalScreenGuideline_20" />
+
+        <TextView
+            android:id="@+id/tvHeading"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_16"
+            android:text="@string/join_a_creative_solution_for_a_better_tomorrow"
+            android:textAlignment="center"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="@dimen/sp_20"
+            app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_90"
+            app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_10"
+            app:layout_constraintTop_toBottomOf="@id/tvTitle" />
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/emailLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_90"
+            app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_10"
+            app:layout_constraintTop_toBottomOf="@id/horizontalScreenGuideline_45">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/textEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:title="@string/app_name"
-                android:background="@color/colorPrimaryDark"
-                app:titleTextColor="@color/colorWhite"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/tvTitle"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="@string/mobi_ledger"
-                android:textColor="@color/colorPrimaryDark"
-                android:textStyle="bold"
-                app:layout_constraintTop_toBottomOf="@id/horizontalScreenGuideline_20"
-                app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_10"
-                app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_90"
-                android:textSize="@dimen/sp_36"
-                android:textAlignment="center" />
-
-            <TextView
-                android:id="@+id/tvHeading"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_16"
-                android:textColor="@color/colorPrimaryDark"
-                android:text="@string/join_a_creative_solution_for_a_better_tomorrow"
-                app:layout_constraintTop_toBottomOf="@id/tvTitle"
-                app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_10"
-                app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_90"
-                android:textSize="@dimen/sp_20"
-                android:textAlignment="center" />
-
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/emailLayout"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_90"
-                app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_10"
-                app:layout_constraintTop_toBottomOf="@id/horizontalScreenGuideline_45">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/textEmail"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textColorHint="@color/colorPrimary"
-                    android:hint="@string/email_id"
-                    android:textSize="@dimen/sp_16" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/passwordLayout"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_8"
-                app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_90"
-                app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_10"
-                app:layout_constraintTop_toBottomOf="@id/emailLayout">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/textPassword"
-                    android:inputType="textPassword"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textColorHint="@color/colorPrimary"
-                    android:hint="@string/password"
-                    android:textSize="@dimen/sp_16" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <Button
-                android:id="@+id/btnLogin"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="@string/login"
-                android:textColor="@color/colorWhite"
-                android:textSize="@dimen/sp_20"
-                android:background="@color/colorPrimary"
-                android:layout_marginTop="@dimen/dp_16"
-                app:layout_constraintTop_toBottomOf="@id/passwordLayout"
-                app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_10"
-                app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_90" />
-
-            <TextView
-                android:id="@+id/tvForgetPassword"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_16"
-                android:text="@string/forget_password"
-                android:textColor="@color/colorPrimary"
-                app:layout_constraintTop_toBottomOf="@id/btnLogin"
-                app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_10"
-                app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_90"
+                android:hint="@string/email_id"
+                android:textColorHint="@color/colorPrimary"
                 android:textSize="@dimen/sp_16" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/passwordLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_8"
+            app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_90"
+            app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_10"
+            app:layout_constraintTop_toBottomOf="@id/emailLayout">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/textPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/password"
+                android:inputType="textPassword"
+                android:textColorHint="@color/colorPrimary"
+                android:textSize="@dimen/sp_16" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Button
+            android:id="@+id/btnLogin"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_16"
+            android:background="@color/colorPrimary"
+            android:text="@string/login"
+            android:textColor="@color/colorWhite"
+            android:textSize="@dimen/sp_20"
+            app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_90"
+            app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_10"
+            app:layout_constraintTop_toBottomOf="@id/passwordLayout" />
+
+        <TextView
+            android:id="@+id/tvForgetPassword"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_16"
+            android:text="@string/forget_password"
+            android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/sp_16"
+            app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_90"
+            app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_10"
+            app:layout_constraintTop_toBottomOf="@id/btnLogin" />
 
         <ImageView
             android:id="@+id/btnGoogleSignIn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/common_google_signin_btn_icon_dark"
-            app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_10"
+            app:layout_constraintBottom_toTopOf="@id/tvSignUp"
             app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_90"
-            app:layout_constraintTop_toBottomOf="@id/tvForgetPassword"
-            app:layout_constraintBottom_toTopOf="@id/tvSignUp"/>
+            app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_10"
+            app:layout_constraintTop_toBottomOf="@id/tvForgetPassword" />
 
-            <TextView
-                android:id="@+id/tvSignUp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/new_user_sign_up"
-                android:textColor="@color/colorPrimary"
-                app:layout_constraintTop_toBottomOf="@id/horizontalScreenGuideline_90"
-                app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_10"
-                app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_90"
-                android:textSize="@dimen/sp_16" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/tvSignUp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/new_user_sign_up"
+            android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/sp_16"
+            app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_90"
+            app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_10"
+            app:layout_constraintTop_toBottomOf="@id/horizontalScreenGuideline_90" />
+
+        <ProgressBar
+            android:id="@+id/loginProgressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <include
+            android:id="@+id/includeErrorView"
+            layout="@layout/snack_view_error"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:visibility="visible" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>
