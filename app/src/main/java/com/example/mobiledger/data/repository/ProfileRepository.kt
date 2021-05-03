@@ -1,17 +1,20 @@
 package com.example.mobiledger.data.repository
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.example.mobiledger.common.utils.ErrorCodes
 import com.example.mobiledger.data.sources.api.UserApi
 import com.example.mobiledger.data.sources.cache.CacheSource
+import com.example.mobiledger.data.sources.room.profile.ProfileDb
 import com.example.mobiledger.domain.AppError
 import com.example.mobiledger.domain.AppResult
-import com.example.mobiledger.domain.entities.UserInfoEntity
+import com.example.mobiledger.domain.entities.UserEntity
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 interface ProfileRepository {
-    suspend fun fetchUserFromFirebase(): AppResult<UserInfoEntity>
+    suspend fun fetchUserFromFirebase(): AppResult<UserEntity>
     suspend fun updateUserNameInFirebase(username: String): AppResult<Unit>
     suspend fun updateEmailInFirebase(email: String): AppResult<Unit>
     suspend fun updatePhoneNoInFirebase(phoneNo: String): AppResult<Unit>
@@ -19,22 +22,39 @@ interface ProfileRepository {
 }
 
 class ProfileRepositoryImpl(
-    private val userApi: UserApi, private val cacheSource: CacheSource,
+    private val userApi: UserApi, private val cacheSource: CacheSource, private val profileDb: ProfileDb,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ProfileRepository {
 
-    override suspend fun fetchUserFromFirebase(): AppResult<UserInfoEntity> {
+    override suspend fun fetchUserFromFirebase(): AppResult<UserEntity> {
         return withContext(dispatcher) {
             val uId = cacheSource.getUID()
-            if (uId != null) userApi.fetchUserDataFromFirebaseDb(uId)
-            else AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
+            if (uId != null) {
+                val userExists = profileDb.hasUser()
+                if(!userExists){
+                    when(val firebaseResult = userApi.fetchUserDataFromFirebaseDb(uId)){
+                        is AppResult.Success -> {
+                            profileDb.saveUser(firebaseResult.data)
+                        }
+                        is AppResult.Failure -> {
+                            return@withContext AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
+                        }
+                    }
+                }
+                 profileDb.fetchUserProfile()
+            }
+            else {
+                AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
+            }
         }
     }
 
     override suspend fun updateUserNameInFirebase(username: String): AppResult<Unit> {
         return withContext(dispatcher) {
             val uId = cacheSource.getUID()
-            if (uId != null) userApi.updateUserNameInAuth(username, uId)
+            if (uId != null) userApi.updateUserNameInAuth(username, uId).also {
+                    if(it is AppResult.Success) profileDb.updateUserName(username, uId)
+            }
             else AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
         }
     }
@@ -42,7 +62,9 @@ class ProfileRepositoryImpl(
     override suspend fun updateEmailInFirebase(email: String): AppResult<Unit> {
         return withContext(dispatcher) {
             val uId = cacheSource.getUID()
-            if (uId != null) userApi.updateEmailInAuth(email, uId)
+            if (uId != null) userApi.updateEmailInAuth(email, uId).also {
+                if(it is AppResult.Success) profileDb.updateEmailId(email, uId)
+            }
             else AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
         }
     }
@@ -50,7 +72,9 @@ class ProfileRepositoryImpl(
     override suspend fun updatePhoneNoInFirebase(phoneNo: String): AppResult<Unit> {
         return withContext(dispatcher) {
             val uId = cacheSource.getUID()
-            if (uId != null) userApi.updateContactInFirebaseDB(phoneNo, uId)
+            if (uId != null) userApi.updateContactInFirebaseDB(phoneNo, uId).also {
+                if(it is AppResult.Success) profileDb.updatePhoneNo(phoneNo, uId)
+            }
             else AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
         }
     }

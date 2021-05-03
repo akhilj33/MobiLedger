@@ -2,10 +2,10 @@ package com.example.mobiledger.domain.usecases
 
 import com.example.mobiledger.data.repository.ProfileRepository
 import com.example.mobiledger.domain.AppResult
-import com.example.mobiledger.domain.entities.UserInfoEntity
+import com.example.mobiledger.domain.entities.UserEntity
 
 interface ProfileUseCase {
-    suspend fun fetchUserFromFirebase(): AppResult<UserInfoEntity>
+    suspend fun fetchUserFromFirebase(): AppResult<UserEntity>
     suspend fun updateUserNameInFirebase(username: String): AppResult<Unit>
     suspend fun updateEmailInFirebase(email: String): AppResult<Unit>
     suspend fun updatePhoneInFirebase(phoneNo: String): AppResult<Unit>
@@ -13,7 +13,7 @@ interface ProfileUseCase {
 }
 
 class ProfileUseCaseImpl(private val profileRepository: ProfileRepository) : ProfileUseCase {
-    override suspend fun fetchUserFromFirebase(): AppResult<UserInfoEntity> {
+    override suspend fun fetchUserFromFirebase(): AppResult<UserEntity> {
         return profileRepository.fetchUserFromFirebase()
     }
 

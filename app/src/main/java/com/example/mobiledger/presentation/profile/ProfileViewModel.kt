@@ -3,11 +3,12 @@ package com.example.mobiledger.presentation.profile
 import androidx.annotation.StringRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import androidx.lifecycle.viewModelScope
 import com.example.mobiledger.R
 import com.example.mobiledger.common.base.BaseViewModel
 import com.example.mobiledger.domain.AppResult
-import com.example.mobiledger.domain.entities.UserInfoEntity
+import com.example.mobiledger.domain.entities.UserEntity
 import com.example.mobiledger.domain.usecases.ProfileUseCase
 import com.example.mobiledger.presentation.Event
 import kotlinx.coroutines.launch
@@ -16,14 +17,15 @@ class ProfileViewModel(
     private val profileUseCase: ProfileUseCase
 ) : BaseViewModel() {
 
-    val userFromFirestoreResult: LiveData<UserInfoEntity> get() = _userFromFirestoreResult
-    private val _userFromFirestoreResult: MutableLiveData<UserInfoEntity> = MutableLiveData()
+    val userFromFirestoreResult: LiveData<UserEntity> get() = _userFromFirestoreResult
+    private val _userFromFirestoreResult: MutableLiveData<UserEntity> = MutableLiveData()
 
     private val _errorLiveData: MutableLiveData<Event<ViewError>> = MutableLiveData()
     val errorLiveData: LiveData<Event<ViewError>> = _errorLiveData
 
-    private val _loadingState = MutableLiveData<Boolean>(false)
+    private val _loadingState = MutableLiveData(false)
     val loadingState: LiveData<Boolean> get() = _loadingState
+
 
     fun fetchUserData() {
         viewModelScope.launch {

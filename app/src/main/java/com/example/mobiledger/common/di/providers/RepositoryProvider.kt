@@ -5,7 +5,8 @@ import com.example.mobiledger.data.repository.*
 class RepositoryProvider(
     authSourceProvider: AuthSourceProvider,
     apiSourceProvider: ApiSourceProvider,
-    cacheSourceProvider: CacheSourceProvider
+    cacheSourceProvider: CacheSourceProvider,
+    dbProvider: DbProvider
 ) {
 
     private val authRepository: AuthRepository by lazy {
@@ -29,7 +30,8 @@ class RepositoryProvider(
     private val profileRepository: ProfileRepository by lazy {
         ProfileRepositoryImpl(
             apiSourceProvider.provideUserApiSource(),
-            cacheSourceProvider.provideCacheSource()
+            cacheSourceProvider.provideCacheSource(),
+            dbProvider.provideProfileDb()
         )
     }
 
