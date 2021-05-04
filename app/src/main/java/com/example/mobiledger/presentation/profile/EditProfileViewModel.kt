@@ -7,15 +7,15 @@ import androidx.lifecycle.viewModelScope
 import com.example.mobiledger.R
 import com.example.mobiledger.common.base.BaseViewModel
 import com.example.mobiledger.domain.AppResult
-import com.example.mobiledger.domain.entities.UserInfoEntity
+import com.example.mobiledger.domain.entities.UserEntity
 import com.example.mobiledger.domain.usecases.ProfileUseCase
 import com.example.mobiledger.presentation.Event
 import kotlinx.coroutines.launch
 
 class EditProfileViewModel(private val profileUseCase: ProfileUseCase) : BaseViewModel() {
 
-    val userFromFirebaseResult: LiveData<Event<UserInfoEntity?>> get() = _userFromFirebaseResult
-    private val _userFromFirebaseResult: MutableLiveData<Event<UserInfoEntity?>> = MutableLiveData()
+    val userFromFirebaseResult: LiveData<Event<UserEntity>> get() = _userFromFirebaseResult
+    private val _userFromFirebaseResult: MutableLiveData<Event<UserEntity>> = MutableLiveData()
 
     val dataUpdatedResult: LiveData<Event<Unit>> get() = _dataUpdatedResult
     private val _dataUpdatedResult: MutableLiveData<Event<Unit>> = MutableLiveData()
@@ -23,7 +23,7 @@ class EditProfileViewModel(private val profileUseCase: ProfileUseCase) : BaseVie
     private val _errorLiveData: MutableLiveData<Event<ViewError>> = MutableLiveData()
     val errorLiveData: LiveData<Event<ViewError>> = _errorLiveData
 
-    private val _loadingState = MutableLiveData<Boolean>(false)
+    private val _loadingState = MutableLiveData(false)
     val loadingState: LiveData<Boolean> get() = _loadingState
 
 

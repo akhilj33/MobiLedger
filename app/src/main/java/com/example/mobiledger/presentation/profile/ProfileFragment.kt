@@ -8,7 +8,7 @@ import com.example.mobiledger.R
 import com.example.mobiledger.common.base.BaseFragment
 import com.example.mobiledger.databinding.FragmentProfileBinding
 import com.example.mobiledger.databinding.SnackViewErrorBinding
-import com.example.mobiledger.domain.entities.UserInfoEntity
+import com.example.mobiledger.domain.entities.UserEntity
 import com.example.mobiledger.presentation.OneTimeObserver
 
 class ProfileFragment : BaseFragment<FragmentProfileBinding, ProfileNavigator>(R.layout.fragment_profile) {
@@ -55,7 +55,7 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding, ProfileNavigator>(R
         }
     }
 
-    private fun updateProfileUI(user: UserInfoEntity) {
+    private fun updateProfileUI(user: UserEntity) {
         viewBinding.displayName.text = user.userName ?: ""
         viewBinding.emailTv.text = user.emailId ?: ""
         viewBinding.contactNumTv.text = user.phoneNo ?: ""

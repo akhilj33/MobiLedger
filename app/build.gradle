@@ -4,7 +4,6 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'kotlin-kapt'
 
-
 android {
     compileSdkVersion project.compileSdk
     buildToolsVersion buildTools

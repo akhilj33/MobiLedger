@@ -12,7 +12,6 @@ import com.example.mobiledger.domain.AppError
 import com.example.mobiledger.domain.AppResult
 import com.example.mobiledger.domain.FireBaseResult
 import com.example.mobiledger.domain.entities.UserEntity
-import com.example.mobiledger.domain.entities.UserInfoEntity
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuthException
 import com.google.firebase.auth.UserProfileChangeRequest
@@ -22,7 +21,7 @@ import kotlinx.coroutines.tasks.await
 
 interface UserApi {
     suspend fun addUserToFirebaseDb(user: UserEntity): AppResult<Unit>
-    suspend fun fetchUserDataFromFirebaseDb(uid: String): AppResult<UserInfoEntity>
+    suspend fun fetchUserDataFromFirebaseDb(uid: String): AppResult<UserEntity>
     suspend fun updateUserNameInAuth(userName: String, uid: String): AppResult<Unit>
     suspend fun updateEmailInAuth(email: String, uid: String): AppResult<Unit>
     suspend fun updateContactInFirebaseDB(contact: String, uid: String): AppResult<Unit>
@@ -52,7 +51,7 @@ class UserApiImpl(private val firebaseDb: FirebaseFirestore, private val authSou
         }
     }
 
-    override suspend fun fetchUserDataFromFirebaseDb(uid: String): AppResult<UserInfoEntity> {
+    override suspend fun fetchUserDataFromFirebaseDb(uid: String): AppResult<UserEntity> {
         var response: Task<DocumentSnapshot>? = null
         var exception: Exception? = null
         try {
@@ -196,8 +195,8 @@ class UserApiImpl(private val firebaseDb: FirebaseFirestore, private val authSou
     }
 }
 
-private fun userResultEntityMapper(user: DocumentSnapshot?): UserInfoEntity? {
-    return user?.toObject(UserInfoEntity::class.java)
+private fun userResultEntityMapper(user: DocumentSnapshot?): UserEntity? {
+    return user?.toObject(UserEntity::class.java)
 }
 
 
