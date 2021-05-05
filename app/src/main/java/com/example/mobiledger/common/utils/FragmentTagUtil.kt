@@ -10,7 +10,7 @@ import com.example.mobiledger.presentation.home.HomeFragment
 import com.example.mobiledger.presentation.insight.InsightFragment
 import com.example.mobiledger.presentation.profile.EditProfileFragment
 import com.example.mobiledger.presentation.profile.ProfileFragment
-import com.example.mobiledger.presentation.recordtransaction.RecordTransactionDialogFragment
+import com.example.mobiledger.presentation.recordtransaction.AddTransactionDialogFragment
 import com.example.mobiledger.presentation.splash.SplashFragment
 
 object FragmentTagUtil {
@@ -38,7 +38,7 @@ object FragmentTagUtil {
             is EditProfileFragment -> EDIT_PROFILE_FRAGMENT_TAG
             is ProfileFragment -> PROFILE_FRAGMENT_TAG
             is SplitFragment -> SPLIT_FRAGMENT_TAG
-            is RecordTransactionDialogFragment -> RECORD_TRANSACTION_DIALOG_FRAGMENT_TAG
+            is AddTransactionDialogFragment -> RECORD_TRANSACTION_DIALOG_FRAGMENT_TAG
             else -> throw RuntimeException("Fragment Name mapping doesn't exist in ${FragmentTagUtil.javaClass.simpleName} class")
         }
     }

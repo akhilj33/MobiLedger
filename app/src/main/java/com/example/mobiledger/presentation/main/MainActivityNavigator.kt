@@ -76,7 +76,7 @@ class MainActivityNavigator constructor(
         FragmentTransactionHelper.replaceFragment(
             fragmentManager,
             SplashFragment.newInstance(),
-            containerId, addToBackStack = false
+            containerId, addToBackStack = true
         )
     }
 

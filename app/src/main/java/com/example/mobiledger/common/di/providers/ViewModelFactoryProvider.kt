@@ -8,7 +8,7 @@ import com.example.mobiledger.presentation.home.HomeViewModel
 import com.example.mobiledger.presentation.main.MainActivityViewModel
 import com.example.mobiledger.presentation.profile.EditProfileViewModel
 import com.example.mobiledger.presentation.profile.ProfileViewModel
-import com.example.mobiledger.presentation.recordtransaction.RecordTransactionDialogFragmentViewModel
+import com.example.mobiledger.presentation.recordtransaction.AddTransactionDialogFragmentViewModel
 import com.example.mobiledger.presentation.splash.SplashViewModel
 
 @Suppress("UNCHECKED_CAST")
@@ -50,8 +50,8 @@ class ViewModelFactoryProvider(private val useCaseProvider: UseCaseProvider) :
             modelClass.isAssignableFrom(EditProfileViewModel::class.java) -> {
                 EditProfileViewModel(useCaseProvider.provideProfileUseCase()) as T
             }
-            modelClass.isAssignableFrom(RecordTransactionDialogFragmentViewModel::class.java) -> {
-                RecordTransactionDialogFragmentViewModel(useCaseProvider.provideTransactionUseCase()) as T
+            modelClass.isAssignableFrom(AddTransactionDialogFragmentViewModel::class.java) -> {
+                AddTransactionDialogFragmentViewModel(useCaseProvider.provideTransactionUseCase()) as T
             }
             else -> throw IllegalArgumentException("Unknown ViewModel Class")
         }

@@ -15,8 +15,9 @@ import com.example.mobiledger.common.base.BaseDialogFragment
 import com.example.mobiledger.common.base.BaseNavigator
 import com.example.mobiledger.common.extention.setWidthPercent
 import com.example.mobiledger.common.showToast
-import com.example.mobiledger.databinding.DialogFragmentRecordTransactionBinding
+import com.example.mobiledger.databinding.DialogFragmentAddTransactionBinding
 import com.example.mobiledger.databinding.SnackViewErrorBinding
+import com.example.mobiledger.domain.entities.TransactionEntity
 import com.example.mobiledger.domain.enums.TransactionType
 import com.example.mobiledger.presentation.OneTimeObserver
 import com.google.firebase.Timestamp
@@ -27,9 +28,9 @@ import java.util.*
 const val DATE_PATTERN = "dd/MM/yyyy"
 const val MONTH_PATTERN = "MM-yyyy"
 
-class RecordTransactionDialogFragment :
-    BaseDialogFragment<DialogFragmentRecordTransactionBinding, BaseNavigator>
-        (R.layout.dialog_fragment_record_transaction), DatePickerDialog.OnDateSetListener {
+class AddTransactionDialogFragment :
+    BaseDialogFragment<DialogFragmentAddTransactionBinding, BaseNavigator>
+        (R.layout.dialog_fragment_add_transaction), DatePickerDialog.OnDateSetListener {
 
     private var categoryList = arrayListOf<String>()
     private lateinit var categoty: String
@@ -40,7 +41,7 @@ class RecordTransactionDialogFragment :
     private var monthYearFormat: SimpleDateFormat? = null
     private var monthYear: String? = null
 
-    private val viewModel: RecordTransactionDialogFragmentViewModel by viewModels { viewModelFactory }
+    private val viewModel: AddTransactionDialogFragmentViewModel by viewModels { viewModelFactory }
 
     override fun getSnackBarErrorView(): SnackViewErrorBinding = viewBinding.includeErrorView
 
@@ -98,7 +99,7 @@ class RecordTransactionDialogFragment :
 
         viewModel.errorLiveData.observe(viewLifecycleOwner, OneTimeObserver {
             when (it.viewErrorType) {
-                RecordTransactionDialogFragmentViewModel.ViewErrorType.NON_BLOCKING -> {
+                AddTransactionDialogFragmentViewModel.ViewErrorType.NON_BLOCKING -> {
                     showSnackBarErrorView(it.message ?: getString(it.resID), true)
                 }
             }
@@ -142,7 +143,7 @@ class RecordTransactionDialogFragment :
 
 
     private fun initSpinner() {
-        Collections.sort(categoryList)
+        categoryList.sort()
         val adapter = ArrayAdapter(
             requireActivity().applicationContext,
             android.R.layout.simple_spinner_dropdown_item,
@@ -174,14 +175,14 @@ class RecordTransactionDialogFragment :
         val timestampNow = Timestamp.now()
         val amount = viewBinding.textAmount.text.toString()
         val description = viewBinding.textDescription.text.toString()
-        val transType = transactionType.type
+        val transType = transactionType
         if (monthYear?.isNotBlank()!! && amount.isNotEmpty() && description.isNotBlank())
-            viewModel.addTransaction(monthYear!!, amount.toLong(), categoty, description, timestampNow, transType)
+            viewModel.addTransaction(monthYear!!, TransactionEntity(amount.toLong(), categoty, description, transType, timestampNow))
         else
             activity?.showToast(getString(R.string.empty_field_msg))
     }
 
     companion object {
-        fun newInstance() = RecordTransactionDialogFragment()
+        fun newInstance() = AddTransactionDialogFragment()
     }
 }
