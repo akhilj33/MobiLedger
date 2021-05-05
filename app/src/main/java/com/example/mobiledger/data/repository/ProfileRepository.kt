@@ -1,7 +1,5 @@
 package com.example.mobiledger.data.repository
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.example.mobiledger.common.utils.ErrorCodes
 import com.example.mobiledger.data.sources.api.UserApi
 import com.example.mobiledger.data.sources.cache.CacheSource
@@ -31,8 +29,8 @@ class ProfileRepositoryImpl(
             val uId = cacheSource.getUID()
             if (uId != null) {
                 val userExists = profileDb.hasUser()
-                if(!userExists){
-                    when(val firebaseResult = userApi.fetchUserDataFromFirebaseDb(uId)){
+                if (!userExists) {
+                    when (val firebaseResult = userApi.fetchUserDataFromFirebaseDb(uId)) {
                         is AppResult.Success -> {
                             profileDb.saveUser(firebaseResult.data)
                         }
@@ -41,9 +39,8 @@ class ProfileRepositoryImpl(
                         }
                     }
                 }
-                 profileDb.fetchUserProfile()
-            }
-            else {
+                profileDb.fetchUserProfile()
+            } else {
                 AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
             }
         }
@@ -53,7 +50,7 @@ class ProfileRepositoryImpl(
         return withContext(dispatcher) {
             val uId = cacheSource.getUID()
             if (uId != null) userApi.updateUserNameInAuth(username, uId).also {
-                    if(it is AppResult.Success) profileDb.updateUserName(username, uId)
+                if (it is AppResult.Success) profileDb.updateUserName(username, uId)
             }
             else AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
         }
@@ -63,7 +60,7 @@ class ProfileRepositoryImpl(
         return withContext(dispatcher) {
             val uId = cacheSource.getUID()
             if (uId != null) userApi.updateEmailInAuth(email, uId).also {
-                if(it is AppResult.Success) profileDb.updateEmailId(email, uId)
+                if (it is AppResult.Success) profileDb.updateEmailId(email, uId)
             }
             else AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
         }
@@ -73,7 +70,7 @@ class ProfileRepositoryImpl(
         return withContext(dispatcher) {
             val uId = cacheSource.getUID()
             if (uId != null) userApi.updateContactInFirebaseDB(phoneNo, uId).also {
-                if(it is AppResult.Success) profileDb.updatePhoneNo(phoneNo, uId)
+                if (it is AppResult.Success) profileDb.updatePhoneNo(phoneNo, uId)
             }
             else AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
         }

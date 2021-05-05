@@ -6,28 +6,28 @@ import com.example.mobiledger.domain.entities.MonthlyTransactionSummaryEntity
 import com.example.mobiledger.domain.entities.TransactionEntity
 
 interface TransactionUseCase {
-    suspend fun getMonthlyTransactionSummaryFromDb(monthYear: String): AppResult<MonthlyTransactionSummaryEntity?>
-    suspend fun addUserTransactionToFirebase(
-        monthYear: String,
-        transactionEntity: TransactionEntity,
-        monthlyTransactionSummaryEntity: MonthlyTransactionSummaryEntity?
-    ): AppResult<Unit>
+    suspend fun getMonthlySummaryEntity(monthYear: String): AppResult<MonthlyTransactionSummaryEntity>
+    suspend fun addMonthlySummaryToFirebase(monthYear: String, monthlySummaryEntity: MonthlyTransactionSummaryEntity): AppResult<Unit>
+    suspend fun updateMonthlySummary(monthYear: String, monthlySummaryEntity: MonthlyTransactionSummaryEntity): AppResult<Unit>
+    suspend fun addUserTransactionToFirebase(monthYear: String, transactionEntity: TransactionEntity): AppResult<Unit>
 }
 
 class TransactionUseCaseImpl(private val transactionRepository: TransactionRepository) : TransactionUseCase {
-    override suspend fun getMonthlyTransactionSummaryFromDb(monthYear: String): AppResult<MonthlyTransactionSummaryEntity?> {
-        return transactionRepository.getMonthlyTransactionFromFirebaseDb(monthYear)
+    override suspend fun getMonthlySummaryEntity(monthYear: String): AppResult<MonthlyTransactionSummaryEntity> {
+        return transactionRepository.getMonthlySummaryEntity(monthYear)
     }
 
-    override suspend fun addUserTransactionToFirebase(
-        monthYear: String,
-        transactionEntity: TransactionEntity,
-        monthlyTransactionSummaryEntity: MonthlyTransactionSummaryEntity?
+    override suspend fun addMonthlySummaryToFirebase(
+        monthYear: String, monthlySummaryEntity: MonthlyTransactionSummaryEntity
     ): AppResult<Unit> {
-        return transactionRepository.addUserTransactionToFirebase(
-            monthYear,
-            transactionEntity,
-            monthlyTransactionSummaryEntity
-        )
+        return transactionRepository.addMonthlySummaryToFirebase(monthYear, monthlySummaryEntity)
+    }
+
+    override suspend fun updateMonthlySummary(monthYear: String, monthlySummaryEntity: MonthlyTransactionSummaryEntity): AppResult<Unit> {
+        return transactionRepository.updateMonthlySummary(monthYear, monthlySummaryEntity)
+    }
+
+    override suspend fun addUserTransactionToFirebase(monthYear: String, transactionEntity: TransactionEntity): AppResult<Unit> {
+        return transactionRepository.addUserTransactionToFirebase(monthYear, transactionEntity)
     }
 }

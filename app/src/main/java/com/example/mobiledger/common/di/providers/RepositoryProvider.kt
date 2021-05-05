@@ -38,7 +38,8 @@ class RepositoryProvider(
     private val transactionRepository: TransactionRepository by lazy {
         TransactionRepositoryImpl(
             apiSourceProvider.provideTransactionApiSource(),
-            cacheSourceProvider.provideCacheSource()
+            cacheSourceProvider.provideCacheSource(),
+            dbProvider.provideTransactionDb()
         )
     }
 
