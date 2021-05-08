@@ -58,6 +58,11 @@ class EditProfileFragment : BaseFragment<FragmentEditProfileBinding, BaseNavigat
 
 
     private fun setOnClickListener() {
+
+        viewBinding.btnBack.setOnClickListener {
+            activity?.onBackPressed()
+        }
+
         viewBinding.btnNameUpdate.setOnClickListener {
             val userName = viewBinding.textName.text.toString()
             if (userName.isEmpty()) {

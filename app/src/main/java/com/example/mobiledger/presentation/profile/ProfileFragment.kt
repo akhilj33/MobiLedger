@@ -50,6 +50,10 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding, ProfileNavigator>(R
     }
 
     private fun setOnClickListener() {
+        viewBinding.btnBack.setOnClickListener {
+            activity?.onBackPressed()
+        }
+
         viewBinding.imgEdit.setOnClickListener {
             navigator?.navigateToEditProfileScreen()
         }

@@ -1,9 +1,6 @@
 package com.example.mobiledger.common.di.providers
 
-import com.example.mobiledger.data.sources.api.TransactionApi
-import com.example.mobiledger.data.sources.api.TransactionApiImpl
-import com.example.mobiledger.data.sources.api.UserApi
-import com.example.mobiledger.data.sources.api.UserApiImpl
+import com.example.mobiledger.data.sources.api.*
 
 /**
  * Provides Constructor dependencies to all api sources present in app
@@ -18,4 +15,5 @@ class ApiSourceProvider(
     fun provideTransactionApiSource(): TransactionApi =
         TransactionApiImpl(firebaseProvider.provideFirebaseDatabase(), authSourceProvider.provideAuthSource())
 
+    fun provideCategoryApiSource(): CategoryApi = CategoryApiImpl(firebaseProvider.provideFirebaseDatabase())
 }
