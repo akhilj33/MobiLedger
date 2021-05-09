@@ -79,29 +79,6 @@ class AddTransactionDialogFragmentViewModel(
         _loadingState.value = false
     }
 
-//    //todo : Fetch it from Firebase later
-//    fun provideExpenseCategoryList(): ArrayList<String> {
-//        expenseCategoryList.add("Rent")
-//        expenseCategoryList.add("Food")
-//        expenseCategoryList.add("Grocery")
-//        expenseCategoryList.add("MISC")
-//        expenseCategoryList.add("Bills")
-//        expenseCategoryList.add("Domestic Help")
-//        expenseCategoryList.add("Water")
-//        expenseCategoryList.add("Travel")
-//
-//        return expenseCategoryList
-//    }
-
-//    fun provideIncomeCategoryList(): ArrayList<String> {
-//        incomeCategoryList.add("Salary")
-//        incomeCategoryList.add("Investment")
-//        incomeCategoryList.add("Sale")
-//        incomeCategoryList.add("MISC")
-//
-//        return incomeCategoryList
-//    }
-
     fun addTransaction(monthYear: String, transactionEntity: TransactionEntity) {
         viewModelScope.launch {
             _loadingState.value = true

@@ -32,7 +32,7 @@ class AddTransactionDialogFragment :
     BaseDialogFragment<DialogFragmentAddTransactionBinding, BaseNavigator>
         (R.layout.dialog_fragment_add_transaction), DatePickerDialog.OnDateSetListener {
 
-    private var categoryList = arrayListOf<String>()
+//    private var categoryList = arrayListOf<String>()
     private var incomeCategoryList = arrayListOf<String>()
     private var expenseCategoryList = arrayListOf<String>()
     private lateinit var categoty: String
@@ -50,6 +50,8 @@ class AddTransactionDialogFragment :
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        viewModel.getIncomeCategoryList()
+        viewModel.getExpenseCategoryList()
         setWidthPercent(85)
     }
 
@@ -57,18 +59,15 @@ class AddTransactionDialogFragment :
         super.onViewCreated(view, savedInstanceState)
         initToggle()
         initDate()
-        viewModel.getIncomeCategoryList()
-        viewModel.getExpenseCategoryList()
         setUpObserver()
-        getCategoryList(TransactionType.Expense)
     }
 
     private fun getCategoryList(transactionType: TransactionType) {
-        categoryList = if (transactionType == TransactionType.Income)
+        val categoryList = if (transactionType == TransactionType.Income)
             incomeCategoryList
         else
             expenseCategoryList
-        initSpinner()
+        initSpinner(categoryList)
     }
 
     private fun initToggle() {
@@ -167,7 +166,7 @@ class AddTransactionDialogFragment :
     }
 
 
-    private fun initSpinner() {
+    private fun initSpinner(categoryList: ArrayList<String>) {
         categoryList.sort()
         val adapter = ArrayAdapter(
             requireActivity().applicationContext,

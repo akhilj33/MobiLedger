@@ -6,8 +6,8 @@ import com.example.mobiledger.domain.entities.ExpenseCategoryListEntity
 import com.example.mobiledger.domain.entities.IncomeCategoryListEntity
 
 interface CategoryUseCase {
-    suspend fun addDefaultIncomeCategories(uid: String, defaultCategoryList: List<String>): AppResult<Unit>
-    suspend fun addDefaultExpenseCategories(uid: String, defaultCategoryList: List<String>): AppResult<Unit>
+    suspend fun addDefaultIncomeCategories(defaultCategoryList: List<String>): AppResult<Unit>
+    suspend fun addDefaultExpenseCategories(defaultCategoryList: List<String>): AppResult<Unit>
     suspend fun getDefaultIncomeCategories(): AppResult<IncomeCategoryListEntity>
     suspend fun getDefaultExpenseCategories(): AppResult<ExpenseCategoryListEntity>
     suspend fun getUserIncomeCategories(): AppResult<IncomeCategoryListEntity>
@@ -16,11 +16,11 @@ interface CategoryUseCase {
 
 class CategoryUseCaseImpl(private val categoryRepository: CategoryRepository) : CategoryUseCase {
 
-    override suspend fun addDefaultIncomeCategories(uid: String, defaultCategoryList: List<String>): AppResult<Unit> =
-        categoryRepository.addUserIncomeCategoryDb(uid, defaultCategoryList)
+    override suspend fun addDefaultIncomeCategories(defaultCategoryList: List<String>): AppResult<Unit> =
+        categoryRepository.addUserIncomeCategoryDb(defaultCategoryList)
 
-    override suspend fun addDefaultExpenseCategories(uid: String, defaultCategoryList: List<String>): AppResult<Unit> =
-        categoryRepository.addUserExpenseCategoryDb(uid, defaultCategoryList)
+    override suspend fun addDefaultExpenseCategories(defaultCategoryList: List<String>): AppResult<Unit> =
+        categoryRepository.addUserExpenseCategoryDb(defaultCategoryList)
 
     override suspend fun getDefaultIncomeCategories(): AppResult<IncomeCategoryListEntity> = categoryRepository.getDefaultIncomeCategories()
 

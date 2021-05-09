@@ -15,8 +15,8 @@ import kotlinx.coroutines.withContext
 import timber.log.Timber
 
 interface CategoryRepository {
-    suspend fun addUserIncomeCategoryDb(uid: String, defaultCategoryList: List<String>): AppResult<Unit>
-    suspend fun addUserExpenseCategoryDb(uid: String, defaultCategoryList: List<String>): AppResult<Unit>
+    suspend fun addUserIncomeCategoryDb(defaultCategoryList: List<String>): AppResult<Unit>
+    suspend fun addUserExpenseCategoryDb(defaultCategoryList: List<String>): AppResult<Unit>
     suspend fun getDefaultIncomeCategories(): AppResult<IncomeCategoryListEntity>
     suspend fun getDefaultExpenseCategories(): AppResult<ExpenseCategoryListEntity>
     suspend fun getUserIncomeCategories(): AppResult<IncomeCategoryListEntity>
@@ -31,15 +31,23 @@ class CategoryRepositoryImpl(
 ) :
     CategoryRepository {
 
-    override suspend fun addUserIncomeCategoryDb(uid: String, defaultCategoryList: List<String>): AppResult<Unit> {
+    override suspend fun addUserIncomeCategoryDb(defaultCategoryList: List<String>): AppResult<Unit> {
         return withContext(dispatcher) {
-            categoryApi.addDefaultIncomeCategories(uid, defaultCategoryList)
+            val uid = cacheSource.getUID()
+            if (uid != null) {
+                categoryApi.addDefaultIncomeCategories(uid, defaultCategoryList)
+            } else
+                AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
         }
     }
 
-    override suspend fun addUserExpenseCategoryDb(uid: String, defaultCategoryList: List<String>): AppResult<Unit> {
+    override suspend fun addUserExpenseCategoryDb(defaultCategoryList: List<String>): AppResult<Unit> {
         return withContext(dispatcher) {
-            categoryApi.addDefaultExpenseCategories(uid, defaultCategoryList)
+            val uid = cacheSource.getUID()
+            if (uid != null) {
+                categoryApi.addDefaultExpenseCategories(uid, defaultCategoryList)
+            } else
+                AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
         }
     }
 
@@ -75,8 +83,10 @@ class CategoryRepositoryImpl(
                     Timber.i(firebaseResult.error.message.toString())
                 }
             }
-            val categoryList = CategoryListEntity(uid, incomeCategoryListEntity, expenseCategoryListEntity)
-            categoryDb.saveUser(categoryList)
+            if (incomeCategoryListEntity.incomeCategoryList.isNotEmpty() && expenseCategoryListEntity.expenseCategoryList.isNotEmpty()) {
+                val categoryList = CategoryListEntity(uid, incomeCategoryListEntity, expenseCategoryListEntity)
+                categoryDb.saveUser(categoryList)
+            }
         }
     }
 

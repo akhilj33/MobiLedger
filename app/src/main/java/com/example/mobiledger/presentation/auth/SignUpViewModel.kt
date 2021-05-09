@@ -82,7 +82,7 @@ class SignUpViewModel(
             when (val incomeCategoryList = categoryUseCase.getDefaultIncomeCategories()) {
                 is AppResult.Success -> {
 
-                    when (val result = categoryUseCase.addDefaultIncomeCategories(user.uid, incomeCategoryList.data.incomeCategoryList)) {
+                    when (val result = categoryUseCase.addDefaultIncomeCategories(incomeCategoryList.data.incomeCategoryList)) {
                         is AppResult.Success -> {
                         }
 
@@ -108,7 +108,7 @@ class SignUpViewModel(
                 is AppResult.Success -> {
 
                     when (val result =
-                        categoryUseCase.addDefaultExpenseCategories(user.uid, expenseCategoryList.data.expenseCategoryList)) {
+                        categoryUseCase.addDefaultExpenseCategories(expenseCategoryList.data.expenseCategoryList)) {
                         is AppResult.Success -> {
                         }
 
