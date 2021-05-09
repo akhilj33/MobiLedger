@@ -68,20 +68,20 @@
             app:layout_constraintTop_toBottomOf="@id/horizontalScreenGuideline_20"
             app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_10"
             app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_90"
-            android:textSize="@dimen/sp_36"
+            android:textSize="@dimen/csp_36"
             android:textAlignment="center" />
 
         <TextView
             android:id="@+id/tvHeading"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp_16"
+            android:layout_marginTop="@dimen/cdp_16"
             android:textColor="@color/colorPrimaryDark"
             android:text="@string/join_a_creative_solution_for_a_better_tomorrow"
             app:layout_constraintTop_toBottomOf="@id/tvTitle"
             app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_10"
             app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_90"
-            android:textSize="@dimen/sp_20"
+            android:textSize="@dimen/csp_20"
             android:textAlignment="center" />
 
         <com.google.android.material.textfield.TextInputLayout
@@ -98,7 +98,7 @@
                 android:layout_height="wrap_content"
                 android:textColorHint="@color/colorPrimary"
                 android:hint="@string/name"
-                android:textSize="@dimen/sp_16" />
+                android:textSize="@dimen/csp_16" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -115,7 +115,7 @@
                 android:layout_height="wrap_content"
                 android:textColorHint="@color/colorPrimary"
                 android:hint="@string/email_id"
-                android:textSize="@dimen/sp_16" />
+                android:textSize="@dimen/csp_16" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -132,14 +132,14 @@
                 android:layout_height="wrap_content"
                 android:textColorHint="@color/colorPrimary"
                 android:hint="@string/mobile_no"
-                android:textSize="@dimen/sp_16" />
+                android:textSize="@dimen/csp_16" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/passwordLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp_8"
+            android:layout_marginTop="@dimen/cdp_8"
             app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_90"
             app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_10"
             app:layout_constraintTop_toBottomOf="@id/phoneInputLayout">
@@ -151,7 +151,7 @@
                 android:layout_height="wrap_content"
                 android:textColorHint="@color/colorPrimary"
                 android:hint="@string/password"
-                android:textSize="@dimen/sp_16" />
+                android:textSize="@dimen/csp_16" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -159,7 +159,7 @@
             android:id="@+id/confirmPasswordLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp_8"
+            android:layout_marginTop="@dimen/cdp_8"
             app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_90"
             app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_10"
             app:layout_constraintTop_toBottomOf="@id/passwordLayout">
@@ -171,7 +171,7 @@
                 android:layout_height="wrap_content"
                 android:textColorHint="@color/colorPrimary"
                 android:hint="@string/confirm_password"
-                android:textSize="@dimen/sp_16" />
+                android:textSize="@dimen/csp_16" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -191,9 +191,9 @@
             android:layout_height="wrap_content"
             android:text="@string/sign_up"
             android:textColor="@color/colorWhite"
-            android:textSize="@dimen/sp_20"
+            android:textSize="@dimen/csp_20"
             android:background="@color/colorPrimary"
-            android:layout_marginTop="@dimen/dp_24"
+            android:layout_marginTop="@dimen/cdp_24"
             app:layout_constraintTop_toBottomOf="@id/confirmPasswordLayout"
             app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_10"
             app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_90" />

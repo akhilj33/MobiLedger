@@ -16,6 +16,7 @@ interface TransactionRepository {
     suspend fun getMonthlySummaryEntity(monthYear: String): AppResult<MonthlyTransactionSummaryEntity>
     suspend fun addMonthlySummaryToFirebase(monthYear: String, monthlySummaryEntity: MonthlyTransactionSummaryEntity): AppResult<Unit>
     suspend fun updateMonthlySummary(monthYear: String, monthlySummaryEntity: MonthlyTransactionSummaryEntity): AppResult<Unit>
+    suspend fun getTransactionList(monthYear: String): AppResult<List<TransactionEntity>>
     suspend fun addUserTransactionToFirebase(monthYear: String, transactionEntity: TransactionEntity): AppResult<Unit>
 }
 
@@ -62,6 +63,16 @@ class TransactionRepositoryImpl(
             val uId = cacheSource.getUID()
             if (uId != null) transactionApi.updateMonthlySummary(uId, monthYear, monthlySummaryEntity).also {
                 if (it is AppResult.Success) transactionDb.saveMonthlySummary(monthYear, monthlySummaryEntity)
+            }
+            else AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
+        }
+    }
+
+    override suspend fun getTransactionList(monthYear: String): AppResult<List<TransactionEntity>> {
+        return withContext(dispatcher){
+            val uId = cacheSource.getUID()
+            if(uId!=null) transactionApi.getTransactionList(uId, monthYear).also {
+                    //todo
             }
             else AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
         }

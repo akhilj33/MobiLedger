@@ -7,8 +7,8 @@ import androidx.room.Query
 
 @Dao
 interface TransactionDao {
-    @Query("SELECT count(*) FROM transaction_table WHERE id = :id")
-    suspend fun hasTransactions(id: String): Int?
+    @Query("SELECT count(*) FROM transaction_table")
+    suspend fun hasTransactions(): Int?
 
     @Query("SELECT * FROM transaction_table")
     suspend fun fetchAllTransactions(): List<TransactionRoomItem>?

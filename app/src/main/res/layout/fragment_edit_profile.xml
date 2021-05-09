@@ -33,12 +33,12 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/dp_16"
+                    android:layout_marginStart="@dimen/cdp_16"
                     android:layout_toEndOf="@id/btnBack"
                     android:text="@string/edit_profile"
                     android:layout_centerVertical="true"
                     android:textColor="@color/colorWhite"
-                    android:textSize="@dimen/sp_20" />
+                    android:textSize="@dimen/csp_20" />
 
             </RelativeLayout>
 
@@ -70,10 +70,10 @@
 
         <ImageView
             android:id="@+id/editImage"
-            android:layout_width="@dimen/dp_200"
-            android:layout_height="@dimen/dp_200"
+            android:layout_width="@dimen/cdp_200"
+            android:layout_height="@dimen/cdp_200"
             android:src="@drawable/user_icon_grey"
-            android:layout_marginTop="@dimen/dp_28"
+            android:layout_marginTop="@dimen/cdp_28"
             app:layout_constraintTop_toBottomOf="@id/editProfileToolbar"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -84,7 +84,7 @@
             android:id="@+id/nameLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp_12"
+            android:layout_marginTop="@dimen/cdp_12"
             app:layout_constraintTop_toBottomOf="@id/editImage"
             app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_10"
             app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_70">
@@ -93,7 +93,7 @@
                 android:id="@+id/textName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="@dimen/sp_16"
+                android:textSize="@dimen/csp_16"
                 android:textColorHint="@color/colorPrimary"
                 android:hint="@string/name" />
 
@@ -105,10 +105,10 @@
             android:layout_height="wrap_content"
             android:text="@string/update"
             android:textColor="@color/colorWhite"
-            android:textSize="@dimen/sp_14"
+            android:textSize="@dimen/csp_14"
             android:textAllCaps="false"
             android:background="@color/colorPrimary"
-            android:layout_marginTop="@dimen/dp_16"
+            android:layout_marginTop="@dimen/cdp_16"
             app:layout_constraintBottom_toBottomOf="@id/nameLayout"
             app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_70"
             app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_90" />
@@ -118,7 +118,7 @@
             android:id="@+id/contactNumLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp_12"
+            android:layout_marginTop="@dimen/cdp_12"
             app:layout_constraintTop_toBottomOf="@id/nameLayout"
             app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_10"
             app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_70">
@@ -127,7 +127,7 @@
                 android:id="@+id/textContactNum"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="@dimen/sp_16"
+                android:textSize="@dimen/csp_16"
                 android:textColorHint="@color/colorPrimary"
                 android:hint="@string/contact_number" />
 
@@ -139,10 +139,10 @@
             android:layout_height="wrap_content"
             android:text="@string/update"
             android:textColor="@color/colorWhite"
-            android:textSize="@dimen/sp_14"
+            android:textSize="@dimen/csp_14"
             android:textAllCaps="false"
             android:background="@color/colorPrimary"
-            android:layout_marginTop="@dimen/dp_16"
+            android:layout_marginTop="@dimen/cdp_16"
             app:layout_constraintBottom_toBottomOf="@id/contactNumLayout"
             app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_70"
             app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_90" />
@@ -152,7 +152,7 @@
             android:id="@+id/emailLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp_12"
+            android:layout_marginTop="@dimen/cdp_12"
             app:layout_constraintTop_toBottomOf="@id/contactNumLayout"
             app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_10"
             app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_70">
@@ -161,7 +161,7 @@
                 android:id="@+id/textEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="@dimen/sp_16"
+                android:textSize="@dimen/csp_16"
                 android:textColorHint="@color/colorPrimary"
                 android:hint="@string/email" />
 
@@ -173,10 +173,10 @@
             android:layout_height="wrap_content"
             android:text="@string/update"
             android:textColor="@color/colorWhite"
-            android:textSize="@dimen/sp_14"
+            android:textSize="@dimen/csp_14"
             android:textAllCaps="false"
             android:background="@color/colorPrimary"
-            android:layout_marginTop="@dimen/dp_16"
+            android:layout_marginTop="@dimen/cdp_16"
             app:layout_constraintBottom_toBottomOf="@id/emailLayout"
             app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_70"
             app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_90" />
@@ -186,7 +186,7 @@
             android:id="@+id/passwordLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp_24"
+            android:layout_marginTop="@dimen/cdp_24"
             app:layout_constraintTop_toBottomOf="@id/emailLayout"
             app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_10"
             app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_90">
@@ -195,7 +195,7 @@
                 android:id="@+id/textPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="@dimen/sp_16"
+                android:textSize="@dimen/csp_16"
                 android:inputType="textPassword"
                 android:textColorHint="@color/colorPrimary"
                 android:hint="@string/password" />
@@ -206,7 +206,7 @@
             android:id="@+id/confirmPasswordLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp_12"
+            android:layout_marginTop="@dimen/cdp_12"
             app:layout_constraintTop_toBottomOf="@id/passwordLayout"
             app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_10"
             app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_90">
@@ -216,7 +216,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"
-                android:textSize="@dimen/sp_16"
+                android:textSize="@dimen/csp_16"
                 android:textColorHint="@color/colorPrimary"
                 android:hint="@string/confirm_password" />
 
@@ -238,7 +238,7 @@
             android:layout_height="wrap_content"
             android:text="@string/update"
             android:textColor="@color/colorWhite"
-            android:textSize="@dimen/sp_14"
+            android:textSize="@dimen/csp_14"
             android:textAllCaps="false"
             android:background="@color/colorPrimary"
             app:layout_constraintTop_toBottomOf="@id/confirmPasswordLayout"

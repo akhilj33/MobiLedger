@@ -32,12 +32,11 @@
                         "It should have a special character"</string>
 
 
-    <!--Home Screen-->
+    <!--Bottom Navigation-->
     <string name="home">Home</string>
     <string name="budget">Budget</string>
-    <string name="insight">Insight</string>
-    <string name="split">Split</string>
-    <string name="add_transaction">Add transaction</string>
+    <string name="stats">Stats</string>
+    <string name="account">Account</string>
 
     <!--Profile Screen-->
     <string name="back">Back</string>
@@ -56,10 +55,16 @@
     <string name="profile_image">Profile Image</string>
     <string name="amount_rs">Amount(Rs)</string>
 
-    <!--Record Transaction Dialog Fragment-->
+    <!--Add Transaction Dialog Fragment-->
     <string name="transaction_added">Transaction Added</string>
     <string name="expense">Expense</string>
     <string name="income">Income</string>
     <string name="description">Description</string>
+
+    <!--Home Fragment-->
+    <string name="overview_report">Overview Report</string>
+    <string name="add_transaction">Add transaction</string>
+    <string name="latest_transaction">Latest Transactions</string>
+
 
 </resources>

@@ -1,30 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <dimen name="dp_5">5dp</dimen>
-    <dimen name="dp_8">8dp</dimen>
-    <dimen name="dp_10">10dp</dimen>
-    <dimen name="dp_11">11dp</dimen>
-    <dimen name="dp_12">12dp</dimen>
-    <dimen name="dp_16">16dp</dimen>
-    <dimen name="dp_20">20dp</dimen>
-    <dimen name="dp_24">24dp</dimen>
-    <dimen name="dp_28">28dp</dimen>
-    <dimen name="dp_30">30dp</dimen>
-    <dimen name="dp_36">36dp</dimen>
-    <dimen name="dp_70">70dp</dimen>
-    <dimen name="dp_200">200dp</dimen>
+    <dimen name="cdp_5">5dp</dimen>
+    <dimen name="cdp_8">8dp</dimen>
+    <dimen name="cdp_10">10dp</dimen>
+    <dimen name="cdp_11">11dp</dimen>
+    <dimen name="cdp_12">12dp</dimen>
+    <dimen name="cdp_16">16dp</dimen>
+    <dimen name="cdp_20">20dp</dimen>
+    <dimen name="cdp_24">24dp</dimen>
+    <dimen name="cdp_28">28dp</dimen>
+    <dimen name="cdp_30">30dp</dimen>
+    <dimen name="cdp_32">32dp</dimen>
+    <dimen name="cdp_36">36dp</dimen>
+    <dimen name="cdp_70">70dp</dimen>
+    <dimen name="cdp_200">200dp</dimen>
 
 
-    <dimen name="sp_12">12sp</dimen>
-    <dimen name="sp_14">14sp</dimen>
-    <dimen name="sp_16">16sp</dimen>
-    <dimen name="sp_24">24sp</dimen>
-    <dimen name="sp_20">20sp</dimen>
-    <dimen name="sp_36">36sp</dimen>
+    <dimen name="csp_12">12sp</dimen>
+    <dimen name="csp_14">14sp</dimen>
+    <dimen name="csp_16">16sp</dimen>
+    <dimen name="csp_24">24sp</dimen>
+    <dimen name="csp_20">20sp</dimen>
+    <dimen name="csp_36">36sp</dimen>
 
-    <dimen name="bottom_nav_height">@dimen/dp_70</dimen>
-    <dimen name="bottom_nav_image_margin">@dimen/dp_12</dimen>
-    <dimen name="bottom_nav_text_margin">@dimen/dp_10</dimen>
+    <dimen name="bottom_nav_height">@dimen/cdp_70</dimen>
+    <dimen name="bottom_nav_image_margin">@dimen/cdp_12</dimen>
+    <dimen name="bottom_nav_text_margin">@dimen/cdp_10</dimen>
+    <dimen name="cdp_48">48dp</dimen>
+    <dimen name="csp_18">18sp</dimen>
+    <dimen name="csp_22">22sp</dimen>
+    <dimen name="cdp_50">50dp</dimen>
+    <dimen name="csp_28">28sp</dimen>
+    <dimen name="cdp_4">4dp</dimen>
 
 </resources>

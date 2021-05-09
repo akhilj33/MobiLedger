@@ -54,23 +54,23 @@ class MainActivity :
             highlightTab(NavTab.HOME)
         }
         viewBinding.includeNav.budgetView.setOnClickListener {
-            highlightTab(NavTab.BUDGET())
+            highlightTab(BUDGET())
         }
-        viewBinding.includeNav.insightView.setOnClickListener {
-            highlightTab(NavTab.INSIGHT())
+        viewBinding.includeNav.statsView.setOnClickListener {
+            highlightTab(INSIGHT())
         }
-        viewBinding.includeNav.splitView.setOnClickListener {
+        viewBinding.includeNav.accountView.setOnClickListener {
             highlightTab(
-                NavTab.SPLIT()
+                SPLIT()
             )
         }
     }
 
     private fun resetTab() {
-        ColorNav().colorBudget(R.color.colorPrimary)
-        ColorNav().colorInsight(R.color.colorPrimary)
-        ColorNav().colorHome(R.color.colorPrimary)
-        ColorNav().colorSplit(R.color.colorPrimary)
+        ColorNav().colorBudget(R.color.colorGrey)
+        ColorNav().colorInsight(R.color.colorGrey)
+        ColorNav().colorHome(R.color.colorGrey)
+        ColorNav().colorSplit(R.color.colorGrey)
     }
 
     private fun highlightTab(selectedNavTab: NavTab) {
@@ -112,13 +112,13 @@ class MainActivity :
         }
 
         fun colorInsight(@ColorRes colorId: Int) {
-            colorImage(viewBinding.includeNav.insightImg, colorId)
-            colorText(viewBinding.includeNav.insightTitle, colorId)
+            colorImage(viewBinding.includeNav.statsImg, colorId)
+            colorText(viewBinding.includeNav.statsTitle, colorId)
         }
 
         fun colorSplit(@ColorRes colorId: Int) {
-            colorImage(viewBinding.includeNav.splitImg, colorId)
-            colorText(viewBinding.includeNav.splitTitle, colorId)
+            colorImage(viewBinding.includeNav.accountImg, colorId)
+            colorText(viewBinding.includeNav.accountTitle, colorId)
 
         }
     }
@@ -145,10 +145,10 @@ class MainActivity :
         viewModel.currentTab.observe(this@MainActivity, NormalObserver { tab ->
             resetTab()
             when (tab) {
-                is HOME -> ColorNav().colorBudget(R.color.colorPrimary)
-                is NavTab.BUDGET -> ColorNav().colorInsight(R.color.colorPrimary)
-                is NavTab.INSIGHT -> ColorNav().colorSplit(R.color.colorPrimary)
-                is NavTab.SPLIT -> ColorNav().colorHome(R.color.colorPrimary)
+                is HOME -> ColorNav().colorHome(R.color.colorPrimary)
+                is BUDGET -> ColorNav().colorBudget(R.color.colorPrimary)
+                is INSIGHT -> ColorNav().colorInsight(R.color.colorPrimary)
+                is SPLIT -> ColorNav().colorSplit(R.color.colorPrimary)
                 is DeselectAll -> {
                 }
             }

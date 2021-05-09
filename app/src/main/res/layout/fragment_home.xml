@@ -1,25 +1,99 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/horizontalGuideline_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.02" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/verticalStartGuideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.04" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/verticalEndGuideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.96" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/ivProfileIcon"
+            android:layout_width="@dimen/cdp_50"
+            android:layout_height="@dimen/cdp_50"
+            android:background="@drawable/circle"
+            app:layout_constraintEnd_toEndOf="@id/verticalEndGuideline"
+            app:layout_constraintTop_toTopOf="@id/horizontalGuideline_2"
+            app:srcCompat="@drawable/profile_colorful" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tvHello"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:fontFamily="@font/margarine"
+            android:maxLines="2"
+            android:textColor="@color/colorTextDark"
+            android:textSize="@dimen/csp_28"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@id/ivProfileIcon"
+            app:layout_constraintEnd_toStartOf="@id/ivProfileIcon"
+            app:layout_constraintStart_toStartOf="@id/verticalStartGuideline"
+            app:layout_constraintTop_toTopOf="@id/ivProfileIcon"
+            android:text="Hello, Abhishek" />
+
         <include
-            android:id="@+id/homeToolbar"
-            layout="@layout/toolbar" />
+            android:id="@+id/month_navigation_bar"
+            layout="@layout/month_navigation_layout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/cdp_16"
+            android:elevation="@dimen/cdp_4"
+            app:layout_constraintBottom_toTopOf="@id/swipeRefreshLayout"
+            app:layout_constraintEnd_toEndOf="@id/verticalEndGuideline"
+            app:layout_constraintStart_toStartOf="@id/verticalStartGuideline"
+            app:layout_constraintTop_toBottomOf="@id/tvHello" />
+
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipeRefreshLayout"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/cdp_16"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/verticalEndGuideline"
+            app:layout_constraintStart_toStartOf="@id/verticalStartGuideline"
+            app:layout_constraintTop_toBottomOf="@id/month_navigation_bar">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvHome"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:overScrollMode="never" />
+
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/btnAddTransaction"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/cdp_32"
+            android:layout_marginBottom="@dimen/cdp_32"
+            android:contentDescription="@string/add_transaction"
             android:src="@drawable/add_icon"
-            android:layout_marginBottom="32dp"
-            android:layout_marginEnd="32dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:contentDescription="@string/add_transaction" />
+            app:layout_constraintEnd_toEndOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

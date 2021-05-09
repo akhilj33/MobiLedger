@@ -4,15 +4,18 @@
     <color name="colorPrimaryDark">#24292E</color>
     <color name="colorAccent">#2C974B</color>
 
-    <color name="colorTextDark">#24292E</color>
+    <color name="colorTextDark">#3E486D</color>
     <color name="colorTextLight">#FFFFFF</color>
 
     <color name="colorSnackBarError">@color/colorDarkRed</color>
 
-    <color name="colorAppBlue">#0366D6</color>
+    <color name="colorAppBlue">#282C52</color>
     <color name="colorBlack">#000000</color>
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorGray">#AAAAAA</color>
     <color name="colorDarkRed">#b00020</color>
+    <color name="colorGreen">#3CB371</color>
+    <color name="colorGrey">#a9a9a9</color>
+
 
 </resources>

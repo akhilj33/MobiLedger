@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="preloaded_fonts" translatable="false">
+        <item>@font/aclonica</item>
+        <item>@font/andika</item>
+        <item>@font/berkshire_swash</item>
+        <item>@font/cousine</item>
+        <item>@font/crete_round</item>
+        <item>@font/margarine</item>
+    </array>
+</resources>
