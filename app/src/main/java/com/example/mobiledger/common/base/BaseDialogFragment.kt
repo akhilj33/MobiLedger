@@ -2,6 +2,7 @@ package com.example.mobiledger.common.base
 
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -36,6 +37,19 @@ abstract class BaseDialogFragment<B : ViewDataBinding, NV : BaseNavigator>(
 
     protected var navigator: NV? = null
 
+    @Suppress("UNCHECKED_CAST")
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        val activity = activity
+        if (activity is BaseActivity<*, *>) {
+            try {
+                navigator = activity.getFragmentNavigator() as NV
+            } catch (e: Exception) {
+                Timber.e("Navigator Initialisation Issue")
+            }
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -59,19 +73,6 @@ abstract class BaseDialogFragment<B : ViewDataBinding, NV : BaseNavigator>(
         }
     }
 
-    @Suppress("UNCHECKED_CAST")
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        val activity = activity
-        if (activity is BaseActivity<*, *>) {
-            try {
-                navigator = activity.getFragmentNavigator() as NV
-            } catch (e: Exception) {
-                Timber.e("Navigator Initialisation Issue")
-            }
-        }
-    }
-
     override fun onDestroyView() {
         super.onDestroyView()
         //garbage collection
@@ -89,7 +90,7 @@ abstract class BaseDialogFragment<B : ViewDataBinding, NV : BaseNavigator>(
         }
 
         if (isVanishing) {
-            Handler().postDelayed({
+            Handler(Looper.getMainLooper()).postDelayed({
                 hideSnackBarErrorView()
             }, errorTimeOut)
 

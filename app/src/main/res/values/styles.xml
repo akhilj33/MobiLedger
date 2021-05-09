@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
@@ -8,7 +8,7 @@
     </style>
 
     <!-- Full Screen Dialogs -->
-    <style name="FullScreenDialog" parent="Theme.AppCompat.Light.Dialog">
+    <style name="FullScreenDialog" parent="Theme.MaterialComponents.Light.Dialog">
         <item name="android:backgroundDimEnabled">false</item>
         <item name="android:windowNoTitle">true</item>
         <item name="android:padding">0dp</item>
@@ -28,10 +28,49 @@
     <!-- SPINNER -->
     <style name="SpinnerTheme" parent="Widget.AppCompat.Light.DropDownItem.Spinner">
         <item name="android:textColor">@color/colorTextDark</item>
-        <item name="android:textSize">@dimen/sp_16</item>
+        <item name="android:textSize">@dimen/csp_16</item>
         <item name="android:textColorHint">@color/colorTextDark</item>
         <item name="android:textColorPrimary">@color/colorTextDark</item>
         <item name="backgroundTint">@color/colorPrimaryDark</item>
+    </style>
+
+    <!-- Gelion Regular Font-->
+    <style name="GelionRegularFont" parent="TextAppearance.MaterialComponents.Body1">
+        <item name="fontFamily">@font/gelion_regular</item>
+    </style>
+
+    <style name="GelionSemiBoldFont" parent="TextAppearance.MaterialComponents.Body1">
+        <item name="fontFamily">@font/gelion_semi_bold</item>
+    </style>
+
+    <!-- Gelion Regular Font and Size-->
+    <style name="GelionSemiBold16" parent="GelionSemiBoldFont">
+        <item name="android:textSize">@dimen/csp_16</item>
+    </style>
+
+    <style name="GelionRegular16" parent="GelionRegularFont">
+        <item name="android:textSize">@dimen/csp_16</item>
+    </style>
+
+    <style name="GelionRegular18" parent="GelionRegularFont">
+        <item name="android:textSize">@dimen/csp_18</item>
+    </style>
+
+    <!-- Gelion Regular Font, Size and color-->
+    <style name="GelionRegularNavyBlue16" parent="GelionRegular16">
+        <item name="android:textColor">@color/colorTextDark</item>
+    </style>
+
+    <style name="GelionRegularGreen18" parent="GelionRegular18">
+        <item name="android:textColor">@color/colorGreen</item>
+    </style>
+
+    <style name="GelionRegularRed18" parent="GelionRegular18">
+        <item name="android:textColor">@color/colorDarkRed</item>
+    </style>
+
+    <style name="GelionSemiBoldBlue16" parent="GelionSemiBold16">
+        <item name="android:textColor">@color/colorTextDark</item>
     </style>
 
 

@@ -7,13 +7,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorSnackBarError"
-        android:padding="@dimen/dp_5">
+        android:padding="@dimen/cdp_5">
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/ivWarning"
-            android:layout_width="@dimen/dp_20"
-            android:layout_height="@dimen/dp_20"
-            android:layout_marginStart="@dimen/dp_8"
+            android:layout_width="@dimen/cdp_20"
+            android:layout_height="@dimen/cdp_20"
+            android:layout_marginStart="@dimen/cdp_8"
             android:src="@drawable/ic_warning"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -23,8 +23,8 @@
             android:id="@+id/tvWarning"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/dp_8"
-            android:layout_marginEnd="@dimen/dp_8"
+            android:layout_marginStart="@dimen/cdp_8"
+            android:layout_marginEnd="@dimen/cdp_8"
             android:textColor="@color/colorTextLight"
             android:text="@string/generic_error_message"
             app:layout_constraintBottom_toBottomOf="parent"

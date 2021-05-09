@@ -21,8 +21,8 @@
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/homeImg"
-                android:layout_width="@dimen/dp_28"
-                android:layout_height="@dimen/dp_28"
+                android:layout_width="@dimen/cdp_28"
+                android:layout_height="@dimen/cdp_28"
                 android:layout_marginTop="@dimen/bottom_nav_image_margin"
                 android:src="@drawable/menu_home_svg"
                 android:tint="@color/colorPrimaryDark"
@@ -37,8 +37,8 @@
                 android:layout_height="wrap_content"
                 android:maxLines="1"
                 android:gravity="center"
-                app:autoSizeMaxTextSize="@dimen/sp_14"
-                app:autoSizeMinTextSize="@dimen/sp_12"
+                app:autoSizeMaxTextSize="@dimen/csp_14"
+                app:autoSizeMinTextSize="@dimen/csp_12"
                 app:autoSizeStepGranularity="1sp"
                 app:autoSizeTextType="uniform"
                 android:layout_marginBottom="@dimen/bottom_nav_text_margin"
@@ -53,16 +53,16 @@
             android:layout_width="0dp"
             android:layout_height="@dimen/bottom_nav_height"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/insightView"
+            app:layout_constraintEnd_toStartOf="@id/statsView"
             app:layout_constraintStart_toEndOf="@id/homeView"
             app:layout_constraintTop_toTopOf="parent">
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/budgetImg"
-                android:layout_width="@dimen/dp_28"
-                android:layout_height="@dimen/dp_28"
+                android:layout_width="@dimen/cdp_28"
+                android:layout_height="@dimen/cdp_28"
                 android:layout_marginTop="@dimen/bottom_nav_image_margin"
-                android:src="@drawable/app_logo"
+                android:src="@drawable/budget_icon_black"
                 android:tint="@color/colorPrimaryDark"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -75,8 +75,8 @@
                 android:layout_height="wrap_content"
                 android:maxLines="1"
                 android:gravity="center"
-                app:autoSizeMaxTextSize="@dimen/sp_14"
-                app:autoSizeMinTextSize="@dimen/sp_12"
+                app:autoSizeMaxTextSize="@dimen/csp_14"
+                app:autoSizeMinTextSize="@dimen/csp_12"
                 app:autoSizeStepGranularity="1sp"
                 app:autoSizeTextType="uniform"
                 android:layout_marginBottom="@dimen/bottom_nav_text_margin"
@@ -88,38 +88,38 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/insightView"
+            android:id="@+id/statsView"
             android:layout_width="0dp"
             android:layout_height="@dimen/bottom_nav_height"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/splitView"
+            app:layout_constraintEnd_toStartOf="@id/accountView"
             app:layout_constraintStart_toEndOf="@id/budgetView"
             app:layout_constraintTop_toTopOf="parent">
 
             <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/insightImg"
-                android:layout_width="@dimen/dp_30"
-                android:layout_height="@dimen/dp_30"
-                android:layout_marginTop="@dimen/dp_11"
-                android:src="@drawable/app_logo"
+                android:id="@+id/statsImg"
+                android:layout_width="@dimen/cdp_30"
+                android:layout_height="@dimen/cdp_30"
+                android:layout_marginTop="@dimen/cdp_11"
+                android:src="@drawable/stats_icon_black"
                 android:tint="@color/colorPrimaryDark"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/insightTitle"
+                app:layout_constraintTop_toBottomOf="@id/statsTitle"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/insightTitle"
+                android:id="@+id/statsTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:maxLines="1"
                 android:gravity="center"
-                app:autoSizeMaxTextSize="@dimen/sp_14"
-                app:autoSizeMinTextSize="@dimen/sp_12"
+                app:autoSizeMaxTextSize="@dimen/csp_14"
+                app:autoSizeMinTextSize="@dimen/csp_12"
                 app:autoSizeStepGranularity="1sp"
                 app:autoSizeTextType="uniform"
                 android:layout_marginBottom="@dimen/bottom_nav_text_margin"
-                android:text="@string/insight"
+                android:text="@string/stats"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
@@ -127,38 +127,38 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/splitView"
+            android:id="@+id/accountView"
             android:layout_width="0dp"
             android:layout_height="@dimen/bottom_nav_height"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/insightView"
+            app:layout_constraintStart_toEndOf="@id/statsView"
             app:layout_constraintTop_toTopOf="parent">
 
             <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/splitImg"
-                android:layout_width="@dimen/dp_28"
-                android:layout_height="@dimen/dp_28"
+                android:id="@+id/accountImg"
+                android:layout_width="@dimen/cdp_28"
+                android:layout_height="@dimen/cdp_28"
                 android:layout_marginTop="@dimen/bottom_nav_image_margin"
-                android:src="@drawable/app_logo"
+                android:src="@drawable/account_icon_black"
                 android:tint="@color/colorPrimaryDark"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/splitTitle"
+                app:layout_constraintTop_toBottomOf="@id/accountTitle"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/splitTitle"
+                android:id="@+id/accountTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:maxLines="1"
                 android:gravity="center"
-                app:autoSizeMaxTextSize="@dimen/sp_14"
-                app:autoSizeMinTextSize="@dimen/sp_12"
+                app:autoSizeMaxTextSize="@dimen/csp_14"
+                app:autoSizeMinTextSize="@dimen/csp_12"
                 app:autoSizeStepGranularity="1sp"
                 app:autoSizeTextType="uniform"
                 android:layout_marginBottom="@dimen/bottom_nav_text_margin"
-                android:text="@string/split"
+                android:text="@string/account"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />

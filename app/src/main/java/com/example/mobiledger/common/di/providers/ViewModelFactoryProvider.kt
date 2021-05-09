@@ -21,7 +21,10 @@ class ViewModelFactoryProvider(private val useCaseProvider: UseCaseProvider) :
             }
 
             modelClass.isAssignableFrom(HomeViewModel::class.java) -> {
-                HomeViewModel(useCaseProvider.provideAuthUseCase()) as T
+                HomeViewModel(
+                    useCaseProvider.provideProfileUseCase(),
+                    useCaseProvider.provideTransactionUseCase()
+                ) as T
             }
 
             modelClass.isAssignableFrom(LoginViewModel::class.java) -> {

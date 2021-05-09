@@ -33,11 +33,11 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/dp_16"
+                    android:layout_marginStart="@dimen/cdp_16"
                     android:layout_toEndOf="@id/btnBack"
                     android:text="@string/profile"
                     android:textColor="@color/colorWhite"
-                    android:textSize="@dimen/sp_20" />
+                    android:textSize="@dimen/csp_20" />
 
             </RelativeLayout>
 
@@ -46,8 +46,8 @@
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/dp_10"
-            android:padding="@dimen/dp_24"
+            android:layout_margin="@dimen/cdp_10"
+            android:padding="@dimen/cdp_24"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/profileToolbar">
@@ -72,8 +72,8 @@
                     app:tint="@color/colorGray"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentTop="true"
-                    android:layout_marginEnd="@dimen/dp_10"
-                    android:layout_marginTop="@dimen/dp_10"
+                    android:layout_marginEnd="@dimen/cdp_10"
+                    android:layout_marginTop="@dimen/cdp_10"
                     android:contentDescription="@string/edit" />
 
 
@@ -81,34 +81,34 @@
                     android:id="@+id/displayName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/dp_16"
+                    android:layout_marginStart="@dimen/cdp_16"
                     android:text="@string/display_name"
-                    android:layout_marginTop="@dimen/dp_10"
+                    android:layout_marginTop="@dimen/cdp_10"
                     android:textColor="@color/colorPrimaryDark"
                     android:layout_toEndOf="@id/imgUser"
-                    android:textSize="@dimen/sp_20" />
+                    android:textSize="@dimen/csp_20" />
 
                 <TextView
                     android:id="@+id/emailTv"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/dp_16"
+                    android:layout_marginStart="@dimen/cdp_16"
                     android:text="@string/email"
                     android:textColor="@color/colorPrimaryDark"
                     android:layout_below="@id/displayName"
                     android:layout_toEndOf="@id/imgUser"
-                    android:textSize="@dimen/sp_16" />
+                    android:textSize="@dimen/csp_16" />
 
                 <TextView
                     android:id="@+id/contactNumTv"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/dp_16"
+                    android:layout_marginStart="@dimen/cdp_16"
                     android:text="@string/contact_number"
                     android:textColor="@color/colorPrimaryDark"
                     android:layout_below="@id/emailTv"
                     android:layout_toEndOf="@id/imgUser"
-                    android:textSize="@dimen/sp_16" />
+                    android:textSize="@dimen/csp_16" />
 
             </RelativeLayout>
 

@@ -15,6 +15,7 @@ import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuthException
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.QuerySnapshot
 import kotlinx.coroutines.tasks.await
 
 interface TransactionApi {
@@ -24,6 +25,7 @@ interface TransactionApi {
     ): AppResult<Unit>
 
     suspend fun updateMonthlySummary(uid: String, monthYear: String, monthlySummaryEntity: MonthlyTransactionSummaryEntity): AppResult<Unit>
+    suspend fun getTransactionList(uid: String, monthYear: String): AppResult<List<TransactionEntity>>
     suspend fun addUserTransactionToFirebase(uid: String, monthYear: String, transactionEntity: TransactionEntity): AppResult<Unit>
 }
 
@@ -130,6 +132,40 @@ class TransactionApiImpl(private val firebaseDb: FirebaseFirestore, private val 
         }
     }
 
+    override suspend fun getTransactionList(uid: String, monthYear: String): AppResult<List<TransactionEntity>> {
+        var response: Task<QuerySnapshot>? = null
+        var exception: Exception? = null
+        try {
+            if (!authSource.isUserAuthorized()) throw FirebaseAuthException(
+                ErrorCodes.FIREBASE_UNAUTHORIZED,
+                ConstantUtils.UNAUTHORIZED_ERROR_MSG
+            )
+            response = firebaseDb.collection(ConstantUtils.USERS)
+                .document(uid)
+                .collection(MONTH)
+                .document(monthYear)
+                .collection(ConstantUtils.TRANSACTION)
+                .get()
+
+            response.await()
+        } catch (e: Exception) {
+            exception = e
+        }
+
+        return when (val result = ErrorMapper.checkAndMapFirebaseApiError(response, exception)) {
+            is FireBaseResult.Success -> {
+                if (result.data != null && result.data.result!=null) {
+                    AppResult.Success(transactionEntityMapper(result.data.result!!))
+                } else {
+                    AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
+                }
+            }
+            is FireBaseResult.Failure -> {
+                AppResult.Failure(result.error)
+            }
+        }
+    }
+
     override suspend fun addUserTransactionToFirebase(
         uid: String,
         monthYear: String,
@@ -166,6 +202,10 @@ class TransactionApiImpl(private val firebaseDb: FirebaseFirestore, private val 
             }
         }
     }
+}
+
+private fun transactionEntityMapper(result: QuerySnapshot): List<TransactionEntity> {
+    return  result.map { it.toObject(TransactionEntity::class.java) }
 }
 
 private fun monthlySummaryEntityMapper(user: DocumentSnapshot?): MonthlyTransactionSummaryEntity? {

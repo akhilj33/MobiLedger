@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/cdp_16">
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/horizontalTopGuideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_begin="@dimen/cdp_16" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/verticalStartGuideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.04" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/verticalGuideline8"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.08" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/verticalGuideline48"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.48" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/verticalGuideline52"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.52" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/verticalGuideline92"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.92" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/verticalEndGuideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.96" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/incomeCardView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:cardBackgroundColor="@color/colorWhite"
+            app:cardCornerRadius="@dimen/cdp_8"
+            app:cardElevation="@dimen/cdp_4"
+            app:cardPreventCornerOverlap="true"
+            app:cardUseCompatPadding="true"
+            app:layout_constraintEnd_toEndOf="@id/verticalGuideline48"
+            app:layout_constraintStart_toStartOf="@id/verticalGuideline8"
+            app:layout_constraintTop_toTopOf="@id/horizontalTopGuideline">
+
+            <LinearLayout
+                android:id="@+id/incomeLL"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="@dimen/cdp_16">
+
+                <com.google.android.material.textview.MaterialTextView
+                    style="@style/GelionSemiBoldBlue16"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/csp_22"
+                    android:text="@string/income" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tvIncomeAmount"
+                    style="@style/GelionRegularGreen18"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:autoSizeMaxTextSize="@dimen/csp_18"
+                    app:autoSizeMinTextSize="@dimen/csp_12"
+                    app:autoSizeStepGranularity="2sp"
+                    app:autoSizeTextType="uniform"
+                    android:layout_marginTop="@dimen/cdp_8"
+                    android:text="₹ 476287427" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/expenseCardView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:cardBackgroundColor="@color/colorWhite"
+            app:cardCornerRadius="@dimen/cdp_8"
+            app:cardElevation="@dimen/cdp_4"
+            app:cardPreventCornerOverlap="true"
+            app:cardUseCompatPadding="true"
+            app:layout_constraintBottom_toBottomOf="@id/incomeCardView"
+            app:layout_constraintEnd_toEndOf="@id/verticalGuideline92"
+            app:layout_constraintStart_toStartOf="@id/verticalGuideline52"
+            app:layout_constraintTop_toTopOf="@id/horizontalTopGuideline">
+
+            <LinearLayout
+                android:id="@+id/expenseLL"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="@dimen/cdp_16">
+
+                <com.google.android.material.textview.MaterialTextView
+                    style="@style/GelionSemiBoldBlue16"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/csp_22"
+                    android:text="@string/expense" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tvExpenseAmount"
+                    style="@style/GelionRegularRed18"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    app:autoSizeMaxTextSize="@dimen/csp_18"
+                    app:autoSizeMinTextSize="@dimen/csp_12"
+                    app:autoSizeStepGranularity="2sp"
+                    app:autoSizeTextType="uniform"
+                    android:layout_marginTop="@dimen/cdp_8"
+                    android:text="₹ 4762874200" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

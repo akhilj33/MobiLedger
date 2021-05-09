@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/verticalStartGuideline"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_percent="0.04" />
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/verticalEndGuideline"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_percent="0.96" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/leftArrow"
+            android:layout_width="@dimen/cdp_32"
+            android:layout_height="@dimen/cdp_32"
+            app:layout_constraintBottom_toBottomOf="@id/tvMonth"
+            app:layout_constraintEnd_toStartOf="@id/tvMonth"
+            app:layout_constraintStart_toStartOf="@id/verticalStartGuideline"
+            app:layout_constraintTop_toTopOf="@id/tvMonth"
+            app:srcCompat="@drawable/arrow_left" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tvMonth"
+            style="@style/GelionRegularNavyBlue16"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/cdp_16"
+            app:layout_constraintEnd_toStartOf="@id/rightArrow"
+            app:layout_constraintStart_toEndOf="@id/leftArrow"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="January 2" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/rightArrow"
+            android:layout_width="@dimen/cdp_32"
+            android:layout_height="@dimen/cdp_32"
+            app:layout_constraintBottom_toBottomOf="@id/tvMonth"
+            app:layout_constraintEnd_toStartOf="@id/verticalEndGuideline"
+            app:layout_constraintStart_toEndOf="@id/tvMonth"
+            app:layout_constraintTop_toTopOf="@id/tvMonth"
+            app:srcCompat="@drawable/arrow_right" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </layout>
