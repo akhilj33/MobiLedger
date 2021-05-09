@@ -7,10 +7,9 @@ import androidx.lifecycle.viewModelScope
 import com.example.mobiledger.R
 import com.example.mobiledger.common.base.BaseViewModel
 import com.example.mobiledger.domain.AppResult
-import com.example.mobiledger.domain.entities.MonthlyTransactionSummaryEntity
-import com.example.mobiledger.domain.entities.TransactionEntity
-import com.example.mobiledger.domain.entities.isEmpty
+import com.example.mobiledger.domain.entities.*
 import com.example.mobiledger.domain.enums.TransactionType
+import com.example.mobiledger.domain.usecases.CategoryUseCase
 import com.example.mobiledger.domain.usecases.TransactionUseCase
 import com.example.mobiledger.presentation.Event
 import kotlinx.coroutines.Dispatchers
@@ -18,12 +17,19 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class AddTransactionDialogFragmentViewModel(private val transactionUseCase: TransactionUseCase) : BaseViewModel() {
-
-    private var categoryList = arrayListOf<String>()
+class AddTransactionDialogFragmentViewModel(
+    private val transactionUseCase: TransactionUseCase,
+    private val categoryUseCase: CategoryUseCase
+) : BaseViewModel() {
 
     val dataUpdatedResult: LiveData<Event<Unit>> get() = _dataUpdatedResult
     private val _dataUpdatedResult: MutableLiveData<Event<Unit>> = MutableLiveData()
+
+    val incomeCategoryList: LiveData<Event<IncomeCategoryListEntity>> get() = _incomeCategoryList
+    private val _incomeCategoryList: MutableLiveData<Event<IncomeCategoryListEntity>> = MutableLiveData()
+
+    val expenseCategoryList: LiveData<Event<ExpenseCategoryListEntity>> get() = _expenseCategoryList
+    private val _expenseCategoryList: MutableLiveData<Event<ExpenseCategoryListEntity>> = MutableLiveData()
 
     private val _errorLiveData: MutableLiveData<Event<ViewError>> = MutableLiveData()
     val errorLiveData: LiveData<Event<ViewError>> = _errorLiveData
@@ -31,20 +37,46 @@ class AddTransactionDialogFragmentViewModel(private val transactionUseCase: Tran
     private val _loadingState = MutableLiveData<Boolean>(false)
     val loadingState: LiveData<Boolean> get() = _loadingState
 
-    //todo : Fetch it from Firebase later
-    fun provideCategoryList(): ArrayList<String> {
-        categoryList.add("Rent")
-        categoryList.add("Food")
-        categoryList.add("Grocery")
-        categoryList.add("Investment")
-        categoryList.add("MISC")
-        categoryList.add("Salary")
-        categoryList.add("Bills")
-        categoryList.add("Domestic Help")
-        categoryList.add("Water")
-        categoryList.add("Travel")
+    fun getIncomeCategoryList() {
+        _loadingState.value = true
+        viewModelScope.launch {
+            when (val result = categoryUseCase.getUserIncomeCategories()) {
+                is AppResult.Success -> {
+                    _incomeCategoryList.value = Event(result.data)
+                }
 
-        return categoryList
+                is AppResult.Failure -> {
+                    _errorLiveData.value = Event(
+                        ViewError(
+                            viewErrorType = ViewErrorType.NON_BLOCKING,
+                            message = result.error.message
+                        )
+                    )
+                }
+            }
+        }
+        _loadingState.value = false
+    }
+
+    fun getExpenseCategoryList() {
+        _loadingState.value = true
+        viewModelScope.launch {
+            when (val result = categoryUseCase.getUserExpenseCategories()) {
+                is AppResult.Success -> {
+                    _expenseCategoryList.value = Event(result.data)
+                }
+
+                is AppResult.Failure -> {
+                    _errorLiveData.value = Event(
+                        ViewError(
+                            viewErrorType = ViewErrorType.NON_BLOCKING,
+                            message = result.error.message
+                        )
+                    )
+                }
+            }
+        }
+        _loadingState.value = false
     }
 
     fun addTransaction(monthYear: String, transactionEntity: TransactionEntity) {
@@ -104,7 +136,7 @@ class AddTransactionDialogFragmentViewModel(private val transactionUseCase: Tran
         }
     }
 
-    private suspend fun handleMonthlySummaryUpdatedResult(result: AppResult<Unit>) {
+    private fun handleMonthlySummaryUpdatedResult(result: AppResult<Unit>) {
         viewModelScope.launch {
             when (result) {
                 is AppResult.Success -> {
@@ -147,7 +179,7 @@ class AddTransactionDialogFragmentViewModel(private val transactionUseCase: Tran
         }
     }
 
- enum class ViewErrorType { NON_BLOCKING }
+    enum class ViewErrorType { NON_BLOCKING }
 
     data class ViewError(
         val viewErrorType: ViewErrorType,

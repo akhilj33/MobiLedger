@@ -22,4 +22,7 @@ class UseCaseProvider(private val repositoryProvider: RepositoryProvider) {
 
     fun provideTransactionUseCase(): TransactionUseCase =
         TransactionUseCaseImpl(repositoryProvider.provideTransactionRepository())
+
+    fun provideCategoryUseCase(): CategoryUseCase =
+        CategoryUseCaseImpl(repositoryProvider.provideCategoryRepository())
 }

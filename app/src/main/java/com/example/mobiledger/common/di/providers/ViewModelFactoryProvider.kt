@@ -26,7 +26,8 @@ class ViewModelFactoryProvider(private val useCaseProvider: UseCaseProvider) :
 
             modelClass.isAssignableFrom(LoginViewModel::class.java) -> {
                 LoginViewModel(
-                    useCaseProvider.provideAuthUseCase(), useCaseProvider.provideUserSettingsUseCase(),
+                    useCaseProvider.provideAuthUseCase(),
+                    useCaseProvider.provideUserSettingsUseCase(),
                     useCaseProvider.provideUserUseCase()
                 ) as T
             }
@@ -35,7 +36,8 @@ class ViewModelFactoryProvider(private val useCaseProvider: UseCaseProvider) :
                 SignUpViewModel(
                     useCaseProvider.provideAuthUseCase(),
                     useCaseProvider.provideUserUseCase(),
-                    useCaseProvider.provideUserSettingsUseCase()
+                    useCaseProvider.provideUserSettingsUseCase(),
+                    useCaseProvider.provideCategoryUseCase()
                 ) as T
             }
 
@@ -51,7 +53,10 @@ class ViewModelFactoryProvider(private val useCaseProvider: UseCaseProvider) :
                 EditProfileViewModel(useCaseProvider.provideProfileUseCase()) as T
             }
             modelClass.isAssignableFrom(AddTransactionDialogFragmentViewModel::class.java) -> {
-                AddTransactionDialogFragmentViewModel(useCaseProvider.provideTransactionUseCase()) as T
+                AddTransactionDialogFragmentViewModel(
+                    useCaseProvider.provideTransactionUseCase(),
+                    useCaseProvider.provideCategoryUseCase()
+                ) as T
             }
             else -> throw IllegalArgumentException("Unknown ViewModel Class")
         }

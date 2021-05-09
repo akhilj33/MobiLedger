@@ -38,7 +38,7 @@ class SignUpFragment :
         viewModel.errorLiveData.observe(viewLifecycleOwner, OneTimeObserver {
             when (it.viewErrorType) {
                 SignUpViewModel.ViewErrorType.NON_BLOCKING -> {
-                    showSnackBarErrorView(it.message ?: getString(it.resID), true)
+                    showSnackBarErrorView(it.message ?: getString(it.resID), false)
                 }
             }
         })

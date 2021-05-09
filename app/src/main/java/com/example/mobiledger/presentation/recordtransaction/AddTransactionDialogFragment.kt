@@ -32,7 +32,9 @@ class AddTransactionDialogFragment :
     BaseDialogFragment<DialogFragmentAddTransactionBinding, BaseNavigator>
         (R.layout.dialog_fragment_add_transaction), DatePickerDialog.OnDateSetListener {
 
-    private var categoryList = arrayListOf<String>()
+//    private var categoryList = arrayListOf<String>()
+    private var incomeCategoryList = arrayListOf<String>()
+    private var expenseCategoryList = arrayListOf<String>()
     private lateinit var categoty: String
     private lateinit var transactionType: TransactionType
     private var calendar: Calendar? = null
@@ -41,39 +43,48 @@ class AddTransactionDialogFragment :
     private var monthYearFormat: SimpleDateFormat? = null
     private var monthYear: String? = null
 
+
     private val viewModel: AddTransactionDialogFragmentViewModel by viewModels { viewModelFactory }
 
     override fun getSnackBarErrorView(): SnackViewErrorBinding = viewBinding.includeErrorView
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        viewModel.getIncomeCategoryList()
+        viewModel.getExpenseCategoryList()
         setWidthPercent(85)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        getCategoryList()
         initToggle()
         initDate()
         setUpObserver()
     }
 
-    private fun getCategoryList() {
-        categoryList = viewModel.provideCategoryList()
-        initSpinner()
+    private fun getCategoryList(transactionType: TransactionType) {
+        val categoryList = if (transactionType == TransactionType.Income)
+            incomeCategoryList
+        else
+            expenseCategoryList
+        initSpinner(categoryList)
     }
 
     private fun initToggle() {
         transactionType = TransactionType.Expense
+
         viewBinding.incomeRadioButton.setOnClickListener {
             transactionType = TransactionType.Income
             viewBinding.incomeRadioButton.setTextColor(resources.getColor(R.color.colorTextLight))
             viewBinding.expanseRadioButton.setTextColor(resources.getColor(R.color.colorTextDark))
+            getCategoryList(TransactionType.Income)
         }
+
         viewBinding.expanseRadioButton.setOnClickListener {
             transactionType = TransactionType.Expense
             viewBinding.expanseRadioButton.setTextColor(resources.getColor(R.color.colorTextLight))
             viewBinding.incomeRadioButton.setTextColor(resources.getColor(R.color.colorTextDark))
+            getCategoryList(TransactionType.Expense)
         }
         viewBinding.btnSubmitTransaction.setOnClickListener {
             addTransaction()
@@ -102,6 +113,19 @@ class AddTransactionDialogFragment :
                 AddTransactionDialogFragmentViewModel.ViewErrorType.NON_BLOCKING -> {
                     showSnackBarErrorView(it.message ?: getString(it.resID), true)
                 }
+            }
+        })
+
+        viewModel.incomeCategoryList.observe(viewLifecycleOwner, Observer {
+            if (it != null) {
+                incomeCategoryList = it.peekContent().incomeCategoryList as ArrayList<String>
+            }
+        })
+
+        viewModel.expenseCategoryList.observe(viewLifecycleOwner, Observer {
+            if (it != null) {
+                expenseCategoryList = it.peekContent().expenseCategoryList as ArrayList<String>
+                getCategoryList(TransactionType.Expense)
             }
         })
 
@@ -142,7 +166,7 @@ class AddTransactionDialogFragment :
     }
 
 
-    private fun initSpinner() {
+    private fun initSpinner(categoryList: ArrayList<String>) {
         categoryList.sort()
         val adapter = ArrayAdapter(
             requireActivity().applicationContext,

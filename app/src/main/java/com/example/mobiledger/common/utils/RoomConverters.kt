@@ -2,12 +2,40 @@ package com.example.mobiledger.common.utils
 
 import androidx.room.TypeConverter
 import com.example.mobiledger.common.utils.JsonUtils.convertJsonStringToObject
+import com.example.mobiledger.domain.entities.ExpenseCategoryListEntity
+import com.example.mobiledger.domain.entities.IncomeCategoryListEntity
 import com.google.firebase.Timestamp
 import java.math.BigDecimal
 
 object RoomConverters {
 
-    /*--------------------------------------TimeStamp Converters--------------------------------------*/
+    /*--------------------------------------Income Expanse EntityConverters--------------------------------------*/
+
+    @TypeConverter
+    @JvmStatic
+    fun fromIncomeCategoryEntity(value: IncomeCategoryListEntity?): String? {
+        return JsonUtils.convertToJsonString(value)
+    }
+
+    @TypeConverter
+    @JvmStatic
+    fun toIncomeCategoryEntity(value: String?): IncomeCategoryListEntity? {
+        return convertJsonStringToObject<IncomeCategoryListEntity>(value)
+    }
+
+    @TypeConverter
+    @JvmStatic
+    fun fromExpenseCategoryEntity(value: ExpenseCategoryListEntity?): String? {
+        return JsonUtils.convertToJsonString(value)
+    }
+
+    @TypeConverter
+    @JvmStatic
+    fun toExpenseCategoryEntity(value: String?): ExpenseCategoryListEntity? {
+        return convertJsonStringToObject<ExpenseCategoryListEntity>(value)
+    }
+
+    /*-------------------------------------- Converters--------------------------------------*/
 
     @TypeConverter
     @JvmStatic

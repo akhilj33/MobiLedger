@@ -15,5 +15,11 @@ object ConstantUtils {
     const val TOTAL_INCOME = "totalIncome"
     const val TOTAL_EXPENSE = "totalExpense"
     const val UNAUTHORIZED_ERROR_MSG = "User is not authenticated"
+    const val INCOME = "Income"
+    const val EXPENSE = "Expense"
+    const val CATEGORIES = "Categories"
+    const val USER_CATEGORIES = "UserCategories"
+    const val INCOME_CATEGORY_LIST = "incomeCategoryList"
+    const val EXPENSE_CATEGORY_LIST = "expenseCategoryList"
 
 }

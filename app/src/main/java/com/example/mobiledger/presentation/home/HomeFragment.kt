@@ -7,11 +7,14 @@ import com.example.mobiledger.R
 import com.example.mobiledger.common.base.BaseFragment
 import com.example.mobiledger.common.utils.showRecordTransactionDialogFragment
 import com.example.mobiledger.databinding.FragmentHomeBinding
+import com.example.mobiledger.databinding.SnackViewErrorBinding
 
 class HomeFragment :
     BaseFragment<FragmentHomeBinding, HomeNavigator>(R.layout.fragment_home) {
 
     private val homeViewModel: HomeViewModel by viewModels { viewModelFactory }
+
+    override fun getSnackBarErrorView(): SnackViewErrorBinding = viewBinding.includeErrorView
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

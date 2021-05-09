@@ -10,5 +10,4 @@ interface UserUseCase {
 
 class UserUseCaseImpl(private val userRepository: UserRepository) : UserUseCase {
     override suspend fun addUserToFirebaseDb(user: UserEntity): AppResult<Unit> = userRepository.addUserToFirebaseDb(user)
-
 }
