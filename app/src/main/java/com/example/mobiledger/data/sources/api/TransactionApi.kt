@@ -25,7 +25,7 @@ interface TransactionApi {
     ): AppResult<Unit>
 
     suspend fun updateMonthlySummary(uid: String, monthYear: String, monthlySummaryEntity: MonthlyTransactionSummaryEntity): AppResult<Unit>
-    suspend fun getTransactionList(uid: String, monthYear: String): AppResult<List<TransactionEntity>>
+    suspend fun getTransactionListByMonth(uid: String, monthYear: String): AppResult<List<TransactionEntity>>
     suspend fun addUserTransactionToFirebase(uid: String, monthYear: String, transactionEntity: TransactionEntity): AppResult<Unit>
 }
 
@@ -132,7 +132,7 @@ class TransactionApiImpl(private val firebaseDb: FirebaseFirestore, private val 
         }
     }
 
-    override suspend fun getTransactionList(uid: String, monthYear: String): AppResult<List<TransactionEntity>> {
+    override suspend fun getTransactionListByMonth(uid: String, monthYear: String): AppResult<List<TransactionEntity>> {
         var response: Task<QuerySnapshot>? = null
         var exception: Exception? = null
         try {

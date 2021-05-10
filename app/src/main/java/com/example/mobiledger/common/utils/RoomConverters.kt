@@ -45,8 +45,8 @@ object RoomConverters {
 
     @TypeConverter
     @JvmStatic
-    fun toTimeStamp(value: String?): Timestamp? {
-        return convertJsonStringToObject<Timestamp>(value)
+    fun toTimeStamp(value: String?): Timestamp {
+        return convertJsonStringToObject<Timestamp>(value)?:Timestamp.now()
     }
 
     /*--------------------------------------Big Decimal Converters--------------------------------------*/

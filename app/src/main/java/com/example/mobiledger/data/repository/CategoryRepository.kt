@@ -15,10 +15,8 @@ import kotlinx.coroutines.withContext
 import timber.log.Timber
 
 interface CategoryRepository {
-    suspend fun addUserIncomeCategoryDb(defaultCategoryList: List<String>): AppResult<Unit>
-    suspend fun addUserExpenseCategoryDb(defaultCategoryList: List<String>): AppResult<Unit>
-    suspend fun getDefaultIncomeCategories(): AppResult<IncomeCategoryListEntity>
-    suspend fun getDefaultExpenseCategories(): AppResult<ExpenseCategoryListEntity>
+    suspend fun addUserIncomeCategoryDb(categoryList: List<String>): AppResult<Unit>
+    suspend fun addUserExpenseCategoryDb(categoryList: List<String>): AppResult<Unit>
     suspend fun getUserIncomeCategories(): AppResult<IncomeCategoryListEntity>
     suspend fun getUserExpenseCategories(): AppResult<ExpenseCategoryListEntity>
 }
@@ -31,35 +29,23 @@ class CategoryRepositoryImpl(
 ) :
     CategoryRepository {
 
-    override suspend fun addUserIncomeCategoryDb(defaultCategoryList: List<String>): AppResult<Unit> {
+    override suspend fun addUserIncomeCategoryDb(categoryList: List<String>): AppResult<Unit> {
         return withContext(dispatcher) {
             val uid = cacheSource.getUID()
             if (uid != null) {
-                categoryApi.addDefaultIncomeCategories(uid, defaultCategoryList)
+                categoryApi.addDefaultIncomeCategories(uid, categoryList)
             } else
                 AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
         }
     }
 
-    override suspend fun addUserExpenseCategoryDb(defaultCategoryList: List<String>): AppResult<Unit> {
+    override suspend fun addUserExpenseCategoryDb(categoryList: List<String>): AppResult<Unit> {
         return withContext(dispatcher) {
             val uid = cacheSource.getUID()
             if (uid != null) {
-                categoryApi.addDefaultExpenseCategories(uid, defaultCategoryList)
+                categoryApi.addDefaultExpenseCategories(uid, categoryList)
             } else
                 AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
-        }
-    }
-
-    override suspend fun getDefaultIncomeCategories(): AppResult<IncomeCategoryListEntity> {
-        return withContext(dispatcher) {
-            categoryApi.getDefaultIncomeCategories()
-        }
-    }
-
-    override suspend fun getDefaultExpenseCategories(): AppResult<ExpenseCategoryListEntity> {
-        return withContext(dispatcher) {
-            categoryApi.getDefaultExpenseCategories()
         }
     }
 

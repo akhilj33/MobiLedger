@@ -10,7 +10,7 @@ sealed class HomeViewItem(val viewType: HomeViewType) {
     data class TransactionDataRow(val data: TransactionData, val type: HomeViewType = HomeViewType.TransactionData) : HomeViewItem(type)
 }
 
-data class MonthlyData(val monthYear: String, val incomeAmount: String, val expenseAmount: String)
+data class MonthlyData(val incomeAmount: String, val expenseAmount: String)
 data class TransactionData(val name: String, val amount: String, val transactionType: TransactionType, val category: String, @DrawableRes val categoryIcon: Int)
 
 enum class HomeViewType { Header, MonthlyData, TransactionData }

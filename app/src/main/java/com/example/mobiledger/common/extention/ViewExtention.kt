@@ -57,3 +57,6 @@ fun View.changeStatusBarColor(
         }
     }
 }
+
+
+fun String.toAmount() = "\u20B9 $this"
