@@ -37,8 +37,8 @@ class SignUpViewModel(
             when (val result = authUseCase.signUpViaEmail(name, phoneNo, email, password)) {
                 is AppResult.Success -> {
                     addUserToFirebaseDB(result.data)
-                    addExpenseCategoryToUserDB(result.data)
-                    addIncomeCategoryToUserDB(result.data)
+//                    addExpenseCategoryToUserDB(result.data)
+//                    addIncomeCategoryToUserDB(result.data)
                 }
                 is AppResult.Failure -> {
                     _errorLiveData.value = Event(
@@ -60,8 +60,8 @@ class SignUpViewModel(
                 is AppResult.Success -> {
                     saveUIDInCache(user.uid)
                     _signUpResultLiveData.value = Event(user)
-                    addExpenseCategoryToUserDB(user)
-                    addIncomeCategoryToUserDB(user)
+                    addExpenseCategoryToUserDB()
+                    addIncomeCategoryToUserDB()
                 }
 
                 is AppResult.Failure -> {
@@ -77,7 +77,7 @@ class SignUpViewModel(
         }
     }
 
-    private fun addIncomeCategoryToUserDB(user: UserEntity) {
+    private fun addIncomeCategoryToUserDB() {
         viewModelScope.launch {
             when (val incomeCategoryList = categoryUseCase.getDefaultIncomeCategories()) {
                 is AppResult.Success -> {
@@ -102,7 +102,7 @@ class SignUpViewModel(
         }
     }
 
-    private fun addExpenseCategoryToUserDB(user: UserEntity) {
+    private fun addExpenseCategoryToUserDB() {
         viewModelScope.launch {
             when (val expenseCategoryList = categoryUseCase.getDefaultExpenseCategories()) {
                 is AppResult.Success -> {

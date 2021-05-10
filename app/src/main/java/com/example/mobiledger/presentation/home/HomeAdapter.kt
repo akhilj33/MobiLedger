@@ -65,7 +65,7 @@ class HomeAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     inner class TransactionDataViewHolder(private val viewBinding: HomeTransactionItemBinding) : RecyclerView.ViewHolder(viewBinding.root) {
         fun bind(item: TransactionData) {
             viewBinding.apply {
-                tvTransactionName.text = item.name
+                tvCategoryName.text = item.name
                 tvAmount.text = item.amount
                 tvCategory.text = item.category
                 ivCategoryIcon.background = ContextCompat.getDrawable(context, item.categoryIcon)

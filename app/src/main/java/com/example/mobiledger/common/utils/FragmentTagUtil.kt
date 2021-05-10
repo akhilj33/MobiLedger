@@ -1,10 +1,13 @@
 package com.example.mobiledger.common.utils
 
+import CategoryFragment
+import IncomeCategoryFragment
 import androidx.fragment.app.Fragment
 import com.example.mobiledger.presentation.SplitFragment
 import com.example.mobiledger.presentation.auth.LoginFragment
 import com.example.mobiledger.presentation.auth.SignUpFragment
 import com.example.mobiledger.presentation.budget.BudgetFragment
+import com.example.mobiledger.presentation.categoryFragment.ExpenseCategoryFragment
 import com.example.mobiledger.presentation.dashboard.DashboardFragment
 import com.example.mobiledger.presentation.home.HomeFragment
 import com.example.mobiledger.presentation.insight.InsightFragment
@@ -25,6 +28,9 @@ object FragmentTagUtil {
     private const val PROFILE_FRAGMENT_TAG = "PROFILE_FRAGMENT_TAG"
     private const val SPLIT_FRAGMENT_TAG = "SPLIT_FRAGMENT_TAG"
     private const val RECORD_TRANSACTION_DIALOG_FRAGMENT_TAG = "RECORD_TRANSACTION_DIALOG_FRAGMENT_TAG"
+    private const val CATEGORY_FRAGMENT_TAG = "CATEGORY_FRAGMENT_TAG"
+    private const val INCOME_CATEGORY_FRAGMENT_TAG = "INCOME_CATEGORY_FRAGMENT_TAG"
+    private const val EXPENSE_CATEGORY_FRAGMENT_TAG = "EXPENSE_CATEGORY_FRAGMENT_TAG"
 
     fun getFragmentName(fragment: Fragment): String {
         return when (fragment) {
@@ -39,6 +45,9 @@ object FragmentTagUtil {
             is ProfileFragment -> PROFILE_FRAGMENT_TAG
             is SplitFragment -> SPLIT_FRAGMENT_TAG
             is AddTransactionDialogFragment -> RECORD_TRANSACTION_DIALOG_FRAGMENT_TAG
+            is CategoryFragment -> CATEGORY_FRAGMENT_TAG
+            is IncomeCategoryFragment -> INCOME_CATEGORY_FRAGMENT_TAG
+            is ExpenseCategoryFragment -> EXPENSE_CATEGORY_FRAGMENT_TAG
             else -> throw RuntimeException("Fragment Name mapping doesn't exist in ${FragmentTagUtil.javaClass.simpleName} class")
         }
     }

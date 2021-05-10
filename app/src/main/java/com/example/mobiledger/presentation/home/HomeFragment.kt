@@ -34,6 +34,9 @@ class HomeFragment :
         viewBinding.btnAddTransaction.setOnClickListener {
             showRecordTransactionDialogFragment(requireActivity().supportFragmentManager)
         }
+        viewBinding.ivProfileIcon.setOnClickListener {
+            navigator?.navigateToProfileScreen()
+        }
     }
 
     private fun initRecyclerView() {
