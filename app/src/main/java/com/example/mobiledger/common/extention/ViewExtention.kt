@@ -1,4 +1,4 @@
-package com.cegidflow.android.common.extensions
+package com.example.mobiledger.common.extention
 
 import android.app.Activity
 import android.os.Build

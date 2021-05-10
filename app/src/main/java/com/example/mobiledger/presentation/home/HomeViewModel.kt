@@ -3,16 +3,20 @@ package com.example.mobiledger.presentation.home
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.example.mobiledger.common.extention.toAmount
 import com.example.mobiledger.R
 import com.example.mobiledger.common.base.BaseViewModel
+import com.example.mobiledger.common.utils.DefaultCategoryUtils.getCategoryIcon
 import com.example.mobiledger.domain.AppResult
 import com.example.mobiledger.domain.entities.MonthlyTransactionSummaryEntity
 import com.example.mobiledger.domain.entities.TransactionEntity
 import com.example.mobiledger.domain.enums.TransactionType
 import com.example.mobiledger.domain.usecases.ProfileUseCase
 import com.example.mobiledger.domain.usecases.TransactionUseCase
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.*
 
 class HomeViewModel(
@@ -64,7 +68,7 @@ class HomeViewModel(
         viewModelScope.launch {
             when (transactionResult) {
                 is AppResult.Success -> {
-//                    renderHomeViewList(transactionResult.data, monthlyResult)
+                    renderHomeViewList(transactionResult.data, monthlyResult)
                 }
                 is AppResult.Failure -> {
                     //todo
@@ -73,33 +77,34 @@ class HomeViewModel(
         }
     }
 
-//    private suspend fun renderHomeViewList(transactionList: List<TransactionEntity>, monthlyResult: MonthlyTransactionSummaryEntity) {
-//        withContext(Dispatchers.IO) {
-//            val homeViewItemList = mutableListOf<HomeViewItem>()
-//            homeViewItemList.add(HomeViewItem.HeaderDataRow(R.string.overview_report))
-//            homeViewItemList.add(
-//                HomeViewItem.MonthlyDataRow(
-//                    MonthlyData(
-//                        monthlyResult.totalIncome.toString().toAmount(),
-//                        monthlyResult.totalExpense.toString().toAmount()
-//                    )
-//                )
-//            )
-//
-//            if (transactionList.isNotEmpty())
-//                homeViewItemList.add(HomeViewItem.HeaderDataRow(R.string.latest_transaction))
-//
-//            transactionList.forEach {
-//                homeViewItemList.add(HomeViewItem.TransactionDataRow(mapToTransactionData(it)))
-//            }
-//        }
-//    }
+    private suspend fun renderHomeViewList(transactionList: List<TransactionEntity>, monthlyResult: MonthlyTransactionSummaryEntity): MutableList<HomeViewItem> {
+       return withContext(Dispatchers.IO) {
+            val homeViewItemList = mutableListOf<HomeViewItem>()
+            homeViewItemList.add(HomeViewItem.HeaderDataRow(R.string.overview_report))
+            homeViewItemList.add(
+                HomeViewItem.MonthlyDataRow(
+                    MonthlyData(
+                        monthlyResult.totalIncome.toString().toAmount(),
+                        monthlyResult.totalExpense.toString().toAmount()
+                    )
+                )
+            )
 
-//    private fun mapToTransactionData(transactionEntity: TransactionEntity): TransactionData {
-//        transactionEntity.apply {
-//            return TransactionData(name, amount.toString().toAmount(), transactionType, category)
-//        }
-//    }
+            if (transactionList.isNotEmpty())
+                homeViewItemList.add(HomeViewItem.HeaderDataRow(R.string.latest_transaction))
+
+            transactionList.forEach {
+                homeViewItemList.add(HomeViewItem.TransactionDataRow(mapToTransactionData(it)))
+            }
+           homeViewItemList
+        }
+    }
+
+    private fun mapToTransactionData(transactionEntity: TransactionEntity): TransactionData {
+        transactionEntity.apply {
+            return TransactionData(name, amount.toString().toAmount(), transactionType, category, getCategoryIcon(category, transactionType))
+        }
+    }
 
     fun homeItemList() = listOf(
         HomeViewItem.HeaderDataRow(R.string.overview_report),
