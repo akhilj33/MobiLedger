@@ -16,7 +16,7 @@ interface TransactionRepository {
     suspend fun getMonthlySummaryEntity(monthYear: String): AppResult<MonthlyTransactionSummaryEntity>
     suspend fun addMonthlySummaryToFirebase(monthYear: String, monthlySummaryEntity: MonthlyTransactionSummaryEntity): AppResult<Unit>
     suspend fun updateMonthlySummary(monthYear: String, monthlySummaryEntity: MonthlyTransactionSummaryEntity): AppResult<Unit>
-    suspend fun getTransactionList(monthYear: String): AppResult<List<TransactionEntity>>
+    suspend fun getTransactionListByMonth(monthYear: String): AppResult<List<TransactionEntity>>
     suspend fun addUserTransactionToFirebase(monthYear: String, transactionEntity: TransactionEntity): AppResult<Unit>
 }
 
@@ -68,11 +68,22 @@ class TransactionRepositoryImpl(
         }
     }
 
-    override suspend fun getTransactionList(monthYear: String): AppResult<List<TransactionEntity>> {
+    override suspend fun getTransactionListByMonth(monthYear: String): AppResult<List<TransactionEntity>> {
         return withContext(dispatcher){
             val uId = cacheSource.getUID()
-            if(uId!=null) transactionApi.getTransactionList(uId, monthYear).also {
-                    //todo
+            if(uId!=null) {
+                val transactionsExists = transactionDb.hasTransactions()
+                if (!transactionsExists) {
+                    when (val firebaseResult = transactionApi.getTransactionListByMonth(uId, monthYear)) {
+                        is AppResult.Success -> {
+                            transactionDb.saveTransactionList(monthYear, firebaseResult.data)
+                        }
+                        is AppResult.Failure -> {
+                            return@withContext AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
+                        }
+                    }
+                }
+                transactionDb.fetchTransactions(monthYear)
             }
             else AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
         }
@@ -83,7 +94,7 @@ class TransactionRepositoryImpl(
             val uId = cacheSource.getUID()
             if (uId != null)
                 transactionApi.addUserTransactionToFirebase(uId, monthYear, transactionEntity).also {
-                    if (it is AppResult.Success) transactionDb.saveTransaction(transactionEntity)
+                    if (it is AppResult.Success) transactionDb.saveTransaction(monthYear, transactionEntity)
                 }
             else AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
         }

@@ -32,7 +32,7 @@ class AddTransactionDialogFragment :
     BaseDialogFragment<DialogFragmentAddTransactionBinding, BaseNavigator>
         (R.layout.dialog_fragment_add_transaction), DatePickerDialog.OnDateSetListener {
 
-//    private var categoryList = arrayListOf<String>()
+    //    private var categoryList = arrayListOf<String>()
     private var incomeCategoryList = arrayListOf<String>()
     private var expenseCategoryList = arrayListOf<String>()
     private lateinit var categoty: String
@@ -197,11 +197,12 @@ class AddTransactionDialogFragment :
 
     private fun addTransaction() {
         val timestampNow = Timestamp.now()
+        val name = "xyz"
         val amount = viewBinding.textAmount.text.toString()
         val description = viewBinding.textDescription.text.toString()
         val transType = transactionType
         if (monthYear?.isNotBlank()!! && amount.isNotEmpty() && description.isNotBlank())
-            viewModel.addTransaction(monthYear!!, TransactionEntity(amount.toLong(), categoty, description, transType, timestampNow))
+            viewModel.addTransaction(monthYear!!, TransactionEntity(name, amount.toLong(), categoty, description, transType, timestampNow))
         else
             activity?.showToast(getString(R.string.empty_field_msg))
     }

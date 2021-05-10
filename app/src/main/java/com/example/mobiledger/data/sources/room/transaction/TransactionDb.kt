@@ -10,7 +10,10 @@ interface TransactionDb {
     suspend fun fetchMonthlySummary(monthYear: String): AppResult<MonthlyTransactionSummaryEntity>
     suspend fun saveMonthlySummary(monthYear: String, monthlySummary: MonthlyTransactionSummaryEntity)
     suspend fun hasMonthlySummary(monthYear: String): Boolean
-    suspend fun saveTransaction(transactionEntity: TransactionEntity)
+    suspend fun saveTransaction(monthYear: String, transactionEntity: TransactionEntity)
+    suspend fun saveTransactionList(monthYear: String, transactionEntityList: List<TransactionEntity>)
+    suspend fun hasTransactions(): Boolean
+    suspend fun fetchTransactions(monthYear: String): AppResult<List<TransactionEntity>>
 }
 
 class TransactionDbImpl(private val transactionDao: TransactionDao, private val monthlySummaryDao: MonthlySummaryDao) : TransactionDb {
@@ -32,9 +35,35 @@ class TransactionDbImpl(private val transactionDao: TransactionDao, private val 
         return !(monthlySummaryCount == null || monthlySummaryCount == 0)
     }
 
-    override suspend fun saveTransaction(transactionEntity: TransactionEntity) {
-        val transactionsRoomItem = mapToTransactionRoomItemRoomItem(transactionEntity)
+    override suspend fun saveTransaction(monthYear: String, transactionEntity: TransactionEntity) {
+        val transactionsRoomItem = mapToTransactionRoomItemList(monthYear, transactionEntity)
         transactionDao.saveTransaction(transactionsRoomItem)
+    }
+
+    override suspend fun saveTransactionList(monthYear: String, transactionEntityList: List<TransactionEntity>) {
+        val transactionRoomItemList = transactionEntityList.map {
+            mapToTransactionRoomItemList(monthYear, it)
+        }
+        transactionDao.saveTransactionList(transactionRoomItemList)
+    }
+
+    override suspend fun hasTransactions(): Boolean {
+        val transactionsCount = transactionDao.hasTransactions()
+        return !(transactionsCount == null || transactionsCount == 0)
+    }
+
+    override suspend fun fetchTransactions(monthYear: String): AppResult<List<TransactionEntity>> {
+        val transactionsList = transactionDao.fetchAllTransactions(monthYear)?.map {
+            mapToTransactionsEntity(it)
+        }
+        return if (transactionsList != null) AppResult.Success(transactionsList)
+        else AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
+    }
+}
+
+private fun mapToTransactionsEntity(transactionsRoomItem: TransactionRoomItem): TransactionEntity {
+    transactionsRoomItem.apply {
+        return TransactionEntity(name, amount, category, description, transactionType, transactionTime)
     }
 }
 
@@ -65,8 +94,8 @@ private fun mapToMonthlySummaryRoomItem(monthYear: String, monthlySummary: Month
     }
 }
 
-private fun mapToTransactionRoomItemRoomItem(transactionEntity: TransactionEntity): TransactionRoomItem {
+private fun mapToTransactionRoomItemList(monthYear: String, transactionEntity: TransactionEntity): TransactionRoomItem {
     transactionEntity.apply {
-        return TransactionRoomItem(id, amount, category, description, transactionType, transactionTime)
+        return TransactionRoomItem(id, monthYear, name, amount, category, description, transactionType, transactionTime)
     }
 }
