@@ -13,8 +13,8 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import com.cegidflow.android.common.extensions.gone
-import com.cegidflow.android.common.extensions.visible
+import com.example.mobiledger.common.extention.gone
+import com.example.mobiledger.common.extention.visible
 import com.example.mobiledger.common.di.DependencyProvider
 import com.example.mobiledger.common.showToast
 import com.example.mobiledger.databinding.SnackViewErrorBinding

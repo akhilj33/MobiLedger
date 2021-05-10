@@ -10,11 +10,14 @@ interface TransactionDao {
     @Query("SELECT count(*) FROM transaction_table")
     suspend fun hasTransactions(): Int?
 
-    @Query("SELECT * FROM transaction_table")
-    suspend fun fetchAllTransactions(): List<TransactionRoomItem>?
+    @Query("SELECT * FROM transaction_table WHERE monthYear = :monthYear")
+    suspend fun fetchAllTransactions(monthYear: String): List<TransactionRoomItem>?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun saveTransaction(transactionItem: TransactionRoomItem)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun saveTransactionList(transactionList: List<TransactionRoomItem>)
 
     @Query("DELETE FROM transaction_table")
     suspend fun deleteAllTransactions()

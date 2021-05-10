@@ -14,17 +14,15 @@ import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
 
 interface CategoryApi {
-    suspend fun addDefaultIncomeCategories(uid: String, defaultCategoryList: List<String>): AppResult<Unit>
-    suspend fun addDefaultExpenseCategories(uid: String, defaultCategoryList: List<String>): AppResult<Unit>
-    suspend fun getDefaultIncomeCategories(): AppResult<IncomeCategoryListEntity>
-    suspend fun getDefaultExpenseCategories(): AppResult<ExpenseCategoryListEntity>
+    suspend fun addDefaultIncomeCategories(uid: String, categoryList: List<String>): AppResult<Unit>
+    suspend fun addDefaultExpenseCategories(uid: String, categoryList: List<String>): AppResult<Unit>
 
     suspend fun getUserIncomeCategories(uid: String): AppResult<IncomeCategoryListEntity>
     suspend fun getUserExpenseCategories(uid: String): AppResult<ExpenseCategoryListEntity>
 }
 
 class CategoryApiImpl(private val firebaseDb: FirebaseFirestore) : CategoryApi {
-    override suspend fun addDefaultIncomeCategories(uid: String, defaultCategoryList: List<String>): AppResult<Unit> {
+    override suspend fun addDefaultIncomeCategories(uid: String, categoryList: List<String>): AppResult<Unit> {
         var response: Task<Void>? = null
         var exception: Exception? = null
 
@@ -32,7 +30,7 @@ class CategoryApiImpl(private val firebaseDb: FirebaseFirestore) : CategoryApi {
             val docRef = firebaseDb.collection(ConstantUtils.USERS).document(uid)
                 .collection(ConstantUtils.USER_CATEGORIES).document(ConstantUtils.INCOME_CATEGORY_LIST)
 
-            response = docRef.set(IncomeCategoryListEntity(defaultCategoryList))
+            response = docRef.set(IncomeCategoryListEntity(categoryList))
             response.await()
         } catch (e: Exception) {
             exception = e
@@ -48,7 +46,7 @@ class CategoryApiImpl(private val firebaseDb: FirebaseFirestore) : CategoryApi {
         }
     }
 
-    override suspend fun addDefaultExpenseCategories(uid: String, defaultCategoryList: List<String>): AppResult<Unit> {
+    override suspend fun addDefaultExpenseCategories(uid: String, categoryList: List<String>): AppResult<Unit> {
         var response: Task<Void>? = null
         var exception: Exception? = null
 
@@ -56,7 +54,7 @@ class CategoryApiImpl(private val firebaseDb: FirebaseFirestore) : CategoryApi {
             val docRef = firebaseDb.collection(ConstantUtils.USERS).document(uid)
                 .collection(ConstantUtils.USER_CATEGORIES).document(ConstantUtils.EXPENSE_CATEGORY_LIST)
 
-            response = docRef.set(ExpenseCategoryListEntity(defaultCategoryList))
+            response = docRef.set(ExpenseCategoryListEntity(categoryList))
             response.await()
         } catch (e: Exception) {
             exception = e
@@ -65,59 +63,6 @@ class CategoryApiImpl(private val firebaseDb: FirebaseFirestore) : CategoryApi {
         return when (val result = ErrorMapper.checkAndMapFirebaseApiError(response, exception)) {
             is FireBaseResult.Success -> {
                 AppResult.Success(Unit)
-            }
-            is FireBaseResult.Failure -> {
-                AppResult.Failure(result.error)
-            }
-        }
-    }
-
-    override suspend fun getDefaultIncomeCategories(): AppResult<IncomeCategoryListEntity> {
-        var response: Task<DocumentSnapshot>? = null
-        var exception: Exception? = null
-
-        try {
-            firebaseDb.collection(ConstantUtils.CATEGORIES).document(ConstantUtils.INCOME)
-            response = firebaseDb.collection(ConstantUtils.CATEGORIES).document(ConstantUtils.INCOME).get()
-            response.await()
-        } catch (e: Exception) {
-            exception = e
-        }
-
-        return when (val result = ErrorMapper.checkAndMapFirebaseApiError(response, exception)) {
-            is FireBaseResult.Success -> {
-                val userInfo = categoryIncomeResultEntityMapper(result.data?.result)
-                if (userInfo != null) {
-                    AppResult.Success(userInfo)
-                } else {
-                    AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
-                }
-            }
-            is FireBaseResult.Failure -> {
-                AppResult.Failure(result.error)
-            }
-        }
-    }
-
-    override suspend fun getDefaultExpenseCategories(): AppResult<ExpenseCategoryListEntity> {
-        var response: Task<DocumentSnapshot>? = null
-        var exception: Exception? = null
-
-        try {
-            response = firebaseDb.collection(ConstantUtils.CATEGORIES).document(ConstantUtils.EXPENSE).get()
-            response.await()
-        } catch (e: Exception) {
-            exception = e
-        }
-
-        return when (val result = ErrorMapper.checkAndMapFirebaseApiError(response, exception)) {
-            is FireBaseResult.Success -> {
-                val userInfo = categoryExpenseResultEntityMapper(result.data?.result)
-                if (userInfo != null) {
-                    AppResult.Success(userInfo)
-                } else {
-                    AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
-                }
             }
             is FireBaseResult.Failure -> {
                 AppResult.Failure(result.error)

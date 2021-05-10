@@ -1,4 +1,4 @@
-package com.cegidflow.android.common.extensions
+package com.example.mobiledger.common.extention
 
 import android.app.Activity
 import android.os.Build
@@ -57,3 +57,6 @@ fun View.changeStatusBarColor(
         }
     }
 }
+
+
+fun String.toAmount() = "\u20B9 $this"

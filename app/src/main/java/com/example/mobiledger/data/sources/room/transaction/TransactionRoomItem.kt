@@ -8,10 +8,12 @@ import com.google.firebase.Timestamp
 
 @Entity(tableName = "transaction_table")
 data class TransactionRoomItem(
-    @PrimaryKey @ColumnInfo(name = "id") val id: String,
+    @PrimaryKey @ColumnInfo(name = "id") val uId: String,
+    @ColumnInfo(name = "monthYear") val monthYear: String,
+    @ColumnInfo(name = "name") val name: String,
     @ColumnInfo(name = "amount") val amount: Long,
     @ColumnInfo(name = "category") val category: String,
     @ColumnInfo(name = "description") val description: String? = null,
     @ColumnInfo(name = "transactionType") val transactionType: TransactionType,
-    @ColumnInfo(name = "transactionTime") val transactionTime: Timestamp?
+    @ColumnInfo(name = "transactionTime") val transactionTime: Timestamp
 )
