@@ -65,6 +65,7 @@
     <string name="overview_report">Overview Report</string>
     <string name="add_transaction">Add transaction</string>
     <string name="latest_transaction">Latest Transactions</string>
+    <string name="hello_name">Hello, %1$s</string>
 
 
 </resources>

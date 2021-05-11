@@ -6,13 +6,16 @@ import androidx.lifecycle.viewModelScope
 import com.example.mobiledger.common.extention.toAmount
 import com.example.mobiledger.R
 import com.example.mobiledger.common.base.BaseViewModel
+import com.example.mobiledger.common.utils.DateUtils.getCurrentDate
+import com.example.mobiledger.common.utils.DateUtils.getDateInMMMMyyyyFormat
+import com.example.mobiledger.common.utils.DateUtils.getDateInMMyyyyFormat
 import com.example.mobiledger.common.utils.DefaultCategoryUtils.getCategoryIcon
 import com.example.mobiledger.domain.AppResult
 import com.example.mobiledger.domain.entities.MonthlyTransactionSummaryEntity
 import com.example.mobiledger.domain.entities.TransactionEntity
-import com.example.mobiledger.domain.enums.TransactionType
 import com.example.mobiledger.domain.usecases.ProfileUseCase
 import com.example.mobiledger.domain.usecases.TransactionUseCase
+import com.example.mobiledger.presentation.Event
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
@@ -26,7 +29,25 @@ class HomeViewModel(
     val userNameLiveData: LiveData<String> get() = _userNameLiveData
     private val _userNameLiveData: MutableLiveData<String> = MutableLiveData()
 
-    fun getUserName() {
+    val homeViewItemListLiveData: LiveData<Event<MutableList<HomeViewItem>>> get() = _homeViewItemListLiveData
+    private val _homeViewItemListLiveData: MutableLiveData<Event<MutableList<HomeViewItem>>> = MutableLiveData()
+
+    val monthNameLiveData: LiveData<String> get() = _monthNameLiveData
+    private val _monthNameLiveData: MutableLiveData<String> = MutableLiveData()
+
+    private val _isLoading: MutableLiveData<Boolean> = MutableLiveData(false)
+    val isLoading: LiveData<Boolean> get() = _isLoading
+
+    private var monthCount = 0
+
+    fun getHomeData(){
+        _isLoading.value = true
+        getUserName()
+        getTransactionData()
+        updateMonthLiveData()
+    }
+
+    private fun getUserName() {
         viewModelScope.launch {
             when (val result = profileUseCase.fetchUserFromFirebase()) {
                 is AppResult.Success -> {
@@ -46,10 +67,10 @@ class HomeViewModel(
         return regex.find(userName.capitalize(Locale.getDefault()))?.value ?: ""
     }
 
-    fun getTransactionData(monthYear: String) {
+    private fun getTransactionData() {
         viewModelScope.launch {
-            val monthlyData = async { transactionUseCase.getMonthlySummaryEntity(monthYear) }
-            val transactionList = async { transactionUseCase.getTransactionListByMonth(monthYear) }
+            val monthlyData = async { transactionUseCase.getMonthlySummaryEntity(getDateInMMyyyyFormat(getCurrentMonth())) }
+            val transactionList = async { transactionUseCase.getTransactionListByMonth(getDateInMMyyyyFormat(getCurrentMonth())) }
             when (val monthlyResult = monthlyData.await()) {
                 is AppResult.Success -> {
                     val transactionResult = transactionList.await()
@@ -57,6 +78,7 @@ class HomeViewModel(
                 }
                 is AppResult.Failure -> {
                     //todo
+                    _isLoading.value = false
                 }
             }
         }
@@ -68,10 +90,12 @@ class HomeViewModel(
         viewModelScope.launch {
             when (transactionResult) {
                 is AppResult.Success -> {
-                    renderHomeViewList(transactionResult.data, monthlyResult)
+                    _homeViewItemListLiveData.value = Event(renderHomeViewList(transactionResult.data, monthlyResult))
+                    _isLoading.value = false
                 }
                 is AppResult.Failure -> {
                     //todo
+                    _isLoading.value = false
                 }
             }
         }
@@ -90,12 +114,20 @@ class HomeViewModel(
                 )
             )
 
-            if (transactionList.isNotEmpty())
+            if (transactionList.isNotEmpty()){
                 homeViewItemList.add(HomeViewItem.HeaderDataRow(R.string.latest_transaction))
-
-            transactionList.forEach {
-                homeViewItemList.add(HomeViewItem.TransactionDataRow(mapToTransactionData(it)))
+                var newList = transactionList
+                if(transactionList.size>10)
+                    newList = transactionList.subList(0,11)
+                newList.forEach {
+                    homeViewItemList.add(HomeViewItem.TransactionDataRow(mapToTransactionData(it)))
+                }
             }
+
+           else{
+               homeViewItemList.add(HomeViewItem.EmptyDataRow)
+            }
+
            homeViewItemList
         }
     }
@@ -106,48 +138,26 @@ class HomeViewModel(
         }
     }
 
-    fun homeItemList() = listOf(
-        HomeViewItem.HeaderDataRow(R.string.overview_report),
-        HomeViewItem.MonthlyDataRow(MonthlyData("\u20B9 10000", "\u20B9 53264")),
-        HomeViewItem.HeaderDataRow(R.string.latest_transaction),
-        HomeViewItem.TransactionDataRow(getIncomeData()),
-        HomeViewItem.TransactionDataRow(getExpenseData()),
-        HomeViewItem.TransactionDataRow(getExpenseData()),
-        HomeViewItem.TransactionDataRow(getIncomeData()),
-        HomeViewItem.TransactionDataRow(getIncomeData()),
-        HomeViewItem.TransactionDataRow(getExpenseData()),
-        HomeViewItem.TransactionDataRow(getIncomeData()),
-        HomeViewItem.TransactionDataRow(getIncomeData()),
-        HomeViewItem.TransactionDataRow(getIncomeData()),
-        HomeViewItem.TransactionDataRow(getExpenseData()),
-        HomeViewItem.TransactionDataRow(getIncomeData()),
-        HomeViewItem.TransactionDataRow(getIncomeData()),
-        HomeViewItem.TransactionDataRow(getIncomeData()),
-        HomeViewItem.TransactionDataRow(getExpenseData()),
-        HomeViewItem.TransactionDataRow(getIncomeData()),
-        HomeViewItem.TransactionDataRow(getIncomeData()),
-        HomeViewItem.TransactionDataRow(getExpenseData()),
-        HomeViewItem.TransactionDataRow(getExpenseData()),
-        HomeViewItem.TransactionDataRow(getIncomeData()),
-        HomeViewItem.TransactionDataRow(getIncomeData()),
-        HomeViewItem.TransactionDataRow(getIncomeData()),
-        HomeViewItem.TransactionDataRow(getExpenseData()),
-        HomeViewItem.TransactionDataRow(getIncomeData()),
-        HomeViewItem.TransactionDataRow(getExpenseData()),
-        HomeViewItem.TransactionDataRow(getIncomeData()),
-        HomeViewItem.TransactionDataRow(getExpenseData()),
-        HomeViewItem.TransactionDataRow(getIncomeData()),
-        HomeViewItem.TransactionDataRow(getIncomeData()),
-        HomeViewItem.TransactionDataRow(getExpenseData()),
-        HomeViewItem.TransactionDataRow(getIncomeData()),
-        HomeViewItem.TransactionDataRow(getIncomeData()),
-        HomeViewItem.TransactionDataRow(getIncomeData()),
-        HomeViewItem.TransactionDataRow(getExpenseData()),
-        HomeViewItem.TransactionDataRow(getIncomeData()),
+    fun updateMonthLiveData(){
+       _monthNameLiveData.value =  getDateInMMMMyyyyFormat(getCurrentMonth())
+    }
 
-        )
+    private fun getCurrentMonth(): Calendar = getCurrentDate().apply{ add(Calendar.MONTH, monthCount)}
 
-    private fun getIncomeData() = TransactionData("Salary", "+14000", TransactionType.Income, "Salary", R.drawable.ic_warning)
-    private fun getExpenseData() = TransactionData("Electricity Bill", "-700", TransactionType.Expense, "Bills", R.drawable.ic_warning)
+    fun isCurrentMonth(): Boolean = monthCount == 0
+
+    fun getPreviousMonthData() {
+        --monthCount
+        reloadData()
+    }
+
+    fun getNextMonthData() {
+        ++monthCount
+        reloadData()
+    }
+
+    fun reloadData() {
+        getHomeData()
+    }
 
 }
