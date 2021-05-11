@@ -1,5 +1,6 @@
 package com.example.mobiledger.presentation.home
 
+import androidx.annotation.StringRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -38,6 +39,9 @@ class HomeViewModel(
     private val _isLoading: MutableLiveData<Boolean> = MutableLiveData(false)
     val isLoading: LiveData<Boolean> get() = _isLoading
 
+    private val _errorLiveData: MutableLiveData<Event<ViewError>> = MutableLiveData()
+    val errorLiveData: LiveData<Event<ViewError>> = _errorLiveData
+
     private var monthCount = 0
 
     fun getHomeData(){
@@ -56,7 +60,14 @@ class HomeViewModel(
                 }
 
                 is AppResult.Failure -> {
-                    //todo
+                    if (needToHandleAppError(result.error)) {
+                        _errorLiveData.value = Event(
+                            ViewError(
+                                viewErrorType = ViewErrorType.NON_BLOCKING,
+                                message = result.error.message
+                            )
+                        )
+                    }
                 }
             }
         }
@@ -77,7 +88,14 @@ class HomeViewModel(
                     handleTransactionResult(transactionResult, monthlyResult.data)
                 }
                 is AppResult.Failure -> {
-                    //todo
+                    if (needToHandleAppError(monthlyResult.error)) {
+                        _errorLiveData.value = Event(
+                            ViewError(
+                                viewErrorType = ViewErrorType.NON_BLOCKING,
+                                message = monthlyResult.error.message
+                            )
+                        )
+                    }
                     _isLoading.value = false
                 }
             }
@@ -94,7 +112,14 @@ class HomeViewModel(
                     _isLoading.value = false
                 }
                 is AppResult.Failure -> {
-                    //todo
+                    if (needToHandleAppError(transactionResult.error)) {
+                        _errorLiveData.value = Event(
+                            ViewError(
+                                viewErrorType = ViewErrorType.NON_BLOCKING,
+                                message = transactionResult.error.message
+                            )
+                        )
+                    }
                     _isLoading.value = false
                 }
             }
@@ -138,7 +163,7 @@ class HomeViewModel(
         }
     }
 
-    fun updateMonthLiveData(){
+    private fun updateMonthLiveData(){
        _monthNameLiveData.value =  getDateInMMMMyyyyFormat(getCurrentMonth())
     }
 
@@ -160,4 +185,11 @@ class HomeViewModel(
         getHomeData()
     }
 
+    enum class ViewErrorType { NON_BLOCKING }
+
+    data class ViewError(
+        val viewErrorType: ViewErrorType,
+        var message: String? = null,
+        @StringRes val resID: Int = R.string.generic_error_message
+    )
 }

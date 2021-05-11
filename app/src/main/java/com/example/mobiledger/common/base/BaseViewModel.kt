@@ -17,7 +17,7 @@ abstract class BaseViewModel : ViewModel() {
 
     protected fun needToHandleAppError(appError: AppError): Boolean {
         return when (appError.code) {
-            ErrorCodes.HTTP_UNAUTHORIZED -> {
+            ErrorCodes.HTTP_UNAUTHORIZED,  ErrorCodes.FIREBASE_UNAUTHORIZED-> {
                 handleAuthError()
                 false
             }

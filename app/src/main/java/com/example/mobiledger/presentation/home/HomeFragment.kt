@@ -61,6 +61,14 @@ class HomeFragment :
                 hideSwipeRefresh()
             }
         }
+
+        viewModel.errorLiveData.observe(viewLifecycleOwner, OneTimeObserver {
+            showSnackBarErrorView(it.message ?: getString(it.resID), false)
+        })
+
+        viewModel.authErrorLiveData.observe(viewLifecycleOwner, OneTimeObserver {
+//            navigateToLoginScreen() todo
+        })
     }
 
     private fun setOnClickListener() {

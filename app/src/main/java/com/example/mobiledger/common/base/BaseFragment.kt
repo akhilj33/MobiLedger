@@ -14,15 +14,17 @@ import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.example.mobiledger.R
+import com.example.mobiledger.common.di.DependencyProvider
 import com.example.mobiledger.common.extention.gone
 import com.example.mobiledger.common.extention.visible
-import com.example.mobiledger.common.di.DependencyProvider
 import com.example.mobiledger.common.showToast
 import com.example.mobiledger.databinding.SnackViewErrorBinding
+import com.example.mobiledger.presentation.NormalObserver
 import com.example.mobiledger.presentation.main.MainActivityViewModel
 import timber.log.Timber
 
-abstract class BaseFragment<B : ViewDataBinding, NV : BaseNavigator>    (
+abstract class BaseFragment<B : ViewDataBinding, NV : BaseNavigator>(
     @LayoutRes private val layoutId: Int,
     private val statusBarColor: StatusBarColor? = null
 ) : Fragment() {
@@ -65,7 +67,7 @@ abstract class BaseFragment<B : ViewDataBinding, NV : BaseNavigator>    (
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initSwipeRefreshLayout()
-//        observeInternetState()
+        observeInternetState()
         setBottomNavVisibility()
     }
 
@@ -85,15 +87,15 @@ abstract class BaseFragment<B : ViewDataBinding, NV : BaseNavigator>    (
         activityViewModel.hideBottomNavigationView()
     }
 
-//    private fun observeInternetState() {
-//        activityViewModel.isInternetAvailableLiveData.observe(viewLifecycleOwner, NormalObserver {
-//            if (it) {
-//                hideSnackBarErrorView()
-//            } else {
-//                showSnackBarErrorView(getString(R.string.device_offline_error_message))
-//            }
-//        })
-//    }
+    private fun observeInternetState() {
+        activityViewModel.isInternetAvailableLiveData.observe(viewLifecycleOwner, NormalObserver {
+            if (it) {
+                hideSnackBarErrorView()
+            } else {
+                showSnackBarErrorView(getString(R.string.device_offline_error_message), false)
+            }
+        })
+    }
 
 //    override fun onResume() {
 //        super.onResume()
@@ -181,8 +183,8 @@ abstract class BaseFragment<B : ViewDataBinding, NV : BaseNavigator>    (
         }
     }
 
-///*-----------------------------------Authentication Error-----------------------------------------*/
-//
+/*-----------------------------------Authentication Error-----------------------------------------*/
+
 //    private var authResultCallback: ((Boolean) -> Unit)? = null
 //
 //    protected fun addAuthCallback(authCallback: (Boolean) -> Unit) {
