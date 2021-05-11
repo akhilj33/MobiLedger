@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.mobiledger.R
 import com.example.mobiledger.common.base.BaseFragment
 import com.example.mobiledger.common.base.BaseNavigator
+import com.example.mobiledger.common.utils.showAddCategoryDialogFragment
 import com.example.mobiledger.databinding.FragmentExpenseCategoryBinding
 import com.example.mobiledger.databinding.SnackViewErrorBinding
 import com.example.mobiledger.presentation.OneTimeObserver
@@ -20,15 +21,22 @@ class ExpenseCategoryFragment : BaseFragment<FragmentExpenseCategoryBinding, Bas
 
     override fun getSnackBarErrorView(): SnackViewErrorBinding = viewBinding.includeExpenseErrorView
 
+    private var list: List<String> = emptyList()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setUpObserver()
+        setOnCLickListener()
+    }
+
+    override fun onResume() {
+        super.onResume()
         viewModel.getExpenseCategoryList()
     }
 
     private fun setUpObserver() {
         viewModel.expenseCategoryList.observe(viewLifecycleOwner, OneTimeObserver {
+            list = it.expenseCategoryList
             initRecyclerView(it.expenseCategoryList)
         })
 
@@ -49,8 +57,14 @@ class ExpenseCategoryFragment : BaseFragment<FragmentExpenseCategoryBinding, Bas
         })
     }
 
+    private val onCategoryDeleteClick = fun(category: String, list: List<String>) {
+        val newList = list as ArrayList
+        newList.remove(category)
+        viewModel.updateUserCategoryList(newList)
+    }
+
     private fun initRecyclerView(incomeCategoryList: List<String>) {
-        val expenseCategoryAdapter = CategoryAdapter(incomeCategoryList)
+        val expenseCategoryAdapter = CategoryAdapter(incomeCategoryList, onCategoryDeleteClick)
         val linearLayoutManager = LinearLayoutManager(activity)
         viewBinding.rvExpenseCategory.apply {
             layoutManager = linearLayoutManager
@@ -58,6 +72,11 @@ class ExpenseCategoryFragment : BaseFragment<FragmentExpenseCategoryBinding, Bas
         }
     }
 
+    private fun setOnCLickListener() {
+        viewBinding.btnAddCategory.setOnClickListener {
+            showAddCategoryDialogFragment(requireActivity().supportFragmentManager, list, false)
+        }
+    }
 
     companion object {
         fun newInstance() = ExpenseCategoryFragment()

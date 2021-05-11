@@ -2,11 +2,15 @@ package com.example.mobiledger.presentation.categoryFragment.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mobiledger.databinding.ItemCategoryBinding
 
-class CategoryAdapter(private val categoryList: List<String>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class CategoryAdapter(
+    private val categoryList: List<String>,
+    val onCategoryDeleteClicked: (String, List<String>) -> Unit,
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private lateinit var context: Context
 
@@ -29,9 +33,11 @@ class CategoryAdapter(private val categoryList: List<String>) : RecyclerView.Ada
 
     inner class ViewHolder(private val viewBinding: ItemCategoryBinding) : RecyclerView.ViewHolder(viewBinding.root) {
         fun bind(item: String) {
+            if (item == "Others")
+                viewBinding.deleteCategory.visibility = View.GONE
             viewBinding.tvCategoryName.text = item
             viewBinding.deleteCategory.setOnClickListener {
-
+                onCategoryDeleteClicked(item, categoryList)
             }
         }
     }

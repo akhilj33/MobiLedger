@@ -45,4 +45,29 @@ class IncomeCategoryViewModel(
         }
         _loadingState.value = false
     }
+
+    fun updateUserIncomeCategory(newIncomeCategoryList: IncomeCategoryListEntity) {
+        _loadingState.value = true
+        viewModelScope.launch {
+            when (val result = categoryUseCase.updateUserIncomeCategory(newIncomeCategoryList)) {
+                is AppResult.Success -> {
+                    updateUserIncomeCategoryDB(newIncomeCategoryList)
+                }
+                is AppResult.Failure -> {
+                    _errorLiveData.value = Event(
+                        AddTransactionDialogFragmentViewModel.ViewError(
+                            viewErrorType = AddTransactionDialogFragmentViewModel.ViewErrorType.NON_BLOCKING,
+                            message = result.error.message
+                        )
+                    )
+                }
+            }
+        }
+        _loadingState.value = false
+    }
+
+    private suspend fun updateUserIncomeCategoryDB(newIncomeCategoryList: IncomeCategoryListEntity) {
+        categoryUseCase.updateUserIncomeCategoryDB(newIncomeCategoryList)
+        getIncomeCategoryList()
+    }
 }

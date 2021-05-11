@@ -6,8 +6,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.mobiledger.R
 import com.example.mobiledger.common.base.BaseFragment
 import com.example.mobiledger.common.base.BaseNavigator
+import com.example.mobiledger.common.utils.showAddCategoryDialogFragment
 import com.example.mobiledger.databinding.FragmentIncomeCategoryBinding
 import com.example.mobiledger.databinding.SnackViewErrorBinding
+import com.example.mobiledger.domain.entities.IncomeCategoryListEntity
 import com.example.mobiledger.presentation.OneTimeObserver
 import com.example.mobiledger.presentation.categoryFragment.IncomeCategoryViewModel
 import com.example.mobiledger.presentation.categoryFragment.adapter.CategoryAdapter
@@ -19,14 +21,22 @@ class IncomeCategoryFragment : BaseFragment<FragmentIncomeCategoryBinding, BaseN
 
     override fun getSnackBarErrorView(): SnackViewErrorBinding = viewBinding.includeIncomeErrorView
 
+    private var list: List<String> = emptyList()
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setUpObserver()
+        setOnCLickListener()
+        viewModel.getIncomeCategoryList()
+    }
+
+    override fun onResume() {
+        super.onResume()
         viewModel.getIncomeCategoryList()
     }
 
     private fun setUpObserver() {
         viewModel.incomeCategoryList.observe(viewLifecycleOwner, OneTimeObserver {
+            list = it.incomeCategoryList
             initRecyclerView(it.incomeCategoryList)
         })
 
@@ -47,12 +57,24 @@ class IncomeCategoryFragment : BaseFragment<FragmentIncomeCategoryBinding, BaseN
         })
     }
 
+    private val onCategoryDeleteClick = fun(category: String, list: List<String>) {
+        val newList = list as ArrayList
+        newList.remove(category)
+        viewModel.updateUserIncomeCategory(IncomeCategoryListEntity(newList))
+    }
+
     private fun initRecyclerView(incomeCategoryList: List<String>) {
-        val incomeCategoryAdapter = CategoryAdapter(incomeCategoryList)
+        val incomeCategoryAdapter = CategoryAdapter(incomeCategoryList, onCategoryDeleteClick)
         val linearLayoutManager = LinearLayoutManager(activity)
         viewBinding.rvIncomeCategory.apply {
             layoutManager = linearLayoutManager
             adapter = incomeCategoryAdapter
+        }
+    }
+
+    private fun setOnCLickListener() {
+        viewBinding.btnAddCategory.setOnClickListener {
+            showAddCategoryDialogFragment(requireActivity().supportFragmentManager, list, true)
         }
     }
 

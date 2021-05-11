@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.mobiledger.presentation.auth.LoginViewModel
 import com.example.mobiledger.presentation.auth.SignUpViewModel
+import com.example.mobiledger.presentation.categoryFragment.AddCategoryDialogViewModel
 import com.example.mobiledger.presentation.categoryFragment.ExpenseCategoryViewModel
 import com.example.mobiledger.presentation.categoryFragment.IncomeCategoryViewModel
 import com.example.mobiledger.presentation.home.HomeViewModel
@@ -68,6 +69,9 @@ class ViewModelFactoryProvider(private val useCaseProvider: UseCaseProvider) :
             }
             modelClass.isAssignableFrom(ExpenseCategoryViewModel::class.java) -> {
                 ExpenseCategoryViewModel(useCaseProvider.provideCategoryUseCase()) as T
+            }
+            modelClass.isAssignableFrom(AddCategoryDialogViewModel::class.java) -> {
+                AddCategoryDialogViewModel(useCaseProvider.provideCategoryUseCase()) as T
             }
             else -> throw IllegalArgumentException("Unknown ViewModel Class")
         }

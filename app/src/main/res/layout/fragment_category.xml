@@ -35,7 +35,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/cdp_16"
                     android:layout_toEndOf="@id/btnBack"
-                    android:text="@string/profile"
+                    android:text="@string/category"
                     android:textColor="@color/colorWhite"
                     android:textSize="@dimen/csp_20" />
 

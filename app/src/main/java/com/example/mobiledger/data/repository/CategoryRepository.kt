@@ -19,6 +19,10 @@ interface CategoryRepository {
     suspend fun addUserExpenseCategoryDb(categoryList: List<String>): AppResult<Unit>
     suspend fun getUserIncomeCategories(): AppResult<IncomeCategoryListEntity>
     suspend fun getUserExpenseCategories(): AppResult<ExpenseCategoryListEntity>
+    suspend fun updateUserIncomeCategory(newIncomeCategory: IncomeCategoryListEntity): AppResult<Unit>
+    suspend fun updateUserIncomeCategoryDB(newIncomeCategory: IncomeCategoryListEntity)
+    suspend fun updateUserExpenseCategory(newExpenseCategory: ExpenseCategoryListEntity): AppResult<Unit>
+    suspend fun updateUserExpenseCategoryDB(newExpenseCategory: ExpenseCategoryListEntity)
 }
 
 class CategoryRepositoryImpl(
@@ -105,4 +109,46 @@ class CategoryRepositoryImpl(
             }
         }
     }
+
+    override suspend fun updateUserIncomeCategory(newIncomeCategory: IncomeCategoryListEntity): AppResult<Unit> {
+        return withContext(dispatcher) {
+            val uid = cacheSource.getUID()
+            if (uid != null) {
+                categoryApi.updateUserIncomeCategory(uid, newIncomeCategory)
+            } else
+                AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
+        }
+    }
+
+    override suspend fun updateUserIncomeCategoryDB(newIncomeCategory: IncomeCategoryListEntity) {
+        return withContext(dispatcher) {
+            val uid = cacheSource.getUID()
+            if (uid != null) {
+                categoryDb.updateIncomeCategoryList(newIncomeCategory)
+            } else
+                AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
+        }
+    }
+
+    override suspend fun updateUserExpenseCategory(newExpenseCategory: ExpenseCategoryListEntity): AppResult<Unit> {
+        return withContext(dispatcher) {
+            val uid = cacheSource.getUID()
+            if (uid != null) {
+                categoryApi.updateUserExpenseCategory(uid, newExpenseCategory)
+            } else
+                AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
+        }
+    }
+
+    override suspend fun updateUserExpenseCategoryDB(newExpenseCategory: ExpenseCategoryListEntity) {
+        return withContext(dispatcher) {
+            val uid = cacheSource.getUID()
+            if (uid != null) {
+                categoryDb.updateExpenseCategoryList(newExpenseCategory)
+            } else
+                AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
+        }
+    }
 }
+
+
