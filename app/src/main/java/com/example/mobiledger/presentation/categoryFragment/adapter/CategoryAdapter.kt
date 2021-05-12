@@ -8,11 +8,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.mobiledger.databinding.ItemCategoryBinding
 
 class CategoryAdapter(
-    private val categoryList: List<String>,
     val onCategoryDeleteClicked: (String, List<String>) -> Unit,
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private lateinit var context: Context
+
+    private val categoryList: MutableList<String> = mutableListOf()
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)
@@ -35,10 +36,33 @@ class CategoryAdapter(
         fun bind(item: String) {
             if (item == "Others")
                 viewBinding.deleteCategory.visibility = View.GONE
+            else
+                viewBinding.deleteCategory.visibility = View.VISIBLE
             viewBinding.tvCategoryName.text = item
             viewBinding.deleteCategory.setOnClickListener {
                 onCategoryDeleteClicked(item, categoryList)
             }
         }
     }
+
+    fun addItemList(list: List<String>) {
+        if (list.isNotEmpty()) {
+            val newIndex = categoryList.size
+            val newItemsCount = list.size
+            if (categoryList.addAll(list)) notifyItemRangeInserted(newIndex, newItemsCount)
+        }
+    }
+
+    fun addList(list: List<String>) {
+        if (list.isNotEmpty()) {
+            val newIndex = categoryList.size
+            val newItemsCount = list.size
+            if (categoryList.addAll(list)) notifyItemRangeInserted(newIndex, newItemsCount)
+        }
+        categoryList.clear()
+        categoryList.addAll(list)
+        notifyDataSetChanged()
+    }
+
+
 }

@@ -23,10 +23,16 @@ class ExpenseCategoryFragment : BaseFragment<FragmentExpenseCategoryBinding, Bas
 
     private var list: List<String> = emptyList()
 
+    private val expenseCategoryAdapter: CategoryAdapter by lazy {
+        CategoryAdapter(onCategoryDeleteClick)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setUpObserver()
+        initRecyclerView()
         setOnCLickListener()
+
     }
 
     override fun onResume() {
@@ -36,8 +42,10 @@ class ExpenseCategoryFragment : BaseFragment<FragmentExpenseCategoryBinding, Bas
 
     private fun setUpObserver() {
         viewModel.expenseCategoryList.observe(viewLifecycleOwner, OneTimeObserver {
-            list = it.expenseCategoryList
-            initRecyclerView(it.expenseCategoryList)
+            val arrList = it.expenseCategoryList as ArrayList
+            arrList.sort()
+            list = arrList
+            expenseCategoryAdapter.addList(list)
         })
 
         viewModel.loadingState.observe(viewLifecycleOwner, Observer {
@@ -63,8 +71,7 @@ class ExpenseCategoryFragment : BaseFragment<FragmentExpenseCategoryBinding, Bas
         viewModel.updateUserCategoryList(newList)
     }
 
-    private fun initRecyclerView(incomeCategoryList: List<String>) {
-        val expenseCategoryAdapter = CategoryAdapter(incomeCategoryList, onCategoryDeleteClick)
+    private fun initRecyclerView() {
         val linearLayoutManager = LinearLayoutManager(activity)
         viewBinding.rvExpenseCategory.apply {
             layoutManager = linearLayoutManager

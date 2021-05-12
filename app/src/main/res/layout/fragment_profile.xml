@@ -75,8 +75,8 @@
             android:id="@+id/profileCard"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginStart="@dimen/cdp_20"
-            android:layout_marginEnd="@dimen/cdp_20"
+            android:layout_marginStart="@dimen/cdp_10"
+            android:layout_marginEnd="@dimen/cdp_10"
             android:layout_marginBottom="@dimen/cdp_20"
             android:padding="@dimen/cdp_24"
             app:layout_constraintBottom_toTopOf="@id/horizontalGuideline_30"
@@ -86,7 +86,9 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:paddingEnd="@dimen/cdp_10"
+                android:paddingStart="@dimen/cdp_10">
 
                 <ImageView
                     android:id="@+id/imgUser"

@@ -22,11 +22,16 @@ class IncomeCategoryFragment : BaseFragment<FragmentIncomeCategoryBinding, BaseN
     override fun getSnackBarErrorView(): SnackViewErrorBinding = viewBinding.includeIncomeErrorView
 
     private var list: List<String> = emptyList()
+
+    private val incomeCategoryAdapter: CategoryAdapter by lazy {
+        CategoryAdapter(onCategoryDeleteClick)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setUpObserver()
+        initRecyclerView()
         setOnCLickListener()
-        viewModel.getIncomeCategoryList()
     }
 
     override fun onResume() {
@@ -36,8 +41,10 @@ class IncomeCategoryFragment : BaseFragment<FragmentIncomeCategoryBinding, BaseN
 
     private fun setUpObserver() {
         viewModel.incomeCategoryList.observe(viewLifecycleOwner, OneTimeObserver {
-            list = it.incomeCategoryList
-            initRecyclerView(it.incomeCategoryList)
+            val arrList = it.incomeCategoryList as ArrayList
+            arrList.sort()
+            list = arrList
+            incomeCategoryAdapter.addList(list)
         })
 
         viewModel.loadingState.observe(viewLifecycleOwner, Observer {
@@ -63,8 +70,7 @@ class IncomeCategoryFragment : BaseFragment<FragmentIncomeCategoryBinding, BaseN
         viewModel.updateUserIncomeCategory(IncomeCategoryListEntity(newList))
     }
 
-    private fun initRecyclerView(incomeCategoryList: List<String>) {
-        val incomeCategoryAdapter = CategoryAdapter(incomeCategoryList, onCategoryDeleteClick)
+    private fun initRecyclerView() {
         val linearLayoutManager = LinearLayoutManager(activity)
         viewBinding.rvIncomeCategory.apply {
             layoutManager = linearLayoutManager
