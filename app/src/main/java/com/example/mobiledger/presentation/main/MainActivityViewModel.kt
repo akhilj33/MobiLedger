@@ -42,6 +42,14 @@ class MainActivityViewModel(
 
     /*---------------------------------------Internet Error Info -----------------------------------------------*/
 
+//    fun registerInternetStatus() {
+//        viewModelScope.launch {
+//            internetUseCase.receiveInternetStatus().collect {
+//                _isInternetAvailableLiveData.value = Event(it)
+//            }
+//        }
+//    }
+
 
     sealed class NavTab {
         object HOME : NavTab()

@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mobiledger.R
+import com.example.mobiledger.databinding.HomeEmptyItemBinding
 import com.example.mobiledger.databinding.HomeHeaderItemBinding
 import com.example.mobiledger.databinding.HomeMonthlyDataItemBinding
 import com.example.mobiledger.databinding.HomeTransactionItemBinding
@@ -34,6 +35,7 @@ class HomeAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             HomeViewType.Header -> HeaderViewHolder(HomeHeaderItemBinding.inflate(layoutInflater, parent, false))
             HomeViewType.MonthlyData -> MonthlyDataViewHolder(HomeMonthlyDataItemBinding.inflate(layoutInflater, parent, false))
             HomeViewType.TransactionData -> TransactionDataViewHolder(HomeTransactionItemBinding.inflate(layoutInflater, parent, false))
+            HomeViewType.EmptyData -> EmptyDataViewHolder(HomeEmptyItemBinding.inflate(layoutInflater, parent, false))
         }
     }
 
@@ -42,6 +44,7 @@ class HomeAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             is HomeViewItem.HeaderDataRow -> (holder as HeaderViewHolder).bind(item.data)
             is HomeViewItem.MonthlyDataRow -> (holder as MonthlyDataViewHolder).bind(item.data)
             is HomeViewItem.TransactionDataRow -> (holder as TransactionDataViewHolder).bind(item.data)
+            is HomeViewItem.EmptyDataRow -> (holder as EmptyDataViewHolder).bind()
         }
     }
 
@@ -57,7 +60,15 @@ class HomeAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         fun bind(item: MonthlyData) {
             viewBinding.apply {
                 tvIncomeAmount.text = item.incomeAmount
-                tvExpenseAmount.text = item.incomeAmount
+                tvExpenseAmount.text = item.expenseAmount
+            }
+        }
+    }
+
+    inner class EmptyDataViewHolder(private val viewBinding: HomeEmptyItemBinding) : RecyclerView.ViewHolder(viewBinding.root) {
+        fun bind() {
+            viewBinding.apply {
+                animationView.playAnimation()
             }
         }
     }
@@ -88,11 +99,9 @@ class HomeAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     /*---------------------------------Utility Functions---------------------------- */
 
     fun addItemList(homeItemList: List<HomeViewItem>) {
-        if (homeItemList.isNotEmpty()) {
-            val newIndex = items.size
-            val newItemsCount = homeItemList.size
-            if (items.addAll(homeItemList)) notifyItemRangeInserted(newIndex, newItemsCount)
-        }
+        items.clear()
+        items.addAll(homeItemList)
+        notifyDataSetChanged()
     }
 
     fun insertHomeViewItem(homeItem: HomeViewItem) {
