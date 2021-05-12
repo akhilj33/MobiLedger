@@ -46,6 +46,7 @@
             android:id="@+id/rightArrow"
             android:layout_width="@dimen/cdp_32"
             android:layout_height="@dimen/cdp_32"
+            android:tint="@color/colorGrey"
             app:layout_constraintBottom_toBottomOf="@id/tvMonth"
             app:layout_constraintEnd_toStartOf="@id/verticalEndGuideline"
             app:layout_constraintStart_toEndOf="@id/tvMonth"
