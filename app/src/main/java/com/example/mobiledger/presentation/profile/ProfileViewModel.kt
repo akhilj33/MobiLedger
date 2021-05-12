@@ -3,7 +3,6 @@ package com.example.mobiledger.presentation.profile
 import androidx.annotation.StringRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
 import androidx.lifecycle.viewModelScope
 import com.example.mobiledger.R
 import com.example.mobiledger.common.base.BaseViewModel
@@ -29,7 +28,7 @@ class ProfileViewModel(
 
     fun fetchUserData() {
         viewModelScope.launch {
-            _loadingState.value = false
+            _loadingState.value = true
             when (val result = profileUseCase.fetchUserFromFirebase()) {
                 is AppResult.Success -> {
                     _userFromFirestoreResult.value = result.data

@@ -8,6 +8,7 @@ import com.example.mobiledger.domain.AppResult
 import com.example.mobiledger.domain.FireBaseResult
 import com.example.mobiledger.domain.entities.ExpenseCategoryListEntity
 import com.example.mobiledger.domain.entities.IncomeCategoryListEntity
+import com.example.mobiledger.domain.entities.toMutableMap
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
@@ -19,6 +20,9 @@ interface CategoryApi {
 
     suspend fun getUserIncomeCategories(uid: String): AppResult<IncomeCategoryListEntity>
     suspend fun getUserExpenseCategories(uid: String): AppResult<ExpenseCategoryListEntity>
+
+    suspend fun updateUserIncomeCategory(uid: String, newIncomeCategory: IncomeCategoryListEntity): AppResult<Unit>
+    suspend fun updateUserExpenseCategory(uid: String, newIncomeCategory: ExpenseCategoryListEntity): AppResult<Unit>
 }
 
 class CategoryApiImpl(private val firebaseDb: FirebaseFirestore) : CategoryApi {
@@ -124,7 +128,53 @@ class CategoryApiImpl(private val firebaseDb: FirebaseFirestore) : CategoryApi {
         }
     }
 
+    override suspend fun updateUserIncomeCategory(uid: String, newIncomeCategory: IncomeCategoryListEntity): AppResult<Unit> {
+        var response: Task<Void>? = null
+        var exception: Exception? = null
 
+        try {
+            val docRef = firebaseDb.collection(ConstantUtils.USERS).document(uid)
+                .collection(ConstantUtils.USER_CATEGORIES).document(ConstantUtils.INCOME_CATEGORY_LIST)
+
+            response = docRef.update(newIncomeCategory.toMutableMap())
+            response.await()
+        } catch (e: Exception) {
+            exception = e
+        }
+
+        return when (val result = ErrorMapper.checkAndMapFirebaseApiError(response, exception)) {
+            is FireBaseResult.Success -> {
+                AppResult.Success(Unit)
+            }
+            is FireBaseResult.Failure -> {
+                AppResult.Failure(result.error)
+            }
+        }
+    }
+
+    override suspend fun updateUserExpenseCategory(uid: String, newExpenseCategory: ExpenseCategoryListEntity): AppResult<Unit> {
+        var response: Task<Void>? = null
+        var exception: Exception? = null
+
+        try {
+            val docRef = firebaseDb.collection(ConstantUtils.USERS).document(uid)
+                .collection(ConstantUtils.USER_CATEGORIES).document(ConstantUtils.EXPENSE_CATEGORY_LIST)
+
+            response = docRef.update(newExpenseCategory.toMutableMap())
+            response.await()
+        } catch (e: Exception) {
+            exception = e
+        }
+
+        return when (val result = ErrorMapper.checkAndMapFirebaseApiError(response, exception)) {
+            is FireBaseResult.Success -> {
+                AppResult.Success(Unit)
+            }
+            is FireBaseResult.Failure -> {
+                AppResult.Failure(result.error)
+            }
+        }
+    }
 }
 
 private fun categoryIncomeResultEntityMapper(category: DocumentSnapshot?): IncomeCategoryListEntity? {

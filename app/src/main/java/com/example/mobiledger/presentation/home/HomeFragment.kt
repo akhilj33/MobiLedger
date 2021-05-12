@@ -81,6 +81,9 @@ class HomeFragment :
             monthNavigationBar.rightArrow.setOnClickListener {handleRightClick()}
 
         }
+        viewBinding.ivProfileIcon.setOnClickListener {
+            navigator?.navigateToProfileScreen()
+        }
     }
 
     private fun handleRightClick() {

@@ -8,6 +8,34 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/horizontalGuideline_86"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.86" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/horizontalGuideline_10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent=".10" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/horizontalGuideline_30"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent=".30" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/horizontalGuideline_34"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent=".34" />
+
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/profileToolbar"
             android:layout_width="match_parent"
@@ -44,75 +72,166 @@
         </com.google.android.material.appbar.MaterialToolbar>
 
         <androidx.cardview.widget.CardView
+            android:id="@+id/profileCard"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/cdp_10"
+            android:layout_height="0dp"
+            android:layout_marginStart="@dimen/cdp_10"
+            android:layout_marginEnd="@dimen/cdp_10"
+            android:layout_marginBottom="@dimen/cdp_20"
             android:padding="@dimen/cdp_24"
+            app:layout_constraintBottom_toTopOf="@id/horizontalGuideline_30"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/profileToolbar">
+            app:layout_constraintTop_toBottomOf="@id/horizontalGuideline_10">
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:paddingEnd="@dimen/cdp_10"
+                android:paddingStart="@dimen/cdp_10">
 
                 <ImageView
                     android:id="@+id/imgUser"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
-                    android:src="@drawable/user_icon_grey"
                     android:layout_alignParentStart="true"
-                    android:contentDescription="@string/user_image" />
+                    android:layout_centerVertical="true"
+                    android:background="@drawable/circle"
+                    android:contentDescription="@string/user_image"
+                    app:srcCompat="@drawable/profile_colorful" />
 
                 <ImageView
                     android:id="@+id/imgEdit"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:src="@drawable/edit_icon"
-                    app:tint="@color/colorGray"
-                    android:layout_alignParentEnd="true"
                     android:layout_alignParentTop="true"
-                    android:layout_marginEnd="@dimen/cdp_10"
+                    android:layout_alignParentEnd="true"
                     android:layout_marginTop="@dimen/cdp_10"
-                    android:contentDescription="@string/edit" />
+                    android:layout_marginEnd="@dimen/cdp_10"
+                    android:contentDescription="@string/edit"
+                    android:src="@drawable/edit_icon"
+                    app:tint="@color/colorGray" />
 
 
                 <TextView
                     android:id="@+id/displayName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_alignTop="@id/imgUser"
                     android:layout_marginStart="@dimen/cdp_16"
-                    android:text="@string/display_name"
                     android:layout_marginTop="@dimen/cdp_10"
-                    android:textColor="@color/colorPrimaryDark"
                     android:layout_toEndOf="@id/imgUser"
+                    android:text="@string/display_name"
+                    android:textColor="@color/colorPrimaryDark"
                     android:textSize="@dimen/csp_20" />
 
                 <TextView
                     android:id="@+id/emailTv"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_below="@id/displayName"
                     android:layout_marginStart="@dimen/cdp_16"
+                    android:layout_toEndOf="@id/imgUser"
                     android:text="@string/email"
                     android:textColor="@color/colorPrimaryDark"
-                    android:layout_below="@id/displayName"
-                    android:layout_toEndOf="@id/imgUser"
                     android:textSize="@dimen/csp_16" />
 
                 <TextView
                     android:id="@+id/contactNumTv"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_below="@id/emailTv"
                     android:layout_marginStart="@dimen/cdp_16"
+                    android:layout_toEndOf="@id/imgUser"
                     android:text="@string/contact_number"
                     android:textColor="@color/colorPrimaryDark"
-                    android:layout_below="@id/emailTv"
-                    android:layout_toEndOf="@id/imgUser"
                     android:textSize="@dimen/csp_16" />
 
             </RelativeLayout>
 
         </androidx.cardview.widget.CardView>
+
+        <RelativeLayout
+            android:id="@+id/menuList"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/horizontalGuideline_34">
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/textCategory"
+                style="@style/GelionSemiBoldBlue16"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="@dimen/cdp_16"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="@string/category"
+                android:textSize="@dimen/csp_18" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/textSetting"
+                style="@style/GelionSemiBoldBlue16"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/textCategory"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="@dimen/cdp_16"
+                android:layout_marginTop="@dimen/cdp_16"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="@string/settings"
+                android:textSize="@dimen/csp_18" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/textContactUs"
+                style="@style/GelionSemiBoldBlue16"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/textSetting"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="@dimen/cdp_16"
+                android:layout_marginTop="@dimen/cdp_16"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="@string/contact_us"
+                android:textSize="@dimen/csp_18" />
+
+        </RelativeLayout>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/logoutCard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/cdp_10"
+            android:layout_marginBottom="@dimen/cdp_24"
+            android:padding="@dimen/cdp_24"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/horizontalGuideline_86">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="@dimen/cdp_10">
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/textLogout"
+                    style="@style/GelionSemiBoldBlue16"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginStart="@dimen/cdp_16"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:text="@string/logout"
+                    android:textSize="@dimen/csp_18" />
+
+            </RelativeLayout>
+        </androidx.cardview.widget.CardView>
+
 
         <ProgressBar
             android:id="@+id/profileProgressBar"

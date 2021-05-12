@@ -1,5 +1,6 @@
 package com.example.mobiledger.presentation.main
 
+import CategoryFragment
 import androidx.annotation.IdRes
 import androidx.fragment.app.FragmentManager
 import com.example.mobiledger.common.utils.FragmentTagUtil
@@ -92,6 +93,14 @@ class MainActivityNavigator constructor(
         FragmentTransactionHelper.replaceFragment(
             fragmentManager,
             EditProfileFragment.newInstance(),
+            containerId, addToBackStack = true
+        )
+    }
+
+    override fun navigateToCategoryFragmentScreen() {
+        FragmentTransactionHelper.replaceFragment(
+            fragmentManager,
+            CategoryFragment.newInstance(),
             containerId, addToBackStack = true
         )
     }

@@ -25,7 +25,7 @@ interface CategoryDao {
     @Query("UPDATE category SET incomeCategoryList=:list")
     suspend fun updateIncomeCategoryList(list: IncomeCategoryListEntity)
 
-    @Query("UPDATE category SET incomeCategoryList=:list")
+    @Query("UPDATE category SET expenseCategoryList=:list")
     suspend fun updateExpenseCategoryList(list: ExpenseCategoryListEntity)
 
 }

@@ -29,8 +29,7 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding, ProfileNavigator>(R
     private fun setObserver() {
         viewModel.userFromFirestoreResult.observe(viewLifecycleOwner, {
             updateProfileUI(it)
-        }
-        )
+        })
 
         viewModel.loadingState.observe(viewLifecycleOwner, Observer {
             if (it) {
@@ -43,7 +42,7 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding, ProfileNavigator>(R
         viewModel.errorLiveData.observe(viewLifecycleOwner, OneTimeObserver {
             when (it.viewErrorType) {
                 ProfileViewModel.ViewErrorType.NON_BLOCKING -> {
-                    showSnackBarErrorView(it.message ?: getString(it.resID), true)
+                    showSnackBarErrorView(it.message ?: getString(it.resID), false)
                 }
             }
         })
@@ -56,6 +55,10 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding, ProfileNavigator>(R
 
         viewBinding.imgEdit.setOnClickListener {
             navigator?.navigateToEditProfileScreen()
+        }
+
+        viewBinding.textCategory.setOnClickListener {
+            navigator?.navigateToCategoryFragmentScreen()
         }
     }
 
