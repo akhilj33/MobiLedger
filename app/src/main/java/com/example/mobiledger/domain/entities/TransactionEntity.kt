@@ -12,4 +12,5 @@ data class TransactionEntity(
     val transactionTime: Timestamp
 ) {
     val id = transactionTime.seconds.toString()
+    constructor(): this(" ",0L, "", null, TransactionType.Income, Timestamp.now())
 }
