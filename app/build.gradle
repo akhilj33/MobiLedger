@@ -90,6 +90,8 @@ dependencies {
     implementation "com.jakewharton.timber:timber:$timber"
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
     implementation "com.airbnb.android:lottie:$lottieVersion"
+    implementation "com.chauthai.swipereveallayout:swipe-reveal-layout:$swipeLayoutVersion"
+
 
 
 }

@@ -20,7 +20,7 @@ class HomeFragment :
 
     private val viewModel: HomeViewModel by viewModels { viewModelFactory }
 
-    private val homeAdapter: HomeAdapter by lazy { HomeAdapter() }
+    private val homeAdapter: HomeAdapter by lazy { HomeAdapter(onDeleteItemClick) }
 
     override fun getSnackBarErrorView(): SnackViewErrorBinding = viewBinding.includeErrorView
 
@@ -52,6 +52,10 @@ class HomeFragment :
 
         viewModel.monthNameLiveData.observe(viewLifecycleOwner, {
             viewBinding.monthNavigationBar.tvMonth.text = it
+        })
+
+        viewModel.deleteTransactionLiveData.observe(viewLifecycleOwner, OneTimeObserver{
+            homeAdapter.removeAt(it)
         })
 
         viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
@@ -116,6 +120,10 @@ class HomeFragment :
             layoutManager = linearLayoutManager
             adapter = homeAdapter
         }
+    }
+
+    private val onDeleteItemClick = fun(transactionId:String, position: Int) {
+        viewModel.deleteTransaction(transactionId, position)
     }
 
     companion object {

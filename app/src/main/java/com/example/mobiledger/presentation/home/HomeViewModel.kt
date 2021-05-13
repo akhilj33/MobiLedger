@@ -4,9 +4,9 @@ import androidx.annotation.StringRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.example.mobiledger.common.extention.toAmount
 import com.example.mobiledger.R
 import com.example.mobiledger.common.base.BaseViewModel
+import com.example.mobiledger.common.extention.toAmount
 import com.example.mobiledger.common.utils.DateUtils.getCurrentDate
 import com.example.mobiledger.common.utils.DateUtils.getDateInMMMMyyyyFormat
 import com.example.mobiledger.common.utils.DateUtils.getDateInMMyyyyFormat
@@ -21,6 +21,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.text.FieldPosition
 import java.util.*
 
 class HomeViewModel(
@@ -42,9 +43,12 @@ class HomeViewModel(
     private val _errorLiveData: MutableLiveData<Event<ViewError>> = MutableLiveData()
     val errorLiveData: LiveData<Event<ViewError>> = _errorLiveData
 
+    private val _deleteTransactionLiveData: MutableLiveData<Event<Int>> = MutableLiveData()
+    val deleteTransactionLiveData: LiveData<Event<Int>> = _deleteTransactionLiveData
+
     private var monthCount = 0
 
-    fun getHomeData(){
+    fun getHomeData() {
         _isLoading.value = true
         getUserName()
         getTransactionData()
@@ -126,8 +130,11 @@ class HomeViewModel(
         }
     }
 
-    private suspend fun renderHomeViewList(transactionList: List<TransactionEntity>, monthlyResult: MonthlyTransactionSummaryEntity): MutableList<HomeViewItem> {
-       return withContext(Dispatchers.IO) {
+    private suspend fun renderHomeViewList(
+        transactionList: List<TransactionEntity>,
+        monthlyResult: MonthlyTransactionSummaryEntity
+    ): MutableList<HomeViewItem> {
+        return withContext(Dispatchers.IO) {
             val homeViewItemList = mutableListOf<HomeViewItem>()
             homeViewItemList.add(HomeViewItem.HeaderDataRow(R.string.overview_report))
             homeViewItemList.add(
@@ -139,35 +146,63 @@ class HomeViewModel(
                 )
             )
 
-            if (transactionList.isNotEmpty()){
+            if (transactionList.isNotEmpty()) {
                 homeViewItemList.add(HomeViewItem.HeaderDataRow(R.string.latest_transaction))
                 var newList = transactionList
-                if(transactionList.size>10)
-                    newList = transactionList.subList(0,11)
+                if (transactionList.size > 10)
+                    newList = transactionList.subList(0, 11)
                 newList.forEach {
                     homeViewItemList.add(HomeViewItem.TransactionDataRow(mapToTransactionData(it)))
                 }
+            } else {
+                homeViewItemList.add(HomeViewItem.EmptyDataRow)
             }
 
-           else{
-               homeViewItemList.add(HomeViewItem.EmptyDataRow)
-            }
-
-           homeViewItemList
+            homeViewItemList
         }
     }
 
     private fun mapToTransactionData(transactionEntity: TransactionEntity): TransactionData {
         transactionEntity.apply {
-            return TransactionData(name, amount.toString().toAmount(), transactionType, category, getCategoryIcon(category, transactionType))
+            return TransactionData(
+                id = id,
+                name = name,
+                amount = amount.toString().toAmount(),
+                transactionType = transactionType,
+                category = category,
+                categoryIcon = getCategoryIcon(category, transactionType)
+            )
         }
     }
 
-    private fun updateMonthLiveData(){
-       _monthNameLiveData.value =  getDateInMMMMyyyyFormat(getCurrentMonth())
+    fun deleteTransaction(transactionId: String, position: Int){
+        _isLoading.value = true
+        viewModelScope.launch {
+            when(val result = transactionUseCase.deleteTransaction(transactionId, getDateInMMyyyyFormat(getCurrentMonth()))){
+                is AppResult.Success ->{
+                    _deleteTransactionLiveData.value = Event(position)
+                    _isLoading.value = false
+                }
+                is AppResult.Failure -> {
+                    if (needToHandleAppError(result.error)) {
+                        _errorLiveData.value = Event(
+                            ViewError(
+                                viewErrorType = ViewErrorType.NON_BLOCKING,
+                                message = "Cannot Delete this Item. Please Try Again"
+                            )
+                        )
+                    }
+                    _isLoading.value = false
+                }
+            }
+        }
     }
 
-    private fun getCurrentMonth(): Calendar = getCurrentDate().apply{ add(Calendar.MONTH, monthCount)}
+    private fun updateMonthLiveData() {
+        _monthNameLiveData.value = getDateInMMMMyyyyFormat(getCurrentMonth())
+    }
+
+    private fun getCurrentMonth(): Calendar = getCurrentDate().apply { add(Calendar.MONTH, monthCount) }
 
     fun isCurrentMonth(): Boolean = monthCount == 0
 

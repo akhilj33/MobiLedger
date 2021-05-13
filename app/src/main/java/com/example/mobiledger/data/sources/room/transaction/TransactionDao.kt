@@ -19,8 +19,8 @@ interface TransactionDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun saveTransactionList(transactionList: List<TransactionRoomItem>)
 
-    @Query("DELETE FROM transaction_table")
-    suspend fun deleteAllTransactions()
+    @Query("DELETE FROM transaction_table WHERE id = :transactionId")
+    suspend fun deleteTransaction(transactionId: String)
 }
 
 @Dao

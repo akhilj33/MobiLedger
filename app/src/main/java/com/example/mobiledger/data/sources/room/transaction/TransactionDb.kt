@@ -14,6 +14,7 @@ interface TransactionDb {
     suspend fun saveTransactionList(monthYear: String, transactionEntityList: List<TransactionEntity>)
     suspend fun hasTransactions(): Boolean
     suspend fun fetchTransactions(monthYear: String): AppResult<List<TransactionEntity>>
+    suspend fun deleteTransaction(transactionId: String)
 }
 
 class TransactionDbImpl(private val transactionDao: TransactionDao, private val monthlySummaryDao: MonthlySummaryDao) : TransactionDb {
@@ -58,6 +59,10 @@ class TransactionDbImpl(private val transactionDao: TransactionDao, private val 
         }
         return if (transactionsList != null) AppResult.Success(transactionsList)
         else AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
+    }
+
+    override suspend fun deleteTransaction(transactionId: String) {
+        transactionDao.deleteTransaction(transactionId)
     }
 }
 

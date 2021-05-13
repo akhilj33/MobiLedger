@@ -29,7 +29,7 @@ object DefaultCategoryUtils {
     private const val EXP_TRAVEL = "Travel"
     private const val EXP_BOOKS = "Books"
     private const val EXP_OFFICE = "Office"
-    private const val EXP_OTHERS = "Others"
+    const val EXP_OTHERS = "Others"
 
     // Income Tags
     private const val INC_SALARY = "Salary"
@@ -39,7 +39,7 @@ object DefaultCategoryUtils {
     private const val INC_REFUND = "Refund"
     private const val INC_COUPONS = "Coupons"
     private const val INC_INVESTMENT = "Investment"
-    private const val INC_OTHERS = "Others"
+    const val INC_OTHERS = "Others"
 
     fun getDefaultExpenseList() = listOf(EXP_FOOD, EXP_BILLS, EXP_TRANSPORTATION, EXP_HOME, EXP_CAR, EXP_ENTERTAINMENT, EXP_SHOPPING,
         EXP_INSURANCE, EXP_TAX, EXP_TELEPHONE, EXP_HEALTH, EXP_SPORT, EXP_PET, EXP_BABY, EXP_BEAUTY, EXP_ELECTRONICS, EXP_ALCOHOL,

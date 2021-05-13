@@ -27,6 +27,7 @@ interface TransactionApi {
     suspend fun updateMonthlySummary(uid: String, monthYear: String, monthlySummaryEntity: MonthlyTransactionSummaryEntity): AppResult<Unit>
     suspend fun getTransactionListByMonth(uid: String, monthYear: String): AppResult<List<TransactionEntity>>
     suspend fun addUserTransactionToFirebase(uid: String, monthYear: String, transactionEntity: TransactionEntity): AppResult<Unit>
+    suspend fun deleteTransaction(uid: String, transactionId: String, monthYear: String): AppResult<Unit>
 }
 
 class TransactionApiImpl(private val firebaseDb: FirebaseFirestore, private val authSource: AuthSource) : TransactionApi {
@@ -187,6 +188,39 @@ class TransactionApiImpl(private val firebaseDb: FirebaseFirestore, private val 
                 .collection(ConstantUtils.TRANSACTION)
                 .document(transactionEntity.id)
                 .set(transactionEntity)
+
+            response.await()
+        } catch (e: Exception) {
+            exception = e
+        }
+
+        return when (val result = ErrorMapper.checkAndMapFirebaseApiError(response, exception)) {
+            is FireBaseResult.Success -> {
+                AppResult.Success(Unit)
+            }
+            is FireBaseResult.Failure -> {
+                AppResult.Failure(result.error)
+            }
+        }
+    }
+
+    override suspend fun deleteTransaction(uid: String, transactionId: String, monthYear: String): AppResult<Unit> {
+        var response: Task<Void>? = null
+        var exception: Exception? = null
+
+        try {
+            if (!authSource.isUserAuthorized()) throw FirebaseAuthException(
+                ErrorCodes.FIREBASE_UNAUTHORIZED,
+                ConstantUtils.UNAUTHORIZED_ERROR_MSG
+            )
+
+            response = firebaseDb.collection(ConstantUtils.USERS)
+                .document(uid)
+                .collection(MONTH)
+                .document(monthYear)
+                .collection(ConstantUtils.TRANSACTION)
+                .document(transactionId)
+                .delete()
 
             response.await()
         } catch (e: Exception) {
