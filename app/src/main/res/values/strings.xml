@@ -74,6 +74,12 @@
 
     <!-- Add Category Dialog Fragment -->
     <string name="add_a_new_category">Add a new category</string>
+    <string name="maximum_budget">Maximum budget</string>
+    <string name="total_budget">Total Budget</string>
+    <string name="set_your_monthly_budget">Set your monthly budget</string>
+    <string name="percent_of_budget_spent">Percent of budget spent : </string>
+
+    <!-- Budget Fragment -->
 
 
 </resources>
