@@ -11,6 +11,7 @@ import com.example.mobiledger.common.base.BaseNavigator
 import com.example.mobiledger.common.utils.showAddCategoryDialogFragment
 import com.example.mobiledger.databinding.FragmentExpenseCategoryBinding
 import com.example.mobiledger.databinding.SnackViewErrorBinding
+import com.example.mobiledger.domain.enums.TransactionType
 import com.example.mobiledger.presentation.OneTimeObserver
 import com.example.mobiledger.presentation.categoryFragment.adapter.CategoryAdapter
 import com.example.mobiledger.presentation.recordtransaction.AddTransactionDialogFragmentViewModel
@@ -24,7 +25,7 @@ class ExpenseCategoryFragment : BaseFragment<FragmentExpenseCategoryBinding, Bas
     private var list: List<String> = emptyList()
 
     private val expenseCategoryAdapter: CategoryAdapter by lazy {
-        CategoryAdapter(onCategoryDeleteClick)
+        CategoryAdapter(TransactionType.Income, onCategoryDeleteClick)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

@@ -93,4 +93,5 @@ dependencies {
     implementation "com.chauthai.swipereveallayout:swipe-reveal-layout:$swipeLayoutVersion"
 
 
+
 }

@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.chauthai.swipereveallayout.ViewBinderHelper
 import com.example.mobiledger.R
 import com.example.mobiledger.databinding.HomeEmptyItemBinding
 import com.example.mobiledger.databinding.HomeHeaderItemBinding
@@ -12,9 +13,11 @@ import com.example.mobiledger.databinding.HomeMonthlyDataItemBinding
 import com.example.mobiledger.databinding.HomeTransactionItemBinding
 import com.example.mobiledger.domain.enums.TransactionType
 
-class HomeAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class HomeAdapter(val onDeleteItemClick: (String, Int) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private lateinit var context: Context
+
+    private val viewBinderHelper = ViewBinderHelper()
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)
@@ -76,6 +79,10 @@ class HomeAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     inner class TransactionDataViewHolder(private val viewBinding: HomeTransactionItemBinding) : RecyclerView.ViewHolder(viewBinding.root) {
         fun bind(item: TransactionData) {
             viewBinding.apply {
+                deleteSwipeAction.setOnClickListener { onDeleteItemClick(item.id, adapterPosition)}
+                viewBinderHelper.setOpenOnlyOne(true)
+                viewBinderHelper.bind(swipelayout, item.id)
+                viewBinderHelper.closeLayout(item.id)
                 tvTransactionName.text = item.name
                 tvAmount.text = item.amount
                 tvCategory.text = item.category
@@ -109,4 +116,12 @@ class HomeAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         if (items.add(homeItem)) notifyItemInserted(newIndex)
     }
 
+    fun removeAt(position: Int) {
+        items.removeAt(position)
+        notifyItemRemoved(position)
+    }
+
+    fun closeItemLayout(itemId: String) {
+        viewBinderHelper.closeLayout(itemId)
+    }
 }

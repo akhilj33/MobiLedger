@@ -2,12 +2,17 @@ package com.example.mobiledger.presentation.categoryFragment.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.example.mobiledger.common.extention.gone
+import com.example.mobiledger.common.extention.visible
+import com.example.mobiledger.common.utils.DefaultCategoryUtils
 import com.example.mobiledger.databinding.ItemCategoryBinding
+import com.example.mobiledger.domain.enums.TransactionType
 
 class CategoryAdapter(
+    val transactionType: TransactionType,
     val onCategoryDeleteClicked: (String, List<String>) -> Unit,
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -33,23 +38,22 @@ class CategoryAdapter(
     override fun getItemCount(): Int = categoryList.size
 
     inner class ViewHolder(private val viewBinding: ItemCategoryBinding) : RecyclerView.ViewHolder(viewBinding.root) {
-        fun bind(item: String) {
-            if (item == "Others")
-                viewBinding.deleteCategory.visibility = View.GONE
-            else
-                viewBinding.deleteCategory.visibility = View.VISIBLE
-            viewBinding.tvCategoryName.text = item
-            viewBinding.deleteCategory.setOnClickListener {
-                onCategoryDeleteClicked(item, categoryList)
-            }
-        }
-    }
+        fun bind(category: String) {
 
-    fun addItemList(list: List<String>) {
-        if (list.isNotEmpty()) {
-            val newIndex = categoryList.size
-            val newItemsCount = list.size
-            if (categoryList.addAll(list)) notifyItemRangeInserted(newIndex, newItemsCount)
+            if (category == DefaultCategoryUtils.INC_OTHERS)
+                viewBinding.deleteCategory.gone()
+            else
+                viewBinding.deleteCategory.visible()
+            viewBinding.tvCategoryName.text = category
+            if (transactionType == TransactionType.Income)
+                viewBinding.ivCategoryIcon.background =
+                    ContextCompat.getDrawable(context, DefaultCategoryUtils.getCategoryIcon(category, TransactionType.Income))
+            else if (transactionType == TransactionType.Expense)
+                viewBinding.ivCategoryIcon.background =
+                    ContextCompat.getDrawable(context, DefaultCategoryUtils.getCategoryIcon(category, TransactionType.Expense))
+            viewBinding.deleteCategory.setOnClickListener {
+                onCategoryDeleteClicked(category, categoryList)
+            }
         }
     }
 

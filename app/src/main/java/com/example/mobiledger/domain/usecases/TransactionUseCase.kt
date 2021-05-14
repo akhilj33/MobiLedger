@@ -11,6 +11,7 @@ interface TransactionUseCase {
     suspend fun updateMonthlySummary(monthYear: String, monthlySummaryEntity: MonthlyTransactionSummaryEntity): AppResult<Unit>
     suspend fun addUserTransactionToFirebase(monthYear: String, transactionEntity: TransactionEntity): AppResult<Unit>
     suspend fun getTransactionListByMonth(monthYear: String): AppResult<List<TransactionEntity>>
+    suspend fun deleteTransaction(transactionId: String, monthYear: String): AppResult<Unit>
 }
 
 class TransactionUseCaseImpl(private val transactionRepository: TransactionRepository) : TransactionUseCase {
@@ -34,5 +35,9 @@ class TransactionUseCaseImpl(private val transactionRepository: TransactionRepos
 
     override suspend fun getTransactionListByMonth(monthYear: String): AppResult<List<TransactionEntity>> {
         return transactionRepository.getTransactionListByMonth(monthYear)
+    }
+
+    override suspend fun deleteTransaction(transactionId: String, monthYear: String): AppResult<Unit> {
+        return transactionRepository.deleteTransaction(transactionId, monthYear)
     }
 }
