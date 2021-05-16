@@ -12,10 +12,13 @@ import com.example.mobiledger.domain.enums.TransactionType
 import com.example.mobiledger.domain.usecases.CategoryUseCase
 import com.example.mobiledger.domain.usecases.TransactionUseCase
 import com.example.mobiledger.presentation.Event
+import com.example.mobiledger.presentation.budget.MonthlyBudgetData
+import com.example.mobiledger.presentation.budget.isEmpty
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 
 class AddTransactionDialogFragmentViewModel(
     private val transactionUseCase: TransactionUseCase,
@@ -88,6 +91,7 @@ class AddTransactionDialogFragmentViewModel(
                 is AppResult.Success -> {
                     val transactionResult = addTransactionJob.await()
                     handleAddTransactionResult(transactionResult, result.data, transactionEntity, monthYear)
+                    addCategoryTransaction(monthYear, transactionEntity)
                 }
 
                 is AppResult.Failure -> {
@@ -178,6 +182,66 @@ class AddTransactionDialogFragmentViewModel(
             MonthlyTransactionSummaryEntity(noOfTransaction, noOfIncome, noOfExpense, totalBalance, totalIncome, totalExpense)
         }
     }
+
+
+    private fun addCategoryTransaction(monthYear: String, transactionEntity: TransactionEntity) {
+        viewModelScope.launch {
+            _loadingState.value = true
+            when (val result = transactionUseCase.addCategoryTransaction(monthYear, transactionEntity)) {
+                is AppResult.Success -> {
+                    Timber.i("Transaction added to categoryTransaction in firestore")
+                    handleAddCategoryResult(transactionEntity, monthYear)
+                }
+
+                is AppResult.Failure -> {
+                    _errorLiveData.value = Event(
+                        ViewError(
+                            viewErrorType = ViewErrorType.NON_BLOCKING,
+                            message = result.error.message
+                        )
+                    )
+                    _loadingState.value = false
+                }
+            }
+        }
+    }
+
+    private suspend fun handleAddCategoryResult(
+        transactionEntity: TransactionEntity,
+        monthYear: String
+    ) {
+        viewModelScope.launch {
+            when (val result = transactionUseCase.getMonthlyCategorySummary(monthYear, transactionEntity.category)) {
+                is AppResult.Success -> {
+                    if (result.data == null || result.data.isEmpty()) {
+                        val newMonthlyBudgetSummary = getUpdatedMonthlyBudgetSummary(MonthlyBudgetData(), transactionEntity)
+                        transactionUseCase.updateMonthlyCategoryBudgetData(monthYear, transactionEntity.category, newMonthlyBudgetSummary)
+                    } else {
+                        val newMonthlyBudgetSummary = getUpdatedMonthlyBudgetSummary(result.data, transactionEntity)
+                        transactionUseCase.updateMonthlyCategoryBudgetData(monthYear, transactionEntity.category, newMonthlyBudgetSummary)
+                    }
+                }
+
+                is AppResult.Failure -> {
+                    _errorLiveData.value = Event(
+                        ViewError(
+                            viewErrorType = ViewErrorType.NON_BLOCKING,
+                            message = result.error.message
+                        )
+                    )
+                }
+            }
+            _loadingState.value = false
+        }
+    }
+
+    private fun getUpdatedMonthlyBudgetSummary(
+        monthlyBudgetData: MonthlyBudgetData,
+        transactionEntity: TransactionEntity
+    ): MonthlyBudgetData {
+        return MonthlyBudgetData(monthlyBudgetData.maxBudget, monthlyBudgetData.totalBudget + transactionEntity.amount)
+    }
+
 
     enum class ViewErrorType { NON_BLOCKING }
 
