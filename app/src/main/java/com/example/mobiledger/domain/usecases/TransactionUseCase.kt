@@ -20,6 +20,8 @@ interface TransactionUseCase {
         category: String,
         monthlyCategorySummary: MonthlyCategorySummary
     ): AppResult<Unit>
+
+    suspend fun updateExpenseInBudget(monthYear: String, monthlyCategorySummary: MonthlyCategorySummary): AppResult<Unit>
 }
 
 class TransactionUseCaseImpl(private val transactionRepository: TransactionRepository) : TransactionUseCase {
@@ -64,4 +66,9 @@ class TransactionUseCaseImpl(private val transactionRepository: TransactionRepos
     ): AppResult<Unit> {
         return transactionRepository.updateMonthlyCategoryBudget(monthYear, category, monthlyCategorySummary)
     }
+
+    override suspend fun updateExpenseInBudget(
+        monthYear: String,
+        monthlyCategorySummary: MonthlyCategorySummary
+    ): AppResult<Unit> = transactionRepository.updateExpenseInBudget(monthYear, monthlyCategorySummary)
 }

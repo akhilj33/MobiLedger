@@ -95,7 +95,8 @@ class AddTransactionDialogFragment :
             viewLifecycleOwner,
             OneTimeObserver {
                 activity?.showToast(getString(R.string.transaction_added))
-                dialog?.dismiss()
+//                dialog?.dismiss()
+                //todo : Dismiss dialog when all transaction are added
             }
         )
 

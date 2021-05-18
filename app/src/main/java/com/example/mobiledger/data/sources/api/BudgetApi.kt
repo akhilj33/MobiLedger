@@ -8,7 +8,7 @@ import com.example.mobiledger.domain.AppError
 import com.example.mobiledger.domain.AppResult
 import com.example.mobiledger.domain.FireBaseResult
 import com.example.mobiledger.presentation.budget.MonthlyBudgetData
-import com.example.mobiledger.presentation.budget.MonthlyCategorySummary
+import com.example.mobiledger.presentation.budget.MonthlyCategoryBudget
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuthException
 import com.google.firebase.firestore.DocumentSnapshot
@@ -17,14 +17,14 @@ import com.google.firebase.firestore.QuerySnapshot
 import kotlinx.coroutines.tasks.await
 
 interface BudgetApi {
-    suspend fun getCategoryBudgetListByMonth(uid: String, monthYear: String): AppResult<List<MonthlyCategorySummary>>
+    suspend fun getCategoryBudgetListByMonth(uid: String, monthYear: String): AppResult<List<MonthlyCategoryBudget>>
     suspend fun getMonthlyBudgetOverView(uid: String, monthYear: String): AppResult<MonthlyBudgetData?>
     suspend fun setMonthlyBudget(uid: String, monthYear: String, monthlyBudgetData: MonthlyBudgetData): AppResult<Unit>
 }
 
 class BudgetApiImpl(private val firebaseDb: FirebaseFirestore, private val authSource: AuthSource) : BudgetApi {
 
-    override suspend fun getCategoryBudgetListByMonth(uid: String, monthYear: String): AppResult<List<MonthlyCategorySummary>> {
+    override suspend fun getCategoryBudgetListByMonth(uid: String, monthYear: String): AppResult<List<MonthlyCategoryBudget>> {
 
         var response: Task<QuerySnapshot>? = null
         var exception: Exception? = null
@@ -37,7 +37,9 @@ class BudgetApiImpl(private val firebaseDb: FirebaseFirestore, private val authS
                 .document(uid)
                 .collection(ConstantUtils.MONTH)
                 .document(monthYear)
-                .collection(ConstantUtils.CATEGORY_TRANSACTION)
+                .collection(ConstantUtils.BUDGET)
+                .document(ConstantUtils.BUDGET_DETAILS)
+                .collection(ConstantUtils.CATEGORY_BUDGET)
                 .get()
 
             response.await()
@@ -132,8 +134,8 @@ class BudgetApiImpl(private val firebaseDb: FirebaseFirestore, private val authS
 }
 
 
-private fun budgetCategoryListMapper(result: QuerySnapshot): List<MonthlyCategorySummary> {
-    return result.map { it.toObject(MonthlyCategorySummary::class.java) }
+private fun budgetCategoryListMapper(result: QuerySnapshot): List<MonthlyCategoryBudget> {
+    return result.map { it.toObject(MonthlyCategoryBudget::class.java) }
 }
 
 private fun budgetOverviewEntityMapper(result: DocumentSnapshot?): MonthlyBudgetData? {

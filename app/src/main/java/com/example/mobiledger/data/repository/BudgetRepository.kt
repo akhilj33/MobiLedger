@@ -7,7 +7,7 @@ import com.example.mobiledger.data.sources.room.categories.CategoriesDb
 import com.example.mobiledger.domain.AppError
 import com.example.mobiledger.domain.AppResult
 import com.example.mobiledger.presentation.budget.MonthlyBudgetData
-import com.example.mobiledger.presentation.budget.MonthlyCategorySummary
+import com.example.mobiledger.presentation.budget.MonthlyCategoryBudget
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -15,7 +15,7 @@ import kotlinx.coroutines.withContext
 interface BudgetRepository {
 
     suspend fun getMonthlyBudgetOverView(monthYear: String): AppResult<MonthlyBudgetData?>
-    suspend fun getCategoryBudgetListByMonth(monthYear: String): AppResult<List<MonthlyCategorySummary>>
+    suspend fun getCategoryBudgetListByMonth(monthYear: String): AppResult<List<MonthlyCategoryBudget>>
     suspend fun setMonthlyBudget(monthYear: String, monthlyBudgetData: MonthlyBudgetData): AppResult<Unit>
 }
 
@@ -36,7 +36,7 @@ class BudgetRepositoryImpl(
         }
     }
 
-    override suspend fun getCategoryBudgetListByMonth(monthYear: String): AppResult<List<MonthlyCategorySummary>> {
+    override suspend fun getCategoryBudgetListByMonth(monthYear: String): AppResult<List<MonthlyCategoryBudget>> {
         return withContext(dispatcher) {
             val uId = cacheSource.getUID()
             if (uId != null) {

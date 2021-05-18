@@ -3,6 +3,7 @@ package com.example.mobiledger.presentation.budget
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.chauthai.swipereveallayout.ViewBinderHelper
 import com.example.mobiledger.databinding.BudgetCategoryItemBinding
@@ -94,7 +95,10 @@ class BudgetAdapter(
     inner class BudgetDataViewHolder(private val viewBinding: BudgetCategoryItemBinding) : RecyclerView.ViewHolder(viewBinding.root) {
         fun bind(item: BudgetCategoryData) {
             viewBinding.apply {
-
+                tvBudgetAmount.text = item.totalCategoryBudget
+                tvCategoryName.text = item.categoryName
+                tvAmount.text = item.totalCategoryExpense
+                ivCategoryIcon.background = ContextCompat.getDrawable(context, item.categoryIcon)
             }
         }
     }

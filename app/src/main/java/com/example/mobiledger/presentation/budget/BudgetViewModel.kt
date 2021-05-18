@@ -71,7 +71,7 @@ class BudgetViewModel(
 
     private suspend fun handleTransactionResult(
         monthlyBudgetData: MonthlyBudgetData?,
-        monthlyBudgetCategoryList: AppResult<List<MonthlyCategorySummary>>
+        monthlyBudgetCategoryList: AppResult<List<MonthlyCategoryBudget>>
     ) {
         viewModelScope.launch {
             when (monthlyBudgetCategoryList) {
@@ -95,7 +95,7 @@ class BudgetViewModel(
     }
 
     private suspend fun renderHomeViewList(
-        budgetCategoryList: List<MonthlyCategorySummary>,
+        budgetCategoryList: List<MonthlyCategoryBudget>,
         monthlyResult: MonthlyBudgetData?
     ): MutableList<BudgetViewItem> {
 
@@ -140,12 +140,12 @@ class BudgetViewModel(
 
 }
 
-private fun mapToCategoryBudgetData(budgetCategoryData: MonthlyCategorySummary): BudgetCategoryData {
+private fun mapToCategoryBudgetData(budgetCategoryData: MonthlyCategoryBudget): BudgetCategoryData {
     budgetCategoryData.apply {
         return BudgetCategoryData(
             categoryName = categoryName,
-            totalCategoryBudget = totalCategoryBudget.toString(),
-            totalCategoryExpense = totalCategoryExpense.toString(),
+            totalCategoryBudget = categoryBudget.toString(),
+            totalCategoryExpense = categoryExpense.toString(),
             categoryIcon = DefaultCategoryUtils.getCategoryIcon(categoryName, TransactionType.Expense)
         )
     }

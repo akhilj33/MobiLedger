@@ -26,7 +26,9 @@ fun MonthlyBudgetData.toMutableMap(): MutableMap<String, Any> = mutableMapOf(
     TOTAL_BUDGET to totalBudget
 )
 
-data class MonthlyCategorySummary(val categoryName: String = "", val totalCategoryBudget: Long = 0, val totalCategoryExpense: Long = 0)
+data class MonthlyCategorySummary(val categoryName: String = "", val totalCategoryExpense: Long = 0)
+
+data class MonthlyCategoryBudget(val categoryName: String = "", val categoryBudget: Long = 0, val categoryExpense: Long = 0)
 
 fun MonthlyCategorySummary.isEmpty(): Boolean = this == MonthlyCategorySummary()
 

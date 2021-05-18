@@ -1,6 +1,5 @@
 package com.example.mobiledger.presentation.recordtransaction
 
-import android.util.Log
 import androidx.annotation.StringRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -212,15 +211,16 @@ class AddTransactionDialogFragmentViewModel(
         monthYear: String
     ) {
         viewModelScope.launch {
-            Log.i("Anant", "Started")
             when (val result = transactionUseCase.getMonthlyCategorySummary(monthYear, transactionEntity.category)) {
                 is AppResult.Success -> {
                     if (result.data == null || result.data.isEmpty()) {
                         val newMonthlyBudgetSummary = getUpdatedMonthlyBudgetSummary(MonthlyCategorySummary(), transactionEntity)
                         transactionUseCase.updateMonthlyCategoryBudgetData(monthYear, transactionEntity.category, newMonthlyBudgetSummary)
+                        transactionUseCase.updateExpenseInBudget(monthYear, newMonthlyBudgetSummary)
                     } else {
                         val newMonthlyBudgetSummary = getUpdatedMonthlyBudgetSummary(result.data, transactionEntity)
                         transactionUseCase.updateMonthlyCategoryBudgetData(monthYear, transactionEntity.category, newMonthlyBudgetSummary)
+                        transactionUseCase.updateExpenseInBudget(monthYear, newMonthlyBudgetSummary)
                     }
                 }
 
@@ -243,7 +243,6 @@ class AddTransactionDialogFragmentViewModel(
     ): MonthlyCategorySummary {
         return MonthlyCategorySummary(
             transactionEntity.category,
-            monthlyCategorySummary.totalCategoryBudget,
             monthlyCategorySummary.totalCategoryExpense + transactionEntity.amount
         )
     }
