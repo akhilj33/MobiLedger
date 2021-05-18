@@ -17,11 +17,12 @@ import com.example.mobiledger.common.extention.visible
 import com.example.mobiledger.common.di.DependencyProvider
 import com.example.mobiledger.databinding.SnackViewErrorBinding
 import com.example.mobiledger.presentation.main.MainActivityViewModel
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import timber.log.Timber
 
 abstract class BaseDialogFragment<B : ViewDataBinding, NV : BaseNavigator>(
     @LayoutRes private val layoutId: Int, private val statusBarColor: BaseFragment.StatusBarColor? = null
-) : DialogFragment() {
+) : BottomSheetDialogFragment() {
     //This is nullable as Fragments outlive their views.
     private var _viewBinding: B? = null
 

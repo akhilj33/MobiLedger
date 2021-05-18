@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <dimen name="cdp_0">0dp</dimen>
     <dimen name="cdp_5">5dp</dimen>
     <dimen name="cdp_8">8dp</dimen>
     <dimen name="cdp_10">10dp</dimen>
@@ -33,5 +34,6 @@
     <dimen name="cdp_50">50dp</dimen>
     <dimen name="csp_28">28sp</dimen>
     <dimen name="cdp_4">4dp</dimen>
+    <dimen name="cdp_2">2dp</dimen>
 
 </resources>
