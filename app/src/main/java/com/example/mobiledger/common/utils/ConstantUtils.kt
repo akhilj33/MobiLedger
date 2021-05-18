@@ -21,5 +21,10 @@ object ConstantUtils {
     const val USER_CATEGORIES = "UserCategories"
     const val INCOME_CATEGORY_LIST = "incomeCategoryList"
     const val EXPENSE_CATEGORY_LIST = "expenseCategoryList"
+    const val CATEGORY_TRANSACTION = "CategoryTransaction"
+    const val MAX_BUDGET = "maxBudget"
+    const val TOTAL_BUDGET = "totalBudget"
+    const val BUDGET = "Budget"
+    const val BUDGET_DETAILS = "budgetDetails"
 
 }

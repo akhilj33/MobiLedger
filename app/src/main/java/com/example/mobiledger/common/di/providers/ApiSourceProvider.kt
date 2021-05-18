@@ -12,8 +12,12 @@ class ApiSourceProvider(
     private val authSourceProvider: AuthSourceProvider
 ) {
     fun provideUserApiSource(): UserApi = UserApiImpl(firebaseProvider.provideFirebaseDatabase(), authSourceProvider.provideAuthSource())
+
     fun provideTransactionApiSource(): TransactionApi =
         TransactionApiImpl(firebaseProvider.provideFirebaseDatabase(), authSourceProvider.provideAuthSource())
 
     fun provideCategoryApiSource(): CategoryApi = CategoryApiImpl(firebaseProvider.provideFirebaseDatabase())
+
+    fun provideBudgetApiSource(): BudgetApi =
+        BudgetApiImpl(firebaseProvider.provideFirebaseDatabase(), authSourceProvider.provideAuthSource())
 }

@@ -88,6 +88,7 @@ class HomeFragment :
         viewBinding.ivProfileIcon.setOnClickListener {
             navigator?.navigateToProfileScreen()
         }
+        viewBinding.horizontalGuideline2
     }
 
     private fun handleRightClick() {
