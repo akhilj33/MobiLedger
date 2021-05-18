@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <!--          VERTICAL GUIDELINES          -->
+        android:layout_height="wrap_content"
+        app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/verticalScreenGuideline_10"
@@ -23,124 +21,161 @@
             android:orientation="vertical"
             app:layout_constraintGuide_percent="0.90" />
 
-        <View
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:background="@color/colorWhite"
-            android:layout_marginTop="@dimen/cdp_24"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_10"
-            app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_90"
-            app:layout_constraintBottom_toBottomOf="@id/textAddTransaction" />
-
 
         <TextView
             android:id="@+id/textAddTransaction"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/add_transaction"
-            android:textSize="@dimen/csp_24"
+            style="@style/GelionSemiBoldBlue24"
             android:layout_marginTop="@dimen/cdp_24"
-            android:textColor="@color/colorTextDark"
-            app:layout_constraintTop_toTopOf="parent"
+            android:text="@string/add_transaction"
+            app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_90"
             app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_10"
-            app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_90" />
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <RadioGroup
-            android:id="@+id/toggleRadioGroupLayout"
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/toggleIncome"
+            style="@style/GelionRegularNavyBlue16"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/cdp_24"
+            android:background="@drawable/oval_shape"
+            android:elevation="@dimen/cdp_2"
+            android:inputType="text"
+            android:padding="@dimen/cdp_8"
+            android:text="@string/income"
+            app:backgroundTint="@color/colorWhite"
+            app:icon="@drawable/selected_icon"
+            app:iconTint="@color/colorAppBlue"
+            app:layout_constraintBottom_toTopOf="@id/nameLayout"
+            app:layout_constraintEnd_toStartOf="@id/toggleExpense"
+            app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_10"
+            app:layout_constraintTop_toBottomOf="@id/textAddTransaction" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/toggleExpense"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/GelionRegularGrey16"
+            android:background="@drawable/oval_shape"
+            android:inputType="text"
+            android:padding="@dimen/cdp_8"
+            android:stateListAnimator="@null"
+            android:text="@string/expense"
+            app:backgroundTint="@color/colorLightGrey"
+            app:layout_constraintBottom_toBottomOf="@id/toggleIncome"
+            app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_90"
+            app:layout_constraintStart_toEndOf="@id/toggleIncome"
+            app:layout_constraintTop_toTopOf="@id/toggleIncome" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/nameLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:checkedButton="@+id/rb_world"
-            android:orientation="horizontal"
-            android:layout_marginTop="@dimen/cdp_16"
-            app:layout_constraintTop_toBottomOf="@id/textAddTransaction"
+            android:layout_marginTop="@dimen/cdp_24"
+            android:hint="@string/name"
+            app:errorEnabled="true"
+            app:layout_constraintBottom_toTopOf="@id/amountLayout"
+            app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_90"
             app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_10"
-            app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_90">
+            app:layout_constraintTop_toBottomOf="@id/toggleIncome">
 
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/textName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:textColorHint="@color/colorGrey"
+                android:textSize="@dimen/csp_16" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-            <RadioButton
-                android:id="@+id/expanseRadioButton"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@drawable/toggle_widget_background"
-                android:button="@null"
-                android:gravity="center"
-                android:padding="@dimen/cdp_10"
-                android:text="@string/expense"
-                android:checked="true"
-                android:textColor="@color/colorTextLight" />
-
-            <RadioButton
-                android:id="@+id/incomeRadioButton"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@drawable/toggle_widget_background"
-                android:button="@null"
-                android:gravity="center"
-                android:padding="@dimen/cdp_10"
-                android:text="@string/income"
-                android:textColor="@color/colorPrimaryDark" />
-
-        </RadioGroup>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/amountLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/cdp_10"
+            android:hint="@string/amount_rs"
+            app:errorEnabled="true"
+            app:layout_constraintBottom_toTopOf="@id/spinner_category"
             app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_90"
             app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_10"
-            app:layout_constraintTop_toBottomOf="@id/toggleRadioGroupLayout">
+            app:layout_constraintTop_toBottomOf="@id/nameLayout">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/textAmount"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/amount_rs"
                 android:inputType="number"
-                android:textColorHint="@color/colorPrimary"
+                android:textColorHint="@color/colorGrey"
                 android:textSize="@dimen/csp_16" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <Spinner
+        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/spinner_category"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/csp_16"
-            android:theme="@style/SpinnerTheme"
-            app:layout_constraintTop_toBottomOf="@id/amountLayout"
-            app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_10"
-            app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_90" />
-
-        <TextView
-            android:id="@+id/textDate"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/csp_16"
-            android:textColor="@color/colorTextDark"
-            app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_10"
+            app:errorEnabled="true"
+            app:layout_constraintBottom_toTopOf="@id/dateLayout"
             app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_90"
-            app:layout_constraintTop_toBottomOf="@id/spinner_category" />
+            app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_10"
+            app:layout_constraintTop_toBottomOf="@id/amountLayout">
 
+            <AutoCompleteTextView
+                android:id="@+id/my_spinner_dropdown"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/category"
+                android:inputType="none"
+                android:textSize="@dimen/csp_16"
+                app:hintTextColor="@color/colorGrey" />
+        </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/descriptionLayout"
+            android:id="@+id/dateLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/cdp_10"
+            android:focusable="false"
+            android:hint="@string/date"
+            app:errorEnabled="true"
+            app:layout_constraintBottom_toTopOf="@id/descriptionLayout"
             app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_90"
             app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_10"
-            app:layout_constraintTop_toBottomOf="@id/textDate">
+            app:layout_constraintTop_toBottomOf="@id/spinner_category"
+            app:startIconDrawable="@drawable/calendar_icon">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/textDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusable="false"
+                android:textColorHint="@color/colorGrey"
+                android:textSize="@dimen/csp_16" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/descriptionLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/cdp_10"
+            android:hint="@string/description"
+            app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_90"
+            app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_10"
+            app:layout_constraintTop_toBottomOf="@id/dateLayout">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/textDescription"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/description"
-                android:textColorHint="@color/colorPrimary"
+                android:textColorHint="@color/colorGrey"
                 android:textSize="@dimen/csp_16" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -155,32 +190,19 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btnSubmitTransaction"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/cdp_24"
+            android:layout_marginBottom="@dimen/cdp_48"
+            android:layout_marginHorizontal="@dimen/cdp_48"
             android:text="@string/add_transaction"
             android:textSize="@dimen/csp_16"
-            android:textColor="@color/colorWhite"
-            android:background="@color/colorPrimary"
-            android:layout_marginTop="@dimen/cdp_10"
-            android:layout_marginBottom="@dimen/cdp_30"
-            app:layout_constraintTop_toBottomOf="@id/descriptionLayout"
-            app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_10"
-            app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_90"
-            app:layout_constraintBottom_toBottomOf="parent" />
-
-
-        <include
-            android:id="@+id/includeErrorView"
-            layout="@layout/snack_view_error"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            tools:visibility="visible" />
+            app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_90"
+            app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_10"
+            app:layout_constraintTop_toBottomOf="@id/descriptionLayout" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -42,7 +42,7 @@ class HomeFragment :
     }
 
     private fun setUpObservers() {
-        viewModel.homeViewItemListLiveData.observe(viewLifecycleOwner, OneTimeObserver{
+        viewModel.homeViewItemListLiveData.observe(viewLifecycleOwner, OneTimeObserver {
             homeAdapter.addItemList(it)
         })
 
@@ -54,7 +54,7 @@ class HomeFragment :
             viewBinding.monthNavigationBar.tvMonth.text = it
         })
 
-        viewModel.deleteTransactionLiveData.observe(viewLifecycleOwner, OneTimeObserver{
+        viewModel.deleteTransactionLiveData.observe(viewLifecycleOwner, OneTimeObserver {
             homeAdapter.removeAt(it)
         })
 
@@ -73,6 +73,10 @@ class HomeFragment :
         viewModel.authErrorLiveData.observe(viewLifecycleOwner, OneTimeObserver {
 //            navigateToLoginScreen() todo
         })
+
+        activityViewModel.addTransactionResultLiveData.observe(viewLifecycleOwner, OneTimeObserver {
+            refreshView()
+        })
     }
 
     private fun setOnClickListener() {
@@ -81,8 +85,8 @@ class HomeFragment :
                 showRecordTransactionDialogFragment(requireActivity().supportFragmentManager)
             }
 
-            monthNavigationBar.leftArrow.setOnClickListener {handleLeftClick()}
-            monthNavigationBar.rightArrow.setOnClickListener {handleRightClick()}
+            monthNavigationBar.leftArrow.setOnClickListener { handleLeftClick() }
+            monthNavigationBar.rightArrow.setOnClickListener { handleRightClick() }
 
         }
         viewBinding.ivProfileIcon.setOnClickListener {
@@ -123,7 +127,7 @@ class HomeFragment :
         }
     }
 
-    private val onDeleteItemClick = fun(transactionId:String, position: Int) {
+    private val onDeleteItemClick = fun(transactionId: String, position: Int) {
         viewModel.deleteTransaction(transactionId, position)
     }
 

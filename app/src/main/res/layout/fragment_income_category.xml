@@ -19,7 +19,11 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/cdp_32"
             android:layout_marginBottom="@dimen/cdp_32"
-            android:contentDescription="@string/add_transaction"
+            android:text="Income"
+            android:textColor="@color/colorWhite"
+            app:backgroundTint="@color/colorLightGreen"
+            app:tint="@android:color/white"
+            android:contentDescription="@string/add_new_income_category"
             android:src="@drawable/add_icon"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />

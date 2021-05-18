@@ -27,3 +27,7 @@ fun IncomeCategoryListEntity.toMutableMap(): MutableMap<String, Any> = mutableMa
 fun ExpenseCategoryListEntity.toMutableMap(): MutableMap<String, Any> = mutableMapOf(
     ConstantUtils.EXPENSE_CATEGORY_LIST to expenseCategoryList,
 )
+
+fun IncomeCategoryListEntity.toMutableList(): MutableList<String> = incomeCategoryList.toMutableList()
+
+fun ExpenseCategoryListEntity.toMutableList(): MutableList<String> = expenseCategoryList.toMutableList()
