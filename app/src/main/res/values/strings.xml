@@ -80,6 +80,8 @@
     <string name="percent_of_budget_spent">Percent of budget spent : </string>
     <string name="set_your_budget">Set your budget</string>
     <string name="set_budget">Set Budget</string>
+    <string name="field_required">Field Required</string>
+    <string name="date">Date</string>
 
     <!-- Budget Fragment -->
 
