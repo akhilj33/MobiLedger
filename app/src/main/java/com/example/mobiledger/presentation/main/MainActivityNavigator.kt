@@ -1,6 +1,6 @@
 package com.example.mobiledger.presentation.main
 
-import CategoryFragment
+import com.example.mobiledger.presentation.categoryFragment.CategoryFragment
 import androidx.annotation.IdRes
 import androidx.fragment.app.FragmentManager
 import com.example.mobiledger.common.utils.FragmentTagUtil

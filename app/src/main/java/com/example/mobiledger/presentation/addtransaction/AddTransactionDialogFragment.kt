@@ -34,9 +34,7 @@ class AddTransactionDialogFragment :
         (R.layout.dialog_fragment_add_transaction) {
 
     private val spinnerAdapter: SpinnerAdapter by lazy { SpinnerAdapter(requireContext()) }
-
     private val viewModel: AddTransactionDialogFragmentViewModel by viewModels { viewModelFactory }
-    var list = mutableListOf<String>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -58,6 +56,7 @@ class AddTransactionDialogFragment :
         viewModel.dataUpdatedResult.observe(
             viewLifecycleOwner,
             OneTimeObserver {
+                activityViewModel.addTransactionResult()
                 activity?.showToast(getString(R.string.transaction_added))
                 dialog?.dismiss()
             }
@@ -150,23 +149,6 @@ class AddTransactionDialogFragment :
     private fun handleIncomeClick() {
         updateToggleButton()
         viewModel.getIncomeCategoryList()
-    }
-
-    private fun setBottomSheetBehaviour() {
-        // Fixes Bottomsheet's state to Expanded from Collapsed
-        (dialog as? BottomSheetDialog)?.behavior?.state = BottomSheetBehavior.STATE_EXPANDED
-
-        // Makes BottomSheet Non-Draggable
-//        (dialog as? BottomSheetDialog)?.behavior?.isDraggable = false
-
-        // Makes BottomSheet Non-Cancelable
-        val touchOutsideView = dialog?.window?.decorView?.findViewById<View>(com.google.android.material.R.id.touch_outside)
-        touchOutsideView?.setOnClickListener(null)
-    }
-
-    override fun onResume() {
-        super.onResume()
-        setBottomSheetBehaviour()
     }
 
     private fun updateToggleButton() {

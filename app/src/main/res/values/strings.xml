@@ -73,7 +73,8 @@
     <string name="hello_name">Hello, %1$s</string>
 
     <!-- Add Category Dialog Fragment -->
-    <string name="add_a_new_category">Add a new category</string>
+    <string name="add_new_income_category">Add new income category</string>
+    <string name="add_new_expense_category">Add new expense category</string>
     <string name="maximum_budget">Maximum budget</string>
     <string name="total_budget">Total Budget</string>
     <string name="set_your_monthly_budget">Set your monthly budget</string>
@@ -81,6 +82,7 @@
     <string name="set_your_budget">Set your budget</string>
     <string name="set_budget">Set Budget</string>
     <string name="field_required">Field Required</string>
+    <string name="category_already_exist">Category Already Exist</string>
     <string name="date">Date</string>
 
     <!-- Budget Fragment -->

@@ -1,7 +1,7 @@
 package com.example.mobiledger.common.utils
 
-import CategoryFragment
-import IncomeCategoryFragment
+import com.example.mobiledger.presentation.categoryFragment.CategoryFragment
+import com.example.mobiledger.presentation.categoryFragment.IncomeCategoryFragment
 import androidx.fragment.app.Fragment
 import com.example.mobiledger.presentation.SplitFragment
 import com.example.mobiledger.presentation.auth.LoginFragment

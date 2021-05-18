@@ -1,3 +1,5 @@
+package com.example.mobiledger.presentation.categoryFragment
+
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
@@ -12,7 +14,6 @@ import com.example.mobiledger.databinding.SnackViewErrorBinding
 import com.example.mobiledger.domain.entities.IncomeCategoryListEntity
 import com.example.mobiledger.domain.enums.TransactionType
 import com.example.mobiledger.presentation.OneTimeObserver
-import com.example.mobiledger.presentation.categoryFragment.IncomeCategoryViewModel
 import com.example.mobiledger.presentation.categoryFragment.adapter.CategoryAdapter
 import com.example.mobiledger.presentation.addtransaction.AddTransactionDialogFragmentViewModel
 
@@ -33,10 +34,6 @@ class IncomeCategoryFragment : BaseFragment<FragmentIncomeCategoryBinding, BaseN
         setUpObserver()
         initRecyclerView()
         setOnCLickListener()
-    }
-
-    override fun onResume() {
-        super.onResume()
         viewModel.getIncomeCategoryList()
     }
 
@@ -62,6 +59,9 @@ class IncomeCategoryFragment : BaseFragment<FragmentIncomeCategoryBinding, BaseN
                     showSnackBarErrorView(it.message ?: getString(it.resID), true)
                 }
             }
+        })
+        activityViewModel.addCategoryResultLiveData.observe(viewLifecycleOwner, OneTimeObserver{
+            viewModel.getIncomeCategoryList()
         })
     }
 

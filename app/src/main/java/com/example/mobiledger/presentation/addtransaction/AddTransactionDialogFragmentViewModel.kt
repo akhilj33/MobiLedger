@@ -190,7 +190,6 @@ class AddTransactionDialogFragmentViewModel(
             _loadingState.value = true
             when (val result = transactionUseCase.addCategoryTransaction(monthYear, transactionEntity)) {
                 is AppResult.Success -> {
-                    Timber.i("Transaction added to categoryTransaction in firestore")
                     handleAddCategoryResult(transactionEntity, monthYear)
                 }
 
@@ -212,7 +211,6 @@ class AddTransactionDialogFragmentViewModel(
         monthYear: String
     ) {
         viewModelScope.launch {
-            Log.i("Anant", "Started")
             when (val result = transactionUseCase.getMonthlyCategorySummary(monthYear, transactionEntity.category)) {
                 is AppResult.Success -> {
                     if (result.data == null || result.data.isEmpty()) {

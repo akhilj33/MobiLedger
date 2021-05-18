@@ -17,6 +17,8 @@ import com.example.mobiledger.common.extention.visible
 import com.example.mobiledger.common.di.DependencyProvider
 import com.example.mobiledger.databinding.SnackViewErrorBinding
 import com.example.mobiledger.presentation.main.MainActivityViewModel
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import timber.log.Timber
 
@@ -66,6 +68,22 @@ abstract class BaseDialogFragment<B : ViewDataBinding, NV : BaseNavigator>(
         setStatusBarColor()
     }
 
+    override fun onResume() {
+        super.onResume()
+        setBottomSheetBehaviour()
+    }
+
+    private fun setBottomSheetBehaviour() {
+        // Fixes Bottomsheet's state to Expanded from Collapsed
+        (dialog as? BottomSheetDialog)?.behavior?.state = BottomSheetBehavior.STATE_EXPANDED
+
+        // Makes BottomSheet Non-Draggable
+//        (dialog as? BottomSheetDialog)?.behavior?.isDraggable = false
+
+        // Makes BottomSheet Non-Cancelable
+        val touchOutsideView = dialog?.window?.decorView?.findViewById<View>(com.google.android.material.R.id.touch_outside)
+        touchOutsideView?.setOnClickListener(null)
+    }
 
     private fun setStatusBarColor() {
         if (statusBarColor != null) {

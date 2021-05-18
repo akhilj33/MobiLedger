@@ -33,11 +33,6 @@ class ExpenseCategoryFragment : BaseFragment<FragmentExpenseCategoryBinding, Bas
         setUpObserver()
         initRecyclerView()
         setOnCLickListener()
-
-    }
-
-    override fun onResume() {
-        super.onResume()
         viewModel.getExpenseCategoryList()
     }
 
@@ -63,6 +58,10 @@ class ExpenseCategoryFragment : BaseFragment<FragmentExpenseCategoryBinding, Bas
                     showSnackBarErrorView(it.message ?: getString(it.resID), true)
                 }
             }
+        })
+
+        activityViewModel.addCategoryResultLiveData.observe(viewLifecycleOwner, OneTimeObserver{
+            viewModel.getExpenseCategoryList()
         })
     }
 
