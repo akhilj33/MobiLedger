@@ -8,7 +8,7 @@ import com.example.mobiledger.domain.AppError
 import com.example.mobiledger.domain.AppResult
 import com.example.mobiledger.domain.entities.MonthlyTransactionSummaryEntity
 import com.example.mobiledger.domain.entities.TransactionEntity
-import com.example.mobiledger.presentation.budget.MonthlyBudgetData
+import com.example.mobiledger.presentation.budget.MonthlyCategorySummary
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -21,8 +21,12 @@ interface TransactionRepository {
     suspend fun addUserTransactionToFirebase(monthYear: String, transactionEntity: TransactionEntity): AppResult<Unit>
     suspend fun deleteTransaction(transactionId: String, monthYear: String): AppResult<Unit>
     suspend fun addCategoryTransaction(monthYear: String, transactionEntity: TransactionEntity): AppResult<Unit>
-    suspend fun getMonthlyCategorySummary(monthYear: String, category: String): AppResult<MonthlyBudgetData?>
-    suspend fun updateMonthlyCategoryBudget(monthYear: String, category: String, monthlyBudgetData: MonthlyBudgetData): AppResult<Unit>
+    suspend fun getMonthlyCategorySummary(monthYear: String, category: String): AppResult<MonthlyCategorySummary?>
+    suspend fun updateMonthlyCategoryBudget(
+        monthYear: String,
+        category: String,
+        monthlyCategorySummary: MonthlyCategorySummary
+    ): AppResult<Unit>
 }
 
 class TransactionRepositoryImpl(
@@ -127,7 +131,7 @@ class TransactionRepositoryImpl(
         }
     }
 
-    override suspend fun getMonthlyCategorySummary(monthYear: String, category: String): AppResult<MonthlyBudgetData?> {
+    override suspend fun getMonthlyCategorySummary(monthYear: String, category: String): AppResult<MonthlyCategorySummary?> {
         return withContext(dispatcher) {
             val uId = cacheSource.getUID()
             if (uId != null) {
@@ -140,12 +144,12 @@ class TransactionRepositoryImpl(
     override suspend fun updateMonthlyCategoryBudget(
         monthYear: String,
         category: String,
-        monthlyBudgetData: MonthlyBudgetData
+        monthlyCategorySummary: MonthlyCategorySummary
     ): AppResult<Unit> {
         return withContext(dispatcher) {
             val uId = cacheSource.getUID()
             if (uId != null) {
-                transactionApi.updateMonthlyCategoryBudget(uId, monthYear, category, monthlyBudgetData)
+                transactionApi.updateMonthlyCategoryBudget(uId, monthYear, category, monthlyCategorySummary)
             } else
                 AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
         }

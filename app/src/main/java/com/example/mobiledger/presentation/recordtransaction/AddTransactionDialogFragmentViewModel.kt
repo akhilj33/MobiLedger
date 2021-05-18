@@ -1,5 +1,6 @@
 package com.example.mobiledger.presentation.recordtransaction
 
+import android.util.Log
 import androidx.annotation.StringRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -12,7 +13,7 @@ import com.example.mobiledger.domain.enums.TransactionType
 import com.example.mobiledger.domain.usecases.CategoryUseCase
 import com.example.mobiledger.domain.usecases.TransactionUseCase
 import com.example.mobiledger.presentation.Event
-import com.example.mobiledger.presentation.budget.MonthlyBudgetData
+import com.example.mobiledger.presentation.budget.MonthlyCategorySummary
 import com.example.mobiledger.presentation.budget.isEmpty
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -211,10 +212,11 @@ class AddTransactionDialogFragmentViewModel(
         monthYear: String
     ) {
         viewModelScope.launch {
+            Log.i("Anant", "Started")
             when (val result = transactionUseCase.getMonthlyCategorySummary(monthYear, transactionEntity.category)) {
                 is AppResult.Success -> {
                     if (result.data == null || result.data.isEmpty()) {
-                        val newMonthlyBudgetSummary = getUpdatedMonthlyBudgetSummary(MonthlyBudgetData(), transactionEntity)
+                        val newMonthlyBudgetSummary = getUpdatedMonthlyBudgetSummary(MonthlyCategorySummary(), transactionEntity)
                         transactionUseCase.updateMonthlyCategoryBudgetData(monthYear, transactionEntity.category, newMonthlyBudgetSummary)
                     } else {
                         val newMonthlyBudgetSummary = getUpdatedMonthlyBudgetSummary(result.data, transactionEntity)
@@ -236,10 +238,14 @@ class AddTransactionDialogFragmentViewModel(
     }
 
     private fun getUpdatedMonthlyBudgetSummary(
-        monthlyBudgetData: MonthlyBudgetData,
+        monthlyCategorySummary: MonthlyCategorySummary,
         transactionEntity: TransactionEntity
-    ): MonthlyBudgetData {
-        return MonthlyBudgetData(monthlyBudgetData.maxBudget, monthlyBudgetData.totalBudget + transactionEntity.amount)
+    ): MonthlyCategorySummary {
+        return MonthlyCategorySummary(
+            transactionEntity.category,
+            monthlyCategorySummary.totalCategoryBudget,
+            monthlyCategorySummary.totalCategoryExpense + transactionEntity.amount
+        )
     }
 
 

@@ -78,6 +78,8 @@
     <string name="total_budget">Total Budget</string>
     <string name="set_your_monthly_budget">Set your monthly budget</string>
     <string name="percent_of_budget_spent">Percent of budget spent : </string>
+    <string name="set_your_budget">Set your budget</string>
+    <string name="set_budget">Set Budget</string>
 
     <!-- Budget Fragment -->
 

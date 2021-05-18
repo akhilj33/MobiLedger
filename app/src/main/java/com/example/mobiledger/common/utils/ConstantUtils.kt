@@ -24,5 +24,7 @@ object ConstantUtils {
     const val CATEGORY_TRANSACTION = "CategoryTransaction"
     const val MAX_BUDGET = "maxBudget"
     const val TOTAL_BUDGET = "totalBudget"
+    const val BUDGET = "Budget"
+    const val BUDGET_DETAILS = "budgetDetails"
 
 }

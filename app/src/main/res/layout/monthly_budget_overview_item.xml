@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/rootBudgetOverview"
         android:layout_width="match_parent"
         android:layout_height="220dp"
         android:paddingBottom="@dimen/cdp_16">
@@ -93,7 +94,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/cdp_8"
-                        android:text="₹ 476287427"
+                        android:text="₹ 0"
                         app:autoSizeMaxTextSize="@dimen/csp_18"
                         app:autoSizeMinTextSize="@dimen/csp_12"
                         app:autoSizeStepGranularity="2sp"
@@ -108,12 +109,12 @@
                         android:textSize="@dimen/csp_22" />
 
                     <com.google.android.material.textview.MaterialTextView
-                        android:id="@+id/tvTotalVudgetAmount"
+                        android:id="@+id/tvTotalBudgetAmount"
                         style="@style/GelionRegularGreen18"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/cdp_8"
-                        android:text="₹ 476287427"
+                        android:text="₹ 0"
                         app:autoSizeMaxTextSize="@dimen/csp_18"
                         app:autoSizeMinTextSize="@dimen/csp_12"
                         app:autoSizeStepGranularity="2sp"
@@ -123,7 +124,7 @@
                         android:id="@+id/budgetAmountSeekBarID"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8dp"
                         android:value="20.0"
                         android:valueFrom="0.0"
                         android:valueTo="100.0"

@@ -51,6 +51,14 @@ class RepositoryProvider(
         )
     }
 
+    private val budgetRepository: BudgetRepository by lazy {
+        BudgetRepositoryImpl(
+            apiSourceProvider.provideBudgetApiSource(),
+            cacheSourceProvider.provideCacheSource(),
+            dbProvider.provideCategoryDb()
+        )
+    }
+
     /*-------------------------------Public -----------------------------*/
 
     fun provideAuthRepository(): AuthRepository = authRepository
@@ -64,4 +72,6 @@ class RepositoryProvider(
     fun provideTransactionRepository(): TransactionRepository = transactionRepository
 
     fun provideCategoryRepository(): CategoryRepository = categoryRepository
+
+    fun provideBudgetRepository(): BudgetRepository = budgetRepository
 }

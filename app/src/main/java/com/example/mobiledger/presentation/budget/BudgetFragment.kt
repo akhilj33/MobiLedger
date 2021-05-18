@@ -2,19 +2,22 @@ package com.example.mobiledger.presentation.budget
 
 import android.os.Bundle
 import android.view.View
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.mobiledger.R
 import com.example.mobiledger.common.base.BaseFragment
+import com.example.mobiledger.common.utils.showAddBudgetDialogFragment
 import com.example.mobiledger.databinding.FragmentBudgetBinding
 import com.example.mobiledger.databinding.SnackViewErrorBinding
+import com.example.mobiledger.presentation.OneTimeObserver
 
 
 class BudgetFragment : BaseFragment<FragmentBudgetBinding, BudgetNavigator>(R.layout.fragment_budget) {
 
-//    private val viewModel: BudgetViewModel by viewModels { viewModelFactory }
+    private val viewModel: BudgetViewModel by viewModels { viewModelFactory }
 
-    private val budgetAdapter: BudgetAdapter by lazy { BudgetAdapter() }
+    private val budgetAdapter: BudgetAdapter by lazy { BudgetAdapter(onMakeBudgetClick, onBudgetOverviewClick) }
 
     override fun getSnackBarErrorView(): SnackViewErrorBinding = viewBinding.includeErrorView
 
@@ -30,6 +33,9 @@ class BudgetFragment : BaseFragment<FragmentBudgetBinding, BudgetNavigator>(R.la
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setOnClickListener()
+        setUpObserver()
+        initRecyclerView()
+        viewModel.getBudgetData()
     }
 
     private fun setOnClickListener() {
@@ -41,12 +47,26 @@ class BudgetFragment : BaseFragment<FragmentBudgetBinding, BudgetNavigator>(R.la
         }
     }
 
+    private fun setUpObserver() {
+        viewModel.budgetViewItemListLiveData.observe(viewLifecycleOwner, OneTimeObserver {
+            budgetAdapter.addItemList(it)
+        })
+    }
+
     private fun initRecyclerView() {
         val linearLayoutManager = LinearLayoutManager(activity)
         viewBinding.rvBudget.apply {
             layoutManager = linearLayoutManager
             adapter = budgetAdapter
         }
+    }
+
+    private val onMakeBudgetClick = fun() {
+        showAddBudgetDialogFragment(requireActivity().supportFragmentManager, false)
+    }
+
+    private val onBudgetOverviewClick = fun() {
+        showAddBudgetDialogFragment(requireActivity().supportFragmentManager, false)
     }
 
 //    private fun handleRightClick() {

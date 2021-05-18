@@ -1,5 +1,6 @@
 package com.example.mobiledger.data.sources.api
 
+import android.util.Log
 import com.example.mobiledger.common.utils.ConstantUtils
 import com.example.mobiledger.common.utils.ConstantUtils.CATEGORY_TRANSACTION
 import com.example.mobiledger.common.utils.ConstantUtils.MONTH
@@ -14,7 +15,7 @@ import com.example.mobiledger.domain.entities.MonthlyTransactionSummaryEntity
 import com.example.mobiledger.domain.entities.TransactionEntity
 import com.example.mobiledger.domain.entities.TransactionReference
 import com.example.mobiledger.domain.entities.toMutableMap
-import com.example.mobiledger.presentation.budget.MonthlyBudgetData
+import com.example.mobiledger.presentation.budget.MonthlyCategorySummary
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuthException
 import com.google.firebase.firestore.DocumentReference
@@ -35,12 +36,12 @@ interface TransactionApi {
     suspend fun deleteTransaction(uid: String, transactionId: String, monthYear: String): AppResult<Unit>
     suspend fun addCategoryTransaction(uid: String, monthYear: String, transactionEntity: TransactionEntity): AppResult<Unit>
 
-    suspend fun getMonthlyCategorySummary(uid: String, monthYear: String, category: String): AppResult<MonthlyBudgetData?>
+    suspend fun getMonthlyCategorySummary(uid: String, monthYear: String, category: String): AppResult<MonthlyCategorySummary?>
     suspend fun updateMonthlyCategoryBudget(
         uid: String,
         monthYear: String,
         category: String,
-        monthlyBudgetData: MonthlyBudgetData
+        monthlyCategorySummary: MonthlyCategorySummary
     ): AppResult<Unit>
 }
 
@@ -273,6 +274,7 @@ class TransactionApiImpl(private val firebaseDb: FirebaseFirestore, private val 
                 .set(TransactionReference(transRef))
             response.await()
         } catch (e: Exception) {
+            Log.i("Anant", e.localizedMessage.toString())
             exception = e
         }
 
@@ -286,7 +288,7 @@ class TransactionApiImpl(private val firebaseDb: FirebaseFirestore, private val 
         }
     }
 
-    override suspend fun getMonthlyCategorySummary(uid: String, monthYear: String, category: String): AppResult<MonthlyBudgetData?> {
+    override suspend fun getMonthlyCategorySummary(uid: String, monthYear: String, category: String): AppResult<MonthlyCategorySummary?> {
         var response: Task<DocumentSnapshot>? = null
         var exception: Exception? = null
         try {
@@ -304,6 +306,7 @@ class TransactionApiImpl(private val firebaseDb: FirebaseFirestore, private val 
 
             response.await()
         } catch (e: Exception) {
+            Log.i("Anant", e.localizedMessage.toString())
             exception = e
         }
 
@@ -325,7 +328,7 @@ class TransactionApiImpl(private val firebaseDb: FirebaseFirestore, private val 
         uid: String,
         monthYear: String,
         category: String,
-        monthlyBudgetData: MonthlyBudgetData
+        monthlyCategorySummary: MonthlyCategorySummary
     ): AppResult<Unit> {
         var response: Task<Void>? = null
         var exception: Exception? = null
@@ -340,10 +343,11 @@ class TransactionApiImpl(private val firebaseDb: FirebaseFirestore, private val 
                 .document(monthYear)
                 .collection(CATEGORY_TRANSACTION)
                 .document(category)
-                .set(monthlyBudgetData)
+                .set(monthlyCategorySummary)
 
             response.await()
         } catch (e: Exception) {
+            Log.i("Anant", e.localizedMessage.toString())
             exception = e
         }
 
@@ -366,6 +370,6 @@ private fun monthlySummaryEntityMapper(user: DocumentSnapshot?): MonthlyTransact
     return user?.toObject(MonthlyTransactionSummaryEntity::class.java)
 }
 
-private fun monthlyBudgetEntityMapper(user: DocumentSnapshot?): MonthlyBudgetData? {
-    return user?.toObject(MonthlyBudgetData::class.java)
+private fun monthlyBudgetEntityMapper(user: DocumentSnapshot?): MonthlyCategorySummary? {
+    return user?.toObject(MonthlyCategorySummary::class.java)
 }
