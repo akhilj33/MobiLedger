@@ -14,7 +14,7 @@ import com.example.mobiledger.databinding.SnackViewErrorBinding
 import com.example.mobiledger.domain.enums.TransactionType
 import com.example.mobiledger.presentation.OneTimeObserver
 import com.example.mobiledger.presentation.categoryFragment.adapter.CategoryAdapter
-import com.example.mobiledger.presentation.recordtransaction.AddTransactionDialogFragmentViewModel
+import com.example.mobiledger.presentation.addtransaction.AddTransactionDialogFragmentViewModel
 
 class ExpenseCategoryFragment : BaseFragment<FragmentExpenseCategoryBinding, BaseNavigator>(R.layout.fragment_expense_category) {
 
@@ -33,11 +33,6 @@ class ExpenseCategoryFragment : BaseFragment<FragmentExpenseCategoryBinding, Bas
         setUpObserver()
         initRecyclerView()
         setOnCLickListener()
-
-    }
-
-    override fun onResume() {
-        super.onResume()
         viewModel.getExpenseCategoryList()
     }
 
@@ -63,6 +58,10 @@ class ExpenseCategoryFragment : BaseFragment<FragmentExpenseCategoryBinding, Bas
                     showSnackBarErrorView(it.message ?: getString(it.resID), true)
                 }
             }
+        })
+
+        activityViewModel.addCategoryResultLiveData.observe(viewLifecycleOwner, OneTimeObserver{
+            viewModel.getExpenseCategoryList()
         })
     }
 

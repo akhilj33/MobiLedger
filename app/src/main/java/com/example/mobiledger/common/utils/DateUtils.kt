@@ -19,6 +19,12 @@ object DateUtils {
         return simpleDateFormat_MM_yyyy.format(cal.time)
     }
 
+    fun getCalendarFromMillis(millis: Long): Calendar{
+        val cal = Calendar.getInstance()
+        cal.timeInMillis = millis
+        return cal
+    }
+
     fun getCurrentDate(): Calendar = Calendar.getInstance().apply {
         set(Calendar.HOUR_OF_DAY, 0)
         set(Calendar.MINUTE, 0)

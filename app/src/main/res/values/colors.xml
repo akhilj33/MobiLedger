@@ -17,5 +17,9 @@
     <color name="colorGreen">#3CB371</color>
     <color name="colorGrey">#a9a9a9</color>
     <color name="prussianBlue">#002C52</color>
+    <color name="colorTextGrey">#C0C0C0</color>
+    <color name="colorLightGrey">#F5F5F5</color>
+    <color name="colorLightGreen">#3CB371</color>
+    <color name="colorLightRed">#FF6347</color>
 
 </resources>

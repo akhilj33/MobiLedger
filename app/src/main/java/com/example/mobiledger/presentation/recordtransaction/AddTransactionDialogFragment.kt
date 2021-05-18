@@ -95,8 +95,7 @@ class AddTransactionDialogFragment :
             viewLifecycleOwner,
             OneTimeObserver {
                 activity?.showToast(getString(R.string.transaction_added))
-//                dialog?.dismiss()
-                //todo : Dismiss dialog when all transaction are added
+                dialog?.dismiss()
             }
         )
 
@@ -194,20 +193,3 @@ class AddTransactionDialogFragment :
                 }
             }
     }
-
-    private fun addTransaction() {
-        val timestampNow = Timestamp.now()
-        val name = "xyz"
-        val amount = viewBinding.textAmount.text.toString()
-        val description = viewBinding.textDescription.text.toString()
-        val transType = transactionType
-        if (monthYear?.isNotBlank()!! && amount.isNotEmpty() && description.isNotBlank())
-            viewModel.addTransaction(monthYear!!, TransactionEntity(name, amount.toLong(), categoty, description, transType, timestampNow))
-        else
-            activity?.showToast(getString(R.string.empty_field_msg))
-    }
-
-    companion object {
-        fun newInstance() = AddTransactionDialogFragment()
-    }
-}

@@ -8,7 +8,7 @@ import com.example.mobiledger.domain.AppResult
 import com.example.mobiledger.domain.entities.ExpenseCategoryListEntity
 import com.example.mobiledger.domain.usecases.CategoryUseCase
 import com.example.mobiledger.presentation.Event
-import com.example.mobiledger.presentation.recordtransaction.AddTransactionDialogFragmentViewModel
+import com.example.mobiledger.presentation.addtransaction.AddTransactionDialogFragmentViewModel
 import kotlinx.coroutines.launch
 
 class ExpenseCategoryViewModel(

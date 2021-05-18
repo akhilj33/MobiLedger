@@ -24,9 +24,11 @@ class CategoryUseCaseImpl(private val categoryRepository: CategoryRepository) : 
     override suspend fun addUserExpenseCategories(defaultCategoryList: List<String>): AppResult<Unit> =
         categoryRepository.addUserExpenseCategoryDb(defaultCategoryList)
 
-    override suspend fun getUserIncomeCategories(): AppResult<IncomeCategoryListEntity> = categoryRepository.getUserIncomeCategories()
+    override suspend fun getUserIncomeCategories(): AppResult<IncomeCategoryListEntity> =
+        categoryRepository.getUserIncomeCategories()
 
-    override suspend fun getUserExpenseCategories(): AppResult<ExpenseCategoryListEntity> = categoryRepository.getUserExpenseCategories()
+    override suspend fun getUserExpenseCategories(): AppResult<ExpenseCategoryListEntity> =
+        categoryRepository.getUserExpenseCategories()
 
     override suspend fun updateUserIncomeCategory(newIncomeCategory: IncomeCategoryListEntity): AppResult<Unit> =
         categoryRepository.updateUserIncomeCategory(newIncomeCategory)

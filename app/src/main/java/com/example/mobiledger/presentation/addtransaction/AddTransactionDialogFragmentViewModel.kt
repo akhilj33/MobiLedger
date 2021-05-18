@@ -1,4 +1,4 @@
-package com.example.mobiledger.presentation.recordtransaction
+package com.example.mobiledger.presentation.addtransaction
 
 import androidx.annotation.StringRes
 import androidx.lifecycle.LiveData
@@ -28,11 +28,8 @@ class AddTransactionDialogFragmentViewModel(
     val dataUpdatedResult: LiveData<Event<Unit>> get() = _dataUpdatedResult
     private val _dataUpdatedResult: MutableLiveData<Event<Unit>> = MutableLiveData()
 
-    val incomeCategoryList: LiveData<Event<IncomeCategoryListEntity>> get() = _incomeCategoryList
-    private val _incomeCategoryList: MutableLiveData<Event<IncomeCategoryListEntity>> = MutableLiveData()
-
-    val expenseCategoryList: LiveData<Event<ExpenseCategoryListEntity>> get() = _expenseCategoryList
-    private val _expenseCategoryList: MutableLiveData<Event<ExpenseCategoryListEntity>> = MutableLiveData()
+    val categoryListLiveData: LiveData<Event<MutableList<String>>> get() = _categoryListLiveData
+    private val _categoryListLiveData: MutableLiveData<Event<MutableList<String>>> = MutableLiveData()
 
     private val _errorLiveData: MutableLiveData<Event<ViewError>> = MutableLiveData()
     val errorLiveData: LiveData<Event<ViewError>> = _errorLiveData
@@ -40,12 +37,15 @@ class AddTransactionDialogFragmentViewModel(
     private val _loadingState = MutableLiveData<Boolean>(false)
     val loadingState: LiveData<Boolean> get() = _loadingState
 
+    var transactionType = TransactionType.Income
+    var timeInMillis: Long? = null
+
     fun getIncomeCategoryList() {
         _loadingState.value = true
         viewModelScope.launch {
             when (val result = categoryUseCase.getUserIncomeCategories()) {
                 is AppResult.Success -> {
-                    _incomeCategoryList.value = Event(result.data)
+                    _categoryListLiveData.value = Event(result.data.toMutableList())
                 }
 
                 is AppResult.Failure -> {
@@ -66,7 +66,7 @@ class AddTransactionDialogFragmentViewModel(
         viewModelScope.launch {
             when (val result = categoryUseCase.getUserExpenseCategories()) {
                 is AppResult.Success -> {
-                    _expenseCategoryList.value = Event(result.data)
+                    _categoryListLiveData.value = Event(result.data.toMutableList())
                 }
 
                 is AppResult.Failure -> {
@@ -189,7 +189,6 @@ class AddTransactionDialogFragmentViewModel(
             _loadingState.value = true
             when (val result = transactionUseCase.addCategoryTransaction(monthYear, transactionEntity)) {
                 is AppResult.Success -> {
-                    Timber.i("Transaction added to categoryTransaction in firestore")
                     handleAddCategoryResult(transactionEntity, monthYear)
                 }
 

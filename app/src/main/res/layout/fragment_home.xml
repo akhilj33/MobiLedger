@@ -90,6 +90,8 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/cdp_32"
             android:layout_marginBottom="@dimen/cdp_32"
+            app:backgroundTint="@color/colorAppBlue"
+            app:tint="@android:color/white"
             android:contentDescription="@string/add_transaction"
             android:src="@drawable/add_icon"
             app:layout_constraintBottom_toBottomOf="parent"

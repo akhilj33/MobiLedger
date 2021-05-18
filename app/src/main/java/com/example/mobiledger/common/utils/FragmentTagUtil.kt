@@ -1,7 +1,7 @@
 package com.example.mobiledger.common.utils
 
-import CategoryFragment
-import IncomeCategoryFragment
+import com.example.mobiledger.presentation.categoryFragment.CategoryFragment
+import com.example.mobiledger.presentation.categoryFragment.IncomeCategoryFragment
 import androidx.fragment.app.Fragment
 import com.example.mobiledger.presentation.SplitFragment
 import com.example.mobiledger.presentation.auth.LoginFragment
@@ -15,7 +15,7 @@ import com.example.mobiledger.presentation.home.HomeFragment
 import com.example.mobiledger.presentation.insight.InsightFragment
 import com.example.mobiledger.presentation.profile.EditProfileFragment
 import com.example.mobiledger.presentation.profile.ProfileFragment
-import com.example.mobiledger.presentation.recordtransaction.AddTransactionDialogFragment
+import com.example.mobiledger.presentation.addtransaction.AddTransactionDialogFragment
 import com.example.mobiledger.presentation.splash.SplashFragment
 
 object FragmentTagUtil {

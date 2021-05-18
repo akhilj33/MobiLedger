@@ -112,7 +112,8 @@ class HomeViewModel(
         viewModelScope.launch {
             when (transactionResult) {
                 is AppResult.Success -> {
-                    _homeViewItemListLiveData.value = Event(renderHomeViewList(transactionResult.data, monthlyResult))
+                    _homeViewItemListLiveData.value =
+                        Event(renderHomeViewList(transactionResult.data.sortedBy{ it.transactionTime }, monthlyResult))
                     _isLoading.value = false
                 }
                 is AppResult.Failure -> {
