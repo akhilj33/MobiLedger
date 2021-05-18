@@ -9,6 +9,7 @@ import com.example.mobiledger.presentation.auth.LoginFragment
 import com.example.mobiledger.presentation.auth.LoginNavigator
 import com.example.mobiledger.presentation.auth.SignUpFragment
 import com.example.mobiledger.presentation.auth.SignUpNavigator
+import com.example.mobiledger.presentation.budget.BudgetNavigator
 import com.example.mobiledger.presentation.dashboard.DashboardFragment
 import com.example.mobiledger.presentation.home.HomeNavigator
 import com.example.mobiledger.presentation.profile.EditProfileFragment
@@ -20,7 +21,7 @@ import com.example.mobiledger.presentation.splash.SplashNavigator
 class MainActivityNavigator constructor(
     @IdRes private val containerId: Int,
     private val fragmentManager: FragmentManager
-) : HomeNavigator, LoginNavigator, SignUpNavigator, SplashNavigator, ProfileNavigator {
+) : HomeNavigator, LoginNavigator, SignUpNavigator, SplashNavigator, ProfileNavigator, BudgetNavigator {
 
 
     /*---------------------------------Main Activity-------------------------------------*/

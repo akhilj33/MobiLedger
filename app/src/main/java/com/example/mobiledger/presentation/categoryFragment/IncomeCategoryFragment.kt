@@ -10,6 +10,7 @@ import com.example.mobiledger.common.utils.showAddCategoryDialogFragment
 import com.example.mobiledger.databinding.FragmentIncomeCategoryBinding
 import com.example.mobiledger.databinding.SnackViewErrorBinding
 import com.example.mobiledger.domain.entities.IncomeCategoryListEntity
+import com.example.mobiledger.domain.enums.TransactionType
 import com.example.mobiledger.presentation.OneTimeObserver
 import com.example.mobiledger.presentation.categoryFragment.IncomeCategoryViewModel
 import com.example.mobiledger.presentation.categoryFragment.adapter.CategoryAdapter
@@ -24,7 +25,7 @@ class IncomeCategoryFragment : BaseFragment<FragmentIncomeCategoryBinding, BaseN
     private var list: List<String> = emptyList()
 
     private val incomeCategoryAdapter: CategoryAdapter by lazy {
-        CategoryAdapter(onCategoryDeleteClick)
+        CategoryAdapter(TransactionType.Income, onCategoryDeleteClick)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

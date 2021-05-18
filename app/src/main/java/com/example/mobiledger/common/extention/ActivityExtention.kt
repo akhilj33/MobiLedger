@@ -8,9 +8,11 @@ import android.content.Context
 import android.view.Gravity
 import android.view.Window
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
+import com.example.mobiledger.R
 
 private const val COPY_TO_CLIPBOARD = "copy_to_clipboard"
 
@@ -32,10 +34,10 @@ fun Activity.showDialog(
     }
     val alertDialog: AlertDialog = builder.create()
     alertDialog.setOnShowListener {
-//        alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE)
-//            .setTextColor(ContextCompat.getColor(this, R.color.blue))
-//        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE)
-//            .setTextColor(ContextCompat.getColor(this, R.color.blue))
+        alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE)
+            .setTextColor(ContextCompat.getColor(this, R.color.colorPrimary))
+        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE)
+            .setTextColor(ContextCompat.getColor(this, R.color.colorPrimary))
     }
     alertDialog.setCancelable(false)
     alertDialog.show()

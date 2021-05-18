@@ -28,6 +28,7 @@
     <dimen name="bottom_nav_height">@dimen/cdp_70</dimen>
     <dimen name="bottom_nav_image_margin">@dimen/cdp_12</dimen>
     <dimen name="bottom_nav_text_margin">@dimen/cdp_10</dimen>
+    <dimen name="seek_bar_thickness">4dp</dimen>
     <dimen name="cdp_48">48dp</dimen>
     <dimen name="csp_18">18sp</dimen>
     <dimen name="csp_22">22sp</dimen>

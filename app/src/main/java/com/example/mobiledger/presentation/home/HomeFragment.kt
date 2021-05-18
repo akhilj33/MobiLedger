@@ -20,7 +20,7 @@ class HomeFragment :
 
     private val viewModel: HomeViewModel by viewModels { viewModelFactory }
 
-    private val homeAdapter: HomeAdapter by lazy { HomeAdapter() }
+    private val homeAdapter: HomeAdapter by lazy { HomeAdapter(onDeleteItemClick) }
 
     override fun getSnackBarErrorView(): SnackViewErrorBinding = viewBinding.includeErrorView
 
@@ -54,6 +54,10 @@ class HomeFragment :
             viewBinding.monthNavigationBar.tvMonth.text = it
         })
 
+        viewModel.deleteTransactionLiveData.observe(viewLifecycleOwner, OneTimeObserver{
+            homeAdapter.removeAt(it)
+        })
+
         viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
             if (isLoading) {
                 showSwipeRefresh()
@@ -84,6 +88,7 @@ class HomeFragment :
         viewBinding.ivProfileIcon.setOnClickListener {
             navigator?.navigateToProfileScreen()
         }
+        viewBinding.horizontalGuideline2
     }
 
     private fun handleRightClick() {
@@ -116,6 +121,10 @@ class HomeFragment :
             layoutManager = linearLayoutManager
             adapter = homeAdapter
         }
+    }
+
+    private val onDeleteItemClick = fun(transactionId:String, position: Int) {
+        viewModel.deleteTransaction(transactionId, position)
     }
 
     companion object {
