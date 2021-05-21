@@ -13,6 +13,8 @@ sealed class BudgetViewItem(val viewType: BudgetViewType) {
 
     data class BudgetCategory(val data: BudgetCategoryData, val type: BudgetViewType = BudgetViewType.BudgetData) : BudgetViewItem(type)
 
+    object BtnAddCategory : BudgetViewItem(BudgetViewType.BtnAddCategory)
+
     object BudgetEmpty : BudgetViewItem(BudgetViewType.EmptyBudget)
 }
 //            -------------------- Helper Data classes ----------------------------
@@ -44,5 +46,5 @@ data class BudgetCategoryData(
 data class MonthlyBudgetOverviewData(val maxBudget: String, val totalBudget: String)
 
 
-enum class BudgetViewType { Header, MonthlyBudgetOverview, BudgetData, EmptyBudget }
+enum class BudgetViewType { Header, MonthlyBudgetOverview, BtnAddCategory, BudgetData, EmptyBudget }
 

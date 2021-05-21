@@ -17,6 +17,8 @@ interface BudgetRepository {
     suspend fun getMonthlyBudgetOverView(monthYear: String): AppResult<MonthlyBudgetData?>
     suspend fun getCategoryBudgetListByMonth(monthYear: String): AppResult<List<MonthlyCategoryBudget>>
     suspend fun setMonthlyBudget(monthYear: String, monthlyBudgetData: MonthlyBudgetData): AppResult<Unit>
+    suspend fun addCategoryBudget(monthYear: String, monthlyCategoryBudget: MonthlyCategoryBudget): AppResult<Unit>
+    suspend fun updateBudgetTotal(monthYear: String, totalBudgetData: Long): AppResult<Unit>
 }
 
 class BudgetRepositoryImpl(
@@ -56,4 +58,23 @@ class BudgetRepositoryImpl(
         }
     }
 
+    override suspend fun addCategoryBudget(monthYear: String, monthlyCategoryBudget: MonthlyCategoryBudget): AppResult<Unit> {
+        return withContext(dispatcher) {
+            val uId = cacheSource.getUID()
+            if (uId != null) {
+                budgetApi.addCategoryBudget(uId, monthYear, monthlyCategoryBudget)
+            } else
+                AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
+        }
+    }
+
+    override suspend fun updateBudgetTotal(monthYear: String, totalBudgetData: Long): AppResult<Unit> {
+        return withContext(dispatcher) {
+            val uId = cacheSource.getUID()
+            if (uId != null) {
+                budgetApi.updateBudgetTotal(uId, monthYear, totalBudgetData)
+            } else
+                AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
+        }
+    }
 }

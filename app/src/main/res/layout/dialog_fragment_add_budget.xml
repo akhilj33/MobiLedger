@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -23,46 +24,48 @@
             android:orientation="vertical"
             app:layout_constraintGuide_percent="0.90" />
 
-        <View
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginTop="@dimen/cdp_24"
-            android:background="@color/colorWhite"
-            app:layout_constraintBottom_toBottomOf="@id/textSetYourBudget"
-            app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_90"
-            app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_10"
-            app:layout_constraintTop_toTopOf="parent" />
 
 
         <TextView
             android:id="@+id/textSetYourBudget"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            style="@style/GelionSemiBoldBlue24"
             android:layout_marginTop="@dimen/cdp_24"
-            android:text="@string/set_your_budget"
-            android:textColor="@color/colorTextDark"
-            android:textSize="@dimen/csp_24"
+            android:text="@string/add_transaction"
             app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_90"
             app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_10"
             app:layout_constraintTop_toTopOf="parent" />
 
 
-        <Spinner
+        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/spinner_category"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/csp_16"
-            android:layout_marginTop="@dimen/cdp_8"
-            android:theme="@style/SpinnerTheme"
-            app:layout_constraintTop_toBottomOf="@id/textSetYourBudget"
+            app:errorEnabled="true"
+            app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_90"
             app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_10"
-            app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_90" />
+            app:layout_constraintTop_toBottomOf="@id/textSetYourBudget">
+
+            <AutoCompleteTextView
+                android:id="@+id/my_spinner_dropdown"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/category"
+                android:inputType="none"
+                android:textSize="@dimen/csp_16"
+                app:hintTextColor="@color/colorGrey" />
+        </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/amountLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/cdp_10"
+            android:hint="@string/amount_rs"
+            app:errorEnabled="true"
             app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_90"
             app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_10"
             app:layout_constraintTop_toBottomOf="@id/spinner_category">
@@ -71,9 +74,8 @@
                 android:id="@+id/textAmount"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/amount_rs"
                 android:inputType="number"
-                android:textColorHint="@color/colorPrimary"
+                android:textColorHint="@color/colorGrey"
                 android:textSize="@dimen/csp_16" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -93,6 +95,27 @@
             app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_90"
             app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_10"
             app:layout_constraintTop_toBottomOf="@id/amountLayout" />
+
+        <ProgressBar
+            android:id="@+id/addBudgetProgressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <include
+            android:id="@+id/includeErrorView"
+            layout="@layout/snack_view_error"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:visibility="visible" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

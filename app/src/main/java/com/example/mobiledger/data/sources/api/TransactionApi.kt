@@ -48,6 +48,7 @@ interface TransactionApi {
     ): AppResult<Unit>
 
     suspend fun updateExpenseInBudget(uid: String, monthYear: String, monthlyCategorySummary: MonthlyCategorySummary): AppResult<Unit>
+
 }
 
 class TransactionApiImpl(private val firebaseDb: FirebaseFirestore, private val authSource: AuthSource) : TransactionApi {

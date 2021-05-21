@@ -1,20 +1,18 @@
 package com.example.mobiledger.presentation.budget
 
-import android.util.Log
 import androidx.annotation.StringRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.mobiledger.R
 import com.example.mobiledger.common.base.BaseViewModel
-import com.example.mobiledger.common.extention.toAmount
 import com.example.mobiledger.common.utils.DateUtils
 import com.example.mobiledger.common.utils.DefaultCategoryUtils
 import com.example.mobiledger.domain.AppResult
 import com.example.mobiledger.domain.enums.TransactionType
 import com.example.mobiledger.domain.usecases.BudgetUseCase
+import com.example.mobiledger.domain.usecases.CategoryUseCase
 import com.example.mobiledger.presentation.Event
-import com.example.mobiledger.presentation.home.HomeViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
@@ -22,7 +20,8 @@ import kotlinx.coroutines.withContext
 import java.util.*
 
 class BudgetViewModel(
-    private val budgetUseCase: BudgetUseCase
+    private val budgetUseCase: BudgetUseCase,
+    private val categoryUseCase: CategoryUseCase
 ) : BaseViewModel() {
 
     val budgetViewItemListLiveData: LiveData<Event<MutableList<BudgetViewItem>>> get() = _budgetViewItemListLiveData
@@ -31,15 +30,43 @@ class BudgetViewModel(
     private val _isLoading: MutableLiveData<Boolean> = MutableLiveData(false)
     val isLoading: LiveData<Boolean> get() = _isLoading
 
-    private val _errorLiveData: MutableLiveData<Event<HomeViewModel.ViewError>> = MutableLiveData()
-    val errorLiveData: LiveData<Event<HomeViewModel.ViewError>> = _errorLiveData
+    val monthNameLiveData: LiveData<String> get() = _monthNameLiveData
+    private val _monthNameLiveData: MutableLiveData<String> = MutableLiveData()
 
+    private val _errorLiveData: MutableLiveData<Event<ViewError>> = MutableLiveData()
+    val errorLiveData: LiveData<Event<ViewError>> = _errorLiveData
+
+    var expenseCatList: ArrayList<String> = arrayListOf()
+    var existingBudgetCatList: ArrayList<String> = arrayListOf()
+
+    var budgetTotal: Long = 0
     private var monthCount = 0
 
-    private fun getCurrentMonth(): Calendar = DateUtils.getCurrentDate().apply { add(Calendar.MONTH, monthCount) }
 
     fun getBudgetData() {
         getMonthlyBudgetSummary()
+        updateMonthLiveData()
+    }
+
+    fun getExpenseCategoryList() {
+        _isLoading.value = true
+        viewModelScope.launch {
+            when (val result = categoryUseCase.getUserExpenseCategories()) {
+                is AppResult.Success -> {
+                    expenseCatList.addAll(result.data.expenseCategoryList)
+                }
+
+                is AppResult.Failure -> {
+                    _errorLiveData.value = Event(
+                        ViewError(
+                            viewErrorType = ViewErrorType.NON_BLOCKING,
+                            message = result.error.message
+                        )
+                    )
+                }
+            }
+        }
+        _isLoading.value = false
     }
 
     private fun getMonthlyBudgetSummary() {
@@ -56,8 +83,8 @@ class BudgetViewModel(
                 is AppResult.Failure -> {
                     if (needToHandleAppError(monthlyBudgetDataResult.error)) {
                         _errorLiveData.value = Event(
-                            HomeViewModel.ViewError(
-                                viewErrorType = HomeViewModel.ViewErrorType.NON_BLOCKING,
+                            ViewError(
+                                viewErrorType = ViewErrorType.NON_BLOCKING,
                                 message = monthlyBudgetDataResult.error.message
                             )
                         )
@@ -82,8 +109,8 @@ class BudgetViewModel(
                 is AppResult.Failure -> {
                     if (needToHandleAppError(monthlyBudgetCategoryList.error)) {
                         _errorLiveData.value = Event(
-                            HomeViewModel.ViewError(
-                                viewErrorType = HomeViewModel.ViewErrorType.NON_BLOCKING,
+                            ViewError(
+                                viewErrorType = ViewErrorType.NON_BLOCKING,
                                 message = monthlyBudgetCategoryList.error.message
                             )
                         )
@@ -100,34 +127,61 @@ class BudgetViewModel(
     ): MutableList<BudgetViewItem> {
 
         return withContext(Dispatchers.IO) {
-            Log.i("Anant", "Lets make the budget list")
             val budgetViewItemList = mutableListOf<BudgetViewItem>()
-            budgetViewItemList.add(BudgetViewItem.BudgetHeaderData(R.string.overview_report))
             if (monthlyResult != null) {
-                Log.i("Anant", "Overview Null")
+                budgetViewItemList.add(BudgetViewItem.BudgetHeaderData(R.string.overview_report))
                 budgetViewItemList.add(
                     BudgetViewItem.BudgetOverviewData(
                         MonthlyBudgetOverviewData(
-                            monthlyResult.maxBudget.toString().toAmount(),
-                            monthlyResult.totalBudget.toString().toAmount()
+                            monthlyResult.maxBudget.toString(),
+                            monthlyResult.totalBudget.toString()
                         )
                     )
                 )
+                budgetTotal = monthlyResult.totalBudget
+
+                budgetViewItemList.add(BudgetViewItem.BtnAddCategory)
 
                 if (budgetCategoryList.isNotEmpty()) {
-                    Log.i("Anant", budgetCategoryList.size.toString())
                     budgetCategoryList.forEach {
+
                         budgetViewItemList.add(BudgetViewItem.BudgetCategory(mapToCategoryBudgetData(it)))
+                        existingBudgetCatList.add(it.categoryName)
                     }
                 }
             } else {
-                Log.i("Anant", "List Empty")
                 budgetViewItemList.add(BudgetViewItem.BudgetEmpty)
             }
-
-
             budgetViewItemList
         }
+    }
+
+    fun giveFinalExpenseList(): ArrayList<String> {
+        expenseCatList.removeAll(existingBudgetCatList)
+        return expenseCatList
+    }
+
+
+    private fun updateMonthLiveData() {
+        _monthNameLiveData.value = DateUtils.getDateInMMMMyyyyFormat(getCurrentMonth())
+    }
+
+    fun getCurrentMonth(): Calendar = DateUtils.getCurrentDate().apply { add(Calendar.MONTH, monthCount) }
+
+    fun isCurrentMonth(): Boolean = monthCount == 0
+
+    fun getPreviousMonthData() {
+        --monthCount
+        reloadData()
+    }
+
+    fun getNextMonthData() {
+        ++monthCount
+        reloadData()
+    }
+
+    fun reloadData() {
+        getBudgetData()
     }
 
     enum class ViewErrorType { NON_BLOCKING }

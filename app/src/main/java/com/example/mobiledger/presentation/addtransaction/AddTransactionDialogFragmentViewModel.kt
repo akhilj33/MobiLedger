@@ -7,7 +7,10 @@ import androidx.lifecycle.viewModelScope
 import com.example.mobiledger.R
 import com.example.mobiledger.common.base.BaseViewModel
 import com.example.mobiledger.domain.AppResult
-import com.example.mobiledger.domain.entities.*
+import com.example.mobiledger.domain.entities.MonthlyTransactionSummaryEntity
+import com.example.mobiledger.domain.entities.TransactionEntity
+import com.example.mobiledger.domain.entities.isEmpty
+import com.example.mobiledger.domain.entities.toMutableList
 import com.example.mobiledger.domain.enums.TransactionType
 import com.example.mobiledger.domain.usecases.CategoryUseCase
 import com.example.mobiledger.domain.usecases.TransactionUseCase
@@ -18,7 +21,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import timber.log.Timber
 
 class AddTransactionDialogFragmentViewModel(
     private val transactionUseCase: TransactionUseCase,
@@ -90,8 +92,9 @@ class AddTransactionDialogFragmentViewModel(
             when (val result = getMonthlySummaryJob.await()) {
                 is AppResult.Success -> {
                     val transactionResult = addTransactionJob.await()
-                    handleAddTransactionResult(transactionResult, result.data, transactionEntity, monthYear)
-                    addCategoryTransaction(monthYear, transactionEntity)
+                    val a = async { handleAddTransactionResult(transactionResult, result.data, transactionEntity, monthYear) }
+                    val b = async { addCategoryTransaction(monthYear, transactionEntity) }
+
                 }
 
                 is AppResult.Failure -> {
@@ -105,7 +108,6 @@ class AddTransactionDialogFragmentViewModel(
                 }
             }
         }
-
     }
 
     private suspend fun handleAddTransactionResult(
