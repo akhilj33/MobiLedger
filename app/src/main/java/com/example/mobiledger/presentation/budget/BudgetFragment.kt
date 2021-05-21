@@ -54,6 +54,11 @@ class BudgetFragment : BaseFragment<FragmentBudgetBinding, BudgetNavigator>(R.la
     }
 
     private fun setUpObserver() {
+
+        activityViewModel.addBudgetResultLiveData.observe(viewLifecycleOwner, OneTimeObserver {
+            refreshView()
+        })
+
         viewModel.budgetViewItemListLiveData.observe(viewLifecycleOwner, OneTimeObserver {
             budgetAdapter.addItemList(it)
         })

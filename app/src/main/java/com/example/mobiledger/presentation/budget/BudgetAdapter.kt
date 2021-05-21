@@ -100,7 +100,7 @@ class BudgetAdapter(
                 tvMaxBudgetAmount.text = item.maxBudget.toAmount()
                 tvTotalBudgetAmount.text = item.totalBudget.toAmount()
                 val percent = (item.totalBudget.toFloat() / item.maxBudget.toFloat() * 100)
-                budgetAmountSeekBarID.value = (percent)
+                budgetAmountSeekBarID.value = (kotlin.math.min(percent, 100f))
 
             }
         }
@@ -114,7 +114,7 @@ class BudgetAdapter(
                 tvAmount.text = item.totalCategoryExpense.toAmount()
                 ivCategoryIcon.background = ContextCompat.getDrawable(context, item.categoryIcon)
                 val percent = (item.totalCategoryExpense.toFloat() / item.totalCategoryBudget.toFloat() * 100)
-                budgetCatAmountSeekBarID.value = (percent)
+                budgetCatAmountSeekBarID.value = (kotlin.math.min(percent, 100f))
                 tvSpentPercent.text = percent.toString().roundToOneDecimal(percent).toPercent()
             }
         }

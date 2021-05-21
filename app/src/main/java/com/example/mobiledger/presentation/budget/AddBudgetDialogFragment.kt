@@ -64,6 +64,7 @@ class AddBudgetDialogFragment :
 
     private fun setUpObserver() {
         viewModel.dataUpdatedResult.observe(viewLifecycleOwner, OneTimeObserver {
+            activityViewModel.addBudgetResult()
             dismiss()
         })
 
@@ -83,7 +84,7 @@ class AddBudgetDialogFragment :
                 if (viewBinding.textAmount.text.toString().isNotEmpty()) {
                     val amt = viewBinding.textAmount.text.toString().toLong()
                     if (amt >= 0) {
-                        viewModel.setBudget(MonthlyBudgetData(amt, 0), month)
+                        viewModel.setBudget(MonthlyBudgetData(amt, budgetTotal), month)
                     }
                 }
             } else {

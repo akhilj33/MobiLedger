@@ -47,7 +47,7 @@ class BudgetViewModel(
         getMonthlyBudgetSummary()
         updateMonthLiveData()
     }
-
+    //-------------------- GET BUDGET DATA --------------------
     fun getExpenseCategoryList() {
         _isLoading.value = true
         viewModelScope.launch {
@@ -68,6 +68,13 @@ class BudgetViewModel(
         }
         _isLoading.value = false
     }
+
+    fun giveFinalExpenseList(): ArrayList<String> {
+        expenseCatList.removeAll(existingBudgetCatList)
+        return expenseCatList
+    }
+
+    //-------------------- GET BUDGET DATA --------------------
 
     private fun getMonthlyBudgetSummary() {
         _isLoading.value = true
@@ -154,11 +161,6 @@ class BudgetViewModel(
             }
             budgetViewItemList
         }
-    }
-
-    fun giveFinalExpenseList(): ArrayList<String> {
-        expenseCatList.removeAll(existingBudgetCatList)
-        return expenseCatList
     }
 
 
