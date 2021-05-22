@@ -11,25 +11,11 @@
         <!--          HORIZONTAL GUIDELINES          -->
 
         <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/horizontalScreenGuideline_45"
+            android:id="@+id/horizontalScreenGuideline_15"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.45" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/horizontalScreenGuideline_20"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.20" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/horizontalScreenGuideline_90"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.90" />
+            app:layout_constraintGuide_percent="0.08" />
 
         <!--          VERTICAL GUIDELINES          -->
 
@@ -48,51 +34,15 @@
             app:layout_constraintGuide_percent="0.90" />
 
 
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/toolbarLogin"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/colorPrimaryDark"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:title="@string/app_name"
-            app:titleTextColor="@color/colorWhite" />
-
-        <TextView
-            android:id="@+id/tvTitle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="@string/mobi_ledger"
-            android:textAlignment="center"
-            android:textColor="@color/colorPrimaryDark"
-            android:textSize="@dimen/csp_36"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_90"
-            app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_10"
-            app:layout_constraintTop_toBottomOf="@id/horizontalScreenGuideline_20" />
-
-        <TextView
-            android:id="@+id/tvHeading"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/cdp_16"
-            android:text="@string/join_a_creative_solution_for_a_better_tomorrow"
-            android:textAlignment="center"
-            android:textColor="@color/colorPrimaryDark"
-            android:textSize="@dimen/csp_20"
-            app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_90"
-            app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_10"
-            app:layout_constraintTop_toBottomOf="@id/tvTitle" />
-
-
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/emailLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            app:boxBackgroundColor="@color/colorAppLightBlue"
             app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_90"
             app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_10"
-            app:layout_constraintTop_toBottomOf="@id/horizontalScreenGuideline_45">
+            app:layout_constraintTop_toBottomOf="@id/horizontalScreenGuideline_15">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/textEmail"
@@ -109,6 +59,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/cdp_8"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            app:boxBackgroundColor="@color/colorAppLightBlue"
             app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_90"
             app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_10"
             app:layout_constraintTop_toBottomOf="@id/emailLayout">
@@ -148,26 +100,28 @@
             app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_10"
             app:layout_constraintTop_toBottomOf="@id/btnLogin" />
 
-        <ImageView
-            android:id="@+id/btnGoogleSignIn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/common_google_signin_btn_icon_dark"
-            app:layout_constraintBottom_toTopOf="@id/tvSignUp"
-            app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_90"
-            app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_10"
-            app:layout_constraintTop_toBottomOf="@id/tvForgetPassword" />
-
         <TextView
-            android:id="@+id/tvSignUp"
+            android:id="@+id/tvLoginUsingThirdParty"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/new_user_sign_up"
+            android:layout_marginTop="@dimen/cdp_16"
+            android:text="@string/login_with"
             android:textColor="@color/colorPrimary"
             android:textSize="@dimen/csp_16"
             app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_90"
             app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_10"
-            app:layout_constraintTop_toBottomOf="@id/horizontalScreenGuideline_90" />
+            app:layout_constraintTop_toBottomOf="@id/tvForgetPassword" />
+
+        <ImageView
+            android:id="@+id/btnGoogleSignIn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/cdp_10"
+            android:src="@drawable/common_google_signin_btn_icon_dark"
+            app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_90"
+            app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_10"
+            app:layout_constraintTop_toBottomOf="@id/tvLoginUsingThirdParty" />
+
 
         <ProgressBar
             android:id="@+id/loginProgressBar"

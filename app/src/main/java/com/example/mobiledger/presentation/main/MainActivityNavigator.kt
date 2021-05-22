@@ -1,15 +1,15 @@
 package com.example.mobiledger.presentation.main
 
-import com.example.mobiledger.presentation.categoryFragment.CategoryFragment
 import androidx.annotation.IdRes
 import androidx.fragment.app.FragmentManager
 import com.example.mobiledger.common.utils.FragmentTagUtil
 import com.example.mobiledger.common.utils.FragmentTransactionHelper
-import com.example.mobiledger.presentation.auth.LoginFragment
+import com.example.mobiledger.presentation.auth.AuthViewPagerFragment
 import com.example.mobiledger.presentation.auth.LoginNavigator
 import com.example.mobiledger.presentation.auth.SignUpFragment
 import com.example.mobiledger.presentation.auth.SignUpNavigator
 import com.example.mobiledger.presentation.budget.BudgetNavigator
+import com.example.mobiledger.presentation.categoryFragment.CategoryFragment
 import com.example.mobiledger.presentation.dashboard.DashboardFragment
 import com.example.mobiledger.presentation.home.HomeNavigator
 import com.example.mobiledger.presentation.profile.EditProfileFragment
@@ -64,11 +64,11 @@ class MainActivityNavigator constructor(
         )
     }
 
-    override fun navigateSplashToLoginScreen() {
+    override fun navigateSplashToAuthScreen() {
         popAllFragments()
         FragmentTransactionHelper.replaceFragment(
             fragmentManager,
-            LoginFragment.newInstance(),
+            AuthViewPagerFragment.newInstance(),
             containerId, addToBackStack = true
         )
     }

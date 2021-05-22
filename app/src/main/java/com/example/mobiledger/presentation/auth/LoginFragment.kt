@@ -41,9 +41,9 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, LoginNavigator>(R.layou
                     viewModel.loginUserViaEmail(email, password)
             }
 
-            tvSignUp.setOnClickListener {
-                navigator?.navigateLoginToSignUpScreen()
-            }
+//            tvSignUp.setOnClickListener {
+//                navigator?.navigateLoginToSignUpScreen()
+//            }
 
             btnGoogleSignIn.setOnClickListener {
                 initSignInWithGoogle()

@@ -85,6 +85,7 @@
     <string name="category_already_exist">Category Already Exist</string>
     <string name="date">Date</string>
     <string name="add_category_budget">Add category budget</string>
+    <string name="login_with">Login with</string>
 
     <!-- Budget Fragment -->
 
