@@ -27,6 +27,8 @@ interface TransactionRepository {
         category: String,
         monthlyCategorySummary: MonthlyCategorySummary
     ): AppResult<Unit>
+
+    suspend fun updateExpenseInBudget(monthYear: String, monthlyCategorySummary: MonthlyCategorySummary): AppResult<Unit>
 }
 
 class TransactionRepositoryImpl(
@@ -144,12 +146,25 @@ class TransactionRepositoryImpl(
     override suspend fun updateMonthlyCategoryBudget(
         monthYear: String,
         category: String,
-        monthlyCategorySummary: MonthlyCategorySummary
+        monthlyCategorySummary: MonthlyCategorySummary,
     ): AppResult<Unit> {
         return withContext(dispatcher) {
             val uId = cacheSource.getUID()
             if (uId != null) {
                 transactionApi.updateMonthlyCategoryBudget(uId, monthYear, category, monthlyCategorySummary)
+            } else
+                AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
+        }
+    }
+
+    override suspend fun updateExpenseInBudget(
+        monthYear: String,
+        monthlyCategorySummary: MonthlyCategorySummary
+    ): AppResult<Unit> {
+        return withContext(dispatcher) {
+            val uId = cacheSource.getUID()
+            if (uId != null) {
+                transactionApi.updateExpenseInBudget(uId, monthYear, monthlyCategorySummary)
             } else
                 AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
         }

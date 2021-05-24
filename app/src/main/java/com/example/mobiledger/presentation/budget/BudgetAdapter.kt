@@ -3,21 +3,21 @@ package com.example.mobiledger.presentation.budget
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.chauthai.swipereveallayout.ViewBinderHelper
-import com.example.mobiledger.databinding.BudgetCategoryItemBinding
-import com.example.mobiledger.databinding.BudgetEmptyItemBinding
-import com.example.mobiledger.databinding.BudgetHeaderLayoutBinding
-import com.example.mobiledger.databinding.MonthlyBudgetOverviewItemBinding
+import com.example.mobiledger.common.extention.roundToOneDecimal
+import com.example.mobiledger.common.extention.toAmount
+import com.example.mobiledger.common.extention.toPercent
+import com.example.mobiledger.databinding.*
+
 
 class BudgetAdapter(
     val onMakeBudgetClick: () -> Unit,
-    val onBudgetOverViewClick: () -> Unit
+    val onBudgetOverViewClick: () -> Unit,
+    val onAddBudgetCategoryClick: () -> Unit
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private lateinit var context: Context
-
-    private val viewBinderHelper = ViewBinderHelper()
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)
@@ -29,7 +29,9 @@ class BudgetAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         return when (BudgetViewType.values()[viewType]) {
+
             BudgetViewType.Header -> BudgetHeaderViewHolder(BudgetHeaderLayoutBinding.inflate(layoutInflater, parent, false))
+
             BudgetViewType.MonthlyBudgetOverview -> MonthlyBudgetOverviewViewHolder(
                 MonthlyBudgetOverviewItemBinding.inflate(
                     layoutInflater,
@@ -37,6 +39,15 @@ class BudgetAdapter(
                     false
                 )
             )
+
+            BudgetViewType.BtnAddCategory -> AddBudgetCategoryViewHolder(
+                AddBudgetCategoryBinding.inflate(
+                    layoutInflater,
+                    parent,
+                    false
+                )
+            )
+
             BudgetViewType.BudgetData -> BudgetDataViewHolder(
                 BudgetCategoryItemBinding.inflate(
                     layoutInflater,
@@ -58,6 +69,7 @@ class BudgetAdapter(
         when (val item = items[position]) {
             is BudgetViewItem.BudgetHeaderData -> (holder as BudgetAdapter.BudgetHeaderViewHolder).bind(item.data)
             is BudgetViewItem.BudgetOverviewData -> (holder as BudgetAdapter.MonthlyBudgetOverviewViewHolder).bind(item.data)
+            is BudgetViewItem.BtnAddCategory -> (holder as BudgetAdapter.AddBudgetCategoryViewHolder).bind()
             is BudgetViewItem.BudgetCategory -> (holder as BudgetAdapter.BudgetDataViewHolder).bind(item.data)
             is BudgetViewItem.BudgetEmpty -> (holder as BudgetAdapter.BudgetEmptyViewHolder).bind()
         }
@@ -85,8 +97,11 @@ class BudgetAdapter(
                 rootBudgetOverview.setOnClickListener {
                     onBudgetOverViewClick()
                 }
-                tvMaxBudgetAmount.text = item.maxBudget
-                tvTotalBudgetAmount.text = item.totalBudget
+                tvMaxBudgetAmount.text = item.maxBudget.toAmount()
+                tvTotalBudgetAmount.text = item.totalBudget.toAmount()
+                val percent = (item.totalBudget.toFloat() / item.maxBudget.toFloat() * 100)
+                budgetAmountSeekBarID.value = (kotlin.math.min(percent, 100f))
+
             }
         }
     }
@@ -94,7 +109,23 @@ class BudgetAdapter(
     inner class BudgetDataViewHolder(private val viewBinding: BudgetCategoryItemBinding) : RecyclerView.ViewHolder(viewBinding.root) {
         fun bind(item: BudgetCategoryData) {
             viewBinding.apply {
+                tvBudgetAmount.text = item.totalCategoryBudget.toAmount()
+                tvCategoryName.text = item.categoryName
+                tvAmount.text = item.totalCategoryExpense.toAmount()
+                ivCategoryIcon.background = ContextCompat.getDrawable(context, item.categoryIcon)
+                val percent = (item.totalCategoryExpense.toFloat() / item.totalCategoryBudget.toFloat() * 100)
+                budgetCatAmountSeekBarID.value = (kotlin.math.min(percent, 100f))
+                tvSpentPercent.text = percent.toString().roundToOneDecimal(percent).toPercent()
+            }
+        }
+    }
 
+    inner class AddBudgetCategoryViewHolder(private val viewBinding: AddBudgetCategoryBinding) : RecyclerView.ViewHolder(viewBinding.root) {
+        fun bind() {
+            viewBinding.apply {
+                btnAddCategoryBudget.setOnClickListener {
+                    onAddBudgetCategoryClick()
+                }
             }
         }
     }

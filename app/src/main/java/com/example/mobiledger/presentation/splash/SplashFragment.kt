@@ -23,7 +23,7 @@ class SplashFragment : BaseFragment<FragmentSplashBinding, SplashNavigator>(R.la
     private fun setUpObservers() {
         viewModel.isUserSignedInLiveData.observe(viewLifecycleOwner, OneTimeObserver { isSignedIn ->
             if (isSignedIn) navigator?.launchDashboard()
-            else navigator?.navigateSplashToLoginScreen()
+            else navigator?.navigateSplashToAuthScreen()
         })
     }
 

@@ -83,7 +83,6 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/cdp_16"
-            android:text="1000000"
             app:layout_constraintTop_toBottomOf="@id/tvCategoryName"
             app:layout_constraintStart_toEndOf="@id/thumbnail"
             app:layout_constraintEnd_toEndOf="@id/verticalStartGuideline70" />
@@ -104,8 +103,7 @@
             style="@style/GelionRegularNavyBlue16"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/csp_16"
-            android:text="20%"
+            android:textSize="@dimen/csp_14"
             app:layout_constraintTop_toBottomOf="@id/tvAmount"
             app:layout_constraintStart_toEndOf="@id/tvSpent"
             app:layout_constraintEnd_toEndOf="@id/verticalStartGuideline70" />
@@ -133,10 +131,26 @@
             android:layout_marginStart="@dimen/cdp_16"
             android:ellipsize="end"
             android:maxLines="1"
-            android:text="10000"
             android:textSize="@dimen/csp_18"
             app:layout_constraintTop_toBottomOf="@id/tvBudget"
             app:layout_constraintStart_toEndOf="@id/verticalStartGuideline70"
+            app:layout_constraintEnd_toEndOf="@id/verticalEndGuideline" />
+
+        <com.google.android.material.slider.Slider
+            android:id="@+id/budgetCatAmountSeekBarID"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:padding="0dp"
+            android:value="20.0"
+            android:valueFrom="0.0"
+            android:valueTo="100.0"
+            app:thumbRadius="0dp"
+            app:trackHeight="@dimen/cdp_6"
+            android:enabled="false"
+            app:trackColorActive="@color/colorAppBlue"
+            app:layout_constraintTop_toBottomOf="@id/tvSpent"
+            app:layout_constraintStart_toStartOf="@id/verticalStartGuideline"
             app:layout_constraintEnd_toEndOf="@id/verticalEndGuideline" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

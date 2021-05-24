@@ -19,14 +19,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.04" />
+            app:layout_constraintGuide_percent="0.02" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/verticalEndGuideline"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.96" />
+            app:layout_constraintGuide_percent="0.98" />
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/ivProfileIcon"
@@ -44,7 +44,7 @@
             android:ellipsize="end"
             android:fontFamily="@font/margarine"
             android:maxLines="2"
-            android:text="Hello, Abhishek"
+            android:text="@string/budget"
             android:textColor="@color/colorTextDark"
             android:textSize="@dimen/csp_28"
             android:textStyle="bold"
@@ -83,17 +83,6 @@
                 android:overScrollMode="never" />
 
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/btnAddTransaction"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/cdp_32"
-            android:layout_marginBottom="@dimen/cdp_32"
-            android:contentDescription="@string/add_transaction"
-            android:src="@drawable/add_icon"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
 
 
         <include

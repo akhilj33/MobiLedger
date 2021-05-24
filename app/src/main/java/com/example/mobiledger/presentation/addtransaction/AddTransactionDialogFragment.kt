@@ -19,8 +19,6 @@ import com.example.mobiledger.databinding.DialogFragmentAddTransactionBinding
 import com.example.mobiledger.domain.entities.TransactionEntity
 import com.example.mobiledger.domain.enums.TransactionType
 import com.example.mobiledger.presentation.OneTimeObserver
-import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.DateValidatorPointBackward
 import com.google.android.material.datepicker.MaterialDatePicker
@@ -58,7 +56,8 @@ class AddTransactionDialogFragment :
             OneTimeObserver {
                 activityViewModel.addTransactionResult()
                 activity?.showToast(getString(R.string.transaction_added))
-                dialog?.dismiss()
+//                dialog?.dismiss()
+//                todo : dismiss
             }
         )
 

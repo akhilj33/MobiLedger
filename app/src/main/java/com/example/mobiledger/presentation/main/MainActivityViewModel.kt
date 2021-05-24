@@ -4,8 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.mobiledger.common.base.BaseViewModel
 import com.example.mobiledger.domain.enums.TransactionType
-import com.example.mobiledger.domain.usecases.CategoryUseCase
-import com.example.mobiledger.domain.usecases.TransactionUseCase
 import com.example.mobiledger.presentation.Event
 
 class MainActivityViewModel() : BaseViewModel() {
@@ -30,6 +28,9 @@ class MainActivityViewModel() : BaseViewModel() {
 
     private val _addCategoryResultLiveData: MutableLiveData<Event<TransactionType>> = MutableLiveData()
     val addCategoryResultLiveData: LiveData<Event<TransactionType>> = _addCategoryResultLiveData
+
+    private val _addBudgetResultLiveData: MutableLiveData<Event<Unit>> = MutableLiveData()
+    val addBudgetResultLiveData: LiveData<Event<Unit>> = _addBudgetResultLiveData
     /*---------------------------------------Bottom Tabs Info -------------------------------------------------*/
 
     fun updateCurrentTab(tab: NavTab) {
@@ -66,6 +67,9 @@ class MainActivityViewModel() : BaseViewModel() {
         _addCategoryResultLiveData.value = Event(transactionType)
     }
 
+    fun addBudgetResult() {
+        _addBudgetResultLiveData.value = Event(Unit)
+    }
 
     sealed class NavTab {
         object HOME : NavTab()

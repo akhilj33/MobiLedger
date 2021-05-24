@@ -10,6 +10,7 @@
     <color name="colorSnackBarError">@color/colorDarkRed</color>
 
     <color name="colorAppBlue">#282C52</color>
+    <color name="colorAppLightBlue">#edf0ff</color>
     <color name="colorBlack">#000000</color>
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorGray">#AAAAAA</color>

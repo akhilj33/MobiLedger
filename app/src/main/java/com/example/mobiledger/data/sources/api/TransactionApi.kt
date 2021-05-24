@@ -1,7 +1,9 @@
 package com.example.mobiledger.data.sources.api
 
-import android.util.Log
 import com.example.mobiledger.common.utils.ConstantUtils
+import com.example.mobiledger.common.utils.ConstantUtils.BUDGET
+import com.example.mobiledger.common.utils.ConstantUtils.BUDGET_DETAILS
+import com.example.mobiledger.common.utils.ConstantUtils.CATEGORY_BUDGET
 import com.example.mobiledger.common.utils.ConstantUtils.CATEGORY_TRANSACTION
 import com.example.mobiledger.common.utils.ConstantUtils.MONTH
 import com.example.mobiledger.common.utils.ConstantUtils.USERS
@@ -37,12 +39,16 @@ interface TransactionApi {
     suspend fun addCategoryTransaction(uid: String, monthYear: String, transactionEntity: TransactionEntity): AppResult<Unit>
 
     suspend fun getMonthlyCategorySummary(uid: String, monthYear: String, category: String): AppResult<MonthlyCategorySummary?>
+
     suspend fun updateMonthlyCategoryBudget(
         uid: String,
         monthYear: String,
         category: String,
         monthlyCategorySummary: MonthlyCategorySummary
     ): AppResult<Unit>
+
+    suspend fun updateExpenseInBudget(uid: String, monthYear: String, monthlyCategorySummary: MonthlyCategorySummary): AppResult<Unit>
+
 }
 
 class TransactionApiImpl(private val firebaseDb: FirebaseFirestore, private val authSource: AuthSource) : TransactionApi {
@@ -259,10 +265,10 @@ class TransactionApiImpl(private val firebaseDb: FirebaseFirestore, private val 
         val transRef: DocumentReference = firebaseDb.document("/$USERS/$uid/Months/$monthYear/Transaction/${transactionEntity.id}")
 
         try {
-//            if (!authSource.isUserAuthorized()) throw FirebaseAuthException(
-//                ErrorCodes.FIREBASE_UNAUTHORIZED,
-//                ConstantUtils.UNAUTHORIZED_ERROR_MSG
-//            )
+            if (!authSource.isUserAuthorized()) throw FirebaseAuthException(
+                ErrorCodes.FIREBASE_UNAUTHORIZED,
+                ConstantUtils.UNAUTHORIZED_ERROR_MSG
+            )
             response = firebaseDb.collection(ConstantUtils.USERS)
                 .document(uid)
                 .collection(MONTH)
@@ -274,7 +280,6 @@ class TransactionApiImpl(private val firebaseDb: FirebaseFirestore, private val 
                 .set(TransactionReference(transRef))
             response.await()
         } catch (e: Exception) {
-            Log.i("Anant", e.localizedMessage.toString())
             exception = e
         }
 
@@ -292,10 +297,10 @@ class TransactionApiImpl(private val firebaseDb: FirebaseFirestore, private val 
         var response: Task<DocumentSnapshot>? = null
         var exception: Exception? = null
         try {
-//            if (!authSource.isUserAuthorized()) throw FirebaseAuthException(
-//                ErrorCodes.FIREBASE_UNAUTHORIZED,
-//                ConstantUtils.UNAUTHORIZED_ERROR_MSG
-//            )
+            if (!authSource.isUserAuthorized()) throw FirebaseAuthException(
+                ErrorCodes.FIREBASE_UNAUTHORIZED,
+                ConstantUtils.UNAUTHORIZED_ERROR_MSG
+            )
             response = firebaseDb.collection(ConstantUtils.USERS)
                 .document(uid)
                 .collection(MONTH)
@@ -306,7 +311,6 @@ class TransactionApiImpl(private val firebaseDb: FirebaseFirestore, private val 
 
             response.await()
         } catch (e: Exception) {
-            Log.i("Anant", e.localizedMessage.toString())
             exception = e
         }
 
@@ -333,10 +337,10 @@ class TransactionApiImpl(private val firebaseDb: FirebaseFirestore, private val 
         var response: Task<Void>? = null
         var exception: Exception? = null
         try {
-//            if (!authSource.isUserAuthorized()) throw FirebaseAuthException(
-//                ErrorCodes.FIREBASE_UNAUTHORIZED,
-//                ConstantUtils.UNAUTHORIZED_ERROR_MSG
-//            )
+            if (!authSource.isUserAuthorized()) throw FirebaseAuthException(
+                ErrorCodes.FIREBASE_UNAUTHORIZED,
+                ConstantUtils.UNAUTHORIZED_ERROR_MSG
+            )
             response = firebaseDb.collection(ConstantUtils.USERS)
                 .document(uid)
                 .collection(MONTH)
@@ -347,7 +351,46 @@ class TransactionApiImpl(private val firebaseDb: FirebaseFirestore, private val 
 
             response.await()
         } catch (e: Exception) {
-            Log.i("Anant", e.localizedMessage.toString())
+            exception = e
+        }
+
+        return when (val result = ErrorMapper.checkAndMapFirebaseApiError(response, exception)) {
+            is FireBaseResult.Success -> {
+                AppResult.Success(Unit)
+            }
+            is FireBaseResult.Failure -> {
+                AppResult.Failure(result.error)
+            }
+        }
+    }
+
+    override suspend fun updateExpenseInBudget(
+        uid: String,
+        monthYear: String,
+        monthlyCategorySummary: MonthlyCategorySummary
+    ): AppResult<Unit> {
+        var response: Task<Void>? = null
+        var exception: Exception? = null
+
+        try {
+            if (!authSource.isUserAuthorized()) throw FirebaseAuthException(
+                ErrorCodes.FIREBASE_UNAUTHORIZED,
+                ConstantUtils.UNAUTHORIZED_ERROR_MSG
+            )
+            val expenseMap = mapOf<String, Long>(Pair("categoryExpense", monthlyCategorySummary.totalCategoryExpense))
+            response = firebaseDb.collection(ConstantUtils.USERS)
+                .document(uid)
+                .collection(MONTH)
+                .document(monthYear)
+                .collection(BUDGET)
+                .document(BUDGET_DETAILS)
+                .collection(CATEGORY_BUDGET)
+                .document(monthlyCategorySummary.categoryName)
+                .update(expenseMap)
+
+            response.await()
+
+        } catch (e: Exception) {
             exception = e
         }
 

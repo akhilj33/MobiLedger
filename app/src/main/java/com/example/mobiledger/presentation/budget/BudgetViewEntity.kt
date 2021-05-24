@@ -13,6 +13,8 @@ sealed class BudgetViewItem(val viewType: BudgetViewType) {
 
     data class BudgetCategory(val data: BudgetCategoryData, val type: BudgetViewType = BudgetViewType.BudgetData) : BudgetViewItem(type)
 
+    object BtnAddCategory : BudgetViewItem(BudgetViewType.BtnAddCategory)
+
     object BudgetEmpty : BudgetViewItem(BudgetViewType.EmptyBudget)
 }
 //            -------------------- Helper Data classes ----------------------------
@@ -26,7 +28,9 @@ fun MonthlyBudgetData.toMutableMap(): MutableMap<String, Any> = mutableMapOf(
     TOTAL_BUDGET to totalBudget
 )
 
-data class MonthlyCategorySummary(val categoryName: String = "", val totalCategoryBudget: Long = 0, val totalCategoryExpense: Long = 0)
+data class MonthlyCategorySummary(val categoryName: String = "", val totalCategoryExpense: Long = 0)
+
+data class MonthlyCategoryBudget(val categoryName: String = "", val categoryBudget: Long = 0, val categoryExpense: Long = 0)
 
 fun MonthlyCategorySummary.isEmpty(): Boolean = this == MonthlyCategorySummary()
 
@@ -42,5 +46,5 @@ data class BudgetCategoryData(
 data class MonthlyBudgetOverviewData(val maxBudget: String, val totalBudget: String)
 
 
-enum class BudgetViewType { Header, MonthlyBudgetOverview, BudgetData, EmptyBudget }
+enum class BudgetViewType { Header, MonthlyBudgetOverview, BtnAddCategory, BudgetData, EmptyBudget }
 
