@@ -7,11 +7,10 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.chauthai.swipereveallayout.ViewBinderHelper
 import com.example.mobiledger.R
-import com.example.mobiledger.databinding.HomeEmptyItemBinding
-import com.example.mobiledger.databinding.HomeHeaderItemBinding
-import com.example.mobiledger.databinding.HomeMonthlyDataItemBinding
-import com.example.mobiledger.databinding.HomeTransactionItemBinding
+import com.example.mobiledger.common.utils.GraphUtils
+import com.example.mobiledger.databinding.*
 import com.example.mobiledger.domain.enums.TransactionType
+import com.github.mikephil.charting.data.PieEntry
 
 class HomeAdapter(val onDeleteItemClick: (String, Int) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -37,6 +36,7 @@ class HomeAdapter(val onDeleteItemClick: (String, Int) -> Unit) : RecyclerView.A
         return when (HomeViewType.values()[viewType]) {
             HomeViewType.Header -> HeaderViewHolder(HomeHeaderItemBinding.inflate(layoutInflater, parent, false))
             HomeViewType.MonthlyData -> MonthlyDataViewHolder(HomeMonthlyDataItemBinding.inflate(layoutInflater, parent, false))
+            HomeViewType.MonthlyTotalPieChart -> MonthlyPieViewHolder(HomeMonthlyPieItemBinding.inflate(layoutInflater, parent, false))
             HomeViewType.TransactionData -> TransactionDataViewHolder(HomeTransactionItemBinding.inflate(layoutInflater, parent, false))
             HomeViewType.EmptyData -> EmptyDataViewHolder(HomeEmptyItemBinding.inflate(layoutInflater, parent, false))
         }
@@ -46,6 +46,7 @@ class HomeAdapter(val onDeleteItemClick: (String, Int) -> Unit) : RecyclerView.A
         when (val item = items[position]) {
             is HomeViewItem.HeaderDataRow -> (holder as HeaderViewHolder).bind(item.data)
             is HomeViewItem.MonthlyDataRow -> (holder as MonthlyDataViewHolder).bind(item.data)
+            is HomeViewItem.MonthlyTotalPie -> (holder as MonthlyPieViewHolder).bind(item.pieEntryList)
             is HomeViewItem.TransactionDataRow -> (holder as TransactionDataViewHolder).bind(item.data)
             is HomeViewItem.EmptyDataRow -> (holder as EmptyDataViewHolder).bind()
         }
@@ -68,6 +69,15 @@ class HomeAdapter(val onDeleteItemClick: (String, Int) -> Unit) : RecyclerView.A
         }
     }
 
+    inner class MonthlyPieViewHolder(private val viewBinding: HomeMonthlyPieItemBinding) : RecyclerView.ViewHolder(viewBinding.root) {
+        fun bind(item: ArrayList<PieEntry>) {
+            viewBinding.apply {
+                GraphUtils.pieChart(pieChart, item)
+
+            }
+        }
+    }
+
     inner class EmptyDataViewHolder(private val viewBinding: HomeEmptyItemBinding) : RecyclerView.ViewHolder(viewBinding.root) {
         fun bind() {
             viewBinding.apply {
@@ -79,7 +89,7 @@ class HomeAdapter(val onDeleteItemClick: (String, Int) -> Unit) : RecyclerView.A
     inner class TransactionDataViewHolder(private val viewBinding: HomeTransactionItemBinding) : RecyclerView.ViewHolder(viewBinding.root) {
         fun bind(item: TransactionData) {
             viewBinding.apply {
-                deleteSwipeAction.setOnClickListener { onDeleteItemClick(item.id, adapterPosition)}
+                deleteSwipeAction.setOnClickListener { onDeleteItemClick(item.id, adapterPosition) }
                 viewBinderHelper.setOpenOnlyOne(true)
                 viewBinderHelper.bind(swipelayout, item.id)
                 viewBinderHelper.closeLayout(item.id)

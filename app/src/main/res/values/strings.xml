@@ -86,6 +86,7 @@
     <string name="date">Date</string>
     <string name="add_category_budget">Add category budget</string>
     <string name="login_with">Login with</string>
+    <string name="income_vs_expense">Income Vs Expense</string>
 
     <!-- Budget Fragment -->
 
