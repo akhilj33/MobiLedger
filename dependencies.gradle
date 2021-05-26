@@ -32,6 +32,7 @@ ext{
     roomVersion = "2.3.0"
     playCoreVersion = "1.10.0"
     lottieVersion = "3.4.0"
+    mpAndroidChart ="v3.1.0"
 
     //test dependencies
     junit4Version = "4.13.2"

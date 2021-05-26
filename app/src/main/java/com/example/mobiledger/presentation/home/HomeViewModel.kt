@@ -17,12 +17,13 @@ import com.example.mobiledger.domain.entities.TransactionEntity
 import com.example.mobiledger.domain.usecases.ProfileUseCase
 import com.example.mobiledger.domain.usecases.TransactionUseCase
 import com.example.mobiledger.presentation.Event
+import com.github.mikephil.charting.data.PieEntry
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.text.FieldPosition
 import java.util.*
+import kotlin.collections.ArrayList
 
 class HomeViewModel(
     private val profileUseCase: ProfileUseCase, private val transactionUseCase: TransactionUseCase
@@ -146,6 +147,12 @@ class HomeViewModel(
                     )
                 )
             )
+
+            val pieEntryList = ArrayList<PieEntry>()
+            pieEntryList.add(PieEntry(monthlyResult.totalIncome.toFloat(), "Income"))
+            pieEntryList.add(PieEntry(monthlyResult.totalExpense.toFloat(), "Expense"))
+
+            homeViewItemList.add(HomeViewItem.MonthlyTotalPie(pieEntryList))
 
             if (transactionList.isNotEmpty()) {
                 homeViewItemList.add(HomeViewItem.HeaderDataRow(R.string.latest_transaction))
