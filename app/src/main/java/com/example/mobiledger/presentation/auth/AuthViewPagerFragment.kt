@@ -10,6 +10,8 @@ import com.google.android.material.tabs.TabLayoutMediator
 
 class AuthViewPagerFragment : BaseFragment<FragmentAuthBinding, LoginNavigator>(R.layout.fragment_auth) {
 
+    override fun isBottomNavVisible(): Boolean = false
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initViewPager()

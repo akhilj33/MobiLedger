@@ -10,6 +10,7 @@
     <dimen name="cdp_10">10dp</dimen>
     <dimen name="cdp_11">11dp</dimen>
     <dimen name="cdp_12">12dp</dimen>
+    <dimen name="cdp_14">14dp</dimen>
     <dimen name="cdp_16">16dp</dimen>
     <dimen name="cdp_20">20dp</dimen>
     <dimen name="cdp_24">24dp</dimen>

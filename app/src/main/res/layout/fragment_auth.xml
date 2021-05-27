@@ -22,13 +22,6 @@
             android:orientation="horizontal"
             app:layout_constraintGuide_percent="0.12" />
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/horizontalScreenGuideline_90"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.90" />
-
         <!--          VERTICAL GUIDELINES          -->
 
         <androidx.constraintlayout.widget.Guideline
@@ -45,16 +38,6 @@
             android:orientation="vertical"
             app:layout_constraintGuide_percent="0.90" />
 
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/toolbarLogin"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/colorPrimaryDark"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:title="@string/app_name"
-            app:titleTextColor="@color/colorWhite" />
 
         <TextView
             android:id="@+id/tvTitle"

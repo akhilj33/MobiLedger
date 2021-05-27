@@ -115,11 +115,11 @@
 
                 <TextView
                     android:id="@+id/displayName"
-                    android:layout_width="match_parent"
+                    android:layout_width="245dp"
                     android:layout_height="wrap_content"
                     android:layout_alignTop="@id/imgUser"
                     android:layout_marginStart="@dimen/cdp_16"
-                    android:layout_marginTop="@dimen/cdp_10"
+                    android:layout_marginTop="10dp"
                     android:layout_toEndOf="@id/imgUser"
                     android:text="@string/display_name"
                     android:textColor="@color/colorPrimaryDark"

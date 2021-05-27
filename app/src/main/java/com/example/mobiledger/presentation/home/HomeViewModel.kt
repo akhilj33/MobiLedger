@@ -151,8 +151,8 @@ class HomeViewModel(
             val pieEntryList = ArrayList<PieEntry>()
             pieEntryList.add(PieEntry(monthlyResult.totalIncome.toFloat(), "Income"))
             pieEntryList.add(PieEntry(monthlyResult.totalExpense.toFloat(), "Expense"))
-
-            homeViewItemList.add(HomeViewItem.MonthlyTotalPie(pieEntryList))
+            if (monthlyResult.totalIncome.toFloat() > 0 || monthlyResult.totalExpense.toFloat() > 0)
+                homeViewItemList.add(HomeViewItem.MonthlyTotalPie(pieEntryList))
 
             if (transactionList.isNotEmpty()) {
                 homeViewItemList.add(HomeViewItem.HeaderDataRow(R.string.latest_transaction))

@@ -50,8 +50,7 @@
             app:layout_constraintBottom_toBottomOf="@id/ivProfileIcon"
             app:layout_constraintEnd_toStartOf="@id/ivProfileIcon"
             app:layout_constraintStart_toStartOf="@id/verticalStartGuideline"
-            app:layout_constraintTop_toTopOf="@id/ivProfileIcon"
-            android:text="Hello, Abhishek" />
+            app:layout_constraintTop_toTopOf="@id/ivProfileIcon" />
 
         <include
             android:id="@+id/month_navigation_bar"

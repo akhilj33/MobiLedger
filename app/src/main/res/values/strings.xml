@@ -75,18 +75,20 @@
     <!-- Add Category Dialog Fragment -->
     <string name="add_new_income_category">Add new income category</string>
     <string name="add_new_expense_category">Add new expense category</string>
-    <string name="maximum_budget">Maximum budget</string>
-    <string name="total_budget">Total Budget</string>
+    <string name="maximum_budget">Maximum \nBudget</string>
+    <string name="total_budget">Total \nBudget</string>
     <string name="set_your_monthly_budget">Set your monthly budget</string>
     <string name="percent_of_budget_spent">Budget spent : </string>
     <string name="set_your_budget">Set your budget</string>
     <string name="set_budget">Set Budget</string>
     <string name="field_required">Field Required</string>
+    <string name="field_invalid">This field is not valid</string>
     <string name="category_already_exist">Category Already Exist</string>
     <string name="date">Date</string>
     <string name="add_category_budget">Add category budget</string>
     <string name="login_with">Login with</string>
     <string name="income_vs_expense">Income Vs Expense</string>
+    <string name="add_monthly_budget">Add Monthly Budget</string>
 
     <!-- Budget Fragment -->
 

@@ -73,7 +73,6 @@ class HomeAdapter(val onDeleteItemClick: (String, Int) -> Unit) : RecyclerView.A
         fun bind(item: ArrayList<PieEntry>) {
             viewBinding.apply {
                 GraphUtils.pieChart(pieChart, item)
-
             }
         }
     }

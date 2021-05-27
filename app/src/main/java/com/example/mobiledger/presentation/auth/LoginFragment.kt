@@ -2,19 +2,23 @@ package com.example.mobiledger.presentation.auth
 
 import android.app.Activity
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
+import android.util.Patterns
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.example.mobiledger.R
 import com.example.mobiledger.common.base.BaseFragment
-import com.example.mobiledger.common.showToast
+import com.example.mobiledger.common.utils.ValidationUtils
 import com.example.mobiledger.databinding.FragmentLoginBinding
 import com.example.mobiledger.databinding.SnackViewErrorBinding
 import com.example.mobiledger.presentation.OneTimeObserver
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
+import com.google.android.material.textfield.TextInputLayout
 
 class LoginFragment : BaseFragment<FragmentLoginBinding, LoginNavigator>(R.layout.fragment_login) {
 
@@ -30,24 +34,17 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, LoginNavigator>(R.layou
     override fun getSnackBarErrorView(): SnackViewErrorBinding = viewBinding.includeErrorView
 
     private fun setOnClickListener() {
-
         viewBinding.apply {
             btnLogin.setOnClickListener {
-                val email = viewBinding.textEmail.text.toString()
-                val password = viewBinding.textPassword.text.toString()
-                if (email.isEmpty() || password.isEmpty())
-                    activity?.showToast("No field can be empty")
-                else
-                    viewModel.loginUserViaEmail(email, password)
+                loginWithEmail()
             }
-
-//            tvSignUp.setOnClickListener {
-//                navigator?.navigateLoginToSignUpScreen()
-//            }
 
             btnGoogleSignIn.setOnClickListener {
                 initSignInWithGoogle()
             }
+
+            textPassword.addTextChangedListener(passwordTextWatcher)
+            textEmail.addTextChangedListener(emailTextWatcher)
         }
     }
 
@@ -103,9 +100,66 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, LoginNavigator>(R.layou
             }
         }
 
-    companion object {
-        fun newInstance() = LoginFragment()
+
+    private fun getEmailText(): String = viewBinding.textEmail.text.toString()
+    private fun getPasswordText(): String = viewBinding.textPassword.text.toString()
+
+    private fun isValidEmail(): Boolean = (getEmailText().isNotBlank() && Patterns.EMAIL_ADDRESS.matcher(getEmailText()).matches())
+    private fun isValidPassword(): Boolean = (getPasswordText().isNotBlank() && ValidationUtils.passwordValidator(getPasswordText()))
+
+    private fun loginWithEmail() {
+        if (doValidations()) {
+            viewModel.loginUserViaEmail(getEmailText(), getPasswordText())
+        }
+    }
+
+    /*---------------------------------------Text Watchers-----------------------------------------*/
+
+    private val emailTextWatcher = object : TextWatcher {
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
+
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) = Unit
+
+        override fun afterTextChanged(editable: Editable?) {
+            if (isValidEmail()) {
+                updateViewBasedOnValidation(viewBinding.emailLayout, isValid = true)
+            }
+        }
+    }
+
+    private val passwordTextWatcher = object : TextWatcher {
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
+
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) = Unit
+
+        override fun afterTextChanged(editable: Editable?) {
+            if (isValidPassword()) {
+                updateViewBasedOnValidation(viewBinding.passwordLayout, isValid = true)
+            }
+        }
     }
 
 
+    /*---------------------------------------Validations------------------------------------------*/
+
+    private fun doValidations(): Boolean {
+        updateViewBasedOnValidation(viewBinding.emailLayout, isValidEmail())
+        updateViewBasedOnValidation(viewBinding.passwordLayout, isValidPassword())
+        return isValidEmail() && isValidPassword()
+    }
+
+    private fun updateViewBasedOnValidation(
+        textInputLayout: TextInputLayout,
+        isValid: Boolean
+    ) {
+        if (isValid) {
+            textInputLayout.error = null
+        } else {
+            textInputLayout.error = getString(R.string.field_invalid)
+        }
+    }
+
+    companion object {
+        fun newInstance() = LoginFragment()
+    }
 }

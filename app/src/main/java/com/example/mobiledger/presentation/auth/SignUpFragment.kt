@@ -1,6 +1,8 @@
 package com.example.mobiledger.presentation.auth
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Patterns
 import android.view.View
 import androidx.fragment.app.viewModels
@@ -12,6 +14,7 @@ import com.example.mobiledger.common.utils.ValidationUtils
 import com.example.mobiledger.databinding.FragmentSignUpBinding
 import com.example.mobiledger.databinding.SnackViewErrorBinding
 import com.example.mobiledger.presentation.OneTimeObserver
+import com.google.android.material.textfield.TextInputLayout
 
 
 class SignUpFragment :
@@ -54,29 +57,123 @@ class SignUpFragment :
 
     private fun setOnClick() {
 
-        viewBinding.btnSignup.setOnClickListener {
-            val name = viewBinding.nameEditText.text.toString()
-            val email = viewBinding.textEmail.text.toString()
-            val password = viewBinding.textPassword.text.toString()
-            val phoneNo = viewBinding.phoneEditText.text.toString()
-            val confirmPassword = viewBinding.textConfirmPassword.text.toString()
-            doValidations(name, email, password, confirmPassword, phoneNo)
+        viewBinding.apply {
+            btnSignup.setOnClickListener {
+                signUp(getNameText(), getEmailText(), getPasswordText(), getConfirmPasswordText(), getContactText())
+            }
+
+            nameEditText.addTextChangedListener(nameTextWatcher)
+            textEmail.addTextChangedListener(emailTextWatcher)
+            textPassword.addTextChangedListener(passwordTextWatcher)
+            textConfirmPassword.addTextChangedListener(confirmPasswordTextWatcher)
+            phoneEditText.addTextChangedListener(phoneTextWatcher)
         }
     }
 
-    private fun doValidations(name: String, email: String, password: String, confirmPassword: String, phoneNo: String) {
-        if (name.isBlank() || email.isBlank() || password.isBlank() || confirmPassword.isBlank() || phoneNo.isBlank())
-            activity?.showToast(getString(R.string.empty_field_msg))
-        else if (password != confirmPassword)
-            activity?.showToast(getString(R.string.confirm_password_mismatched_msg))
-        else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches())
-            activity?.showToast(getString(R.string.incorrect_email))
-        else if (!ValidationUtils.passwordValidator(password))
-            activity?.showToast(getString(R.string.password_requirement))
-        else if (!ValidationUtils.phoneNoValidator(phoneNo))
-            activity?.showToast(getString(R.string.incorrect_phone_no))
-        else {
+    private fun signUp(name: String, email: String, password: String, confirmPassword: String, phoneNo: String) {
+        if (doValidations()) {
             viewModel.signUpViaEmail(name, phoneNo, email, password)
+        } else if (!ValidationUtils.passwordValidator(password) && password.isNotEmpty())
+            activity?.showToast(getString(R.string.password_requirement))
+        else if (password != confirmPassword && confirmPassword.isNotEmpty())
+            activity?.showToast(getString(R.string.confirm_password_mismatched_msg))
+    }
+
+    private fun getNameText(): String = viewBinding.nameEditText.text.toString()
+    private fun getEmailText(): String = viewBinding.textEmail.text.toString()
+    private fun getContactText(): String = viewBinding.phoneEditText.text.toString()
+    private fun getPasswordText(): String = viewBinding.textPassword.text.toString()
+    private fun getConfirmPasswordText(): String = viewBinding.textConfirmPassword.text.toString()
+
+    private fun isValidName(): Boolean = getNameText().isNotBlank()
+    private fun isValidEmail(): Boolean = (getEmailText().isNotBlank() && Patterns.EMAIL_ADDRESS.matcher(getEmailText()).matches())
+    private fun isValidPhone(): Boolean = (getContactText().isNotBlank() && ValidationUtils.phoneNoValidator(getContactText()))
+    private fun isValidPassword(): Boolean = (getPasswordText().isNotBlank() && ValidationUtils.passwordValidator(getPasswordText()))
+    private fun isValidConfirmPassword(): Boolean =
+        (getPasswordText().isNotBlank() && ValidationUtils.passwordValidator(getPasswordText()) && getPasswordText() == (getConfirmPasswordText()))
+
+    /*---------------------------------------Text Watchers-----------------------------------------*/
+
+    private val nameTextWatcher = object : TextWatcher {
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
+
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) = Unit
+
+        override fun afterTextChanged(editable: Editable?) {
+            if (isValidName()) {
+                updateViewBasedOnValidation(viewBinding.emailLayout, isValid = true)
+            }
+        }
+    }
+
+    private val phoneTextWatcher = object : TextWatcher {
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
+
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) = Unit
+
+        override fun afterTextChanged(editable: Editable?) {
+            if (isValidPhone()) {
+                updateViewBasedOnValidation(viewBinding.emailLayout, isValid = true)
+            }
+        }
+    }
+
+    private val emailTextWatcher = object : TextWatcher {
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
+
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) = Unit
+
+        override fun afterTextChanged(editable: Editable?) {
+            if (isValidEmail()) {
+                updateViewBasedOnValidation(viewBinding.emailLayout, isValid = true)
+            }
+        }
+    }
+
+    private val passwordTextWatcher = object : TextWatcher {
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
+
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) = Unit
+
+        override fun afterTextChanged(editable: Editable?) {
+            if (isValidPassword()) {
+                updateViewBasedOnValidation(viewBinding.passwordLayout, isValid = true)
+            }
+        }
+    }
+
+    private val confirmPasswordTextWatcher = object : TextWatcher {
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
+
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) = Unit
+
+        override fun afterTextChanged(editable: Editable?) {
+            if (isValidConfirmPassword()) {
+                updateViewBasedOnValidation(viewBinding.emailLayout, isValid = true)
+            }
+        }
+    }
+
+    /*---------------------------------------Validations------------------------------------------*/
+
+    private fun doValidations(): Boolean {
+        updateViewBasedOnValidation(viewBinding.nameInputLayout, isValidName())
+        updateViewBasedOnValidation(viewBinding.emailLayout, isValidEmail())
+        updateViewBasedOnValidation(viewBinding.phoneInputLayout, isValidPhone())
+        updateViewBasedOnValidation(viewBinding.passwordLayout, isValidPassword())
+        updateViewBasedOnValidation(viewBinding.confirmPasswordLayout, isValidConfirmPassword())
+
+        return isValidName() && isValidEmail() && isValidPhone() && isValidPassword() && isValidConfirmPassword()
+    }
+
+    private fun updateViewBasedOnValidation(
+        textInputLayout: TextInputLayout,
+        isValid: Boolean
+    ) {
+        if (isValid) {
+            textInputLayout.error = null
+        } else {
+            textInputLayout.error = getString(R.string.field_invalid)
         }
     }
 
