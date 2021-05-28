@@ -47,6 +47,7 @@
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    app:errorEnabled="true"
                     app:boxBackgroundColor="@color/colorAppLightBlue"
                     app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_90"
                     app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_10"
@@ -67,6 +68,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/cdp_4"
+                    app:errorEnabled="true"
                     app:boxBackgroundColor="@color/colorAppLightBlue"
                     app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_90"
                     app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_10"
@@ -87,6 +89,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/cdp_4"
+                    app:errorEnabled="true"
                     app:boxBackgroundColor="@color/colorAppLightBlue"
                     app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_90"
                     app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_10"
@@ -107,6 +110,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/cdp_4"
+                    app:errorEnabled="true"
                     app:boxBackgroundColor="@color/colorAppLightBlue"
                     app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_90"
                     app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_10"
@@ -129,6 +133,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/cdp_4"
+                    app:errorEnabled="true"
                     app:boxBackgroundColor="@color/colorAppLightBlue"
                     app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_90"
                     app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_10"
@@ -160,26 +165,28 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/cdp_16"
+                    android:layout_marginBottom="@dimen/cdp_24"
                     android:background="@color/colorPrimary"
                     android:text="@string/sign_up"
                     android:textColor="@color/colorWhite"
                     android:textSize="@dimen/csp_20"
                     app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_90"
                     app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_10"
-                    app:layout_constraintTop_toBottomOf="@id/confirmPasswordLayout" />
+                    app:layout_constraintTop_toBottomOf="@id/confirmPasswordLayout"
+                    app:layout_constraintBottom_toBottomOf="parent" />
 
-                <include
-                    android:id="@+id/includeErrorView"
-                    layout="@layout/snack_view_error"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:visibility="gone"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    tools:visibility="visible" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>
+
+        <include
+            android:id="@+id/includeErrorView"
+            layout="@layout/snack_view_error"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:layout_alignParentBottom="true"
+            tools:visibility="visible" />
+
     </RelativeLayout>
 </layout>

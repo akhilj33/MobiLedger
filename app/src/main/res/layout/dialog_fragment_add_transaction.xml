@@ -34,6 +34,22 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.button.MaterialButton
+            android:id="@+id/toggleExpense"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/GelionRegularGrey16"
+            android:background="@drawable/oval_shape"
+            android:inputType="text"
+            android:padding="@dimen/cdp_8"
+            android:stateListAnimator="@null"
+            android:text="@string/expense"
+            app:backgroundTint="@color/colorLightGrey"
+            app:layout_constraintBottom_toBottomOf="@id/toggleIncome"
+            app:layout_constraintEnd_toStartOf="@id/toggleIncome"
+            app:layout_constraintStart_toEndOf="@id/verticalScreenGuideline_10"
+            app:layout_constraintTop_toTopOf="@id/toggleIncome" />
+
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/toggleIncome"
             style="@style/GelionRegularNavyBlue16"
             android:layout_width="wrap_content"
@@ -47,39 +63,45 @@
             app:backgroundTint="@color/colorWhite"
             app:icon="@drawable/selected_icon"
             app:iconTint="@color/colorAppBlue"
-            app:layout_constraintBottom_toTopOf="@id/nameLayout"
-            app:layout_constraintEnd_toStartOf="@id/toggleExpense"
-            app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_10"
+            app:layout_constraintBottom_toTopOf="@id/spinner_category"
+            app:layout_constraintEnd_toStartOf="@id/verticalScreenGuideline_90"
+            app:layout_constraintStart_toEndOf="@id/toggleExpense"
             app:layout_constraintTop_toBottomOf="@id/textAddTransaction" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/toggleExpense"
-            android:layout_width="wrap_content"
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/spinner_category"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            style="@style/GelionRegularGrey16"
-            android:background="@drawable/oval_shape"
-            android:inputType="text"
-            android:padding="@dimen/cdp_8"
-            android:stateListAnimator="@null"
-            android:text="@string/expense"
-            app:backgroundTint="@color/colorLightGrey"
-            app:layout_constraintBottom_toBottomOf="@id/toggleIncome"
+            app:errorEnabled="true"
+            android:layout_marginTop="@dimen/cdp_24"
+            app:layout_constraintBottom_toTopOf="@id/nameLayout"
             app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_90"
-            app:layout_constraintStart_toEndOf="@id/toggleIncome"
-            app:layout_constraintTop_toTopOf="@id/toggleIncome" />
+            app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_10"
+            app:layout_constraintTop_toBottomOf="@id/toggleIncome">
+
+            <AutoCompleteTextView
+                android:id="@+id/my_spinner_dropdown"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/category"
+                android:inputType="none"
+                android:textSize="@dimen/csp_16"
+                app:hintTextColor="@color/colorGrey" />
+        </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/nameLayout"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/cdp_24"
             android:hint="@string/name"
             app:errorEnabled="true"
             app:layout_constraintBottom_toTopOf="@id/amountLayout"
             app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_90"
             app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_10"
-            app:layout_constraintTop_toBottomOf="@id/toggleIncome">
+            app:layout_constraintTop_toBottomOf="@id/spinner_category">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/textName"
@@ -99,7 +121,7 @@
             android:layout_marginTop="@dimen/cdp_10"
             android:hint="@string/amount_rs"
             app:errorEnabled="true"
-            app:layout_constraintBottom_toTopOf="@id/spinner_category"
+            app:layout_constraintBottom_toTopOf="@id/dateLayout"
             app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_90"
             app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_10"
             app:layout_constraintTop_toBottomOf="@id/nameLayout">
@@ -114,26 +136,6 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/spinner_category"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:errorEnabled="true"
-            app:layout_constraintBottom_toTopOf="@id/dateLayout"
-            app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_90"
-            app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_10"
-            app:layout_constraintTop_toBottomOf="@id/amountLayout">
-
-            <AutoCompleteTextView
-                android:id="@+id/my_spinner_dropdown"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/category"
-                android:inputType="none"
-                android:textSize="@dimen/csp_16"
-                app:hintTextColor="@color/colorGrey" />
-        </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/dateLayout"
@@ -147,7 +149,7 @@
             app:layout_constraintBottom_toTopOf="@id/descriptionLayout"
             app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_90"
             app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_10"
-            app:layout_constraintTop_toBottomOf="@id/spinner_category"
+            app:layout_constraintTop_toBottomOf="@id/amountLayout"
             app:startIconDrawable="@drawable/calendar_icon">
 
             <com.google.android.material.textfield.TextInputEditText

@@ -1,6 +1,8 @@
 package com.example.mobiledger.presentation.budget
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.View
 import android.widget.AutoCompleteTextView
 import androidx.fragment.app.viewModels
@@ -13,6 +15,7 @@ import com.example.mobiledger.common.extention.visible
 import com.example.mobiledger.databinding.DialogFragmentAddBudgetBinding
 import com.example.mobiledger.presentation.OneTimeObserver
 import com.example.mobiledger.presentation.addtransaction.SpinnerAdapter
+import com.google.android.material.textfield.TextInputLayout
 import java.util.*
 
 class AddBudgetDialogFragment :
@@ -26,8 +29,6 @@ class AddBudgetDialogFragment :
     private var expenseCategoryList: ArrayList<String>? = null
     private var month: String = ""
     private var budgetTotal: Long = 0
-
-    private fun getCategory(): String = viewBinding.mySpinnerDropdown.text.toString()
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -78,27 +79,90 @@ class AddBudgetDialogFragment :
     }
 
     private fun setOnClickListener() {
+        viewBinding.mySpinnerDropdown.addTextChangedListener(categoryTextWatcher)
+        viewBinding.textAmount.addTextChangedListener(amountTextWatcher)
+
         viewBinding.btnSeBudget.setOnClickListener {
 
-            if (!isCategoryBudget) {
-                if (viewBinding.textAmount.text.toString().isNotEmpty()) {
-                    val amt = viewBinding.textAmount.text.toString().toLong()
-                    if (amt >= 0) {
-                        viewModel.setBudget(MonthlyBudgetData(amt, budgetTotal), month)
-                    }
+            when {
+                !isCategoryBudget -> {
+                    addBudgetOverview()
                 }
-            } else {
-                if (viewBinding.textAmount.text.toString().isNotEmpty() && getCategory().isNotEmpty()) {
-                    val amt = viewBinding.textAmount.text.toString().toLong()
-                    if (amt >= 0) {
-                        viewModel.getMonthlyCategorySummary(getCategory(), amt, month, budgetTotal)
-                    }
+                else -> {
+                    addCategoryBudget()
                 }
-
             }
         }
     }
 
+    private fun addCategoryBudget() {
+        if (doValidations()) {
+            viewModel.getMonthlyCategorySummary(getCategoryText(), getAmountText().toLong(), month, budgetTotal)
+        }
+    }
+
+    private fun addBudgetOverview() {
+        if (doValidations()) {
+            viewModel.setBudget(MonthlyBudgetData(getAmountText().toLong(), budgetTotal), month)
+        }
+    }
+
+    private fun getAmountText(): String = viewBinding.textAmount.text.toString()
+    private fun getCategoryText(): String = viewBinding.mySpinnerDropdown.text.toString()
+
+    private fun isValidAmount(): Boolean = (getAmountText().isNotBlank() && getAmountText().toLong() >= 0)
+    private fun isValidCategory(): Boolean = getCategoryText().isNotBlank()
+
+    /*---------------------------------------Text Watchers-----------------------------------------*/
+
+    private val amountTextWatcher = object : TextWatcher {
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
+
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) = Unit
+
+        override fun afterTextChanged(editable: Editable?) {
+            if (isValidAmount()) {
+                updateViewBasedOnValidation(viewBinding.amountLayout, isValid = true)
+            }
+        }
+    }
+
+    private val categoryTextWatcher = object : TextWatcher {
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
+
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) = Unit
+
+        override fun afterTextChanged(editable: Editable?) {
+            if (isValidCategory()) {
+                updateViewBasedOnValidation(viewBinding.spinnerCategory, isValid = true)
+            }
+        }
+    }
+
+
+    /*---------------------------------------Validations------------------------------------------*/
+
+    private fun doValidations(): Boolean {
+        if (isCategoryBudget) {
+            updateViewBasedOnValidation(viewBinding.amountLayout, isValidAmount())
+            updateViewBasedOnValidation(viewBinding.spinnerCategory, isValidCategory())
+            return isValidCategory() && isValidAmount()
+        } else {
+            updateViewBasedOnValidation(viewBinding.amountLayout, isValidAmount())
+            return isValidAmount()
+        }
+    }
+
+    private fun updateViewBasedOnValidation(
+        textInputLayout: TextInputLayout,
+        isValid: Boolean
+    ) {
+        if (isValid) {
+            textInputLayout.error = null
+        } else {
+            textInputLayout.error = getString(R.string.field_required)
+        }
+    }
 
     companion object {
         private const val KEY_LIST = "getList"

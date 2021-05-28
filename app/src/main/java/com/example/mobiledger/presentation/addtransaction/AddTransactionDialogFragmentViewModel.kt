@@ -39,7 +39,7 @@ class AddTransactionDialogFragmentViewModel(
     private val _loadingState = MutableLiveData<Boolean>(false)
     val loadingState: LiveData<Boolean> get() = _loadingState
 
-    var transactionType = TransactionType.Income
+    var transactionType = TransactionType.Expense
     var timeInMillis: Long? = null
 
     fun getIncomeCategoryList() {

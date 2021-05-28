@@ -283,7 +283,7 @@ class AddTransactionDialogFragment :
         if (isValid) {
             textInputLayout.error = null
         } else {
-            textInputLayout.error = getString(R.string.field_required)
+            textInputLayout.error = getString(R.string.field_invalid)
         }
     }
 

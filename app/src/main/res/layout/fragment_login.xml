@@ -40,6 +40,7 @@
             android:layout_height="wrap_content"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             app:boxBackgroundColor="@color/colorAppLightBlue"
+            app:errorEnabled="true"
             app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_90"
             app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_10"
             app:layout_constraintTop_toBottomOf="@id/horizontalScreenGuideline_15">
@@ -61,6 +62,7 @@
             android:layout_marginTop="@dimen/cdp_8"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             app:boxBackgroundColor="@color/colorAppLightBlue"
+            app:errorEnabled="true"
             app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_90"
             app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_10"
             app:layout_constraintTop_toBottomOf="@id/emailLayout">

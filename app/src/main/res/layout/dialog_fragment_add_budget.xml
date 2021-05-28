@@ -32,7 +32,7 @@
             android:layout_height="wrap_content"
             style="@style/GelionSemiBoldBlue24"
             android:layout_marginTop="@dimen/cdp_24"
-            android:text="@string/add_transaction"
+            android:text="@string/add_monthly_budget"
             app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_90"
             app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_10"
             app:layout_constraintTop_toTopOf="parent" />

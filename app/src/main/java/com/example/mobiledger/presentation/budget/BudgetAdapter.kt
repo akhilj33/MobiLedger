@@ -94,14 +94,13 @@ class BudgetAdapter(
         RecyclerView.ViewHolder(viewBinding.root) {
         fun bind(item: MonthlyBudgetOverviewData) {
             viewBinding.apply {
-                rootBudgetOverview.setOnClickListener {
+                imgEditBudget.setOnClickListener {
                     onBudgetOverViewClick()
                 }
                 tvMaxBudgetAmount.text = item.maxBudget.toAmount()
                 tvTotalBudgetAmount.text = item.totalBudget.toAmount()
                 val percent = (item.totalBudget.toFloat() / item.maxBudget.toFloat() * 100)
                 budgetAmountSeekBarID.value = (kotlin.math.min(percent, 100f))
-
             }
         }
     }
