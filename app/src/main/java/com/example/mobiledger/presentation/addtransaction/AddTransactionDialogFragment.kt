@@ -78,7 +78,14 @@ class AddTransactionDialogFragment :
         })
 
         viewModel.categoryListLiveData.observe(viewLifecycleOwner, OneTimeObserver { it ->
+            it.sort()
             spinnerAdapter.addItems(it)
+        })
+
+        viewModel.notificationIndicator.observe(viewLifecycleOwner, Observer {
+            it.let {
+                activityViewModel.notificationHandler(it)
+            }
         })
     }
 

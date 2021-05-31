@@ -23,7 +23,7 @@ class ViewModelFactoryProvider(private val useCaseProvider: UseCaseProvider) :
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         return when {
             modelClass.isAssignableFrom(MainActivityViewModel::class.java) -> {
-                MainActivityViewModel() as T
+                MainActivityViewModel(useCaseProvider.provideBudgetUseCase()) as T
             }
 
             modelClass.isAssignableFrom(HomeViewModel::class.java) -> {

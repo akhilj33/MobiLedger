@@ -39,6 +39,9 @@ class AddTransactionDialogFragmentViewModel(
     private val _loadingState = MutableLiveData<Boolean>(false)
     val loadingState: LiveData<Boolean> get() = _loadingState
 
+    private val _notificationIndicator = MutableLiveData<NotificationCallerData>()
+    val notificationIndicator: LiveData<NotificationCallerData> get() = _notificationIndicator
+
     var transactionType = TransactionType.Expense
     var timeInMillis: Long? = null
 
@@ -216,12 +219,24 @@ class AddTransactionDialogFragmentViewModel(
                 is AppResult.Success -> {
                     if (result.data.isEmpty()) {
                         val newMonthlyCategorySummary = getUpdatedMonthlyCategorySummary(MonthlyCategorySummary(), transactionEntity)
-                        transactionUseCase.updateMonthlyCategorySummaryData(monthYear, transactionEntity.category, newMonthlyCategorySummary)
-                        transactionUseCase.updateExpenseInBudget(monthYear, newMonthlyCategorySummary)
+                        transactionUseCase.updateMonthlyCategorySummaryData(
+                            monthYear,
+                            transactionEntity.category,
+                            newMonthlyCategorySummary
+                        )
+                        val updateExpenseInBudget = transactionUseCase.updateExpenseInBudget(monthYear, newMonthlyCategorySummary)
+                        if (updateExpenseInBudget is AppResult.Success) {
+                            _notificationIndicator.value =
+                                NotificationCallerData(monthYear, transactionEntity.category, transactionEntity.amount)
+                        }
                     } else {
                         val newMonthlyBudgetSummary = getUpdatedMonthlyCategorySummary(result.data, transactionEntity)
                         transactionUseCase.updateMonthlyCategorySummaryData(monthYear, transactionEntity.category, newMonthlyBudgetSummary)
-                        transactionUseCase.updateExpenseInBudget(monthYear, newMonthlyBudgetSummary)
+                        val updateExpenseInBudget = transactionUseCase.updateExpenseInBudget(monthYear, newMonthlyBudgetSummary)
+                        if (updateExpenseInBudget is AppResult.Success) {
+                            _notificationIndicator.value =
+                                NotificationCallerData(monthYear, transactionEntity.category, transactionEntity.amount)
+                        }
                     }
                     _loadingState.value = false
                 }
@@ -256,5 +271,11 @@ class AddTransactionDialogFragmentViewModel(
         val viewErrorType: ViewErrorType,
         var message: String? = null,
         @StringRes val resID: Int = R.string.generic_error_message
+    )
+
+    data class NotificationCallerData(
+        val monthYear: String,
+        val expenseCategory: String,
+        val expenseTransaction: Long
     )
 }

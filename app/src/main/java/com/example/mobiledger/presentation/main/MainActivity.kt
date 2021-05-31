@@ -1,5 +1,6 @@
 package com.example.mobiledger.presentation.main
 
+import android.app.NotificationManager
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
@@ -9,6 +10,7 @@ import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.content.ContextCompat
 import com.example.mobiledger.R
 import com.example.mobiledger.common.base.BaseActivity
+import com.example.mobiledger.common.utils.ConstantUtils
 import com.example.mobiledger.databinding.ActivityMainBinding
 import com.example.mobiledger.presentation.NormalObserver
 import com.example.mobiledger.presentation.main.MainActivityViewModel.*
@@ -21,6 +23,7 @@ class MainActivity :
     private val viewModel: MainActivityViewModel by viewModels { viewModelFactory }
     private var mainActivityNavigator: MainActivityNavigator? = null
     private var currentSelectedTab: NavTab = HOME
+    private var notificationManager: NotificationManager? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,6 +37,14 @@ class MainActivity :
         mainActivityNavigator?.navigateToSplashScreen()
         setNavOnClickListeners()
         setupObservers()
+
+        notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+
+        createNotificationChannel(
+            notificationManager,
+            getString(R.string.channel_transaction_description),
+            ConstantUtils.CHANNEL_ID_TRANSACTION
+        )
     }
 
     override fun getFragmentNavigator(): MainActivityNavigator? = mainActivityNavigator
@@ -154,6 +165,21 @@ class MainActivity :
             }
         })
 
+        viewModel.notificationIndicatorTotal.observe(this@MainActivity, {
+            it.let {
+                val title = "Limit Exceed!!"
+                val message = "You have crossed ".plus(it.percentValue).plus("% for this month.")
+                sendNotification(notificationManager, ConstantUtils.CHANNEL_ID_TRANSACTION, title, message)
+            }
+        })
 
+        viewModel.notificationIndicatorCategory.observe(this@MainActivity, {
+            it.let {
+                val title = "Limit Exceed!!"
+                val message = "You have crossed ".plus(it.percentValue)
+                    .plus("% of your for category ".plus(it.notificationCallerData.expenseCategory).plus(" for this month."))
+                sendNotification(notificationManager, ConstantUtils.CHANNEL_ID_TRANSACTION, title, message)
+            }
+        })
     }
 }
