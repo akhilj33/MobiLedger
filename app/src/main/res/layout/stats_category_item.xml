@@ -3,32 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <com.chauthai.swipereveallayout.SwipeRevealLayout
-        android:id="@+id/swipelayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:mode="same_level"
-        app:dragEdge="right">
-
-        <LinearLayout
-            android:id="@+id/deleteSwipeAction"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:background="@color/colorGreen">
-
-            <androidx.appcompat.widget.AppCompatImageView
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:drawablePadding="@dimen/cdp_4"
-                android:layout_gravity="center"
-                android:gravity="center"
-                app:srcCompat="@drawable/delete_white" />
-        </LinearLayout>
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:visibility="gone">
+        android:layout_height="wrap_content">
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/horizontalStartGuideline_16dp"
@@ -52,11 +29,11 @@
             app:layout_constraintGuide_percent="0.04" />
 
         <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/verticalStartGuideline77"
+            android:id="@+id/verticalStartGuideline70"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.75" />
+            app:layout_constraintGuide_percent="0.70" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/verticalEndGuideline"
@@ -88,7 +65,7 @@
             app:layout_constraintTop_toTopOf="@id/thumbnail" />
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/tvTransactionName"
+            android:id="@+id/tvCategoryName"
             style="@style/GelionSemiBoldBlue16"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -96,31 +73,50 @@
             android:ellipsize="end"
             android:maxLines="1"
             tools:text="Hello, Abhishek"
-            app:layout_constraintBottom_toTopOf="@id/tvAmount"
+            app:layout_constraintBottom_toTopOf="@id/tvPercentage"
             app:layout_constraintEnd_toEndOf="@id/verticalEndGuideline"
             app:layout_constraintStart_toEndOf="@id/thumbnail"
             app:layout_constraintTop_toTopOf="@id/horizontalStartGuideline_16dp" />
 
+        <View
+            android:id="@+id/colorIndicator"
+            android:layout_width="@dimen/cdp_12"
+            android:layout_height="@dimen/cdp_12"
+            android:background="@drawable/circle_shape"
+            android:backgroundTint="@color/colorDarkRed"
+            app:layout_constraintDimensionRatio="w,1:1"
+            app:layout_constraintBottom_toBottomOf="@id/horizontalEndGuideline_16dp"
+            app:layout_constraintStart_toStartOf="@id/tvCategoryName"
+            app:layout_constraintTop_toBottomOf="@id/tvCategoryName"
+            app:layout_constraintEnd_toStartOf="@id/tvPercentage"/>
+
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/tvAmount"
+            android:id="@+id/tvPercentage"
             style="@style/GelionRegularNavyBlue16"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/cdp_16"
-            tools:text="1000000"
+            android:layout_marginStart="@dimen/cdp_8"
+            tools:text="24%"
             app:layout_constraintBottom_toBottomOf="@id/horizontalEndGuideline_16dp"
-            app:layout_constraintStart_toEndOf="@id/thumbnail"
-            app:layout_constraintTop_toBottomOf="@id/tvTransactionName" />
+            app:layout_constraintStart_toEndOf="@id/colorIndicator"
+            app:layout_constraintTop_toBottomOf="@id/tvCategoryName" />
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/tvCategory"
+            android:id="@+id/tvAmount"
+            style="@style/GelionRegularNavyBlue16"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            tools:text="Investment"
+            tools:text="₹ 4763478343"
+            app:autoSizeMinTextSize="@dimen/csp_12"
+            app:autoSizeMaxTextSize="@dimen/csp_16"
+            app:autoSizeStepGranularity="1sp"
+            android:maxLines="1"
+            app:autoSizeTextType="uniform"
+            android:gravity="center"
             app:layout_constraintBottom_toBottomOf="@id/horizontalEndGuideline_16dp"
+            app:layout_constraintStart_toStartOf="@id/verticalStartGuideline70"
             app:layout_constraintEnd_toEndOf="@id/verticalEndGuideline"
-            app:layout_constraintStart_toStartOf="@id/verticalStartGuideline77"
-            app:layout_constraintTop_toBottomOf="@id/tvTransactionName" />
+            app:layout_constraintTop_toBottomOf="@id/tvCategoryName" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
-    </com.chauthai.swipereveallayout.SwipeRevealLayout>
 </layout>

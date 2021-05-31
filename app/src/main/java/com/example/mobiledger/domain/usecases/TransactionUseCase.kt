@@ -13,9 +13,7 @@ interface TransactionUseCase {
     suspend fun addUserTransactionToFirebase(monthYear: String, transactionEntity: TransactionEntity): AppResult<Unit>
     suspend fun getTransactionListByMonth(monthYear: String): AppResult<List<TransactionEntity>>
     suspend fun deleteTransaction(transactionId: String, monthYear: String): AppResult<Unit>
-    suspend fun addCategoryTransaction(monthYear: String, transactionEntity: TransactionEntity): AppResult<Unit>
-    suspend fun getMonthlyCategorySummary(monthYear: String, category: String): AppResult<MonthlyCategorySummary?>
-    suspend fun updateMonthlyCategoryBudgetData(
+    suspend fun updateMonthlyCategorySummaryData(
         monthYear: String,
         category: String,
         monthlyCategorySummary: MonthlyCategorySummary
@@ -51,20 +49,12 @@ class TransactionUseCaseImpl(private val transactionRepository: TransactionRepos
         return transactionRepository.deleteTransaction(transactionId, monthYear)
     }
 
-    override suspend fun addCategoryTransaction(monthYear: String, transactionEntity: TransactionEntity): AppResult<Unit> {
-        return transactionRepository.addCategoryTransaction(monthYear, transactionEntity)
-    }
-
-    override suspend fun getMonthlyCategorySummary(monthYear: String, category: String): AppResult<MonthlyCategorySummary?> {
-        return transactionRepository.getMonthlyCategorySummary(monthYear, category)
-    }
-
-    override suspend fun updateMonthlyCategoryBudgetData(
+    override suspend fun updateMonthlyCategorySummaryData(
         monthYear: String,
         category: String,
         monthlyCategorySummary: MonthlyCategorySummary
     ): AppResult<Unit> {
-        return transactionRepository.updateMonthlyCategoryBudget(monthYear, category, monthlyCategorySummary)
+        return transactionRepository.updateMonthlyCategorySummary(monthYear, category, monthlyCategorySummary)
     }
 
     override suspend fun updateExpenseInBudget(

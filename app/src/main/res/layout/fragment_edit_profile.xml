@@ -81,7 +81,7 @@
                     android:layout_width="@dimen/cdp_180"
                     android:layout_height="@dimen/cdp_180"
                     android:layout_marginTop="@dimen/cdp_28"
-                    android:background="@drawable/circle"
+                    android:background="@drawable/ring_shape"
                     android:contentDescription="@string/profile_image"
                     android:src="@drawable/profile_colorful"
                     app:layout_constraintEnd_toEndOf="parent"

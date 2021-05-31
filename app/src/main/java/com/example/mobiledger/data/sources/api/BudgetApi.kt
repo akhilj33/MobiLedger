@@ -22,6 +22,7 @@ interface BudgetApi {
     suspend fun setMonthlyBudget(uid: String, monthYear: String, monthlyBudgetData: MonthlyBudgetData): AppResult<Unit>
     suspend fun addCategoryBudget(uid: String, monthYear: String, monthlyCategoryBudget: MonthlyCategoryBudget): AppResult<Unit>
     suspend fun updateBudgetTotal(uid: String, monthYear: String, totalBudgetData: Long): AppResult<Unit>
+    suspend fun getMonthlyCategoryBudget(uid: String, monthYear: String, category: String): AppResult<MonthlyCategoryBudget>
 }
 
 class BudgetApiImpl(private val firebaseDb: FirebaseFirestore, private val authSource: AuthSource) : BudgetApi {
@@ -169,11 +170,11 @@ class BudgetApiImpl(private val firebaseDb: FirebaseFirestore, private val authS
         }
     }
 
-    override suspend fun updateBudgetTotal(uid: String, monthYear: String, budgetTotal: Long): AppResult<Unit> {
+    override suspend fun updateBudgetTotal(uid: String, monthYear: String, totalBudgetData: Long): AppResult<Unit> {
         var response: Task<Void>? = null
         var exception: Exception? = null
 
-        val totalBudgetMap: Map<String, Long> = mutableMapOf(Pair("totalBudget", budgetTotal))
+        val totalBudgetMap: Map<String, Long> = mutableMapOf(Pair("totalBudget", totalBudgetData))
         try {
             if (!authSource.isUserAuthorized()) throw FirebaseAuthException(
                 ErrorCodes.FIREBASE_UNAUTHORIZED,
@@ -202,6 +203,46 @@ class BudgetApiImpl(private val firebaseDb: FirebaseFirestore, private val authS
             }
         }
     }
+
+    override suspend fun getMonthlyCategoryBudget(uid: String, monthYear: String, category: String): AppResult<MonthlyCategoryBudget> {
+        var response: Task<DocumentSnapshot>? = null
+        var exception: Exception? = null
+
+        try {
+            if (!authSource.isUserAuthorized()) throw FirebaseAuthException(
+                ErrorCodes.FIREBASE_UNAUTHORIZED,
+                ConstantUtils.UNAUTHORIZED_ERROR_MSG
+            )
+
+            response = firebaseDb.collection(ConstantUtils.USERS)
+                .document(uid)
+                .collection(ConstantUtils.MONTH)
+                .document(monthYear)
+                .collection(ConstantUtils.BUDGET)
+                .document(ConstantUtils.BUDGET_DETAILS)
+                .collection(ConstantUtils.CATEGORY_BUDGET)
+                .document(category)
+                .get()
+
+            response.await()
+        } catch (e: Exception) {
+            exception = e
+        }
+
+        return when (val result = ErrorMapper.checkAndMapFirebaseApiError(response, exception)) {
+            is FireBaseResult.Success -> {
+                if (result.data != null && result.data.result != null) {
+                    val monthlyResult = monthlyCategoryBudgetMapper(result = result.data.result!!)
+                    if (monthlyResult != null) AppResult.Success(monthlyResult)
+                    else AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
+                }
+                else AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
+            }
+            is FireBaseResult.Failure -> {
+                AppResult.Failure(result.error)
+            }
+        }
+    }
 }
 
 
@@ -211,4 +252,8 @@ private fun budgetCategoryListMapper(result: QuerySnapshot): List<MonthlyCategor
 
 private fun budgetOverviewEntityMapper(result: DocumentSnapshot?): MonthlyBudgetData? {
     return result?.toObject(MonthlyBudgetData::class.java)
+}
+
+private fun monthlyCategoryBudgetMapper(result: DocumentSnapshot): MonthlyCategoryBudget? {
+    return result.toObject(MonthlyCategoryBudget::class.java)
 }

@@ -32,7 +32,7 @@
             android:id="@+id/ivProfileIcon"
             android:layout_width="@dimen/cdp_50"
             android:layout_height="@dimen/cdp_50"
-            android:background="@drawable/circle"
+            android:background="@drawable/ring_shape"
             app:layout_constraintEnd_toEndOf="@id/verticalEndGuideline"
             app:layout_constraintTop_toTopOf="@id/horizontalGuideline_2"
             app:srcCompat="@drawable/profile_colorful" />

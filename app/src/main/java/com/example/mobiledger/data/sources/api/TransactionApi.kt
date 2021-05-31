@@ -27,7 +27,7 @@ import com.google.firebase.firestore.QuerySnapshot
 import kotlinx.coroutines.tasks.await
 
 interface TransactionApi {
-    suspend fun getMonthlySummaryEntity(uid: String, monthYear: String): AppResult<MonthlyTransactionSummaryEntity?>
+    suspend fun getMonthlySummaryEntity(uid: String, monthYear: String): AppResult<MonthlyTransactionSummaryEntity>
     suspend fun addMonthlySummaryToFirebase(
         uid: String, monthYear: String, monthlySummaryEntity: MonthlyTransactionSummaryEntity
     ): AppResult<Unit>
@@ -36,11 +36,8 @@ interface TransactionApi {
     suspend fun getTransactionListByMonth(uid: String, monthYear: String): AppResult<List<TransactionEntity>>
     suspend fun addUserTransactionToFirebase(uid: String, monthYear: String, transactionEntity: TransactionEntity): AppResult<Unit>
     suspend fun deleteTransaction(uid: String, transactionId: String, monthYear: String): AppResult<Unit>
-    suspend fun addCategoryTransaction(uid: String, monthYear: String, transactionEntity: TransactionEntity): AppResult<Unit>
 
-    suspend fun getMonthlyCategorySummary(uid: String, monthYear: String, category: String): AppResult<MonthlyCategorySummary?>
-
-    suspend fun updateMonthlyCategoryBudget(
+    suspend fun updateMonthlyCategorySummary(
         uid: String,
         monthYear: String,
         category: String,
@@ -53,7 +50,7 @@ interface TransactionApi {
 
 class TransactionApiImpl(private val firebaseDb: FirebaseFirestore, private val authSource: AuthSource) : TransactionApi {
 
-    override suspend fun getMonthlySummaryEntity(uid: String, monthYear: String): AppResult<MonthlyTransactionSummaryEntity?> {
+    override suspend fun getMonthlySummaryEntity(uid: String, monthYear: String): AppResult<MonthlyTransactionSummaryEntity> {
         var response: Task<DocumentSnapshot>? = null
         var exception: Exception? = null
         try {
@@ -61,7 +58,7 @@ class TransactionApiImpl(private val firebaseDb: FirebaseFirestore, private val 
                 ErrorCodes.FIREBASE_UNAUTHORIZED,
                 ConstantUtils.UNAUTHORIZED_ERROR_MSG
             )
-            response = firebaseDb.collection(ConstantUtils.USERS)
+            response = firebaseDb.collection(USERS)
                 .document(uid)
                 .collection(MONTH)
                 .document(monthYear)
@@ -74,8 +71,10 @@ class TransactionApiImpl(private val firebaseDb: FirebaseFirestore, private val 
 
         return when (val result = ErrorMapper.checkAndMapFirebaseApiError(response, exception)) {
             is FireBaseResult.Success -> {
-                if (result.data != null) {
-                    AppResult.Success(monthlySummaryEntityMapper(result.data.result))
+                if (result.data != null && result.data.result!=null) {
+                   val monthlyResult =  monthlySummaryEntityMapper(result.data.result!!)
+                    if (monthlyResult!=null) AppResult.Success(monthlyResult)
+                    else AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
                 } else {
                     AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
                 }
@@ -100,7 +99,7 @@ class TransactionApiImpl(private val firebaseDb: FirebaseFirestore, private val 
                 ConstantUtils.UNAUTHORIZED_ERROR_MSG
             )
 
-            response = firebaseDb.collection(ConstantUtils.USERS)
+            response = firebaseDb.collection(USERS)
                 .document(uid)
                 .collection(MONTH)
                 .document(monthYear)
@@ -134,7 +133,7 @@ class TransactionApiImpl(private val firebaseDb: FirebaseFirestore, private val 
                 ErrorCodes.FIREBASE_UNAUTHORIZED,
                 ConstantUtils.UNAUTHORIZED_ERROR_MSG
             )
-            response = firebaseDb.collection(ConstantUtils.USERS)
+            response = firebaseDb.collection(USERS)
                 .document(uid)
                 .collection(MONTH)
                 .document(monthYear)
@@ -162,7 +161,7 @@ class TransactionApiImpl(private val firebaseDb: FirebaseFirestore, private val 
                 ErrorCodes.FIREBASE_UNAUTHORIZED,
                 ConstantUtils.UNAUTHORIZED_ERROR_MSG
             )
-            response = firebaseDb.collection(ConstantUtils.USERS)
+            response = firebaseDb.collection(USERS)
                 .document(uid)
                 .collection(MONTH)
                 .document(monthYear)
@@ -202,7 +201,7 @@ class TransactionApiImpl(private val firebaseDb: FirebaseFirestore, private val 
                 ConstantUtils.UNAUTHORIZED_ERROR_MSG
             )
 
-            response = firebaseDb.collection(ConstantUtils.USERS)
+            response = firebaseDb.collection(USERS)
                 .document(uid)
                 .collection(MONTH)
                 .document(monthYear)
@@ -235,7 +234,7 @@ class TransactionApiImpl(private val firebaseDb: FirebaseFirestore, private val 
                 ConstantUtils.UNAUTHORIZED_ERROR_MSG
             )
 
-            response = firebaseDb.collection(ConstantUtils.USERS)
+            response = firebaseDb.collection(USERS)
                 .document(uid)
                 .collection(MONTH)
                 .document(monthYear)
@@ -258,77 +257,7 @@ class TransactionApiImpl(private val firebaseDb: FirebaseFirestore, private val 
         }
     }
 
-    override suspend fun addCategoryTransaction(uid: String, monthYear: String, transactionEntity: TransactionEntity): AppResult<Unit> {
-        var response: Task<Void>? = null
-        var exception: Exception? = null
-
-        val transRef: DocumentReference = firebaseDb.document("/$USERS/$uid/Months/$monthYear/Transaction/${transactionEntity.id}")
-
-        try {
-            if (!authSource.isUserAuthorized()) throw FirebaseAuthException(
-                ErrorCodes.FIREBASE_UNAUTHORIZED,
-                ConstantUtils.UNAUTHORIZED_ERROR_MSG
-            )
-            response = firebaseDb.collection(ConstantUtils.USERS)
-                .document(uid)
-                .collection(MONTH)
-                .document(monthYear)
-                .collection(CATEGORY_TRANSACTION)
-                .document(transactionEntity.category)
-                .collection(CATEGORY_TRANSACTION)
-                .document(transactionEntity.id)
-                .set(TransactionReference(transRef))
-            response.await()
-        } catch (e: Exception) {
-            exception = e
-        }
-
-        return when (val result = ErrorMapper.checkAndMapFirebaseApiError(response, exception)) {
-            is FireBaseResult.Success -> {
-                AppResult.Success(Unit)
-            }
-            is FireBaseResult.Failure -> {
-                AppResult.Failure(result.error)
-            }
-        }
-    }
-
-    override suspend fun getMonthlyCategorySummary(uid: String, monthYear: String, category: String): AppResult<MonthlyCategorySummary?> {
-        var response: Task<DocumentSnapshot>? = null
-        var exception: Exception? = null
-        try {
-            if (!authSource.isUserAuthorized()) throw FirebaseAuthException(
-                ErrorCodes.FIREBASE_UNAUTHORIZED,
-                ConstantUtils.UNAUTHORIZED_ERROR_MSG
-            )
-            response = firebaseDb.collection(ConstantUtils.USERS)
-                .document(uid)
-                .collection(MONTH)
-                .document(monthYear)
-                .collection(CATEGORY_TRANSACTION)
-                .document(category)
-                .get()
-
-            response.await()
-        } catch (e: Exception) {
-            exception = e
-        }
-
-        return when (val result = ErrorMapper.checkAndMapFirebaseApiError(response, exception)) {
-            is FireBaseResult.Success -> {
-                if (result.data != null) {
-                    AppResult.Success(monthlyBudgetEntityMapper(result.data.result))
-                } else {
-                    AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
-                }
-            }
-            is FireBaseResult.Failure -> {
-                AppResult.Failure(result.error)
-            }
-        }
-    }
-
-    override suspend fun updateMonthlyCategoryBudget(
+    override suspend fun updateMonthlyCategorySummary(
         uid: String,
         monthYear: String,
         category: String,
@@ -341,7 +270,7 @@ class TransactionApiImpl(private val firebaseDb: FirebaseFirestore, private val 
                 ErrorCodes.FIREBASE_UNAUTHORIZED,
                 ConstantUtils.UNAUTHORIZED_ERROR_MSG
             )
-            response = firebaseDb.collection(ConstantUtils.USERS)
+            response = firebaseDb.collection(USERS)
                 .document(uid)
                 .collection(MONTH)
                 .document(monthYear)
@@ -377,8 +306,8 @@ class TransactionApiImpl(private val firebaseDb: FirebaseFirestore, private val 
                 ErrorCodes.FIREBASE_UNAUTHORIZED,
                 ConstantUtils.UNAUTHORIZED_ERROR_MSG
             )
-            val expenseMap = mapOf<String, Long>(Pair("categoryExpense", monthlyCategorySummary.totalCategoryExpense))
-            response = firebaseDb.collection(ConstantUtils.USERS)
+            val expenseMap = mapOf(Pair("categoryExpense", monthlyCategorySummary.categoryAmount))
+            response = firebaseDb.collection(USERS)
                 .document(uid)
                 .collection(MONTH)
                 .document(monthYear)
@@ -409,10 +338,7 @@ private fun transactionEntityMapper(result: QuerySnapshot): List<TransactionEnti
     return result.map { it.toObject(TransactionEntity::class.java) }
 }
 
-private fun monthlySummaryEntityMapper(user: DocumentSnapshot?): MonthlyTransactionSummaryEntity? {
-    return user?.toObject(MonthlyTransactionSummaryEntity::class.java)
-}
-
-private fun monthlyBudgetEntityMapper(user: DocumentSnapshot?): MonthlyCategorySummary? {
-    return user?.toObject(MonthlyCategorySummary::class.java)
+private fun monthlySummaryEntityMapper(user: DocumentSnapshot): MonthlyTransactionSummaryEntity? {
+    if (user.data==null) return MonthlyTransactionSummaryEntity()
+    return user.toObject(MonthlyTransactionSummaryEntity::class.java)
 }

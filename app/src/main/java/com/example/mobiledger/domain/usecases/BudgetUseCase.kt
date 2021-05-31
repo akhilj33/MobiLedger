@@ -11,6 +11,8 @@ interface BudgetUseCase {
     suspend fun setMonthlyBudget(monthYear: String, monthlyBudgetData: MonthlyBudgetData): AppResult<Unit>
     suspend fun addCategoryBudget(monthYear: String, monthlyCategoryBudget: MonthlyCategoryBudget): AppResult<Unit>
     suspend fun updateBudgetTotal(monthYear: String, totalBudgetData: Long): AppResult<Unit>
+    suspend fun getMonthlyCategoryBudget(monthYear: String, category: String): AppResult<MonthlyCategoryBudget>
+
 }
 
 class BudgetUseCaseImpl(private val budgetRepository: BudgetRepository) : BudgetUseCase {
@@ -28,5 +30,9 @@ class BudgetUseCaseImpl(private val budgetRepository: BudgetRepository) : Budget
 
     override suspend fun updateBudgetTotal(monthYear: String, totalBudgetData: Long): AppResult<Unit> =
         budgetRepository.updateBudgetTotal(monthYear, totalBudgetData)
+
+    override suspend fun getMonthlyCategoryBudget(monthYear: String, category: String): AppResult<MonthlyCategoryBudget> {
+        return budgetRepository.getMonthlyCategoryBudget(monthYear, category)
+    }
 
 }

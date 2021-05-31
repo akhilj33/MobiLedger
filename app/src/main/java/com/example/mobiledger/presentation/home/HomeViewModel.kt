@@ -114,7 +114,7 @@ class HomeViewModel(
             when (transactionResult) {
                 is AppResult.Success -> {
                     _homeViewItemListLiveData.value =
-                        Event(renderHomeViewList(transactionResult.data.sortedBy{ it.transactionTime }, monthlyResult))
+                        Event(renderHomeViewList(transactionResult.data.sortedByDescending{ it.transactionTime }, monthlyResult))
                     _isLoading.value = false
                 }
                 is AppResult.Failure -> {
@@ -147,7 +147,6 @@ class HomeViewModel(
                     )
                 )
             )
-
             val pieEntryList = ArrayList<PieEntry>()
             pieEntryList.add(PieEntry(monthlyResult.totalIncome.toFloat(), "Income"))
             pieEntryList.add(PieEntry(monthlyResult.totalExpense.toFloat(), "Expense"))

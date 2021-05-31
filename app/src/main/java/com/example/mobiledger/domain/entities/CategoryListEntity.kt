@@ -2,6 +2,8 @@ package com.example.mobiledger.domain.entities
 
 import com.example.mobiledger.common.utils.ConstantUtils
 
+/*---------------------------------Category List---------------------------- */
+
 data class CategoryListEntity(
     val uid: String,
     val incomeCategoryList: IncomeCategoryListEntity,
@@ -31,3 +33,5 @@ fun ExpenseCategoryListEntity.toMutableMap(): MutableMap<String, Any> = mutableM
 fun IncomeCategoryListEntity.toMutableList(): MutableList<String> = incomeCategoryList.toMutableList()
 
 fun ExpenseCategoryListEntity.toMutableList(): MutableList<String> = expenseCategoryList.toMutableList()
+
+

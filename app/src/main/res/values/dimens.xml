@@ -24,7 +24,7 @@
     <dimen name="cdp_180">180dp</dimen>
     <dimen name="cdp_200">200dp</dimen>
 
-
+    <dimen name="csp_2">2sp</dimen>
     <dimen name="csp_12">12sp</dimen>
     <dimen name="csp_14">14sp</dimen>
     <dimen name="csp_16">16sp</dimen>
@@ -39,6 +39,5 @@
     <dimen name="bottom_nav_image_margin">@dimen/cdp_12</dimen>
     <dimen name="bottom_nav_text_margin">@dimen/cdp_10</dimen>
     <dimen name="seek_bar_thickness">4dp</dimen>
-
 
 </resources>

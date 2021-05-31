@@ -9,8 +9,11 @@ import com.example.mobiledger.domain.AppResult
 import com.example.mobiledger.domain.entities.CategoryListEntity
 import com.example.mobiledger.domain.entities.ExpenseCategoryListEntity
 import com.example.mobiledger.domain.entities.IncomeCategoryListEntity
+import com.example.mobiledger.domain.entities.TransactionEntity
+import com.example.mobiledger.presentation.budget.MonthlyCategorySummary
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 
@@ -20,9 +23,11 @@ interface CategoryRepository {
     suspend fun getUserIncomeCategories(): AppResult<IncomeCategoryListEntity>
     suspend fun getUserExpenseCategories(): AppResult<ExpenseCategoryListEntity>
     suspend fun updateUserIncomeCategory(newIncomeCategory: IncomeCategoryListEntity): AppResult<Unit>
-    suspend fun updateUserIncomeCategoryDB(newIncomeCategory: IncomeCategoryListEntity)
     suspend fun updateUserExpenseCategory(newExpenseCategory: ExpenseCategoryListEntity): AppResult<Unit>
-    suspend fun updateUserExpenseCategoryDB(newExpenseCategory: ExpenseCategoryListEntity)
+    suspend fun addCategoryTransaction(monthYear: String, transactionEntity: TransactionEntity): AppResult<Unit>
+    suspend fun getMonthlyCategorySummary(monthYear: String, category: String): AppResult<MonthlyCategorySummary>
+    suspend fun getAllMonthlyCategories(monthYear: String): AppResult<List<MonthlyCategorySummary>>
+
 }
 
 class CategoryRepositoryImpl(
@@ -114,17 +119,9 @@ class CategoryRepositoryImpl(
         return withContext(dispatcher) {
             val uid = cacheSource.getUID()
             if (uid != null) {
-                categoryApi.updateUserIncomeCategory(uid, newIncomeCategory)
-            } else
-                AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
-        }
-    }
-
-    override suspend fun updateUserIncomeCategoryDB(newIncomeCategory: IncomeCategoryListEntity) {
-        return withContext(dispatcher) {
-            val uid = cacheSource.getUID()
-            if (uid != null) {
-                categoryDb.updateIncomeCategoryList(newIncomeCategory)
+                categoryApi.updateUserIncomeCategory(uid, newIncomeCategory).also {
+                    if (it is AppResult.Success) categoryDb.updateIncomeCategoryList(newIncomeCategory)
+                }
             } else
                 AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
         }
@@ -134,17 +131,39 @@ class CategoryRepositoryImpl(
         return withContext(dispatcher) {
             val uid = cacheSource.getUID()
             if (uid != null) {
-                categoryApi.updateUserExpenseCategory(uid, newExpenseCategory)
+                categoryApi.updateUserExpenseCategory(uid, newExpenseCategory).also {
+                    if (it is AppResult.Success) categoryDb.updateExpenseCategoryList(newExpenseCategory)
+                }
             } else
                 AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
         }
     }
 
-    override suspend fun updateUserExpenseCategoryDB(newExpenseCategory: ExpenseCategoryListEntity) {
+    override suspend fun addCategoryTransaction(monthYear: String, transactionEntity: TransactionEntity): AppResult<Unit> {
         return withContext(dispatcher) {
-            val uid = cacheSource.getUID()
-            if (uid != null) {
-                categoryDb.updateExpenseCategoryList(newExpenseCategory)
+            val uId = cacheSource.getUID()
+            if (uId != null) {
+                categoryApi.addCategoryTransaction(uId, monthYear, transactionEntity)
+            } else
+                AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
+        }
+    }
+
+    override suspend fun getMonthlyCategorySummary(monthYear: String, category: String): AppResult<MonthlyCategorySummary> {
+        return withContext(dispatcher) {
+            val uId = cacheSource.getUID()
+            if (uId != null) {
+                categoryApi.getMonthlyCategorySummary(uId, monthYear, category)
+            } else
+                AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
+        }
+    }
+
+    override suspend fun getAllMonthlyCategories(monthYear: String): AppResult<List<MonthlyCategorySummary>> {
+        return withContext(dispatcher) {
+            val uId = cacheSource.getUID()
+            if (uId != null) {
+                categoryApi.getAllMonthlyCategories(uId, monthYear)
             } else
                 AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
         }

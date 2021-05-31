@@ -92,8 +92,8 @@ class AddTransactionDialogFragmentViewModel(
             when (val result = getMonthlySummaryJob.await()) {
                 is AppResult.Success -> {
                     val transactionResult = addTransactionJob.await()
-                    val a = async { handleAddTransactionResult(transactionResult, result.data, transactionEntity, monthYear) }
-                    val b = async { addCategoryTransaction(monthYear, transactionEntity) }
+                    async { handleAddTransactionResult(transactionResult, result.data, transactionEntity, monthYear) }
+                    async { addCategoryTransaction(monthYear, transactionEntity) }
 
                 }
 
@@ -147,7 +147,7 @@ class AddTransactionDialogFragmentViewModel(
             when (result) {
                 is AppResult.Success -> {
                     _dataUpdatedResult.value = Event(result.data)
-                    _loadingState.value = false
+//                    _loadingState.value = false
                 }
 
                 is AppResult.Failure -> {
@@ -189,7 +189,7 @@ class AddTransactionDialogFragmentViewModel(
     private fun addCategoryTransaction(monthYear: String, transactionEntity: TransactionEntity) {
         viewModelScope.launch {
             _loadingState.value = true
-            when (val result = transactionUseCase.addCategoryTransaction(monthYear, transactionEntity)) {
+            when (val result = categoryUseCase.addCategoryTransaction(monthYear, transactionEntity)) {
                 is AppResult.Success -> {
                     handleAddCategoryResult(transactionEntity, monthYear)
                 }
@@ -212,17 +212,18 @@ class AddTransactionDialogFragmentViewModel(
         monthYear: String
     ) {
         viewModelScope.launch {
-            when (val result = transactionUseCase.getMonthlyCategorySummary(monthYear, transactionEntity.category)) {
+            when (val result = categoryUseCase.getMonthlyCategorySummary(monthYear, transactionEntity.category)) {
                 is AppResult.Success -> {
-                    if (result.data == null || result.data.isEmpty()) {
-                        val newMonthlyBudgetSummary = getUpdatedMonthlyBudgetSummary(MonthlyCategorySummary(), transactionEntity)
-                        transactionUseCase.updateMonthlyCategoryBudgetData(monthYear, transactionEntity.category, newMonthlyBudgetSummary)
-                        transactionUseCase.updateExpenseInBudget(monthYear, newMonthlyBudgetSummary)
+                    if (result.data.isEmpty()) {
+                        val newMonthlyCategorySummary = getUpdatedMonthlyCategorySummary(MonthlyCategorySummary(), transactionEntity)
+                        transactionUseCase.updateMonthlyCategorySummaryData(monthYear, transactionEntity.category, newMonthlyCategorySummary)
+                        transactionUseCase.updateExpenseInBudget(monthYear, newMonthlyCategorySummary)
                     } else {
-                        val newMonthlyBudgetSummary = getUpdatedMonthlyBudgetSummary(result.data, transactionEntity)
-                        transactionUseCase.updateMonthlyCategoryBudgetData(monthYear, transactionEntity.category, newMonthlyBudgetSummary)
+                        val newMonthlyBudgetSummary = getUpdatedMonthlyCategorySummary(result.data, transactionEntity)
+                        transactionUseCase.updateMonthlyCategorySummaryData(monthYear, transactionEntity.category, newMonthlyBudgetSummary)
                         transactionUseCase.updateExpenseInBudget(monthYear, newMonthlyBudgetSummary)
                     }
+                    _loadingState.value = false
                 }
 
                 is AppResult.Failure -> {
@@ -238,13 +239,13 @@ class AddTransactionDialogFragmentViewModel(
         }
     }
 
-    private fun getUpdatedMonthlyBudgetSummary(
+    private fun getUpdatedMonthlyCategorySummary(
         monthlyCategorySummary: MonthlyCategorySummary,
         transactionEntity: TransactionEntity
     ): MonthlyCategorySummary {
         return MonthlyCategorySummary(
             transactionEntity.category,
-            monthlyCategorySummary.totalCategoryExpense + transactionEntity.amount
+            monthlyCategorySummary.categoryAmount + transactionEntity.amount, transactionEntity.transactionType.type
         )
     }
 
