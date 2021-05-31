@@ -9,7 +9,7 @@ import com.example.mobiledger.presentation.NormalObserver
 import com.example.mobiledger.presentation.SplitFragment
 import com.example.mobiledger.presentation.budget.BudgetFragment
 import com.example.mobiledger.presentation.home.HomeFragment
-import com.example.mobiledger.presentation.insight.InsightFragment
+import com.example.mobiledger.presentation.stats.StatsFragment
 import com.example.mobiledger.presentation.main.MainActivityViewModel.*
 
 class DashboardFragment :
@@ -32,7 +32,7 @@ class DashboardFragment :
                 when (position) {
                     0 -> HomeFragment.newInstance()
                     1 -> BudgetFragment.newInstance()
-                    2 -> InsightFragment.newInstance()
+                    2 -> StatsFragment.newInstance()
                     3 -> SplitFragment.newInstance()
                     else -> HomeFragment.newInstance()
                 }
@@ -52,7 +52,7 @@ class DashboardFragment :
                     TabOrder.Budget.ordinal,
                     false
                 )
-                is NavTab.INSIGHT ->
+                is NavTab.STATS ->
                     viewBinding.viewPager.setCurrentItem(
                         TabOrder.Insight.ordinal,
                         false

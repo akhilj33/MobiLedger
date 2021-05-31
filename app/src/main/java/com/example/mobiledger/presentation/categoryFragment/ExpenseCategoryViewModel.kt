@@ -50,7 +50,7 @@ class ExpenseCategoryViewModel(
         viewModelScope.launch {
             when (val result = categoryUseCase.updateUserExpenseCategory(ExpenseCategoryListEntity(newList))) {
                 is AppResult.Success -> {
-                    updateUserExpenseCategoryDB(ExpenseCategoryListEntity(newList))
+                    getExpenseCategoryList()
                 }
                 is AppResult.Failure -> {
                     _errorLiveData.value = Event(
@@ -63,11 +63,6 @@ class ExpenseCategoryViewModel(
             }
         }
         _loadingState.value = false
-    }
-
-    private suspend fun updateUserExpenseCategoryDB(newExpenseCategoryList: ExpenseCategoryListEntity) {
-        categoryUseCase.updateUserExpenseCategoryDB(newExpenseCategoryList)
-        getExpenseCategoryList()
     }
 }
 

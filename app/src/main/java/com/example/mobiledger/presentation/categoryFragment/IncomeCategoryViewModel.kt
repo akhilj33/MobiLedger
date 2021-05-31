@@ -51,7 +51,7 @@ class IncomeCategoryViewModel(
         viewModelScope.launch {
             when (val result = categoryUseCase.updateUserIncomeCategory(newIncomeCategoryList)) {
                 is AppResult.Success -> {
-                    updateUserIncomeCategoryDB(newIncomeCategoryList)
+                    getIncomeCategoryList()
                 }
                 is AppResult.Failure -> {
                     _errorLiveData.value = Event(
@@ -64,10 +64,5 @@ class IncomeCategoryViewModel(
             }
         }
         _loadingState.value = false
-    }
-
-    private suspend fun updateUserIncomeCategoryDB(newIncomeCategoryList: IncomeCategoryListEntity) {
-        categoryUseCase.updateUserIncomeCategoryDB(newIncomeCategoryList)
-        getIncomeCategoryList()
     }
 }
