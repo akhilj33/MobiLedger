@@ -92,5 +92,9 @@
 
     <!-- Budget Fragment -->
 
+    <!-- NOTIFICATION -->
+    <string name="channel_transaction">Transaction channel</string>
+    <string name="channel_transaction_description">Channel for transaction notifications</string>
+
 
 </resources>
