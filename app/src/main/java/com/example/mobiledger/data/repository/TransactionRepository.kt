@@ -20,9 +20,7 @@ interface TransactionRepository {
     suspend fun getTransactionListByMonth(monthYear: String): AppResult<List<TransactionEntity>>
     suspend fun addUserTransactionToFirebase(monthYear: String, transactionEntity: TransactionEntity): AppResult<Unit>
     suspend fun deleteTransaction(transactionId: String, monthYear: String): AppResult<Unit>
-    suspend fun addCategoryTransaction(monthYear: String, transactionEntity: TransactionEntity): AppResult<Unit>
-    suspend fun getMonthlyCategorySummary(monthYear: String, category: String): AppResult<MonthlyCategorySummary?>
-    suspend fun updateMonthlyCategoryBudget(
+    suspend fun updateMonthlyCategorySummary(
         monthYear: String,
         category: String,
         monthlyCategorySummary: MonthlyCategorySummary
@@ -44,7 +42,7 @@ class TransactionRepositoryImpl(
                 if (!monthlySummaryExists) {
                     when (val firebaseResult = transactionApi.getMonthlySummaryEntity(uId, monthYear)) {
                         is AppResult.Success -> {
-                            transactionDb.saveMonthlySummary(monthYear, firebaseResult.data ?: MonthlyTransactionSummaryEntity())
+                            transactionDb.saveMonthlySummary(monthYear, firebaseResult.data)
                         }
                         is AppResult.Failure -> {
                             return@withContext AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
@@ -123,27 +121,7 @@ class TransactionRepositoryImpl(
         }
     }
 
-    override suspend fun addCategoryTransaction(monthYear: String, transactionEntity: TransactionEntity): AppResult<Unit> {
-        return withContext(dispatcher) {
-            val uId = cacheSource.getUID()
-            if (uId != null) {
-                transactionApi.addCategoryTransaction(uId, monthYear, transactionEntity)
-            } else
-                AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
-        }
-    }
-
-    override suspend fun getMonthlyCategorySummary(monthYear: String, category: String): AppResult<MonthlyCategorySummary?> {
-        return withContext(dispatcher) {
-            val uId = cacheSource.getUID()
-            if (uId != null) {
-                transactionApi.getMonthlyCategorySummary(uId, monthYear, category)
-            } else
-                AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
-        }
-    }
-
-    override suspend fun updateMonthlyCategoryBudget(
+    override suspend fun updateMonthlyCategorySummary(
         monthYear: String,
         category: String,
         monthlyCategorySummary: MonthlyCategorySummary,
@@ -151,7 +129,7 @@ class TransactionRepositoryImpl(
         return withContext(dispatcher) {
             val uId = cacheSource.getUID()
             if (uId != null) {
-                transactionApi.updateMonthlyCategoryBudget(uId, monthYear, category, monthlyCategorySummary)
+                transactionApi.updateMonthlyCategorySummary(uId, monthYear, category, monthlyCategorySummary)
             } else
                 AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
         }

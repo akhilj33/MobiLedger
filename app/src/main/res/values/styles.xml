@@ -43,6 +43,10 @@
         <item name="fontFamily">@font/gelion_semi_bold</item>
     </style>
 
+    <style name="GelionItalicsFont" parent="TextAppearance.MaterialComponents.Body1">
+        <item name="fontFamily">@font/gelion_light_italic</item>
+    </style>
+
     <!-- Gelion Regular Font and Size-->
     <style name="GelionSemiBold16" parent="GelionSemiBoldFont">
         <item name="android:textSize">@dimen/csp_16</item>
@@ -64,6 +68,10 @@
         <item name="android:textSize">@dimen/csp_18</item>
     </style>
 
+    <style name="GelionItalics12" parent="GelionItalicsFont">
+        <item name="android:textSize">@dimen/csp_12</item>
+    </style>
+
     <!-- Gelion Regular Font, Size and color-->
     <style name="GelionRegularNavyBlue16" parent="GelionRegular16">
         <item name="android:textColor">@color/colorTextDark</item>
@@ -81,11 +89,19 @@
         <item name="android:textColor">@color/colorDarkRed</item>
     </style>
 
+    <style name="GelionSemiBoldBlue18" parent="GelionSemiBold18">
+        <item name="android:textColor">@color/colorTextDark</item>
+    </style>
+
     <style name="GelionSemiBoldBlue16" parent="GelionSemiBold16">
         <item name="android:textColor">@color/colorTextDark</item>
     </style>
 
     <style name="GelionSemiBoldBlue24" parent="GelionSemiBold24">
+        <item name="android:textColor">@color/colorTextDark</item>
+    </style>
+
+    <style name="GelionItalicsBlue12" parent="GelionItalics12">
         <item name="android:textColor">@color/colorTextDark</item>
     </style>
 

@@ -74,7 +74,7 @@ class MainActivityViewModel() : BaseViewModel() {
     sealed class NavTab {
         object HOME : NavTab()
         data class BUDGET(val isFromDashboard: Boolean = false) : NavTab()
-        data class INSIGHT(val isFromDashboard: Boolean = false) : NavTab()
+        data class STATS(val isFromDashboard: Boolean = false) : NavTab()
         data class SPLIT(val isFromDashboard: Boolean = false) : NavTab()
         object DeselectAll : NavTab()
     }

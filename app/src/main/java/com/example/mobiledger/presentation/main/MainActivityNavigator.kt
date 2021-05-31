@@ -17,11 +17,12 @@ import com.example.mobiledger.presentation.profile.ProfileFragment
 import com.example.mobiledger.presentation.profile.ProfileNavigator
 import com.example.mobiledger.presentation.splash.SplashFragment
 import com.example.mobiledger.presentation.splash.SplashNavigator
+import com.example.mobiledger.presentation.stats.StatsNavigator
 
 class MainActivityNavigator constructor(
     @IdRes private val containerId: Int,
     private val fragmentManager: FragmentManager
-) : HomeNavigator, LoginNavigator, SignUpNavigator, SplashNavigator, ProfileNavigator, BudgetNavigator {
+) : HomeNavigator, LoginNavigator, SignUpNavigator, SplashNavigator, ProfileNavigator, BudgetNavigator, StatsNavigator {
 
 
     /*---------------------------------Main Activity-------------------------------------*/

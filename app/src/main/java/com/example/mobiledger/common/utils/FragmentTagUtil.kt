@@ -14,7 +14,7 @@ import com.example.mobiledger.presentation.categoryFragment.ExpenseCategoryFragm
 import com.example.mobiledger.presentation.categoryFragment.IncomeCategoryFragment
 import com.example.mobiledger.presentation.dashboard.DashboardFragment
 import com.example.mobiledger.presentation.home.HomeFragment
-import com.example.mobiledger.presentation.insight.InsightFragment
+import com.example.mobiledger.presentation.stats.StatsFragment
 import com.example.mobiledger.presentation.profile.EditProfileFragment
 import com.example.mobiledger.presentation.profile.ProfileFragment
 import com.example.mobiledger.presentation.splash.SplashFragment
@@ -46,7 +46,7 @@ object FragmentTagUtil {
             is SignUpFragment -> SIGN_UP_FRAGMENT_TAG
             is HomeFragment -> HOME_FRAGMENT_TAG
             is BudgetFragment -> BUDGET_FRAGMENT_TAG
-            is InsightFragment -> INSIGHT_FRAGMENT_TAG
+            is StatsFragment -> INSIGHT_FRAGMENT_TAG
             is EditProfileFragment -> EDIT_PROFILE_FRAGMENT_TAG
             is ProfileFragment -> PROFILE_FRAGMENT_TAG
             is SplitFragment -> SPLIT_FRAGMENT_TAG

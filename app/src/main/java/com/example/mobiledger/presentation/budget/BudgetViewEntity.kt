@@ -4,6 +4,7 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import com.example.mobiledger.common.utils.ConstantUtils.MAX_BUDGET
 import com.example.mobiledger.common.utils.ConstantUtils.TOTAL_BUDGET
+import com.example.mobiledger.domain.enums.TransactionType
 
 sealed class BudgetViewItem(val viewType: BudgetViewType) {
     data class BudgetHeaderData(@StringRes val data: Int, val type: BudgetViewType = BudgetViewType.Header) : BudgetViewItem(type)
@@ -28,7 +29,7 @@ fun MonthlyBudgetData.toMutableMap(): MutableMap<String, Any> = mutableMapOf(
     TOTAL_BUDGET to totalBudget
 )
 
-data class MonthlyCategorySummary(val categoryName: String = "", val totalCategoryExpense: Long = 0)
+data class MonthlyCategorySummary(val categoryName: String = "", val categoryAmount: Long = 0, val categoryType: String = TransactionType.Expense.type)
 
 data class MonthlyCategoryBudget(val categoryName: String = "", val categoryBudget: Long = 0, val categoryExpense: Long = 0)
 

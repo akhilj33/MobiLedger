@@ -15,17 +15,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <!--          HORIZONTAL GUIDELINES          -->
-
                 <androidx.constraintlayout.widget.Guideline
                     android:id="@+id/horizontalScreenGuideline_08"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     app:layout_constraintGuide_percent="0.08" />
-
-
-                <!--          VERTICAL GUIDELINES          -->
 
                 <androidx.constraintlayout.widget.Guideline
                     android:id="@+id/verticalScreenGuideline_10"

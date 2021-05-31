@@ -29,7 +29,7 @@ object DefaultCategoryUtils {
     private const val EXP_TRAVEL = "Travel"
     private const val EXP_BOOKS = "Books"
     private const val EXP_OFFICE = "Office"
-    const val EXP_OTHERS = "Others"
+    const val EXP_OTHERS = "Other Expenses"
 
     // Income Tags
     private const val INC_SALARY = "Salary"
@@ -39,13 +39,17 @@ object DefaultCategoryUtils {
     private const val INC_REFUND = "Refund"
     private const val INC_COUPONS = "Coupons"
     private const val INC_INVESTMENT = "Investment"
-    const val INC_OTHERS = "Others"
+    const val INC_OTHERS = "Other Incomes"
 
     fun getDefaultExpenseList() = listOf(EXP_FOOD, EXP_BILLS, EXP_TRANSPORTATION, EXP_HOME, EXP_CAR, EXP_ENTERTAINMENT, EXP_SHOPPING,
         EXP_INSURANCE, EXP_TAX, EXP_TELEPHONE, EXP_HEALTH, EXP_SPORT, EXP_PET, EXP_BABY, EXP_BEAUTY, EXP_ELECTRONICS, EXP_ALCOHOL,
         EXP_VEGETABLE, EXP_GROCERIES, EXP_SOCIAL, EXP_EDUCATION, EXP_TRAVEL, EXP_BOOKS, EXP_OFFICE, EXP_OTHERS)
 
     fun getDefaultIncomeList() = listOf(INC_SALARY, INC_AWARDS, INC_SALE, INC_RENTAL, INC_REFUND, INC_COUPONS, INC_INVESTMENT, INC_OTHERS)
+
+    fun getOtherCategoryName(transactionType: TransactionType) =
+        if(transactionType == TransactionType.Expense) EXP_OTHERS
+        else INC_OTHERS
 
     fun getCategoryIcon(category: String, transactionType: TransactionType) =
         when(category){
@@ -66,7 +70,7 @@ object DefaultCategoryUtils {
             EXP_OFFICE -> R.drawable.exp_office_icon
             EXP_PET -> R.drawable.exp_pet_icon
             EXP_SHOPPING -> R.drawable.exp_shopping_icon
-            EXP_SOCIAL -> R.drawable.exp_shopping_icon
+            EXP_SOCIAL -> R.drawable.exp_social_icon
             EXP_SPORT -> R.drawable.exp_sports_icon
             EXP_TAX -> R.drawable.exp_tax_icon
             EXP_TELEPHONE -> R.drawable.exp_mobile_icon
@@ -80,6 +84,8 @@ object DefaultCategoryUtils {
             INC_RENTAL -> R.drawable.inc_rental_icon
             INC_SALE -> R.drawable.inc_sale_icon
             INC_SALARY -> R.drawable.inc_salary_icon
+            EXP_OTHERS -> R.drawable.exp_others_icon
+            INC_OTHERS -> R.drawable.inc_others_icon
             else -> {
                 if(transactionType == TransactionType.Expense) R.drawable.exp_others_icon
                 else R.drawable.inc_others_icon

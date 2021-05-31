@@ -30,7 +30,6 @@ class AddCategoryDialogViewModel(
         viewModelScope.launch {
             when (val result = categoryUseCase.updateUserIncomeCategory(newIncomeCategoryList)) {
                 is AppResult.Success -> {
-                    updateUserIncomeCategoryDB(newIncomeCategoryList)
                     _dataUpdatedResult.value = Event(true)
                 }
                 is AppResult.Failure -> {
@@ -44,10 +43,6 @@ class AddCategoryDialogViewModel(
             }
         }
         _loadingState.value = false
-    }
-
-    private suspend fun updateUserIncomeCategoryDB(newIncomeCategoryList: IncomeCategoryListEntity) {
-        categoryUseCase.updateUserIncomeCategoryDB(newIncomeCategoryList)
     }
 
     fun updateUserExpenseCategoryList(expenseCategoryListEntity: ExpenseCategoryListEntity) {
@@ -55,7 +50,6 @@ class AddCategoryDialogViewModel(
         viewModelScope.launch {
             when (val result = categoryUseCase.updateUserExpenseCategory(expenseCategoryListEntity)) {
                 is AppResult.Success -> {
-                    updateUserExpenseCategoryDB(expenseCategoryListEntity)
                     _dataUpdatedResult.value = Event(true)
                 }
                 is AppResult.Failure -> {
@@ -69,9 +63,5 @@ class AddCategoryDialogViewModel(
             }
         }
         _loadingState.value = false
-    }
-
-    private suspend fun updateUserExpenseCategoryDB(newExpenseCategoryList: ExpenseCategoryListEntity) {
-        categoryUseCase.updateUserExpenseCategoryDB(newExpenseCategoryList)
     }
 }

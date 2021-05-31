@@ -72,7 +72,7 @@ class HomeAdapter(val onDeleteItemClick: (String, Int) -> Unit) : RecyclerView.A
     inner class MonthlyPieViewHolder(private val viewBinding: HomeMonthlyPieItemBinding) : RecyclerView.ViewHolder(viewBinding.root) {
         fun bind(item: ArrayList<PieEntry>) {
             viewBinding.apply {
-                GraphUtils.pieChart(pieChart, item)
+                GraphUtils.pieChart(pieChart, item, true)
             }
         }
     }
@@ -97,16 +97,10 @@ class HomeAdapter(val onDeleteItemClick: (String, Int) -> Unit) : RecyclerView.A
                 tvCategory.text = item.category
                 ivCategoryIcon.background = ContextCompat.getDrawable(context, item.categoryIcon)
                 if (item.transactionType == TransactionType.Income) tvAmount.setTextColor(
-                    ContextCompat.getColorStateList(
-                        context,
-                        R.color.colorGreen
-                    )
+                    ContextCompat.getColorStateList(context, R.color.colorGreen)
                 )
                 else if (item.transactionType == TransactionType.Expense) tvAmount.setTextColor(
-                    ContextCompat.getColorStateList(
-                        context,
-                        R.color.colorDarkRed
-                    )
+                    ContextCompat.getColorStateList(context, R.color.colorDarkRed)
                 )
             }
         }

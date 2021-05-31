@@ -4,11 +4,11 @@ enum class TransactionType(val type: String) {
     Expense("expense"), Income("income");
 
     companion object {
-        fun getTransactionType(type: String?): TransactionType? {
+        fun getTransactionType(type: String): TransactionType {
             return when (type) {
                 Expense.type -> Expense
                 Income.type -> Income
-                else -> null
+                else -> Expense
             }
         }
     }
@@ -16,8 +16,4 @@ enum class TransactionType(val type: String) {
 
 enum class SignInType(val type: String) {
     Google("google"), Email("email")
-}
-
-enum class CategoryType(val type: String) {
-    INCOME("income"), EXPENSE("expense")
 }

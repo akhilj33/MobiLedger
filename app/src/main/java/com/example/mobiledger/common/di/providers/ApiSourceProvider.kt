@@ -16,7 +16,7 @@ class ApiSourceProvider(
     fun provideTransactionApiSource(): TransactionApi =
         TransactionApiImpl(firebaseProvider.provideFirebaseDatabase(), authSourceProvider.provideAuthSource())
 
-    fun provideCategoryApiSource(): CategoryApi = CategoryApiImpl(firebaseProvider.provideFirebaseDatabase())
+    fun provideCategoryApiSource(): CategoryApi = CategoryApiImpl(firebaseProvider.provideFirebaseDatabase(), authSourceProvider.provideAuthSource())
 
     fun provideBudgetApiSource(): BudgetApi =
         BudgetApiImpl(firebaseProvider.provideFirebaseDatabase(), authSourceProvider.provideAuthSource())

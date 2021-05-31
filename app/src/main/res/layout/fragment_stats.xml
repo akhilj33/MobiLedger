@@ -51,7 +51,7 @@
             app:layout_constraintEnd_toStartOf="@id/ivProfileIcon"
             app:layout_constraintStart_toStartOf="@id/verticalStartGuideline"
             app:layout_constraintTop_toTopOf="@id/ivProfileIcon"
-            android:text="@string/hello" />
+            android:text="@string/monthly_statistics" />
 
         <include
             android:id="@+id/month_navigation_bar"
@@ -69,7 +69,7 @@
             android:id="@+id/swipeRefreshLayout"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginTop="@dimen/cdp_16"
+            android:layout_marginTop="@dimen/cdp_32"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@id/verticalEndGuideline"
@@ -77,26 +77,12 @@
             app:layout_constraintTop_toBottomOf="@id/month_navigation_bar">
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvHome"
+                android:id="@+id/rvStats"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:overScrollMode="never" />
 
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/btnAddTransaction"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/cdp_32"
-            android:layout_marginBottom="@dimen/cdp_32"
-            app:backgroundTint="@color/colorAppBlue"
-            app:tint="@android:color/white"
-            android:contentDescription="@string/add_transaction"
-            android:src="@drawable/add_icon"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
-
 
         <include
             android:id="@+id/includeErrorView"
@@ -108,7 +94,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             tools:visibility="visible" />
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

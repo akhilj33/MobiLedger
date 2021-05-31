@@ -57,7 +57,7 @@ class MainActivity :
             highlightTab(BUDGET())
         }
         viewBinding.includeNav.statsView.setOnClickListener {
-            highlightTab(INSIGHT())
+            highlightTab(STATS())
         }
         viewBinding.includeNav.accountView.setOnClickListener {
             highlightTab(
@@ -147,7 +147,7 @@ class MainActivity :
             when (tab) {
                 is HOME -> ColorNav().colorHome(R.color.colorPrimary)
                 is BUDGET -> ColorNav().colorBudget(R.color.colorPrimary)
-                is INSIGHT -> ColorNav().colorInsight(R.color.colorPrimary)
+                is STATS -> ColorNav().colorInsight(R.color.colorPrimary)
                 is SPLIT -> ColorNav().colorSplit(R.color.colorPrimary)
                 is DeselectAll -> {
                 }

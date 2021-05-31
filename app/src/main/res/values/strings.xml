@@ -64,6 +64,7 @@
     <string name="transaction_added">Transaction Added</string>
     <string name="expense">Expense</string>
     <string name="income">Income</string>
+    <string name="saving">Saving</string>
     <string name="description">Description (Optional)</string>
 
     <!--Home Fragment-->
@@ -89,6 +90,12 @@
     <string name="login_with">Login with</string>
     <string name="income_vs_expense">Income Vs Expense</string>
     <string name="add_monthly_budget">Add Monthly Budget</string>
+    <string name="monthly_statistics">Monthly Statistics</string>
+    <string name="hello">Hello,</string>
+    <string name="others">Others</string>
+    <string name="expenses_breakup">Expenses BreakUp</string>
+    <string name="income_breakup">Income BreakUp</string>
+    <string name="monthly_limit">Limit</string>
 
     <!-- Budget Fragment -->
 

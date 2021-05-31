@@ -9,6 +9,7 @@ import com.example.mobiledger.common.base.BaseViewModel
 import com.example.mobiledger.common.utils.DateUtils
 import com.example.mobiledger.domain.AppResult
 import com.example.mobiledger.domain.usecases.BudgetUseCase
+import com.example.mobiledger.domain.usecases.CategoryUseCase
 import com.example.mobiledger.domain.usecases.TransactionUseCase
 import com.example.mobiledger.presentation.Event
 import kotlinx.coroutines.async
@@ -18,7 +19,7 @@ import java.util.*
 
 class AddBudgetDialogViewModel(
     private val budgetUseCase: BudgetUseCase,
-    private val transactionUseCase: TransactionUseCase
+    private val categoryUseCase: CategoryUseCase
 ) : BaseViewModel() {
 
 
@@ -64,12 +65,9 @@ class AddBudgetDialogViewModel(
     fun getMonthlyCategorySummary(category: String, amt: Long, month: String, budgetTotal: Long) {
         _isLoading.value = true
         viewModelScope.launch {
-            when (val result = transactionUseCase.getMonthlyCategorySummary(DateUtils.getDateInMMyyyyFormat(getCurrentMonth()), category)) {
+            when (val result = categoryUseCase.getMonthlyCategorySummary(DateUtils.getDateInMMyyyyFormat(getCurrentMonth()), category)) {
                 is AppResult.Success -> {
-                    if (result.data != null) {
-                        addCategoryBudgetToFirebase(category, amt, result.data.totalCategoryExpense, month, budgetTotal)
-                    } else
-                        addCategoryBudgetToFirebase(category, amt, 0, month, budgetTotal)
+                    addCategoryBudgetToFirebase(category, amt, result.data.categoryAmount, month, budgetTotal)
                 }
                 is AppResult.Failure -> {
                     addCategoryBudgetToFirebase(category, amt, 0, month, budgetTotal)
