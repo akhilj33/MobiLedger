@@ -27,4 +27,5 @@ object ConstantUtils {
     const val BUDGET = "Budget"
     const val BUDGET_DETAILS = "budgetDetails"
     const val CATEGORY_BUDGET = "CategoryBudget"
+    const val CHANNEL_ID_TRANSACTION = "ChannelIDTransaction"
 }

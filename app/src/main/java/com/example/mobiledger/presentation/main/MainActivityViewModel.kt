@@ -2,11 +2,20 @@ package com.example.mobiledger.presentation.main
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.example.mobiledger.common.base.BaseViewModel
+import com.example.mobiledger.domain.AppResult
 import com.example.mobiledger.domain.enums.TransactionType
+import com.example.mobiledger.domain.usecases.BudgetUseCase
 import com.example.mobiledger.presentation.Event
+import com.example.mobiledger.presentation.addtransaction.AddTransactionDialogFragmentViewModel
+import com.example.mobiledger.presentation.budget.MonthlyBudgetData
+import com.example.mobiledger.presentation.budget.MonthlyCategoryBudget
+import kotlinx.coroutines.launch
 
-class MainActivityViewModel() : BaseViewModel() {
+class MainActivityViewModel(
+    private val budgetUseCase: BudgetUseCase
+) : BaseViewModel() {
 
 
     /*------------------------------------------------Live Data--------------------------------------------------*/
@@ -31,6 +40,12 @@ class MainActivityViewModel() : BaseViewModel() {
 
     private val _addBudgetResultLiveData: MutableLiveData<Event<Unit>> = MutableLiveData()
     val addBudgetResultLiveData: LiveData<Event<Unit>> = _addBudgetResultLiveData
+
+    private val _notificationIndicatorTotal = MutableLiveData<NotificationCallerPercentData>()
+    val notificationIndicatorTotal: LiveData<NotificationCallerPercentData> get() = _notificationIndicatorTotal
+
+    private val _notificationIndicatorCategory = MutableLiveData<NotificationCallerPercentData>()
+    val notificationIndicatorCategory: LiveData<NotificationCallerPercentData> get() = _notificationIndicatorCategory
     /*---------------------------------------Bottom Tabs Info -------------------------------------------------*/
 
     fun updateCurrentTab(tab: NavTab) {
@@ -71,6 +86,52 @@ class MainActivityViewModel() : BaseViewModel() {
         _addBudgetResultLiveData.value = Event(Unit)
     }
 
+    fun notificationHandler(notificationCallerData: AddTransactionDialogFragmentViewModel.NotificationCallerData) {
+        viewModelScope.launch {
+            when (val result = budgetUseCase.getMonthlyBudgetOverView(notificationCallerData.monthYear)) {
+                is AppResult.Success -> {
+                    shouldTriggerTotalNotification(result.data, notificationCallerData)
+                }
+                is AppResult.Failure -> {
+                }
+            }
+            when (val result =
+                budgetUseCase.getMonthlyCategoryBudget(notificationCallerData.monthYear, notificationCallerData.expenseCategory)) {
+                is AppResult.Success -> {
+                    shouldTriggerCategoryNotification(result.data, notificationCallerData)
+                }
+                is AppResult.Failure -> {
+                }
+            }
+        }
+    }
+
+    private fun shouldTriggerTotalNotification(
+        monthlyBudgetData: MonthlyBudgetData?,
+        notificationCallerData: AddTransactionDialogFragmentViewModel.NotificationCallerData
+    ) {
+        if (monthlyBudgetData?.maxBudget != null && (monthlyBudgetData.totalBudget.toFloat() / monthlyBudgetData.maxBudget.toFloat()) >= 1 && ((monthlyBudgetData.totalBudget.toFloat() - notificationCallerData.expenseTransaction.toFloat()) / monthlyBudgetData.maxBudget.toFloat()) < 1) {
+            _notificationIndicatorTotal.value = NotificationCallerPercentData(notificationCallerData, 100)
+        } else if (monthlyBudgetData?.maxBudget != null && (monthlyBudgetData.totalBudget.toFloat() / monthlyBudgetData.maxBudget.toFloat()) >= .9 && ((monthlyBudgetData.totalBudget.toFloat() - notificationCallerData.expenseTransaction.toFloat()) / monthlyBudgetData.maxBudget.toFloat()) < .9) {
+            _notificationIndicatorTotal.value = NotificationCallerPercentData(notificationCallerData, 90)
+        } else if (monthlyBudgetData?.maxBudget != null && (monthlyBudgetData.totalBudget.toFloat() / monthlyBudgetData.maxBudget.toFloat()) >= .5 && ((monthlyBudgetData.totalBudget.toFloat() - notificationCallerData.expenseTransaction.toFloat()) / monthlyBudgetData.maxBudget.toFloat()) < .5) {
+            _notificationIndicatorTotal.value = NotificationCallerPercentData(notificationCallerData, 50)
+        }
+    }
+
+    private fun shouldTriggerCategoryNotification(
+        monthlyCategoryBudget: MonthlyCategoryBudget?,
+        notificationCallerData: AddTransactionDialogFragmentViewModel.NotificationCallerData
+    ) {
+        if (monthlyCategoryBudget?.categoryBudget != null && (monthlyCategoryBudget.categoryExpense.toFloat() / monthlyCategoryBudget.categoryBudget.toFloat()) >= 1 && ((monthlyCategoryBudget.categoryExpense.toFloat() - notificationCallerData.expenseTransaction.toFloat()) / monthlyCategoryBudget.categoryBudget.toFloat()) < 1) {
+            _notificationIndicatorCategory.value = NotificationCallerPercentData(notificationCallerData, 100)
+        } else if (monthlyCategoryBudget?.categoryBudget != null && (monthlyCategoryBudget.categoryExpense.toFloat() / monthlyCategoryBudget.categoryBudget.toFloat()) >= .9 && ((monthlyCategoryBudget.categoryExpense.toFloat() - notificationCallerData.expenseTransaction.toFloat()) / monthlyCategoryBudget.categoryBudget.toFloat()) < .9) {
+            _notificationIndicatorCategory.value = NotificationCallerPercentData(notificationCallerData, 90)
+        } else if (monthlyCategoryBudget?.categoryBudget != null && (monthlyCategoryBudget.categoryExpense.toFloat() / monthlyCategoryBudget.categoryBudget.toFloat()) >= .5 && ((monthlyCategoryBudget.categoryExpense.toFloat() - notificationCallerData.expenseTransaction.toFloat()) / monthlyCategoryBudget.categoryBudget.toFloat()) < .5) {
+            _notificationIndicatorCategory.value = NotificationCallerPercentData(notificationCallerData, 50)
+        }
+    }
+
     sealed class NavTab {
         object HOME : NavTab()
         data class BUDGET(val isFromDashboard: Boolean = false) : NavTab()
@@ -78,4 +139,9 @@ class MainActivityViewModel() : BaseViewModel() {
         data class SPLIT(val isFromDashboard: Boolean = false) : NavTab()
         object DeselectAll : NavTab()
     }
+
+    data class NotificationCallerPercentData(
+        val notificationCallerData: AddTransactionDialogFragmentViewModel.NotificationCallerData,
+        val percentValue: Long
+    )
 }

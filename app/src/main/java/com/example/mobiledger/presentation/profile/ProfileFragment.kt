@@ -11,6 +11,7 @@ import com.example.mobiledger.databinding.SnackViewErrorBinding
 import com.example.mobiledger.domain.entities.UserEntity
 import com.example.mobiledger.presentation.OneTimeObserver
 
+
 class ProfileFragment : BaseFragment<FragmentProfileBinding, ProfileNavigator>(R.layout.fragment_profile) {
 
     private val viewModel: ProfileViewModel by viewModels { viewModelFactory }
@@ -67,6 +68,7 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding, ProfileNavigator>(R
         viewBinding.emailTv.text = user.emailId ?: ""
         viewBinding.contactNumTv.text = user.phoneNo ?: ""
     }
+
 
     companion object {
         fun newInstance() = ProfileFragment()
