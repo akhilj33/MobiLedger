@@ -60,7 +60,7 @@ fun View.changeStatusBarColor(
 }
 
 
-fun String.toAmount() = "\u20B9 $this"
+fun String.toAmount() = "\u20B9$this"
 fun String.toPercent() = "$this \u0025"
 fun String.roundToOneDecimal(num: Float) = "%.1f".format(num)
 fun Long.toPercent(total: Long) = ((this.toFloat() / total) * 100).roundToInt()

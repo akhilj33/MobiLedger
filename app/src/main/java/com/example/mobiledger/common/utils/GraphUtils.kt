@@ -1,16 +1,25 @@
 package com.example.mobiledger.common.utils
 
+import android.content.Context
 import android.graphics.Color
 import android.graphics.Color.rgb
+import android.view.LayoutInflater
+import com.example.mobiledger.R
+import com.example.mobiledger.databinding.MarkerLayoutBinding
 import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.charts.BarChart
+import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.charts.PieChart
+import com.github.mikephil.charting.components.MarkerView
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.components.XAxis.XAxisPosition
 import com.github.mikephil.charting.data.*
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.github.mikephil.charting.formatter.PercentFormatter
+import com.github.mikephil.charting.highlight.Highlight
 import java.text.DecimalFormat
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 object GraphUtils {
@@ -83,6 +92,54 @@ object GraphUtils {
         barChart.invalidate()
     }
 
+    //todo
+    // 1 - marker not working
+    // 2 - Padding not adding between first item and white axis
+    // 3 - Remove grids
+    fun lineChart(lineChart: LineChart, arrayList: List<Entry>, context: Context) {
+        val dataSet = LineDataSet(arrayList, "Unused label")
+        dataSet.apply{
+            this.color = Color.BLACK
+            this.valueTextColor = Color.GRAY
+            this.highLightColor = Color.RED
+            this.setCircleColor(Color.BLACK)
+            this.circleHoleColor = Color.BLACK
+            this.setDrawValues(false)
+            this.lineWidth = 1.5f
+            this.isHighlightEnabled = true
+            this.setDrawHighlightIndicators(false)
+        }
+
+        with(lineChart) {
+            // (1)
+            axisLeft.isEnabled = true
+            axisRight.isEnabled = false
+            xAxis.isEnabled = true
+            xAxis.position = XAxisPosition.BOTTOM
+            xAxis.labelRotationAngle = 45f
+            xAxis.labelCount = 10
+            xAxis.spaceMin = 0.1f
+            xAxis.spaceMax = 0.1f
+            xAxis.setAvoidFirstLastClipping(true)
+            legend.isEnabled = false
+            description.isEnabled = false
+
+            // (2)
+            setTouchEnabled(true)
+            isDragEnabled = true
+            setScaleEnabled(false)
+            setPinchZoom(false)
+
+            xAxis.valueFormatter = LineChartXAxisValueFormatter()
+        }
+
+        lineChart.marker = MyMarker(context)
+        lineChart.data = LineData(dataSet)
+        lineChart.invalidate()
+    }
+
+
+
     fun getGraphColorList() = listOf(
         rgb(255, 82, 82), rgb(130, 177, 255),
         rgb(255, 196, 0), rgb(124, 179, 66),
@@ -90,6 +147,30 @@ object GraphUtils {
     )
 
     val otherColor = rgb(161, 136, 127)
+}
+
+class MyMarker(context: Context) : MarkerView(context, R.layout.marker_layout) {
+
+    override fun refreshContent(entry: Entry, highlight: Highlight) {
+        val viewBinding = MarkerLayoutBinding.inflate(LayoutInflater.from(context))
+        viewBinding.monthName.text = entry.x.toString()
+        viewBinding.tvAmount.text = entry.y.toString()
+        super.refreshContent(entry, highlight)
+    }
+}
+
+class LineChartXAxisValueFormatter : IndexAxisValueFormatter() {
+    override fun getFormattedValue(value: Float): String {
+
+        // Convert float value to date string
+        // Convert from seconds back to milliseconds to format time  to show to the user
+        val emissionsMilliSince1970Time = value.toLong() * 1000
+
+        // Show time in local version
+        val timeMilliseconds = Date(emissionsMilliSince1970Time)
+        val dateTimeFormat = SimpleDateFormat("dd-MMM", Locale.ENGLISH)
+        return dateTimeFormat.format(timeMilliseconds)
+    }
 }
 
 class DecimalRemover(format: DecimalFormat?, pieChart: PieChart) : PercentFormatter(pieChart) {

@@ -172,7 +172,7 @@ class StatsViewModel(private val categoryUseCase: CategoryUseCase, private val b
                     getCategoryIcon(getOtherCategoryName(transactionType), transactionType),
                     transactionType,
                     percentageValue.toString(),
-                    GraphUtils.otherColor.toHexString(), remainingSum.toString().toAmount()
+                    GraphUtils.otherColor.toHexString(), remainingSum
                 )
                 resultList.add(Pair(PieEntry(percentageValue.toFloat()), categoryData))
                 resultList
@@ -196,7 +196,7 @@ class StatsViewModel(private val categoryUseCase: CategoryUseCase, private val b
                     getCategoryIcon(summary.categoryName, transactionType),
                     transactionType,
                     percentageValue.toString(),
-                    "#" + getGraphColorList()[i].toHexString(), summary.categoryAmount.toString().toAmount()
+                    "#" + getGraphColorList()[i].toHexString(), summary.categoryAmount
                 )
                 resultList.add(Pair(PieEntry(percentageValue.toFloat()), categoryData))
             }
@@ -209,7 +209,7 @@ class StatsViewModel(private val categoryUseCase: CategoryUseCase, private val b
         _monthNameLiveData.value = DateUtils.getDateInMMMMyyyyFormat(getCurrentMonth())
     }
 
-    private fun getCurrentMonth(): Calendar = DateUtils.getCurrentDate().apply { add(Calendar.MONTH, monthCount) }
+    fun getCurrentMonth(): Calendar = DateUtils.getCurrentDate().apply { add(Calendar.MONTH, monthCount) }
 
     fun isCurrentMonth(): Boolean = monthCount == 0
 

@@ -6,14 +6,11 @@ import com.example.mobiledger.data.sources.cache.CacheSource
 import com.example.mobiledger.data.sources.room.categories.CategoriesDb
 import com.example.mobiledger.domain.AppError
 import com.example.mobiledger.domain.AppResult
-import com.example.mobiledger.domain.entities.CategoryListEntity
-import com.example.mobiledger.domain.entities.ExpenseCategoryListEntity
-import com.example.mobiledger.domain.entities.IncomeCategoryListEntity
-import com.example.mobiledger.domain.entities.TransactionEntity
+import com.example.mobiledger.domain.entities.*
 import com.example.mobiledger.presentation.budget.MonthlyCategorySummary
+import com.google.firebase.firestore.DocumentReference
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 
@@ -24,10 +21,11 @@ interface CategoryRepository {
     suspend fun getUserExpenseCategories(): AppResult<ExpenseCategoryListEntity>
     suspend fun updateUserIncomeCategory(newIncomeCategory: IncomeCategoryListEntity): AppResult<Unit>
     suspend fun updateUserExpenseCategory(newExpenseCategory: ExpenseCategoryListEntity): AppResult<Unit>
-    suspend fun addCategoryTransaction(monthYear: String, transactionEntity: TransactionEntity): AppResult<Unit>
+    suspend fun addMonthlyCategoryTransaction(monthYear: String, transactionEntity: TransactionEntity): AppResult<Unit>
     suspend fun getMonthlyCategorySummary(monthYear: String, category: String): AppResult<MonthlyCategorySummary>
     suspend fun getAllMonthlyCategories(monthYear: String): AppResult<List<MonthlyCategorySummary>>
-
+    suspend fun getMonthlyCategoryTransactionReferences(monthYear: String, category: String): AppResult<List<DocumentReferenceEntity>>
+    suspend fun getTransactionFromReference(transRef: DocumentReference): AppResult<TransactionEntity>
 }
 
 class CategoryRepositoryImpl(
@@ -139,11 +137,11 @@ class CategoryRepositoryImpl(
         }
     }
 
-    override suspend fun addCategoryTransaction(monthYear: String, transactionEntity: TransactionEntity): AppResult<Unit> {
+    override suspend fun addMonthlyCategoryTransaction(monthYear: String, transactionEntity: TransactionEntity): AppResult<Unit> {
         return withContext(dispatcher) {
             val uId = cacheSource.getUID()
             if (uId != null) {
-                categoryApi.addCategoryTransaction(uId, monthYear, transactionEntity)
+                categoryApi.addMonthlyCategoryTransaction(uId, monthYear, transactionEntity)
             } else
                 AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
         }
@@ -166,6 +164,22 @@ class CategoryRepositoryImpl(
                 categoryApi.getAllMonthlyCategories(uId, monthYear)
             } else
                 AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
+        }
+    }
+
+    override suspend fun getMonthlyCategoryTransactionReferences(monthYear: String, category: String): AppResult<List<DocumentReferenceEntity>> {
+        return withContext(dispatcher) {
+            val uId = cacheSource.getUID()
+            if (uId != null) {
+                categoryApi.getMonthlyCategoryTransactionReferences(uId, monthYear, category)
+            } else
+                AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
+        }
+    }
+
+    override suspend fun getTransactionFromReference(transRef: DocumentReference): AppResult<TransactionEntity> {
+        return withContext(dispatcher){
+            categoryApi.getTransactionFromReference(transRef)
         }
     }
 }

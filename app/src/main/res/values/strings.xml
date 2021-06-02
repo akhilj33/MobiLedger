@@ -96,6 +96,12 @@
     <string name="expenses_breakup">Expenses BreakUp</string>
     <string name="income_breakup">Income BreakUp</string>
     <string name="monthly_limit">Limit</string>
+    <string name="stats_detail_header">%1$s - %2$s</string>
+    <string name="expense_vs_budget">Budget vs Expense</string>
+    <string name="stats_detail_header_expense">You spent ₹%1$s on %2$s in %3$s</string>
+    <string name="stats_detail_header_income">You earned ₹%1$s from %2$s in %3$s</string>
+    <string name="monthly_analysis">Monthly Analysis</string>
+
 
     <!-- Budget Fragment -->
 
