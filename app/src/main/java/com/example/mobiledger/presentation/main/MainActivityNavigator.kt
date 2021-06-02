@@ -18,6 +18,8 @@ import com.example.mobiledger.presentation.profile.ProfileNavigator
 import com.example.mobiledger.presentation.splash.SplashFragment
 import com.example.mobiledger.presentation.splash.SplashNavigator
 import com.example.mobiledger.presentation.stats.StatsNavigator
+import com.example.mobiledger.presentation.statsdetail.StatsDetailFragment
+import java.util.*
 
 class MainActivityNavigator constructor(
     @IdRes private val containerId: Int,
@@ -87,6 +89,14 @@ class MainActivityNavigator constructor(
         FragmentTransactionHelper.replaceFragment(
             fragmentManager,
             ProfileFragment.newInstance(),
+            containerId, addToBackStack = true
+        )
+    }
+
+    override fun navigateToStatsDetailScreen(categoryName: String, amount: Long, monthYear: Calendar) {
+        FragmentTransactionHelper.replaceFragment(
+            fragmentManager,
+            StatsDetailFragment.newInstance(categoryName,amount,monthYear),
             containerId, addToBackStack = true
         )
     }

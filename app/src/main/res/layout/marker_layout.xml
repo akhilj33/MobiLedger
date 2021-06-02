@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <LinearLayout
+        android:id="@+id/markerLL"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/cdp_16">
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/monthName"
+            style="@style/GelionSemiBoldBlue16"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="10sp"
+            tools:text="@string/income" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tvAmount"
+            style="@style/GelionRegularGreen18"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/cdp_8"
+            android:textSize="10sp"
+            tools:text="₹ 476287427" />
+    </LinearLayout>
+</layout>

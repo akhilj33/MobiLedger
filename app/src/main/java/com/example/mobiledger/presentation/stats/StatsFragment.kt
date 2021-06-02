@@ -16,13 +16,10 @@ import com.example.mobiledger.presentation.ConditionalOneTimeObserver
 import com.example.mobiledger.presentation.OneTimeObserver
 import com.example.mobiledger.presentation.main.MainActivityViewModel
 
-
 class StatsFragment : BaseFragment<FragmentStatsBinding, StatsNavigator>(R.layout.fragment_stats) {
 
     private val viewModel: StatsViewModel by viewModels { viewModelFactory }
-
-    private val statsAdapter: StatsAdapter by lazy { StatsAdapter() }
-
+    private val statsAdapter: StatsAdapter by lazy { StatsAdapter(onCategoryItemClick) }
 
     override fun getSnackBarErrorView(): SnackViewErrorBinding = viewBinding.includeErrorView
 
@@ -88,10 +85,8 @@ class StatsFragment : BaseFragment<FragmentStatsBinding, StatsNavigator>(R.layou
 
     private fun setOnClickListener() {
         viewBinding.apply {
-
             monthNavigationBar.leftArrow.setOnClickListener { handleLeftClick() }
             monthNavigationBar.rightArrow.setOnClickListener { handleRightClick() }
-
         }
         viewBinding.ivProfileIcon.setOnClickListener {
             navigator?.navigateToProfileScreen()
@@ -129,6 +124,10 @@ class StatsFragment : BaseFragment<FragmentStatsBinding, StatsNavigator>(R.layou
             layoutManager = linearLayoutManager
             adapter = statsAdapter
         }
+    }
+
+    private val onCategoryItemClick = fun(categoryName: String, amount: Long){
+        navigator?.navigateToStatsDetailScreen(categoryName, amount, viewModel.getCurrentMonth())
     }
 
     companion object {

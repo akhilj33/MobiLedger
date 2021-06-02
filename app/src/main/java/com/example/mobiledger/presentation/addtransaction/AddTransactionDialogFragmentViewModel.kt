@@ -189,7 +189,7 @@ class AddTransactionDialogFragmentViewModel(
     private fun addCategoryTransaction(monthYear: String, transactionEntity: TransactionEntity) {
         viewModelScope.launch {
             _loadingState.value = true
-            when (val result = categoryUseCase.addCategoryTransaction(monthYear, transactionEntity)) {
+            when (val result = categoryUseCase.addMonthlyCategoryTransaction(monthYear, transactionEntity)) {
                 is AppResult.Success -> {
                     handleAddCategoryResult(transactionEntity, monthYear)
                 }

@@ -21,7 +21,7 @@ data class CategoryData(
     val categoryType: TransactionType,
     val percent: String,
     val color: String,
-    val amount: String,
+    val amount: Long,
 )
 
 sealed class StatsGraphViewItem(val viewType: StatsGraphViewType) {

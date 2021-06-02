@@ -52,6 +52,10 @@
         <item name="android:textSize">@dimen/csp_16</item>
     </style>
 
+    <style name="GelionRegular12" parent="GelionRegularFont">
+        <item name="android:textSize">@dimen/csp_12</item>
+    </style>
+
     <style name="GelionRegular16" parent="GelionRegularFont">
         <item name="android:textSize">@dimen/csp_16</item>
     </style>
@@ -68,11 +72,19 @@
         <item name="android:textSize">@dimen/csp_18</item>
     </style>
 
+    <style name="GelionRegular20" parent="GelionRegularFont">
+        <item name="android:textSize">@dimen/csp_20</item>
+    </style>
+
     <style name="GelionItalics12" parent="GelionItalicsFont">
         <item name="android:textSize">@dimen/csp_12</item>
     </style>
 
     <!-- Gelion Regular Font, Size and color-->
+    <style name="GelionRegularNavyBlue12" parent="GelionRegular12">
+        <item name="android:textColor">@color/colorTextDark</item>
+    </style>
+
     <style name="GelionRegularNavyBlue16" parent="GelionRegular16">
         <item name="android:textColor">@color/colorTextDark</item>
     </style>
@@ -87,6 +99,14 @@
 
     <style name="GelionRegularRed18" parent="GelionRegular18">
         <item name="android:textColor">@color/colorDarkRed</item>
+    </style>
+
+    <style name="GelionSemiBoldWhite24" parent="GelionSemiBold24">
+        <item name="android:textColor">@color/colorWhite</item>
+    </style>
+
+    <style name="GelionRegularWhite20" parent="GelionRegular20">
+        <item name="android:textColor">@color/colorWhite</item>
     </style>
 
     <style name="GelionSemiBoldBlue18" parent="GelionSemiBold18">

@@ -1,9 +1,7 @@
-package com.example.mobiledger.presentation.stats
+package com.example.mobiledger.presentation.statsdetail
 
 import CirclePagerIndicatorDecoration
 import android.content.Context
-import android.content.res.ColorStateList
-import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
@@ -11,14 +9,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mobiledger.R
-import com.example.mobiledger.common.extention.toAmount
-import com.example.mobiledger.databinding.StatsCategoryItemBinding
+import com.example.mobiledger.common.utils.DefaultCategoryUtils
 import com.example.mobiledger.databinding.StatsChildRecyclerviewItemBinding
+import com.example.mobiledger.databinding.StatsDetailTransactionItemBinding
 import com.example.mobiledger.databinding.StatsHeaderItemBinding
 import com.example.mobiledger.domain.enums.TransactionType
 import java.util.*
 
-class StatsAdapter(private val onCategoryItemClick:(categoryName: String, amount: Long)->Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class StatsDetailAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private lateinit var context: Context
 
@@ -27,7 +25,7 @@ class StatsAdapter(private val onCategoryItemClick:(categoryName: String, amount
         context = recyclerView.context
     }
 
-    private val items: MutableList<StatsViewItem> = mutableListOf()
+    private val items: MutableList<StatsDetailViewItem> = mutableListOf()
     private val viewPool = RecyclerView.RecycledViewPool()
 
     override fun getItemViewType(position: Int): Int {
@@ -38,66 +36,66 @@ class StatsAdapter(private val onCategoryItemClick:(categoryName: String, amount
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
-        return when (StatsViewType.values()[viewType]) {
-            StatsViewType.Header -> HeaderViewHolder(StatsHeaderItemBinding.inflate(layoutInflater, parent, false))
-            StatsViewType.GraphData -> GraphsViewHolder(StatsChildRecyclerviewItemBinding.inflate(layoutInflater, parent, false))
-            StatsViewType.CategoryData -> CategoryDataViewHolder(StatsCategoryItemBinding.inflate(layoutInflater, parent, false))
+        return when (StatsDetailViewType.values()[viewType]) {
+            StatsDetailViewType.Date -> DateViewHolder(StatsHeaderItemBinding.inflate(layoutInflater, parent, false))
+            StatsDetailViewType.GraphData -> GraphsViewHolder(StatsChildRecyclerviewItemBinding.inflate(layoutInflater, parent, false))
+            StatsDetailViewType.CategoryData -> TransactionDataViewHolder(
+                StatsDetailTransactionItemBinding.inflate(
+                    layoutInflater,
+                    parent,
+                    false
+                )
+            )
         }
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (val item = items[position]) {
-            is StatsViewItem.HeaderDataRow -> (holder as StatsAdapter.HeaderViewHolder).bind(item.data, item.amount)
-            is StatsViewItem.GraphDataRow -> (holder as StatsAdapter.GraphsViewHolder).bind(item.data)
-            is StatsViewItem.CategoryDataRow -> (holder as StatsAdapter.CategoryDataViewHolder).bind(item.data)
+            is StatsDetailViewItem.DateRow -> (holder as StatsDetailAdapter.DateViewHolder).bind(item.date, item.amount)
+            is StatsDetailViewItem.GraphDataRow -> (holder as StatsDetailAdapter.GraphsViewHolder).bind(item.data)
+            is StatsDetailViewItem.TransactionDataRow -> (holder as StatsDetailAdapter.TransactionDataViewHolder).bind(item.data)
         }
     }
 
     /*---------------------------------View Holders---------------------------- */
 
-    inner class HeaderViewHolder(private val viewBinding: StatsHeaderItemBinding) : RecyclerView.ViewHolder(viewBinding.root) {
-        fun bind(headerString: Int, amount: String) {
-            val header = context.resources.getString(headerString)
-            viewBinding.tvHeader.text = header
+    inner class DateViewHolder(private val viewBinding: StatsHeaderItemBinding) : RecyclerView.ViewHolder(viewBinding.root) {
+        fun bind(headerString: String, amount: String?) {
+            viewBinding.tvHeader.text = headerString
             viewBinding.tvAmount.text = amount
-            val transactionType = TransactionType.getTransactionType(header.toLowerCase(Locale.getDefault()))
+            val transactionType = TransactionType.getTransactionType(headerString.toLowerCase(Locale.getDefault()))
             if (transactionType == TransactionType.Income) viewBinding.tvAmount.setTextColor(
                 ContextCompat.getColorStateList(context, R.color.colorGreen)
             )
             else if (transactionType == TransactionType.Expense) viewBinding.tvAmount.setTextColor(
                 ContextCompat.getColorStateList(context, R.color.colorDarkRed)
             )
-
         }
     }
 
-    inner class CategoryDataViewHolder(private val viewBinding: StatsCategoryItemBinding) : RecyclerView.ViewHolder(viewBinding.root) {
-        fun bind(item: CategoryData) {
+    inner class TransactionDataViewHolder(private val viewBinding: StatsDetailTransactionItemBinding) :
+        RecyclerView.ViewHolder(viewBinding.root) {
+        fun bind(item: TransactionData) {
             viewBinding.apply {
-                ivCategoryIcon.background = ContextCompat.getDrawable(context, item.categoryIcon)
-                tvCategoryName.text = item.name
-                colorIndicator.backgroundTintList = ColorStateList.valueOf(Color.parseColor(item.color))
+                ivCategoryIcon.background =
+                    ContextCompat.getDrawable(context, DefaultCategoryUtils.getCategoryIcon(item.transactionEntity.category, item.transactionEntity.transactionType))
+                tvTransactionName.text = item.transactionEntity.name
                 (item.percent + "%").also { tvPercentage.text = it }
-                tvAmount.text = item.amount.toString().toAmount()
-
-                if (item.categoryType == TransactionType.Income)
-                    root.setOnClickListener { onCategoryItemClick(item.name, item.amount) }
-                else if (item.categoryType == TransactionType.Expense)
-                    root.setOnClickListener { onCategoryItemClick(item.name, 0L - item.amount) }
+                tvAmount.text = item.transactionEntity.amount.toString()
             }
         }
     }
 
     inner class GraphsViewHolder(private val viewBinding: StatsChildRecyclerviewItemBinding) : RecyclerView.ViewHolder(viewBinding.root) {
-        fun bind(data: MutableList<StatsGraphViewItem>) {
+        fun bind(data: MutableList<StatsDetailGraphViewItem>) {
             viewBinding.childGraphRv.apply {
                 val linearLayoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
                 linearLayoutManager.initialPrefetchItemCount = 3
                 layoutManager = linearLayoutManager
-                adapter = StatsChildGraphAdapter(data)
+                adapter = StatsDetailChildGraphAdapter(data)
                 setRecycledViewPool(viewPool)
                 val snapHelper = PagerSnapHelper()
-                if (this.onFlingListener == null) {
+                if (this.onFlingListener == null && isCircleIndicatorVisible()) {
                     snapHelper.attachToRecyclerView(this)
                     addItemDecoration(CirclePagerIndicatorDecoration())
                 }
@@ -107,10 +105,16 @@ class StatsAdapter(private val onCategoryItemClick:(categoryName: String, amount
 
     /*---------------------------------Utility Functions---------------------------- */
 
-    fun addItemList(statsItemList: List<StatsViewItem>) {
+    fun addItemList(statsItemList: List<StatsDetailViewItem>) {
         items.clear()
         items.addAll(statsItemList)
         notifyDataSetChanged()
+    }
+
+    fun isCircleIndicatorVisible(): Boolean{
+        if(items[0].viewType == StatsDetailViewType.GraphData && (items[0] as StatsDetailViewItem.GraphDataRow).data.size>1)
+            return true
+        return false
     }
 
 }
