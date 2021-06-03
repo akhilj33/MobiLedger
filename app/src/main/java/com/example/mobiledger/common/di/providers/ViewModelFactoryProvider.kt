@@ -17,6 +17,7 @@ import com.example.mobiledger.presentation.profile.ProfileViewModel
 import com.example.mobiledger.presentation.splash.SplashViewModel
 import com.example.mobiledger.presentation.stats.StatsViewModel
 import com.example.mobiledger.presentation.statsdetail.StatsDetailViewModel
+import com.example.mobiledger.presentation.transactiondetail.TransactionDetailViewModel
 
 @Suppress("UNCHECKED_CAST")
 class ViewModelFactoryProvider(private val useCaseProvider: UseCaseProvider) :
@@ -94,6 +95,9 @@ class ViewModelFactoryProvider(private val useCaseProvider: UseCaseProvider) :
             }
             modelClass.isAssignableFrom(StatsDetailViewModel::class.java) -> {
                 StatsDetailViewModel(useCaseProvider.provideCategoryUseCase(), useCaseProvider.provideBudgetUseCase()) as T
+            }
+            modelClass.isAssignableFrom(TransactionDetailViewModel::class.java) -> {
+                TransactionDetailViewModel(useCaseProvider.provideCategoryUseCase()) as T
             }
             else -> throw IllegalArgumentException("Unknown ViewModel Class")
         }

@@ -78,11 +78,11 @@ abstract class BaseDialogFragment<B : ViewDataBinding, NV : BaseNavigator>(
         (dialog as? BottomSheetDialog)?.behavior?.state = BottomSheetBehavior.STATE_EXPANDED
 
         // Makes BottomSheet Non-Draggable
-//        (dialog as? BottomSheetDialog)?.behavior?.isDraggable = false
+        (dialog as? BottomSheetDialog)?.behavior?.isDraggable = true
 
         // Makes BottomSheet Non-Cancelable
-        val touchOutsideView = dialog?.window?.decorView?.findViewById<View>(com.google.android.material.R.id.touch_outside)
-        touchOutsideView?.setOnClickListener(null)
+//        val touchOutsideView = dialog?.window?.decorView?.findViewById<View>(com.google.android.material.R.id.touch_outside)
+//        touchOutsideView?.setOnClickListener(null)
     }
 
     private fun setStatusBarColor() {

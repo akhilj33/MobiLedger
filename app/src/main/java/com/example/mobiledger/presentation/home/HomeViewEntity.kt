@@ -2,6 +2,7 @@ package com.example.mobiledger.presentation.home
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import com.example.mobiledger.domain.entities.TransactionEntity
 import com.example.mobiledger.domain.enums.TransactionType
 import com.github.mikephil.charting.data.PieEntry
 
@@ -18,11 +19,7 @@ sealed class HomeViewItem(val viewType: HomeViewType) {
 data class MonthlyData(val incomeAmount: String, val expenseAmount: String)
 
 data class TransactionData(
-    val id: String,
-    val name: String,
-    val amount: String,
-    val transactionType: TransactionType,
-    val category: String,
+    val transactionEntity: TransactionEntity,
     @DrawableRes val categoryIcon: Int
 )
 

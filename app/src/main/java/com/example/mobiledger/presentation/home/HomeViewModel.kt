@@ -172,11 +172,7 @@ class HomeViewModel(
     private fun mapToTransactionData(transactionEntity: TransactionEntity): TransactionData {
         transactionEntity.apply {
             return TransactionData(
-                id = id,
-                name = name,
-                amount = amount.toString().toAmount(),
-                transactionType = transactionType,
-                category = category,
+                transactionEntity = this,
                 categoryIcon = getCategoryIcon(category, transactionType)
             )
         }

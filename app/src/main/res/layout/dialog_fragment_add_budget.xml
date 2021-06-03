@@ -49,7 +49,7 @@
             app:layout_constraintTop_toBottomOf="@id/textSetYourBudget">
 
             <AutoCompleteTextView
-                android:id="@+id/my_spinner_dropdown"
+                android:id="@+id/categorySpinnerTv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/category"
@@ -71,7 +71,7 @@
             app:layout_constraintTop_toBottomOf="@id/spinner_category">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/textAmount"
+                android:id="@+id/amountTv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="number"

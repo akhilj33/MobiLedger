@@ -1,39 +1,44 @@
-package com.example.mobiledger.presentation.addtransaction
+package com.example.mobiledger.presentation.transactiondetail
 
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.widget.AutoCompleteTextView
-import androidx.core.content.ContextCompat
-import androidx.core.widget.TextViewCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.example.mobiledger.R
 import com.example.mobiledger.common.base.BaseDialogFragment
 import com.example.mobiledger.common.base.BaseNavigator
-import com.example.mobiledger.common.extention.hideKeyboard
-import com.example.mobiledger.common.showToast
-import com.example.mobiledger.common.utils.DateUtils
+import com.example.mobiledger.common.extention.invisible
+import com.example.mobiledger.common.extention.visible
 import com.example.mobiledger.common.utils.DateUtils.getDateInDDMMMMyyyyFormat
-import com.example.mobiledger.databinding.DialogFragmentAddTransactionBinding
+import com.example.mobiledger.common.utils.JsonUtils.convertJsonStringToObject
+import com.example.mobiledger.common.utils.JsonUtils.convertToJsonString
+import com.example.mobiledger.databinding.TransactionDetailFragmentBinding
 import com.example.mobiledger.domain.entities.TransactionEntity
 import com.example.mobiledger.domain.enums.TransactionType
 import com.example.mobiledger.presentation.OneTimeObserver
+import com.example.mobiledger.presentation.addtransaction.SpinnerAdapter
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.DateValidatorPointBackward
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.textfield.TextInputLayout
-import com.google.firebase.Timestamp
-import java.util.*
 
-
-class AddTransactionDialogFragment :
-    BaseDialogFragment<DialogFragmentAddTransactionBinding, BaseNavigator>
-        (R.layout.dialog_fragment_add_transaction) {
+class TransactionDetailDialogFragment :
+    BaseDialogFragment<TransactionDetailFragmentBinding, BaseNavigator>(R.layout.transaction_detail_fragment) {
 
     private val spinnerAdapter: SpinnerAdapter by lazy { SpinnerAdapter(requireContext()) }
-    private val viewModel: AddTransactionDialogFragmentViewModel by viewModels { viewModelFactory }
+    private val viewModel: TransactionDetailViewModel by viewModels { viewModelFactory }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.apply {
+            getString(TRANSACTION_ENTITY)?.let {
+                viewModel.transactionEntity = convertJsonStringToObject<TransactionEntity>(it)?: TransactionEntity()
+            }
+        }
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -44,25 +49,25 @@ class AddTransactionDialogFragment :
     }
 
     private fun initUI() {
-        viewBinding.dateTv.setText(getDateInDDMMMMyyyyFormat(Timestamp.now()))
-
-        if (viewModel.transactionType == TransactionType.Income) {
-            handleIncomeClick()
-        } else {
-            handleExpenseClick()
+        viewBinding.apply {
+            if (viewModel.transactionEntity.transactionType == TransactionType.Income) {
+                toggleTransactionType.text = getString(R.string.income)
+                viewModel.getIncomeCategoryList()
+            } else {
+                toggleTransactionType.text = getString(R.string.expense)
+                viewModel.getExpenseCategoryList()
+            }
+            categorySpinnerTv.setText(viewModel.transactionEntity.category)
+            transactionNameTv.setText(viewModel.transactionEntity.name)
+            amountTv.setText(viewModel.transactionEntity.amount.toString())
+            amountTv.setText(viewModel.transactionEntity.amount.toString())
+            dateTv.setText(getDateInDDMMMMyyyyFormat(viewModel.transactionEntity.transactionTime))
+            descriptionTv.setText(viewModel.transactionEntity.description)
+            viewBinding.btnUpdate.invisible()
         }
     }
 
     private fun setUpObserver() {
-        viewModel.dataUpdatedResult.observe(
-            viewLifecycleOwner,
-            OneTimeObserver {
-                activityViewModel.addTransactionResult()
-                activity?.showToast(getString(R.string.transaction_added))
-//                dialog?.dismiss()
-//                todo : dismiss
-            }
-        )
 
         viewModel.loadingState.observe(viewLifecycleOwner, Observer {
             if (it) {
@@ -72,46 +77,42 @@ class AddTransactionDialogFragment :
             }
         })
 
-        viewModel.errorLiveData.observe(viewLifecycleOwner, OneTimeObserver {
-            when (it.viewErrorType) {
-                AddTransactionDialogFragmentViewModel.ViewErrorType.NON_BLOCKING -> {
-                    showSnackBarErrorView(it.message ?: getString(it.resID), true)
-                }
-            }
-        })
-
         viewModel.categoryListLiveData.observe(viewLifecycleOwner, OneTimeObserver { it ->
-            it.sort()
             spinnerAdapter.addItems(it)
         })
 
-        viewModel.notificationIndicator.observe(viewLifecycleOwner, Observer {
-            it.let {
-                activityViewModel.notificationHandler(it)
-            }
-        })
+//        viewModel.errorLiveData.observe(viewLifecycleOwner, OneTimeObserver {
+//            when (it.viewErrorType) {
+//                AddTransactionDialogFragmentViewModel.ViewErrorType.NON_BLOCKING -> {
+//                    showSnackBarErrorView(it.message ?: getString(it.resID), true)
+//                }
+//            }
+//        })
+//
+//        viewModel.categoryListLiveData.observe(viewLifecycleOwner, OneTimeObserver { it ->
+//            spinnerAdapter.addItems(it)
+//        })
     }
 
     private fun setOnClickListeners() {
         viewBinding.apply {
-            toggleIncome.setOnClickListener {
-                clearAllFields()
-                viewModel.transactionType = TransactionType.Income
-                handleIncomeClick()
-            }
-            toggleExpense.setOnClickListener {
-                clearAllFields()
-                viewModel.transactionType = TransactionType.Expense
-                handleExpenseClick()
-            }
-
-            viewBinding.dateTv.setOnClickListener {
+            dateTv.setOnClickListener {
                 datePicker.show(requireActivity().supportFragmentManager, "tag");
             }
 
-            btnSubmitTransaction.setOnClickListener {
-                addTransaction()
+            closeIv.setOnClickListener {
+                dismiss()
             }
+
+            btnUpdate.setOnClickListener {
+                if(checkAllFieldsSame()) dismiss()
+                else{
+                    if (doValidations()){
+
+                    }
+                }
+            }
+
         }
 
         datePicker.addOnPositiveButtonClickListener {
@@ -123,80 +124,20 @@ class AddTransactionDialogFragment :
         viewBinding.amountTv.addTextChangedListener(amountTextWatcher)
         viewBinding.transactionNameTv.addTextChangedListener(nameTextWatcher)
         viewBinding.dateTv.addTextChangedListener(dateTextWatcher)
+        viewBinding.descriptionTv.addTextChangedListener(descriptionTextWatcher)
     }
 
-    private fun clearAllFields() {
-        viewBinding.apply {
-            transactionNameTv.setText("")
-            transactionNameTv.clearFocus()
-            transactionNameLayout.error = null
-
-            amountTv.setText("")
-            amountTv.clearFocus()
-            amountLayout.error = null
-
-            dateTv.setText("")
-            dateTv.clearFocus()
-            dateLayout.error = null
-
-            descriptionTv.setText("")
-            descriptionTv.clearFocus()
-
-            categorySpinnerTv.setText("")
-            categorySpinnerTv.clearFocus()
-            spinnerCategory.error = null
-
+    private fun checkAllFieldsSame(): Boolean {
+        viewModel.transactionEntity.apply {
+            return amount.toString() == getAmount() && category == getCategory() && name == getName() &&
+                    description==getDescription() && getDateInDDMMMMyyyyFormat(transactionTime)==getDate()
         }
-        viewBinding.root.hideKeyboard()
-    }
-
-    private fun handleExpenseClick() {
-        updateToggleButton()
-        viewModel.getExpenseCategoryList()
-    }
-
-    private fun handleIncomeClick() {
-        updateToggleButton()
-        viewModel.getIncomeCategoryList()
-    }
-
-    private fun updateToggleButton() {
-        if (viewModel.transactionType == TransactionType.Income) {
-            updateSelectedTab(TransactionType.Income)
-            updateNotSelectedTab(TransactionType.Expense)
-        } else if (viewModel.transactionType == TransactionType.Expense) {
-            updateSelectedTab(TransactionType.Expense)
-            updateNotSelectedTab(TransactionType.Income)
-        }
-    }
-
-    private fun updateNotSelectedTab(transactionType: TransactionType) {
-        val tab = if (transactionType == TransactionType.Income) viewBinding.toggleIncome
-        else viewBinding.toggleExpense
-
-        TextViewCompat.setTextAppearance(tab, R.style.GelionRegularGrey16)
-        tab.elevation = resources.getDimension(R.dimen.cdp_0)
-        tab.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.colorLightGrey)
-        tab.icon = null
-        tab.stateListAnimator = null
-    }
-
-    private fun updateSelectedTab(transactionType: TransactionType) {
-        val tab = if (transactionType == TransactionType.Income) viewBinding.toggleIncome
-        else viewBinding.toggleExpense
-
-        TextViewCompat.setTextAppearance(tab, R.style.GelionRegularNavyBlue16)
-        tab.elevation = resources.getDimension(R.dimen.cdp_2)
-        tab.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.colorWhite)
-        tab.icon = ContextCompat.getDrawable(requireContext(), R.drawable.selected_icon)
-        tab.iconTint = ContextCompat.getColorStateList(requireContext(), R.color.colorAppBlue)
     }
 
     private val constraintsBuilder = CalendarConstraints.Builder().setValidator(DateValidatorPointBackward.now()).build()
 
     private val datePicker =
         MaterialDatePicker.Builder.datePicker()
-            .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
             .setTitleText("Select date")
             .setCalendarConstraints(constraintsBuilder)
             .build()
@@ -212,18 +153,6 @@ class AddTransactionDialogFragment :
     private fun isValidCategory(): Boolean = getCategory().isNotBlank()
     private fun isValidDate(): Boolean = getDate().isNotBlank()
 
-    private fun addTransaction() {
-        if (doValidations()) {
-            val milliSeconds = viewModel.timeInMillis ?: DateUtils.getCurrentDate().timeInMillis
-            val date = Date(milliSeconds)
-            val monthYear = DateUtils.getDateInMMyyyyFormat(DateUtils.getCalendarFromMillis(milliSeconds))
-            val transactionEntity = TransactionEntity(
-                getName(), getAmount().toLong(), getCategory(), getDescription(),
-                viewModel.transactionType, Timestamp(date)
-            )
-            viewModel.addTransaction(monthYear, transactionEntity)
-        }
-    }
 
     /*---------------------------------------Text Watchers-----------------------------------------*/
 
@@ -234,6 +163,7 @@ class AddTransactionDialogFragment :
 
         override fun afterTextChanged(editable: Editable?) {
             if (isValidName()) {
+                viewBinding.btnUpdate.visible()
                 updateViewBasedOnValidation(viewBinding.transactionNameLayout, isValid = true)
             }
         }
@@ -246,6 +176,7 @@ class AddTransactionDialogFragment :
 
         override fun afterTextChanged(editable: Editable?) {
             if (isValidAmount()) {
+                viewBinding.btnUpdate.visible()
                 updateViewBasedOnValidation(viewBinding.amountLayout, isValid = true)
             }
         }
@@ -258,6 +189,7 @@ class AddTransactionDialogFragment :
 
         override fun afterTextChanged(editable: Editable?) {
             if (isValidCategory()) {
+                viewBinding.btnUpdate.visible()
                 updateViewBasedOnValidation(viewBinding.spinnerCategory, isValid = true)
             }
         }
@@ -270,8 +202,19 @@ class AddTransactionDialogFragment :
 
         override fun afterTextChanged(editable: Editable?) {
             if (isValidDate()) {
+                viewBinding.btnUpdate.visible()
                 updateViewBasedOnValidation(viewBinding.dateLayout, isValid = true)
             }
+        }
+    }
+
+    private val descriptionTextWatcher = object : TextWatcher {
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
+
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) = Unit
+
+        override fun afterTextChanged(editable: Editable?) {
+            viewBinding.btnUpdate.visible()
         }
     }
 
@@ -297,8 +240,14 @@ class AddTransactionDialogFragment :
         }
     }
 
-
     companion object {
-        fun newInstance() = AddTransactionDialogFragment()
+        private const val TRANSACTION_ENTITY = "transaction_entity"
+
+        fun newInstance(transactionEntity: TransactionEntity) = TransactionDetailDialogFragment().apply {
+            arguments = Bundle().apply {
+                putString(TRANSACTION_ENTITY, convertToJsonString(transactionEntity))
+            }
+        }
     }
+
 }

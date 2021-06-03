@@ -101,7 +101,7 @@
                     app:layout_constraintTop_toBottomOf="@id/editImage">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/textName"
+                        android:id="@+id/nameTv"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/name"
@@ -121,7 +121,7 @@
                     android:textSize="@dimen/csp_14"
                     android:layout_marginTop="@dimen/cdp_2"
                     app:layout_constraintBottom_toBottomOf="@id/nameLayout"
-                    app:layout_constraintTop_toTopOf="@+id/nameLayout"
+                    app:layout_constraintTop_toTopOf="@+id/transactionNameLayout"
                     app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_96"
                     app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_70" />
 
