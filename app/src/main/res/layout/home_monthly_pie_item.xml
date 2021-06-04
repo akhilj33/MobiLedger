@@ -5,6 +5,7 @@
         android:id="@+id/monthlyPieChart"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/cdp_12"
         android:layout_marginTop="@dimen/cdp_16"
         android:orientation="vertical">
 

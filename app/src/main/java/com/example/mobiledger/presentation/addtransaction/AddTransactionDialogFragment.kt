@@ -13,7 +13,7 @@ import com.example.mobiledger.R
 import com.example.mobiledger.common.base.BaseDialogFragment
 import com.example.mobiledger.common.base.BaseNavigator
 import com.example.mobiledger.common.extention.hideKeyboard
-import com.example.mobiledger.common.showToast
+import com.example.mobiledger.common.utils.AnimationDialogUtils
 import com.example.mobiledger.common.utils.DateUtils
 import com.example.mobiledger.databinding.DialogFragmentAddTransactionBinding
 import com.example.mobiledger.domain.entities.TransactionEntity
@@ -55,17 +55,18 @@ class AddTransactionDialogFragment :
             viewLifecycleOwner,
             OneTimeObserver {
                 activityViewModel.addTransactionResult()
-                activity?.showToast(getString(R.string.transaction_added))
-//                dialog?.dismiss()
-//                todo : dismiss
+                showAnimatedDialog()
+                clearAllFields()
             }
         )
 
         viewModel.loadingState.observe(viewLifecycleOwner, Observer {
             if (it) {
                 viewBinding.transactionProgressBar.visibility = View.VISIBLE
+                isCancelable = false
             } else {
                 viewBinding.transactionProgressBar.visibility = View.GONE
+                isCancelable = true
             }
         })
 
@@ -87,6 +88,10 @@ class AddTransactionDialogFragment :
                 activityViewModel.notificationHandler(it)
             }
         })
+    }
+
+    private fun showAnimatedDialog() {
+        AnimationDialogUtils.animatedDialog(requireActivity(), R.layout.animation_dialog_layout, 1500)
     }
 
     private fun setOnClickListeners() {

@@ -12,6 +12,7 @@ import com.example.mobiledger.presentation.budget.BudgetNavigator
 import com.example.mobiledger.presentation.categoryFragment.CategoryFragment
 import com.example.mobiledger.presentation.dashboard.DashboardFragment
 import com.example.mobiledger.presentation.home.HomeNavigator
+import com.example.mobiledger.presentation.home.TransactionData
 import com.example.mobiledger.presentation.profile.EditProfileFragment
 import com.example.mobiledger.presentation.profile.ProfileFragment
 import com.example.mobiledger.presentation.profile.ProfileNavigator
@@ -19,6 +20,7 @@ import com.example.mobiledger.presentation.splash.SplashFragment
 import com.example.mobiledger.presentation.splash.SplashNavigator
 import com.example.mobiledger.presentation.stats.StatsNavigator
 import com.example.mobiledger.presentation.statsdetail.StatsDetailFragment
+import com.example.mobiledger.presentation.transactionList.TransactionListFragment
 import java.util.*
 
 class MainActivityNavigator constructor(
@@ -113,6 +115,14 @@ class MainActivityNavigator constructor(
         FragmentTransactionHelper.replaceFragment(
             fragmentManager,
             CategoryFragment.newInstance(),
+            containerId, addToBackStack = true
+        )
+    }
+
+    override fun navigateToTransactionFragmentScreen(transactionList: ArrayList<TransactionData>) {
+        FragmentTransactionHelper.replaceFragment(
+            fragmentManager,
+            TransactionListFragment.newInstance(transactionList),
             containerId, addToBackStack = true
         )
     }

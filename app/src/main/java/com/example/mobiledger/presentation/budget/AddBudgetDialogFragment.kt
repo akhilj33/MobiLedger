@@ -12,6 +12,7 @@ import com.example.mobiledger.common.base.BaseNavigator
 import com.example.mobiledger.common.extention.gone
 import com.example.mobiledger.common.extention.setWidthPercent
 import com.example.mobiledger.common.extention.visible
+import com.example.mobiledger.common.utils.AnimationDialogUtils
 import com.example.mobiledger.databinding.DialogFragmentAddBudgetBinding
 import com.example.mobiledger.presentation.OneTimeObserver
 import com.example.mobiledger.presentation.addtransaction.SpinnerAdapter
@@ -63,10 +64,15 @@ class AddBudgetDialogFragment :
         }
     }
 
+    private fun showAnimatedDialog() {
+        AnimationDialogUtils.animatedDialog(requireActivity(), R.layout.animation_dialog_layout, 1500)
+        dismiss()
+    }
+
     private fun setUpObserver() {
         viewModel.dataUpdatedResult.observe(viewLifecycleOwner, OneTimeObserver {
             activityViewModel.addBudgetResult()
-            dismiss()
+            showAnimatedDialog()
         })
 
         viewModel.isLoading.observe(viewLifecycleOwner, androidx.lifecycle.Observer {

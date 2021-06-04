@@ -7,12 +7,15 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.chauthai.swipereveallayout.ViewBinderHelper
 import com.example.mobiledger.R
+import com.example.mobiledger.common.extention.totalTransactionTextBuilder
+import com.example.mobiledger.common.utils.DateUtils
 import com.example.mobiledger.common.utils.GraphUtils
 import com.example.mobiledger.databinding.*
 import com.example.mobiledger.domain.enums.TransactionType
 import com.github.mikephil.charting.data.PieEntry
 
-class HomeAdapter(val onDeleteItemClick: (String, Int) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class HomeAdapter(val onDeleteItemClick: (String, Int) -> Unit, val onAllTransactionClicked: () -> Unit) :
+    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private lateinit var context: Context
 
@@ -37,6 +40,13 @@ class HomeAdapter(val onDeleteItemClick: (String, Int) -> Unit) : RecyclerView.A
             HomeViewType.Header -> HeaderViewHolder(HomeHeaderItemBinding.inflate(layoutInflater, parent, false))
             HomeViewType.MonthlyData -> MonthlyDataViewHolder(HomeMonthlyDataItemBinding.inflate(layoutInflater, parent, false))
             HomeViewType.MonthlyTotalPieChart -> MonthlyPieViewHolder(HomeMonthlyPieItemBinding.inflate(layoutInflater, parent, false))
+            HomeViewType.TransactionList -> TransactionListButtonViewHolder(
+                AllTransactionButtonLayoutBinding.inflate(
+                    layoutInflater,
+                    parent,
+                    false
+                )
+            )
             HomeViewType.TransactionData -> TransactionDataViewHolder(HomeTransactionItemBinding.inflate(layoutInflater, parent, false))
             HomeViewType.EmptyData -> EmptyDataViewHolder(HomeEmptyItemBinding.inflate(layoutInflater, parent, false))
         }
@@ -47,6 +57,7 @@ class HomeAdapter(val onDeleteItemClick: (String, Int) -> Unit) : RecyclerView.A
             is HomeViewItem.HeaderDataRow -> (holder as HeaderViewHolder).bind(item.data)
             is HomeViewItem.MonthlyDataRow -> (holder as MonthlyDataViewHolder).bind(item.data)
             is HomeViewItem.MonthlyTotalPie -> (holder as MonthlyPieViewHolder).bind(item.pieEntryList)
+            is HomeViewItem.TransactionListButton -> (holder as TransactionListButtonViewHolder).bind(item.numOfTransactions)
             is HomeViewItem.TransactionDataRow -> (holder as TransactionDataViewHolder).bind(item.data)
             is HomeViewItem.EmptyDataRow -> (holder as EmptyDataViewHolder).bind()
         }
@@ -77,6 +88,18 @@ class HomeAdapter(val onDeleteItemClick: (String, Int) -> Unit) : RecyclerView.A
         }
     }
 
+    inner class TransactionListButtonViewHolder(private val viewBinding: AllTransactionButtonLayoutBinding) :
+        RecyclerView.ViewHolder(viewBinding.root) {
+        fun bind(item: String) {
+            viewBinding.apply {
+                tvTransactionTitle.text = item.totalTransactionTextBuilder()
+                root.setOnClickListener {
+                    onAllTransactionClicked()
+                }
+            }
+        }
+    }
+
     inner class EmptyDataViewHolder(private val viewBinding: HomeEmptyItemBinding) : RecyclerView.ViewHolder(viewBinding.root) {
         fun bind() {
             viewBinding.apply {
@@ -95,6 +118,7 @@ class HomeAdapter(val onDeleteItemClick: (String, Int) -> Unit) : RecyclerView.A
                 tvTransactionName.text = item.name
                 tvAmount.text = item.amount
                 tvCategory.text = item.category
+                tvTime.text = DateUtils.getDateInDDMMMMyyyyFormat(item.transactionTime)
                 ivCategoryIcon.background = ContextCompat.getDrawable(context, item.categoryIcon)
                 if (item.transactionType == TransactionType.Income) tvAmount.setTextColor(
                     ContextCompat.getColorStateList(context, R.color.colorGreen)
