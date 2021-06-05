@@ -7,8 +7,8 @@
         android:id="@+id/swipelayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:mode="same_level"
-        app:dragEdge="right">
+        app:dragEdge="right"
+        app:mode="same_level">
 
         <LinearLayout
             android:id="@+id/deleteSwipeAction"
@@ -19,8 +19,8 @@
             <androidx.appcompat.widget.AppCompatImageView
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
-                android:drawablePadding="@dimen/cdp_4"
                 android:layout_gravity="center"
+                android:drawablePadding="@dimen/cdp_4"
                 android:gravity="center"
                 app:srcCompat="@drawable/delete_white" />
         </LinearLayout>
@@ -31,97 +31,111 @@
         android:layout_height="wrap_content"
         tools:visibility="gone">
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/horizontalStartGuideline_16dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_begin="@dimen/cdp_16" />
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/horizontalStartGuideline_20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_begin="@dimen/cdp_20" />
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/horizontalEndGuideline_16dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_end="@dimen/cdp_16" />
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/horizontalEndGuideline_16dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_end="@dimen/cdp_16" />
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/verticalStartGuideline"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.04" />
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/verticalStartGuideline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.06" />
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/verticalStartGuideline77"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.75" />
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/verticalStartGuideline70"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.70" />
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/verticalEndGuideline"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.96" />
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/verticalEndGuideline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.96" />
 
-        <View
-            android:id="@+id/thumbnail"
-            android:layout_width="@dimen/cdp_48"
-            android:layout_height="@dimen/cdp_48"
-            android:background="@drawable/oval_shape"
-            app:layout_constraintBottom_toBottomOf="@id/horizontalEndGuideline_16dp"
-            app:layout_constraintDimensionRatio="w,1:1"
-            app:layout_constraintStart_toStartOf="@id/verticalStartGuideline"
-            app:layout_constraintTop_toTopOf="@id/horizontalStartGuideline_16dp" />
+            <View
+                android:id="@+id/thumbnail"
+                android:layout_width="@dimen/cdp_48"
+                android:layout_height="@dimen/cdp_48"
+                android:background="@drawable/oval_shape"
+                app:layout_constraintBottom_toBottomOf="@id/horizontalEndGuideline_16dp"
+                app:layout_constraintDimensionRatio="w,1:1"
+                app:layout_constraintStart_toStartOf="@id/verticalStartGuideline"
+                app:layout_constraintTop_toTopOf="@id/horizontalStartGuideline_20dp" />
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/ivCategoryIcon"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_margin="@dimen/cdp_10"
-            android:gravity="center"
-            app:layout_constraintBottom_toBottomOf="@id/thumbnail"
-            app:layout_constraintDimensionRatio="w,1:1"
-            app:layout_constraintEnd_toEndOf="@id/thumbnail"
-            app:layout_constraintStart_toStartOf="@+id/thumbnail"
-            app:layout_constraintTop_toTopOf="@id/thumbnail" />
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/ivCategoryIcon"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_margin="@dimen/cdp_10"
+                android:gravity="center"
+                app:layout_constraintBottom_toBottomOf="@id/thumbnail"
+                app:layout_constraintDimensionRatio="w,1:1"
+                app:layout_constraintEnd_toEndOf="@id/thumbnail"
+                app:layout_constraintStart_toStartOf="@+id/thumbnail"
+                app:layout_constraintTop_toTopOf="@id/thumbnail" />
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/tvTransactionName"
-            style="@style/GelionSemiBoldBlue16"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/cdp_16"
-            android:ellipsize="end"
-            android:maxLines="1"
-            tools:text="Hello, Abhishek"
-            app:layout_constraintBottom_toTopOf="@id/tvAmount"
-            app:layout_constraintEnd_toEndOf="@id/verticalEndGuideline"
-            app:layout_constraintStart_toEndOf="@id/thumbnail"
-            app:layout_constraintTop_toTopOf="@id/horizontalStartGuideline_16dp" />
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tvTransactionName"
+                style="@style/GelionSemiBoldBlue16"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/cdp_16"
+                android:ellipsize="end"
+                android:maxLines="1"
+                app:layout_constraintBottom_toTopOf="@id/tvAmount"
+                app:layout_constraintEnd_toEndOf="@id/verticalStartGuideline70"
+                app:layout_constraintStart_toEndOf="@id/thumbnail"
+                app:layout_constraintTop_toTopOf="@id/horizontalStartGuideline_20dp" />
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/tvAmount"
-            style="@style/GelionRegularNavyBlue16"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/cdp_16"
-            tools:text="1000000"
-            app:layout_constraintBottom_toBottomOf="@id/horizontalEndGuideline_16dp"
-            app:layout_constraintStart_toEndOf="@id/thumbnail"
-            app:layout_constraintTop_toBottomOf="@id/tvTransactionName" />
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tvAmount"
+                style="@style/GelionRegularNavyBlue16"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/cdp_16"
+                app:layout_constraintEnd_toEndOf="@id/verticalStartGuideline70"
+                app:layout_constraintStart_toEndOf="@id/thumbnail"
+                app:layout_constraintTop_toBottomOf="@id/tvTransactionName" />
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/tvCategory"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            tools:text="Investment"
-            app:layout_constraintBottom_toBottomOf="@id/horizontalEndGuideline_16dp"
-            app:layout_constraintEnd_toEndOf="@id/verticalEndGuideline"
-            app:layout_constraintStart_toStartOf="@id/verticalStartGuideline77"
-            app:layout_constraintTop_toBottomOf="@id/tvTransactionName" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tvTime"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
+                app:layout_constraintBottom_toBottomOf="@id/horizontalEndGuideline_16dp"
+                app:layout_constraintBottom_toTopOf="@id/tvCategory"
+                app:layout_constraintEnd_toEndOf="@id/verticalEndGuideline"
+                app:layout_constraintStart_toStartOf="@id/verticalStartGuideline70"
+                tools:text="Investment" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tvCategory"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                style="@style/GelionRegularBlue16"
+                android:maxLines="1"
+                app:layout_constraintBottom_toBottomOf="@id/horizontalEndGuideline_16dp"
+                app:layout_constraintEnd_toEndOf="@id/verticalEndGuideline"
+                app:layout_constraintStart_toStartOf="@id/verticalStartGuideline70"
+                app:layout_constraintTop_toBottomOf="@id/tvTransactionName"
+                tools:text="Investment" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </com.chauthai.swipereveallayout.SwipeRevealLayout>
 </layout>

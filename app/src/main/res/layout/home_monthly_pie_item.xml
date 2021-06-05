@@ -5,13 +5,15 @@
         android:id="@+id/monthlyPieChart"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/cdp_16"
+        android:layout_marginEnd="@dimen/cdp_16"
         android:layout_marginTop="@dimen/cdp_16"
         android:orientation="vertical">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/cdp_16"
+            android:layout_marginStart="@dimen/cdp_12"
             android:text="@string/income_vs_expense"
             android:textColor="@color/colorTextDark"
             android:textSize="@dimen/csp_16"

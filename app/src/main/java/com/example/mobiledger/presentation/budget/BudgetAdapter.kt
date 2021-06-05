@@ -122,7 +122,7 @@ class BudgetAdapter(
     inner class AddBudgetCategoryViewHolder(private val viewBinding: AddBudgetCategoryBinding) : RecyclerView.ViewHolder(viewBinding.root) {
         fun bind() {
             viewBinding.apply {
-                btnAddCategoryBudget.setOnClickListener {
+                root.setOnClickListener {
                     onAddBudgetCategoryClick()
                 }
             }

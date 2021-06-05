@@ -22,7 +22,7 @@ class HomeFragment :
 
     private val viewModel: HomeViewModel by viewModels { viewModelFactory }
 
-    private val homeAdapter: HomeAdapter by lazy { HomeAdapter(onDeleteItemClick, onTransactionItemClick) }
+    private val homeAdapter: HomeAdapter by lazy { HomeAdapter(onDeleteItemClick, onTransactionItemClick, onAllTransactionClicked) }
 
     override fun getSnackBarErrorView(): SnackViewErrorBinding = viewBinding.includeErrorView
 
@@ -131,6 +131,10 @@ class HomeFragment :
 
     private val onDeleteItemClick = fun(transactionId: String, position: Int) {
         viewModel.deleteTransaction(transactionId, position)
+    }
+
+    private val onAllTransactionClicked = fun() {
+        navigator?.navigateToTransactionFragmentScreen(viewModel.transList)
     }
 
     private val onTransactionItemClick = fun(transactionEntity: TransactionEntity){

@@ -12,6 +12,9 @@ sealed class HomeViewItem(val viewType: HomeViewType) {
     data class MonthlyTotalPie(val pieEntryList: ArrayList<PieEntry>, val type: HomeViewType = HomeViewType.MonthlyTotalPieChart) :
         HomeViewItem(type)
 
+    data class TransactionListButton(val numOfTransactions: String, val type: HomeViewType = HomeViewType.TransactionList) :
+        HomeViewItem(type)
+
     data class TransactionDataRow(val data: TransactionData, val type: HomeViewType = HomeViewType.TransactionData) : HomeViewItem(type)
     object EmptyDataRow : HomeViewItem(HomeViewType.EmptyData)
 }
@@ -19,8 +22,13 @@ sealed class HomeViewItem(val viewType: HomeViewType) {
 data class MonthlyData(val incomeAmount: String, val expenseAmount: String)
 
 data class TransactionData(
+    val id: String,
+    val name: String,
+    val amount: String,
+    val transactionType: TransactionType,
+    val category: String,
     val transactionEntity: TransactionEntity,
     @DrawableRes val categoryIcon: Int
 )
 
-enum class HomeViewType { Header, MonthlyData, MonthlyTotalPieChart, TransactionData, EmptyData }
+enum class HomeViewType { Header, MonthlyData, MonthlyTotalPieChart, TransactionList, TransactionData, EmptyData }

@@ -79,7 +79,7 @@
     <string name="maximum_budget">Maximum \nBudget</string>
     <string name="total_budget">Total \nBudget</string>
     <string name="set_your_monthly_budget">Set your monthly budget</string>
-    <string name="percent_of_budget_spent">Budget spent : </string>
+    <string name="percent_of_budget_spent">Budget spent:  </string>
     <string name="set_your_budget">Set your budget</string>
     <string name="set_budget">Set Budget</string>
     <string name="field_required">Field Required</string>
@@ -104,6 +104,10 @@
     <string name="delete">Delete</string>
 
     <!-- Budget Fragment -->
+    <string name="make_budget">Make Budget</string>
+    <string name="see_all">See all</string>
+    <string name="transactions">transactions</string>
+
 
     <!-- NOTIFICATION -->
     <string name="channel_transaction">Transaction channel</string>

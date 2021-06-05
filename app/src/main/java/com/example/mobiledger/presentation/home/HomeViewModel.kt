@@ -48,6 +48,7 @@ class HomeViewModel(
     val deleteTransactionLiveData: LiveData<Event<Int>> = _deleteTransactionLiveData
 
     private var monthCount = 0
+    var transList: ArrayList<TransactionData> = arrayListOf()
 
     fun getHomeData() {
         _isLoading.value = true
@@ -154,13 +155,20 @@ class HomeViewModel(
                 homeViewItemList.add(HomeViewItem.MonthlyTotalPie(pieEntryList))
 
             if (transactionList.isNotEmpty()) {
+                homeViewItemList.add(HomeViewItem.TransactionListButton(transactionList.size.toString()))
                 homeViewItemList.add(HomeViewItem.HeaderDataRow(R.string.latest_transaction))
                 var newList = transactionList
+                val tempList = newList
                 if (transactionList.size > 10)
                     newList = transactionList.subList(0, 11)
                 newList.forEach {
                     homeViewItemList.add(HomeViewItem.TransactionDataRow(mapToTransactionData(it)))
                 }
+                transList.clear()
+                tempList.forEach {
+                    transList.add(mapToTransactionData(it))
+                }
+
             } else {
                 homeViewItemList.add(HomeViewItem.EmptyDataRow)
             }
@@ -173,6 +181,11 @@ class HomeViewModel(
         transactionEntity.apply {
             return TransactionData(
                 transactionEntity = this,
+                id = id,
+                name = name,
+                amount = amount.toString().toAmount(),
+                transactionType = transactionType,
+                category = category,
                 categoryIcon = getCategoryIcon(category, transactionType)
             )
         }

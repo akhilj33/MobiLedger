@@ -93,6 +93,10 @@
         <item name="android:textColor">@color/colorTextGrey</item>
     </style>
 
+    <style name="GelionRegularBlue16" parent="GelionRegular16">
+        <item name="android:textColor">@color/colorAppBlue</item>
+    </style>
+
     <style name="GelionRegularGreen18" parent="GelionRegular18">
         <item name="android:textColor">@color/colorGreen</item>
     </style>
