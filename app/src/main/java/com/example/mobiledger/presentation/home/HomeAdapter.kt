@@ -96,7 +96,7 @@ class HomeAdapter(
         RecyclerView.ViewHolder(viewBinding.root) {
         fun bind(item: String) {
             viewBinding.apply {
-                tvTransactionTitle.text = item.totalTransactionTextBuilder()
+                tvTransactionTitle.text = item.totalTransactionTextBuilder(context)
                 root.setOnClickListener {
                     onAllTransactionClicked()
                 }

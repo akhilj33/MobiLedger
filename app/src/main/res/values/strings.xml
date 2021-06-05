@@ -105,6 +105,8 @@
 
     <!-- Budget Fragment -->
     <string name="make_budget">Make Budget</string>
+    <string name="see_all">See all</string>
+    <string name="transactions">transactions</string>
 
 
     <!-- NOTIFICATION -->

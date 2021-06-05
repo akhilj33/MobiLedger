@@ -5,7 +5,6 @@ import androidx.annotation.StringRes
 import com.example.mobiledger.domain.entities.TransactionEntity
 import com.example.mobiledger.domain.enums.TransactionType
 import com.github.mikephil.charting.data.PieEntry
-import com.google.firebase.Timestamp
 
 sealed class HomeViewItem(val viewType: HomeViewType) {
     data class HeaderDataRow(@StringRes val data: Int, val type: HomeViewType = HomeViewType.Header) : HomeViewItem(type)
@@ -28,7 +27,6 @@ data class TransactionData(
     val amount: String,
     val transactionType: TransactionType,
     val category: String,
-    val transactionTime: Timestamp,
     val transactionEntity: TransactionEntity,
     @DrawableRes val categoryIcon: Int
 )

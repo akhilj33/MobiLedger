@@ -186,7 +186,6 @@ class HomeViewModel(
                 amount = amount.toString().toAmount(),
                 transactionType = transactionType,
                 category = category,
-                transactionTime = transactionTime,
                 categoryIcon = getCategoryIcon(category, transactionType)
             )
         }

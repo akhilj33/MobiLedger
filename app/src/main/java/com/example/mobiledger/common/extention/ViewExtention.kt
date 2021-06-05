@@ -1,6 +1,7 @@
 package com.example.mobiledger.common.extention
 
 import android.app.Activity
+import android.content.Context
 import android.os.Build
 import android.view.View
 import android.view.WindowManager
@@ -63,5 +64,7 @@ fun View.changeStatusBarColor(
 fun String.toAmount() = "\u20B9$this"
 fun String.toPercent() = "$this \u0025"
 fun String.roundToOneDecimal(num: Float) = " %.1f".format(num)
-fun String.totalTransactionTextBuilder() = "See all $this Transactions"
+fun String.totalTransactionTextBuilder(context: Context) =
+    context.getString(R.string.see_all).plus(" $this ").plus(context.getString(R.string.transactions))
+
 fun Long.toPercent(total: Long) = ((this.toFloat() / total) * 100).roundToInt()
