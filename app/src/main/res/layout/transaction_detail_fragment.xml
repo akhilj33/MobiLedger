@@ -1,11 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/topGuideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.03" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/verticalScreenGuideline_10"
@@ -21,36 +29,16 @@
             android:orientation="vertical"
             app:layout_constraintGuide_percent="0.90" />
 
-
-        <TextView
-            android:id="@+id/textAddTransaction"
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/closeIv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@style/GelionSemiBoldBlue24"
-            android:layout_marginTop="@dimen/cdp_24"
-            android:text="@string/add_transaction"
             app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_90"
-            app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_10"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="@id/topGuideline"
+            app:srcCompat="@drawable/cancel_icon"/>
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/toggleExpense"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@style/GelionRegularGrey16"
-            android:background="@drawable/oval_shape"
-            android:inputType="text"
-            android:padding="@dimen/cdp_8"
-            android:stateListAnimator="@null"
-            android:text="@string/expense"
-            app:backgroundTint="@color/colorLightGrey"
-            app:layout_constraintBottom_toBottomOf="@id/toggleIncome"
-            app:layout_constraintEnd_toStartOf="@id/toggleIncome"
-            app:layout_constraintStart_toEndOf="@id/verticalScreenGuideline_10"
-            app:layout_constraintTop_toTopOf="@id/toggleIncome" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/toggleIncome"
+            android:id="@+id/toggleTransactionType"
             style="@style/GelionRegularNavyBlue16"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -64,9 +52,9 @@
             app:icon="@drawable/selected_icon"
             app:iconTint="@color/colorAppBlue"
             app:layout_constraintBottom_toTopOf="@id/spinner_category"
-            app:layout_constraintEnd_toStartOf="@id/verticalScreenGuideline_90"
-            app:layout_constraintStart_toEndOf="@id/toggleExpense"
-            app:layout_constraintTop_toBottomOf="@id/textAddTransaction" />
+            app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_90"
+            app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_10"
+            app:layout_constraintTop_toTopOf="@id/topGuideline" />
 
 
         <com.google.android.material.textfield.TextInputLayout
@@ -74,12 +62,12 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:errorEnabled="true"
             android:layout_marginTop="@dimen/cdp_24"
+            app:errorEnabled="true"
             app:layout_constraintBottom_toTopOf="@id/transactionNameLayout"
             app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_90"
             app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_10"
-            app:layout_constraintTop_toBottomOf="@id/toggleIncome">
+            app:layout_constraintTop_toBottomOf="@id/toggleTransactionType">
 
             <AutoCompleteTextView
                 android:id="@+id/categorySpinnerTv"
@@ -193,17 +181,31 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnSubmitTransaction"
-            android:layout_width="0dp"
+            android:id="@+id/btnUpdate"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/cdp_24"
             android:layout_marginBottom="@dimen/cdp_48"
-            android:layout_marginHorizontal="@dimen/cdp_48"
-            android:text="@string/add_transaction"
+            android:text="@string/update"
+            android:textSize="@dimen/csp_16"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/btnDelete"
+            app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_10"
+            app:layout_constraintTop_toBottomOf="@id/descriptionLayout"
+            tools:visibility="visible" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnDelete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/cdp_24"
+            android:layout_marginBottom="@dimen/cdp_48"
+            android:text="@string/delete"
             android:textSize="@dimen/csp_16"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_90"
-            app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_10"
+            app:layout_constraintStart_toEndOf="@id/btnUpdate"
             app:layout_constraintTop_toBottomOf="@id/descriptionLayout" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

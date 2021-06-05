@@ -64,11 +64,11 @@ class EditProfileFragment : BaseFragment<FragmentEditProfileBinding, BaseNavigat
         }
 
         viewBinding.btnNameUpdate.setOnClickListener {
-            val userName = viewBinding.textName.text.toString()
+            val userName = viewBinding.nameTv.text.toString()
             if (userName.isEmpty()) {
                 activity?.showToast(getString(R.string.single_empty_field_msg))
             } else {
-                viewModel.updateUserName(viewBinding.textName.text.toString())
+                viewModel.updateUserName(viewBinding.nameTv.text.toString())
             }
         }
 
