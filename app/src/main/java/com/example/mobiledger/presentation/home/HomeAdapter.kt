@@ -7,18 +7,20 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.chauthai.swipereveallayout.ViewBinderHelper
 import com.example.mobiledger.R
+import com.example.mobiledger.common.extention.toAmount
 import com.example.mobiledger.common.extention.totalTransactionTextBuilder
 import com.example.mobiledger.common.utils.DateUtils
-import com.example.mobiledger.common.extention.toAmount
 import com.example.mobiledger.common.utils.GraphUtils
 import com.example.mobiledger.databinding.*
 import com.example.mobiledger.domain.entities.TransactionEntity
 import com.example.mobiledger.domain.enums.TransactionType
 import com.github.mikephil.charting.data.PieEntry
 
-class HomeAdapter(val onDeleteItemClick: (String, Int) -> Unit, val onAllTransactionClicked: () -> Unit) :
-    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-class HomeAdapter(val onDeleteItemClick: (String, Int) -> Unit, val onTransactionItemClick: (TransactionEntity) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class HomeAdapter(
+    val onDeleteItemClick: (String, Int) -> Unit,
+    val onTransactionItemClick: (TransactionEntity) -> Unit,
+    val onAllTransactionClicked: () -> Unit
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private lateinit var context: Context
     private val viewBinderHelper = ViewBinderHelper()
@@ -124,7 +126,7 @@ class HomeAdapter(val onDeleteItemClick: (String, Int) -> Unit, val onTransactio
                 tvCategory.text = item.category
                 ivCategoryIcon.background = ContextCompat.getDrawable(context, data.categoryIcon)
                 tvTime.text = DateUtils.getDateInDDMMMMyyyyFormat(item.transactionTime)
-                ivCategoryIcon.background = ContextCompat.getDrawable(context, item.categoryIcon)
+
                 if (item.transactionType == TransactionType.Income) tvAmount.setTextColor(
                     ContextCompat.getColorStateList(context, R.color.colorGreen)
                 )

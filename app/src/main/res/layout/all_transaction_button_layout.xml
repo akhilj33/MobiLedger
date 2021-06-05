@@ -9,7 +9,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/allTransactionBar"
             android:layout_width="0dp"
-            android:layout_height="@dimen/cdp_64"
+            android:layout_height="@dimen/cdp_56"
             android:layout_marginEnd="@dimen/cdp_24"
             android:layout_marginTop="@dimen/cdp_16"
             android:background="@drawable/horizontal_bar"

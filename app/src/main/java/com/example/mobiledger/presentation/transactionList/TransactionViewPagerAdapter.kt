@@ -5,6 +5,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.mobiledger.common.extention.gone
+import com.example.mobiledger.common.extention.visible
 import com.example.mobiledger.databinding.TransactionListRecyclerviewLayoutBinding
 import com.example.mobiledger.presentation.home.TransactionData
 
@@ -29,12 +31,26 @@ class TransactionViewPagerAdapter(
 
         when (position) {
             0 -> {
-                if (incomeList != null)
-                    holder.transactionAdapter.addList(incomeList)
+                if (incomeList != null) {
+                    if (incomeList.isNotEmpty()) {
+                        holder.transactionAdapter.addList(incomeList)
+                        holder.emptyTransactionScreen.gone()
+                    } else {
+                        holder.emptyTransactionScreen.visible()
+                        holder.emptyTransactionScreen.playAnimation()
+                    }
+                }
+
             }
             1 -> {
-                if (expenseList != null)
-                    holder.transactionAdapter.addList(expenseList)
+                if (expenseList != null) {
+                    if (expenseList.isNotEmpty()) {
+                        holder.transactionAdapter.addList(expenseList)
+                    } else {
+                        holder.emptyTransactionScreen.visible()
+                        holder.emptyTransactionScreen.playAnimation()
+                    }
+                }
             }
         }
     }
@@ -43,7 +59,7 @@ class TransactionViewPagerAdapter(
 
     inner class PageHolder(val viewBinding: TransactionListRecyclerviewLayoutBinding) : RecyclerView.ViewHolder(viewBinding.root) {
         val rv: RecyclerView = viewBinding.rvTransaction
-
+        val emptyTransactionScreen = viewBinding.animationView
         val transactionAdapter: TransactionAdapter by lazy { TransactionAdapter() }
 
     }

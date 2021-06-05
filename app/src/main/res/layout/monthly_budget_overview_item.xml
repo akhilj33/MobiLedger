@@ -23,18 +23,18 @@
             app:layout_constraintGuide_percent="1" />
 
         <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/verticalGuideline2"
+            android:id="@+id/verticalGuidelineSrart"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.02" />
+            app:layout_constraintGuide_percent="0.06" />
 
         <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/verticalGuideline98"
+            android:id="@+id/verticalGuidelineEnd"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.98" />
+            app:layout_constraintGuide_percent="0.94" />
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/budgetCardView"
@@ -45,8 +45,8 @@
             app:cardElevation="@dimen/cdp_4"
             app:cardPreventCornerOverlap="true"
             app:cardUseCompatPadding="true"
-            app:layout_constraintEnd_toEndOf="@id/verticalGuideline98"
-            app:layout_constraintStart_toStartOf="@id/verticalGuideline2"
+            app:layout_constraintEnd_toEndOf="@id/verticalGuidelineEnd"
+            app:layout_constraintStart_toStartOf="@id/verticalGuidelineSrart"
             app:layout_constraintTop_toTopOf="@id/horizontalTopGuideline">
 
             <androidx.constraintlayout.widget.ConstraintLayout

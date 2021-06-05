@@ -22,8 +22,7 @@ class HomeFragment :
 
     private val viewModel: HomeViewModel by viewModels { viewModelFactory }
 
-    private val homeAdapter: HomeAdapter by lazy { HomeAdapter(onDeleteItemClick, onAllTransactionClicked) }
-    private val homeAdapter: HomeAdapter by lazy { HomeAdapter(onDeleteItemClick, onTransactionItemClick) }
+    private val homeAdapter: HomeAdapter by lazy { HomeAdapter(onDeleteItemClick, onTransactionItemClick, onAllTransactionClicked) }
 
     override fun getSnackBarErrorView(): SnackViewErrorBinding = viewBinding.includeErrorView
 
