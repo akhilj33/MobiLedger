@@ -180,6 +180,7 @@ class HomeViewModel(
     private fun mapToTransactionData(transactionEntity: TransactionEntity): TransactionData {
         transactionEntity.apply {
             return TransactionData(
+                transactionEntity = this,
                 id = id,
                 name = name,
                 amount = amount.toString().toAmount(),

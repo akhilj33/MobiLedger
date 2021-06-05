@@ -10,9 +10,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.mobiledger.R
 import com.example.mobiledger.common.base.BaseFragment
-import com.example.mobiledger.common.utils.showRecordTransactionDialogFragment
+import com.example.mobiledger.common.utils.showAddTransactionDialogFragment
+import com.example.mobiledger.common.utils.showTransactionDetailDialogFragment
 import com.example.mobiledger.databinding.FragmentHomeBinding
 import com.example.mobiledger.databinding.SnackViewErrorBinding
+import com.example.mobiledger.domain.entities.TransactionEntity
 import com.example.mobiledger.presentation.OneTimeObserver
 
 class HomeFragment :
@@ -21,6 +23,7 @@ class HomeFragment :
     private val viewModel: HomeViewModel by viewModels { viewModelFactory }
 
     private val homeAdapter: HomeAdapter by lazy { HomeAdapter(onDeleteItemClick, onAllTransactionClicked) }
+    private val homeAdapter: HomeAdapter by lazy { HomeAdapter(onDeleteItemClick, onTransactionItemClick) }
 
     override fun getSnackBarErrorView(): SnackViewErrorBinding = viewBinding.includeErrorView
 
@@ -82,7 +85,7 @@ class HomeFragment :
     private fun setOnClickListener() {
         viewBinding.apply {
             btnAddTransaction.setOnClickListener {
-                showRecordTransactionDialogFragment(requireActivity().supportFragmentManager)
+                showAddTransactionDialogFragment(requireActivity().supportFragmentManager)
             }
 
             monthNavigationBar.leftArrow.setOnClickListener { handleLeftClick() }
@@ -133,6 +136,10 @@ class HomeFragment :
 
     private val onAllTransactionClicked = fun() {
         navigator?.navigateToTransactionFragmentScreen(viewModel.transList)
+    }
+
+    private val onTransactionItemClick = fun(transactionEntity: TransactionEntity){
+        showTransactionDetailDialogFragment(transactionEntity, requireActivity().supportFragmentManager)
     }
 
     companion object {

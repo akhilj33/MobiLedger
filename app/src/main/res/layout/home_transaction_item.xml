@@ -25,10 +25,11 @@
                 app:srcCompat="@drawable/delete_white" />
         </LinearLayout>
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            tools:visibility="gone">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/transactionRoot"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:visibility="gone">
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/horizontalStartGuideline_20dp"

@@ -2,6 +2,7 @@ package com.example.mobiledger.presentation.home
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import com.example.mobiledger.domain.entities.TransactionEntity
 import com.example.mobiledger.domain.enums.TransactionType
 import com.github.mikephil.charting.data.PieEntry
 import com.google.firebase.Timestamp
@@ -28,6 +29,7 @@ data class TransactionData(
     val transactionType: TransactionType,
     val category: String,
     val transactionTime: Timestamp,
+    val transactionEntity: TransactionEntity,
     @DrawableRes val categoryIcon: Int
 )
 

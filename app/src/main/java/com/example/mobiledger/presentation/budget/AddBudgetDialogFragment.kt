@@ -51,7 +51,7 @@ class AddBudgetDialogFragment :
         setUpObserver()
         handleUI()
         setOnClickListener()
-        (viewBinding.mySpinnerDropdown as? AutoCompleteTextView)?.setAdapter(spinnerAdapter)
+        (viewBinding.categorySpinnerTv as? AutoCompleteTextView)?.setAdapter(spinnerAdapter)
         val spinnerExpenseList = expenseCategoryList?.sorted()
         spinnerAdapter.addItems(spinnerExpenseList as List<String>)
     }
@@ -85,8 +85,8 @@ class AddBudgetDialogFragment :
     }
 
     private fun setOnClickListener() {
-        viewBinding.mySpinnerDropdown.addTextChangedListener(categoryTextWatcher)
-        viewBinding.textAmount.addTextChangedListener(amountTextWatcher)
+        viewBinding.categorySpinnerTv.addTextChangedListener(categoryTextWatcher)
+        viewBinding.amountTv.addTextChangedListener(amountTextWatcher)
 
         viewBinding.btnSeBudget.setOnClickListener {
 
@@ -113,8 +113,8 @@ class AddBudgetDialogFragment :
         }
     }
 
-    private fun getAmountText(): String = viewBinding.textAmount.text.toString()
-    private fun getCategoryText(): String = viewBinding.mySpinnerDropdown.text.toString()
+    private fun getAmountText(): String = viewBinding.amountTv.text.toString()
+    private fun getCategoryText(): String = viewBinding.categorySpinnerTv.text.toString()
 
     private fun isValidAmount(): Boolean = (getAmountText().isNotBlank() && getAmountText().toLong() >= 0)
     private fun isValidCategory(): Boolean = getCategoryText().isNotBlank()

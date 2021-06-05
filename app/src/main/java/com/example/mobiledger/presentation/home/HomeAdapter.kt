@@ -9,16 +9,18 @@ import com.chauthai.swipereveallayout.ViewBinderHelper
 import com.example.mobiledger.R
 import com.example.mobiledger.common.extention.totalTransactionTextBuilder
 import com.example.mobiledger.common.utils.DateUtils
+import com.example.mobiledger.common.extention.toAmount
 import com.example.mobiledger.common.utils.GraphUtils
 import com.example.mobiledger.databinding.*
+import com.example.mobiledger.domain.entities.TransactionEntity
 import com.example.mobiledger.domain.enums.TransactionType
 import com.github.mikephil.charting.data.PieEntry
 
 class HomeAdapter(val onDeleteItemClick: (String, Int) -> Unit, val onAllTransactionClicked: () -> Unit) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class HomeAdapter(val onDeleteItemClick: (String, Int) -> Unit, val onTransactionItemClick: (TransactionEntity) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private lateinit var context: Context
-
     private val viewBinderHelper = ViewBinderHelper()
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
@@ -109,15 +111,18 @@ class HomeAdapter(val onDeleteItemClick: (String, Int) -> Unit, val onAllTransac
     }
 
     inner class TransactionDataViewHolder(private val viewBinding: HomeTransactionItemBinding) : RecyclerView.ViewHolder(viewBinding.root) {
-        fun bind(item: TransactionData) {
+        fun bind(data: TransactionData) {
+            val item = data.transactionEntity
             viewBinding.apply {
                 deleteSwipeAction.setOnClickListener { onDeleteItemClick(item.id, adapterPosition) }
+                transactionRoot.setOnClickListener {onTransactionItemClick(item)}
                 viewBinderHelper.setOpenOnlyOne(true)
                 viewBinderHelper.bind(swipelayout, item.id)
                 viewBinderHelper.closeLayout(item.id)
                 tvTransactionName.text = item.name
-                tvAmount.text = item.amount
+                tvAmount.text = item.amount.toString().toAmount()
                 tvCategory.text = item.category
+                ivCategoryIcon.background = ContextCompat.getDrawable(context, data.categoryIcon)
                 tvTime.text = DateUtils.getDateInDDMMMMyyyyFormat(item.transactionTime)
                 ivCategoryIcon.background = ContextCompat.getDrawable(context, item.categoryIcon)
                 if (item.transactionType == TransactionType.Income) tvAmount.setTextColor(
