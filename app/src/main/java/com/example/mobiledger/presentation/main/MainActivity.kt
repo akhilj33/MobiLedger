@@ -1,20 +1,28 @@
 package com.example.mobiledger.presentation.main
 
 import android.app.NotificationManager
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.annotation.ColorRes
+import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.content.ContextCompat
+import androidx.work.*
 import com.example.mobiledger.R
 import com.example.mobiledger.common.base.BaseActivity
 import com.example.mobiledger.common.utils.ConstantUtils
+import com.example.mobiledger.common.utils.ReminderWorker
 import com.example.mobiledger.databinding.ActivityMainBinding
 import com.example.mobiledger.presentation.NormalObserver
 import com.example.mobiledger.presentation.main.MainActivityViewModel.*
 import com.example.mobiledger.presentation.main.MainActivityViewModel.NavTab.*
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.util.*
+import java.util.concurrent.TimeUnit
 
 
 class MainActivity :
@@ -73,6 +81,40 @@ class MainActivity :
                 SPLIT()
             )
         }
+    }
+
+    private fun cancelReminder() {
+        WorkManager.getInstance().cancelAllWorkByTag(ConstantUtils.REMINDER_WORKER_TAG)
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun switchOnDailyReminder() {
+
+        val lastUsageTime = LocalDateTime
+            .now()
+            .format(DateTimeFormatter.ISO_DATE_TIME)
+
+        val data = Data.Builder()
+            .putString(
+                ConstantUtils.DATA_REMINDER,
+                lastUsageTime
+            )
+            .build()
+
+        val periodicWork =
+            PeriodicWorkRequestBuilder<ReminderWorker>(
+                1, TimeUnit.DAYS
+            )
+                .addTag(ConstantUtils.REMINDER_WORKER_TAG)
+                .setInputData(data)
+                .build()
+
+        WorkManager.getInstance()
+            .enqueueUniquePeriodicWork(
+                ConstantUtils.DAILY_REMINDER,
+                ExistingPeriodicWorkPolicy.REPLACE,
+                periodicWork
+            )
     }
 
     private fun resetTab() {
@@ -177,6 +219,18 @@ class MainActivity :
                 val message = "You have crossed ".plus(it.percentValue)
                     .plus("% of your for category ".plus(it.notificationCallerData.expenseCategory).plus(" for this month."))
                 sendNotification(notificationManager, ConstantUtils.CHANNEL_ID_TRANSACTION, title, message)
+            }
+        })
+
+        viewModel.activateReminder.observe(this@MainActivity, {
+            it.let {
+                if (it.peekContent()) {
+                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                        switchOnDailyReminder()
+                    }
+                } else {
+                    cancelReminder()
+                }
             }
         })
     }

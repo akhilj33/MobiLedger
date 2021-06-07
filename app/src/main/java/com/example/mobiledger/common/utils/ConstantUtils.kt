@@ -2,6 +2,7 @@ package com.example.mobiledger.common.utils
 
 object ConstantUtils {
 
+    const val APP_NAME = "MobiLedger"
     const val USERS = "Users"
     const val EMAIL_ID = "emailId"
     const val USER_NAME = "userName"
@@ -27,5 +28,11 @@ object ConstantUtils {
     const val BUDGET = "Budget"
     const val BUDGET_DETAILS = "budgetDetails"
     const val CATEGORY_BUDGET = "CategoryBudget"
+    const val REMINDER_CHANNEL = "Reminder channel"
     const val CHANNEL_ID_TRANSACTION = "ChannelIDTransaction"
+    const val REMINDER_WORKER_TAG = "ReminderWorkerTag"
+    const val CHANNEL_ID_REMINDER = "ChannelIDReminder"
+    const val REMINDER_MESSAGE = "Don't miss thr transactions for the day!"
+    const val DATA_REMINDER = "DATA_REMINDER"
+    const val DAILY_REMINDER = "DAILY_REMINDER"
 }

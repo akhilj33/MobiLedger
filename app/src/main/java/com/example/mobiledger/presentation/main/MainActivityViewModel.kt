@@ -21,7 +21,6 @@ class MainActivityViewModel(
     private val userSettingsUseCase: UserSettingsUseCase
 ) : BaseViewModel() {
 
-
     /*------------------------------------------------Live Data--------------------------------------------------*/
 
     private val _isInternetAvailableLiveData: MutableLiveData<Event<Boolean>> = MutableLiveData()
@@ -53,6 +52,9 @@ class MainActivityViewModel(
 
     private val _userLogoutLiveData: MutableLiveData<Event<Boolean>> = MutableLiveData(Event(false))
     val userLogoutLiveData: LiveData<Event<Boolean>> get() = _userLogoutLiveData
+
+    private val _activateReminder: MutableLiveData<Event<Boolean>> = MutableLiveData(Event(false))
+    val activateReminder: LiveData<Event<Boolean>> get() = _activateReminder
     /*---------------------------------------Bottom Tabs Info -------------------------------------------------*/
 
     fun updateCurrentTab(tab: NavTab) {
@@ -91,6 +93,10 @@ class MainActivityViewModel(
 
     fun addBudgetResult() {
         _addBudgetResultLiveData.value = Event(Unit)
+    }
+
+    fun activateDailyReminder(activate: Boolean) {
+        _activateReminder.value = Event(activate)
     }
 
     fun notificationHandler(notificationCallerData: AddTransactionDialogFragmentViewModel.NotificationCallerData) {
@@ -153,6 +159,7 @@ class MainActivityViewModel(
             _notificationIndicatorCategory.value = NotificationCallerPercentData(notificationCallerData, 50)
         }
     }
+
 
     sealed class NavTab {
         object HOME : NavTab()

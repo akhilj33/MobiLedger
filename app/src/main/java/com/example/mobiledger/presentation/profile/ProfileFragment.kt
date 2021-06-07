@@ -204,8 +204,10 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding, ProfileNavigator>(R
     private fun enableDailyReminder() {
         viewBinding.toggleBtnReminder.setOnClickListener {
             if (viewBinding.toggleBtnReminder.isChecked) {
+                activityViewModel.activateDailyReminder(true)
                 viewModel.saveReminderEnabled(true)
             } else {
+                activityViewModel.activateDailyReminder(false)
                 viewModel.saveReminderEnabled(false)
             }
             viewModel.isReminderEnabled()
