@@ -5,4 +5,5 @@ import com.example.mobiledger.common.base.BaseNavigator
 interface ProfileNavigator : BaseNavigator {
     fun navigateToEditProfileScreen()
     fun navigateToCategoryFragmentScreen()
+    fun navigateToAuthScreen()
 }

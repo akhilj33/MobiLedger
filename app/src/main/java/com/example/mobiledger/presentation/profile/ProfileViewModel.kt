@@ -9,11 +9,13 @@ import com.example.mobiledger.common.base.BaseViewModel
 import com.example.mobiledger.domain.AppResult
 import com.example.mobiledger.domain.entities.UserEntity
 import com.example.mobiledger.domain.usecases.ProfileUseCase
+import com.example.mobiledger.domain.usecases.UserSettingsUseCase
 import com.example.mobiledger.presentation.Event
 import kotlinx.coroutines.launch
 
 class ProfileViewModel(
-    private val profileUseCase: ProfileUseCase
+    private val profileUseCase: ProfileUseCase,
+    private val userSettingsUseCase: UserSettingsUseCase
 ) : BaseViewModel() {
 
     val userFromFirestoreResult: LiveData<UserEntity> get() = _userFromFirestoreResult
@@ -24,6 +26,15 @@ class ProfileViewModel(
 
     private val _loadingState = MutableLiveData(false)
     val loadingState: LiveData<Boolean> get() = _loadingState
+
+    private val _isBiometricEnabled = MutableLiveData<Event<Boolean>>()
+    val isBiometricIdEnabled: LiveData<Event<Boolean>> get() = _isBiometricEnabled
+
+    private val _isPushNotificationEnabled = MutableLiveData<Event<Boolean>>()
+    val isPushNotificationEnabled: LiveData<Event<Boolean>> get() = _isPushNotificationEnabled
+
+    private val _isReminderEnabled = MutableLiveData<Event<Boolean>>()
+    val isReminderEnabled: LiveData<Event<Boolean>> get() = _isReminderEnabled
 
 
     fun fetchUserData() {
@@ -43,6 +54,50 @@ class ProfileViewModel(
                 }
             }
             _loadingState.value = false
+        }
+    }
+
+    fun isPushNotificationEnabled() {
+        viewModelScope.launch {
+            val isPushNotificationEnabled = userSettingsUseCase.isNotificationEnabled()
+            _isPushNotificationEnabled.value = Event(isPushNotificationEnabled)
+        }
+
+    }
+
+    fun savePushNotificationEnabled(enablePushNotification: Boolean) {
+        viewModelScope.launch {
+            userSettingsUseCase.saveNotificationEnabled(enablePushNotification)
+            _loadingState.value = false
+        }
+    }
+
+    fun isReminderEnabled() {
+        viewModelScope.launch {
+            val isReminderNotificationEnabled = userSettingsUseCase.isReminderEnabled()
+            _isReminderEnabled.value = Event(isReminderNotificationEnabled)
+        }
+
+    }
+
+    fun saveReminderEnabled(enableReminder: Boolean) {
+        viewModelScope.launch {
+            userSettingsUseCase.saveReminderEnabled(enableReminder)
+            _loadingState.value = false
+        }
+    }
+
+    fun isBiometricEnabled() {
+        viewModelScope.launch {
+            val isBiometricEnabled = userSettingsUseCase.isBiometricEnabled()
+            _isBiometricEnabled.value = Event(isBiometricEnabled)
+        }
+
+    }
+
+    fun saveBiometricEnabled(enableBiometric: Boolean) {
+        viewModelScope.launch {
+            userSettingsUseCase.saveBiometricEnabled(enableBiometric)
         }
     }
 

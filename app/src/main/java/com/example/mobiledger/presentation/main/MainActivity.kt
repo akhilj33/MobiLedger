@@ -53,12 +53,10 @@ class MainActivity :
         return viewBinding.fragmentContainer.id
     }
 
-
     override fun onDestroy() {
         super.onDestroy()
         mainActivityNavigator = null
     }
-
 
     private fun setNavOnClickListeners() {
         viewBinding.includeNav.homeView.setOnClickListener {

@@ -22,6 +22,7 @@ ext{
     coroutinesVersion = "1.4.1"
     retrofitVersion = "2.9.0"
     gsonVersion = "2.8.6"
+    biometric = "1.0.1"
     loggingInterceptorVersion = "4.7.2"
     flexBoxVersion = "2.0.1"
     firebaseMessaging = "21.0.1"

@@ -8,6 +8,7 @@ import android.content.Context
 import android.view.Gravity
 import android.view.Window
 import android.widget.Toast
+import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
@@ -16,7 +17,7 @@ import com.example.mobiledger.R
 
 private const val COPY_TO_CLIPBOARD = "copy_to_clipboard"
 
-fun Activity.showDialog(
+fun Activity.showAlertDialog(
     dialogTitle: String, dialogMessage: String,
     positiveButtonText: String, NegativeButtonText: String,
     onCancelButtonClick: () -> Unit, onContinueClick: () -> Unit
@@ -68,4 +69,36 @@ fun Activity.closePreviousDialogFragment(dialogFragmentName: String) {
         df.dismiss()
     }
 }
+
+fun FragmentActivity.showBiometricSystemPrompt(
+    title: String, negativeButtonText: String,
+    onAuthenticated: () -> Unit,
+    onAuthenticationCancelled: () -> Unit
+) {
+    val executor = ContextCompat.getMainExecutor(this)
+    val biometricPrompt = BiometricPrompt(
+        this, executor,
+        object : BiometricPrompt.AuthenticationCallback() {
+            override fun onAuthenticationError(
+                errorCode: Int,
+                errString: CharSequence
+            ) {
+                onAuthenticationCancelled()
+            }
+
+            override fun onAuthenticationSucceeded(
+                result: BiometricPrompt.AuthenticationResult
+            ) {
+                onAuthenticated()
+            }
+
+        })
+    val promptInfo = BiometricPrompt.PromptInfo.Builder()
+        .setTitle(title)
+        .setNegativeButtonText(negativeButtonText)
+        .build()
+
+    biometricPrompt.authenticate(promptInfo)
+}
+
 

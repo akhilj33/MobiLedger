@@ -14,7 +14,15 @@ class SplashViewModel(private val userSettingsUseCase: UserSettingsUseCase) : Ba
     private val _isUserSignedInLiveData: MutableLiveData<Event<Boolean>> = MutableLiveData()
     val isUserSignedInLiveData: LiveData<Event<Boolean>> = _isUserSignedInLiveData
 
-    private val splashTimeOut: Long = 3000
+    private val _isBiometricEnabled = MutableLiveData<Event<Boolean>>()
+    val isBiometricIdEnabled: LiveData<Event<Boolean>> get() = _isBiometricEnabled
+
+    private val splashTimeOut: Long = 2000
+
+    init {
+        isUserSignedIn()
+        isBiometricEnabled()
+    }
 
     fun isUserSignedIn() {
         viewModelScope.launch {
@@ -22,6 +30,13 @@ class SplashViewModel(private val userSettingsUseCase: UserSettingsUseCase) : Ba
             delay(splashTimeOut)
             if (uID != null) _isUserSignedInLiveData.value = Event(true)
             else _isUserSignedInLiveData.value = Event(false)
+        }
+    }
+
+    fun isBiometricEnabled() {
+        viewModelScope.launch {
+            val isBiometricActive = userSettingsUseCase.isBiometricEnabled()
+            _isBiometricEnabled.value = Event(isBiometricActive)
         }
     }
 }

@@ -5,6 +5,13 @@ import com.example.mobiledger.data.repository.UserSettingsRepository
 interface UserSettingsUseCase {
     suspend fun getUID(): String?
     suspend fun saveUID(uid: String)
+    suspend fun saveBiometricEnabled(isEnabled: Boolean)
+    suspend fun isBiometricEnabled(): Boolean
+    suspend fun saveNotificationEnabled(isEnabled: Boolean)
+    suspend fun isNotificationEnabled(): Boolean
+    suspend fun saveReminderEnabled(isEnabled: Boolean)
+    suspend fun isReminderEnabled(): Boolean
+    suspend fun removeUid()
 }
 
 class UserSettingsUseCaseImpl(
@@ -17,4 +24,18 @@ class UserSettingsUseCaseImpl(
     override suspend fun saveUID(uid: String) {
         userSettingsRepository.saveUID(uid)
     }
+
+    override suspend fun saveBiometricEnabled(isEnabled: Boolean) = userSettingsRepository.saveBiometricEnable(isEnabled)
+
+    override suspend fun isBiometricEnabled(): Boolean = userSettingsRepository.isBiometricEnable()
+
+    override suspend fun saveNotificationEnabled(isEnabled: Boolean) = userSettingsRepository.saveNotificationEnable(isEnabled)
+
+    override suspend fun isNotificationEnabled(): Boolean = userSettingsRepository.isNotificationEnable()
+
+    override suspend fun saveReminderEnabled(isEnabled: Boolean) = userSettingsRepository.saveReminderEnable(isEnabled)
+
+    override suspend fun isReminderEnabled(): Boolean = userSettingsRepository.isReminderEnable()
+
+    override suspend fun removeUid() = userSettingsRepository.removeUid()
 }

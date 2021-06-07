@@ -8,6 +8,27 @@
         android:layout_height="match_parent"
         tools:context=".presentation.splash.SplashFragment">
 
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/verticalScreenGuideline_08"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.08" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/verticalScreenGuideline_92"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.92" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/horizontalGuideline_92"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.92" />
+
         <ImageView
             android:id="@+id/appLogo"
             android:layout_width="0dp"
@@ -17,7 +38,37 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/btnRetry"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@id/btnLoginUsingCred"
+            app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_08"
+            app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_92"
+            android:text="@string/retry" />
+
+        <Button
+            android:id="@+id/btnLoginUsingCred"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@id/btnLogout"
+            app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_08"
+            app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_92"
+            android:text="@string/login_using_credentials" />
+
+        <Button
+            android:id="@+id/btnLogout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@id/horizontalGuideline_92"
+            app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_08"
+            app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_92"
+            android:text="@string/logout" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
