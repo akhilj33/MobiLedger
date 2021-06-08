@@ -108,6 +108,8 @@ class AddTransactionViewModel(
                 categorySummaryAmountUpdateJob.await() is AppResult.Success && budgetAmountUpdateJob.await() is AppResult.Success
             ) {
                 _dataUpdatedResult.value = Event(Unit)
+                _notificationIndicator.value =
+                    NotificationCallerData(monthYear, newTransactionEntity.category, newTransactionEntity.amount)
             } else {
                 _errorLiveData.value = Event(ViewError(viewErrorType = ViewErrorType.NON_BLOCKING))
             }
