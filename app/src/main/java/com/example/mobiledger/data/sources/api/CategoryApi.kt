@@ -1,6 +1,13 @@
 package com.example.mobiledger.data.sources.api
 
-import com.example.mobiledger.common.utils.ConstantUtils
+import com.example.mobiledger.common.utils.ConstantUtils.CATEGORY_AMOUNT
+import com.example.mobiledger.common.utils.ConstantUtils.CATEGORY_TRANSACTION
+import com.example.mobiledger.common.utils.ConstantUtils.EXPENSE_CATEGORY_LIST
+import com.example.mobiledger.common.utils.ConstantUtils.INCOME_CATEGORY_LIST
+import com.example.mobiledger.common.utils.ConstantUtils.MONTH
+import com.example.mobiledger.common.utils.ConstantUtils.UNAUTHORIZED_ERROR_MSG
+import com.example.mobiledger.common.utils.ConstantUtils.USERS
+import com.example.mobiledger.common.utils.ConstantUtils.USER_CATEGORIES
 import com.example.mobiledger.common.utils.ErrorCodes
 import com.example.mobiledger.data.ErrorMapper
 import com.example.mobiledger.data.sources.auth.AuthSource
@@ -11,10 +18,7 @@ import com.example.mobiledger.domain.entities.*
 import com.example.mobiledger.presentation.budget.MonthlyCategorySummary
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuthException
-import com.google.firebase.firestore.DocumentReference
-import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.QuerySnapshot
+import com.google.firebase.firestore.*
 import kotlinx.coroutines.tasks.await
 
 interface CategoryApi {
@@ -27,14 +31,28 @@ interface CategoryApi {
     suspend fun updateUserIncomeCategory(uid: String, newIncomeCategory: IncomeCategoryListEntity): AppResult<Unit>
     suspend fun updateUserExpenseCategory(uid: String, newExpenseCategory: ExpenseCategoryListEntity): AppResult<Unit>
 
-    suspend fun getMonthlyCategorySummary(uid: String, monthYear: String, category: String): AppResult<MonthlyCategorySummary>
+    suspend fun getMonthlyCategorySummary(uid: String, monthYear: String, category: String): AppResult<MonthlyCategorySummary?>
+    suspend fun addMonthlyCategorySummaryData(
+        uid: String,
+        monthYear: String,
+        category: String,
+        monthlyCategorySummary: MonthlyCategorySummary
+    ): AppResult<Unit>
+    suspend fun deleteMonthlyCategorySummary(uid: String, monthYear: String, category: String): AppResult<Unit>
+    suspend fun updateMonthlyCategoryAmount(uid: String, monthYear: String, category: String, categoryAmountChange: Long): AppResult<Unit>
 
-    suspend fun getAllMonthlyCategories(uid: String, monthYear: String): AppResult<List<MonthlyCategorySummary>>
+    suspend fun getAllMonthlyCategorySummaries(uid: String, monthYear: String): AppResult<List<MonthlyCategorySummary>>
 
     suspend fun addMonthlyCategoryTransaction(uid: String, monthYear: String, transactionEntity: TransactionEntity): AppResult<Unit>
-    suspend fun getMonthlyCategoryTransactionReferences(uid: String, monthYear: String, category: String): AppResult<List<DocumentReferenceEntity>>
-    suspend fun getTransactionFromReference(transRef: DocumentReference): AppResult<TransactionEntity>
+    suspend fun deleteMonthlyCategoryTransaction(uid: String, monthYear: String, transactionEntity: TransactionEntity): AppResult<Unit>
 
+    suspend fun getMonthlyCategoryTransactionReferences(
+        uid: String,
+        monthYear: String,
+        category: String
+    ): AppResult<List<DocumentReferenceEntity>>
+
+    suspend fun getTransactionFromReference(transRef: DocumentReference): AppResult<TransactionEntity>
 }
 
 class CategoryApiImpl(private val firebaseDb: FirebaseFirestore, private val authSource: AuthSource) : CategoryApi {
@@ -43,8 +61,8 @@ class CategoryApiImpl(private val firebaseDb: FirebaseFirestore, private val aut
         var exception: Exception? = null
 
         try {
-            val docRef = firebaseDb.collection(ConstantUtils.USERS).document(uid)
-                .collection(ConstantUtils.USER_CATEGORIES).document(ConstantUtils.INCOME_CATEGORY_LIST)
+            val docRef = firebaseDb.collection(USERS).document(uid)
+                .collection(USER_CATEGORIES).document(INCOME_CATEGORY_LIST)
 
             response = docRef.set(IncomeCategoryListEntity(categoryList))
             response.await()
@@ -67,8 +85,8 @@ class CategoryApiImpl(private val firebaseDb: FirebaseFirestore, private val aut
         var exception: Exception? = null
 
         try {
-            val docRef = firebaseDb.collection(ConstantUtils.USERS).document(uid)
-                .collection(ConstantUtils.USER_CATEGORIES).document(ConstantUtils.EXPENSE_CATEGORY_LIST)
+            val docRef = firebaseDb.collection(USERS).document(uid)
+                .collection(USER_CATEGORIES).document(EXPENSE_CATEGORY_LIST)
 
             response = docRef.set(ExpenseCategoryListEntity(categoryList))
             response.await()
@@ -91,8 +109,8 @@ class CategoryApiImpl(private val firebaseDb: FirebaseFirestore, private val aut
         var exception: Exception? = null
 
         try {
-            response = firebaseDb.collection(ConstantUtils.USERS).document(uid)
-                .collection(ConstantUtils.USER_CATEGORIES).document(ConstantUtils.INCOME_CATEGORY_LIST).get()
+            response = firebaseDb.collection(USERS).document(uid)
+                .collection(USER_CATEGORIES).document(INCOME_CATEGORY_LIST).get()
             response.await()
         } catch (e: Exception) {
             exception = e
@@ -118,8 +136,8 @@ class CategoryApiImpl(private val firebaseDb: FirebaseFirestore, private val aut
         var exception: Exception? = null
 
         try {
-            response = firebaseDb.collection(ConstantUtils.USERS).document(uid)
-                .collection(ConstantUtils.USER_CATEGORIES).document(ConstantUtils.EXPENSE_CATEGORY_LIST).get()
+            response = firebaseDb.collection(USERS).document(uid)
+                .collection(USER_CATEGORIES).document(EXPENSE_CATEGORY_LIST).get()
             response.await()
         } catch (e: Exception) {
             exception = e
@@ -145,8 +163,8 @@ class CategoryApiImpl(private val firebaseDb: FirebaseFirestore, private val aut
         var exception: Exception? = null
 
         try {
-            val docRef = firebaseDb.collection(ConstantUtils.USERS).document(uid)
-                .collection(ConstantUtils.USER_CATEGORIES).document(ConstantUtils.INCOME_CATEGORY_LIST)
+            val docRef = firebaseDb.collection(USERS).document(uid)
+                .collection(USER_CATEGORIES).document(INCOME_CATEGORY_LIST)
 
             response = docRef.update(newIncomeCategory.toMutableMap())
             response.await()
@@ -173,22 +191,59 @@ class CategoryApiImpl(private val firebaseDb: FirebaseFirestore, private val aut
         var exception: Exception? = null
 
         val transRef: DocumentReference =
-            firebaseDb.document("/${ConstantUtils.USERS}/$uid/Months/$monthYear/Transaction/${transactionEntity.id}")
+            firebaseDb.document("/${USERS}/$uid/Months/$monthYear/Transaction/${transactionEntity.id}")
 
         try {
             if (!authSource.isUserAuthorized()) throw FirebaseAuthException(
                 ErrorCodes.FIREBASE_UNAUTHORIZED,
-                ConstantUtils.UNAUTHORIZED_ERROR_MSG
+                UNAUTHORIZED_ERROR_MSG
             )
-            response = firebaseDb.collection(ConstantUtils.USERS)
+            response = firebaseDb.collection(USERS)
                 .document(uid)
-                .collection(ConstantUtils.MONTH)
+                .collection(MONTH)
                 .document(monthYear)
-                .collection(ConstantUtils.CATEGORY_TRANSACTION)
+                .collection(CATEGORY_TRANSACTION)
                 .document(transactionEntity.category)
-                .collection(ConstantUtils.CATEGORY_TRANSACTION)
+                .collection(CATEGORY_TRANSACTION)
                 .document(transactionEntity.id)
                 .set(TransactionReference(transRef))
+            response.await()
+        } catch (e: Exception) {
+            exception = e
+        }
+
+        return when (val result = ErrorMapper.checkAndMapFirebaseApiError(response, exception)) {
+            is FireBaseResult.Success -> {
+                AppResult.Success(Unit)
+            }
+            is FireBaseResult.Failure -> {
+                AppResult.Failure(result.error)
+            }
+        }
+    }
+
+    override suspend fun deleteMonthlyCategoryTransaction(
+        uid: String,
+        monthYear: String,
+        transactionEntity: TransactionEntity
+    ): AppResult<Unit> {
+        var response: Task<Void>? = null
+        var exception: Exception? = null
+
+        try {
+            if (!authSource.isUserAuthorized()) throw FirebaseAuthException(
+                ErrorCodes.FIREBASE_UNAUTHORIZED,
+                UNAUTHORIZED_ERROR_MSG
+            )
+            response = firebaseDb.collection(USERS)
+                .document(uid)
+                .collection(MONTH)
+                .document(monthYear)
+                .collection(CATEGORY_TRANSACTION)
+                .document(transactionEntity.category)
+                .collection(CATEGORY_TRANSACTION)
+                .document(transactionEntity.id)
+                .delete()
             response.await()
         } catch (e: Exception) {
             exception = e
@@ -215,27 +270,27 @@ class CategoryApiImpl(private val firebaseDb: FirebaseFirestore, private val aut
         try {
             if (!authSource.isUserAuthorized()) throw FirebaseAuthException(
                 ErrorCodes.FIREBASE_UNAUTHORIZED,
-                ConstantUtils.UNAUTHORIZED_ERROR_MSG
+                UNAUTHORIZED_ERROR_MSG
             )
-            response = firebaseDb.collection(ConstantUtils.USERS)
+            response = firebaseDb.collection(USERS)
                 .document(uid)
-                .collection(ConstantUtils.MONTH)
+                .collection(MONTH)
                 .document(monthYear)
-                .collection(ConstantUtils.CATEGORY_TRANSACTION)
+                .collection(CATEGORY_TRANSACTION)
                 .document(category)
-                .collection(ConstantUtils.CATEGORY_TRANSACTION)
+                .collection(CATEGORY_TRANSACTION)
                 .get()
             response.await()
         } catch (e: Exception) {
             exception = e
         }
 
-       return when (val result = ErrorMapper.checkAndMapFirebaseApiError(response, exception)) {
-             is FireBaseResult.Success -> {
-                 if (result.data != null && result.data.result != null) {
-                     AppResult.Success(transactionEntityListMapper(result.data.result!!))
-                 } else AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
-             }
+        return when (val result = ErrorMapper.checkAndMapFirebaseApiError(response, exception)) {
+            is FireBaseResult.Success -> {
+                if (result.data != null && result.data.result != null) {
+                    AppResult.Success(transactionEntityListMapper(result.data.result!!))
+                } else AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
+            }
             is FireBaseResult.Failure -> {
                 AppResult.Failure(result.error)
             }
@@ -249,7 +304,7 @@ class CategoryApiImpl(private val firebaseDb: FirebaseFirestore, private val aut
         try {
             if (!authSource.isUserAuthorized()) throw FirebaseAuthException(
                 ErrorCodes.FIREBASE_UNAUTHORIZED,
-                ConstantUtils.UNAUTHORIZED_ERROR_MSG
+                UNAUTHORIZED_ERROR_MSG
             )
             response = transRef.get()
             response.await()
@@ -260,8 +315,8 @@ class CategoryApiImpl(private val firebaseDb: FirebaseFirestore, private val aut
         return when (val result = ErrorMapper.checkAndMapFirebaseApiError(response, exception)) {
             is FireBaseResult.Success -> {
                 if (result.data != null && result.data.result != null) {
-                    val entity =  mapToTransactionEntity(result.data.result!!)
-                    if (entity!=null)
+                    val entity = mapToTransactionEntity(result.data.result!!)
+                    if (entity != null)
                         AppResult.Success(entity)
                     else AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
                 } else AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
@@ -273,20 +328,57 @@ class CategoryApiImpl(private val firebaseDb: FirebaseFirestore, private val aut
 
     }
 
-    override suspend fun getAllMonthlyCategories(uid: String, monthYear: String): AppResult<List<MonthlyCategorySummary>> {
+    override suspend fun updateMonthlyCategoryAmount(uid: String, monthYear: String, category: String, categoryAmountChange: Long): AppResult<Unit> {
+        var response: Task<Void>? = null
+        var exception: Exception? = null
+
+        try {
+            if (!authSource.isUserAuthorized()) throw FirebaseAuthException(
+                ErrorCodes.FIREBASE_UNAUTHORIZED,
+                UNAUTHORIZED_ERROR_MSG
+            )
+
+
+            response = firebaseDb.collection(USERS)
+                .document(uid)
+                .collection(MONTH)
+                .document(monthYear)
+                .collection(CATEGORY_TRANSACTION)
+                .document(category)
+                .update(CATEGORY_AMOUNT, FieldValue.increment(categoryAmountChange))
+
+            response.await()
+
+        } catch (e: Exception) {
+            exception = e
+        }
+
+        return when (val result = ErrorMapper.checkAndMapFirebaseApiError(response, exception)) {
+            is FireBaseResult.Success -> {
+                if (result.data != null) {
+                    AppResult.Success(Unit)
+                } else AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
+            }
+            is FireBaseResult.Failure -> {
+                AppResult.Failure(result.error)
+            }
+        }
+    }
+
+    override suspend fun getAllMonthlyCategorySummaries(uid: String, monthYear: String): AppResult<List<MonthlyCategorySummary>> {
         var response: Task<QuerySnapshot>? = null
         var exception: Exception? = null
 
         try {
             if (!authSource.isUserAuthorized()) throw FirebaseAuthException(
                 ErrorCodes.FIREBASE_UNAUTHORIZED,
-                ConstantUtils.UNAUTHORIZED_ERROR_MSG
+                UNAUTHORIZED_ERROR_MSG
             )
-            response = firebaseDb.collection(ConstantUtils.USERS)
+            response = firebaseDb.collection(USERS)
                 .document(uid)
-                .collection(ConstantUtils.MONTH)
+                .collection(MONTH)
                 .document(monthYear)
-                .collection(ConstantUtils.CATEGORY_TRANSACTION)
+                .collection(CATEGORY_TRANSACTION)
                 .get()
             response.await()
         } catch (e: Exception) {
@@ -304,19 +396,19 @@ class CategoryApiImpl(private val firebaseDb: FirebaseFirestore, private val aut
         }
     }
 
-    override suspend fun getMonthlyCategorySummary(uid: String, monthYear: String, category: String): AppResult<MonthlyCategorySummary> {
+    override suspend fun getMonthlyCategorySummary(uid: String, monthYear: String, category: String): AppResult<MonthlyCategorySummary?> {
         var response: Task<DocumentSnapshot>? = null
         var exception: Exception? = null
         try {
             if (!authSource.isUserAuthorized()) throw FirebaseAuthException(
                 ErrorCodes.FIREBASE_UNAUTHORIZED,
-                ConstantUtils.UNAUTHORIZED_ERROR_MSG
+                UNAUTHORIZED_ERROR_MSG
             )
-            response = firebaseDb.collection(ConstantUtils.USERS)
+            response = firebaseDb.collection(USERS)
                 .document(uid)
-                .collection(ConstantUtils.MONTH)
+                .collection(MONTH)
                 .document(monthYear)
-                .collection(ConstantUtils.CATEGORY_TRANSACTION)
+                .collection(CATEGORY_TRANSACTION)
                 .document(category)
                 .get()
 
@@ -328,13 +420,83 @@ class CategoryApiImpl(private val firebaseDb: FirebaseFirestore, private val aut
         return when (val result = ErrorMapper.checkAndMapFirebaseApiError(response, exception)) {
             is FireBaseResult.Success -> {
                 if (result.data != null && result.data.result != null) {
-                    val monthlyCategoryResult = monthlyCategoryEntityMapper(result.data.result!!)
-                    if (monthlyCategoryResult != null)
-                        AppResult.Success(monthlyCategoryResult)
-                    else AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
+                    // If doc doesn't exist, sending null as success value indicating that no doc exists
+                    if ((result.data.result as DocumentSnapshot).exists()) {
+                        val monthlyCategoryResult = monthlyCategoryEntityMapper(result.data.result as DocumentSnapshot)
+                        if (monthlyCategoryResult != null) AppResult.Success(monthlyCategoryResult)
+                        else AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
+                    }
+                    else AppResult.Success(null)
                 } else {
                     AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
                 }
+            }
+            is FireBaseResult.Failure -> {
+                AppResult.Failure(result.error)
+            }
+        }
+    }
+
+    override suspend fun addMonthlyCategorySummaryData(
+        uid: String,
+        monthYear: String,
+        category: String,
+        monthlyCategorySummary: MonthlyCategorySummary
+    ): AppResult<Unit> {
+        var response: Task<Void>? = null
+        var exception: Exception? = null
+        try {
+            if (!authSource.isUserAuthorized()) throw FirebaseAuthException(
+                ErrorCodes.FIREBASE_UNAUTHORIZED,
+                UNAUTHORIZED_ERROR_MSG
+            )
+            response = firebaseDb.collection(USERS)
+                .document(uid)
+                .collection(MONTH)
+                .document(monthYear)
+                .collection(CATEGORY_TRANSACTION)
+                .document(category)
+                .set(monthlyCategorySummary)
+
+            response.await()
+        } catch (e: Exception) {
+            exception = e
+        }
+
+        return when (val result = ErrorMapper.checkAndMapFirebaseApiError(response, exception)) {
+            is FireBaseResult.Success -> {
+                AppResult.Success(Unit)
+            }
+            is FireBaseResult.Failure -> {
+                AppResult.Failure(result.error)
+            }
+        }
+    }
+
+    override suspend fun deleteMonthlyCategorySummary(uid: String, monthYear: String, category: String): AppResult<Unit> {
+        var response: Task<Void>? = null
+        var exception: Exception? = null
+        try {
+            if (!authSource.isUserAuthorized()) throw FirebaseAuthException(
+                ErrorCodes.FIREBASE_UNAUTHORIZED,
+                UNAUTHORIZED_ERROR_MSG
+            )
+            response = firebaseDb.collection(USERS)
+                .document(uid)
+                .collection(MONTH)
+                .document(monthYear)
+                .collection(CATEGORY_TRANSACTION)
+                .document(category)
+                .delete()
+
+            response.await()
+        } catch (e: Exception) {
+            exception = e
+        }
+
+        return when (val result = ErrorMapper.checkAndMapFirebaseApiError(response, exception)) {
+            is FireBaseResult.Success -> {
+                AppResult.Success(Unit)
             }
             is FireBaseResult.Failure -> {
                 AppResult.Failure(result.error)
@@ -346,8 +508,8 @@ class CategoryApiImpl(private val firebaseDb: FirebaseFirestore, private val aut
         var response: Task<Void>? = null
         var exception: Exception? = null
         try {
-            val docRef = firebaseDb.collection(ConstantUtils.USERS).document(uid)
-                .collection(ConstantUtils.USER_CATEGORIES).document(ConstantUtils.EXPENSE_CATEGORY_LIST)
+            val docRef = firebaseDb.collection(USERS).document(uid)
+                .collection(USER_CATEGORIES).document(EXPENSE_CATEGORY_LIST)
 
             response = docRef.update(newExpenseCategory.toMutableMap())
             response.await()
@@ -375,7 +537,6 @@ private fun categoryExpenseResultEntityMapper(category: DocumentSnapshot?): Expe
 }
 
 private fun monthlyCategoryEntityMapper(user: DocumentSnapshot): MonthlyCategorySummary? {
-    if (user.data == null) return MonthlyCategorySummary()
     return user.toObject(MonthlyCategorySummary::class.java)
 }
 

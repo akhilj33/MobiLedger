@@ -14,7 +14,7 @@ import com.example.mobiledger.databinding.SnackViewErrorBinding
 import com.example.mobiledger.domain.enums.TransactionType
 import com.example.mobiledger.presentation.OneTimeObserver
 import com.example.mobiledger.presentation.categoryFragment.adapter.CategoryAdapter
-import com.example.mobiledger.presentation.addtransaction.AddTransactionDialogFragmentViewModel
+import com.example.mobiledger.presentation.addtransaction.AddTransactionViewModel
 
 class ExpenseCategoryFragment : BaseFragment<FragmentExpenseCategoryBinding, BaseNavigator>(R.layout.fragment_expense_category) {
 
@@ -54,7 +54,7 @@ class ExpenseCategoryFragment : BaseFragment<FragmentExpenseCategoryBinding, Bas
 
         viewModel.errorLiveData.observe(viewLifecycleOwner, OneTimeObserver {
             when (it.viewErrorType) {
-                AddTransactionDialogFragmentViewModel.ViewErrorType.NON_BLOCKING -> {
+                ExpenseCategoryViewModel.ViewErrorType.NON_BLOCKING -> {
                     showSnackBarErrorView(it.message ?: getString(it.resID), true)
                 }
             }

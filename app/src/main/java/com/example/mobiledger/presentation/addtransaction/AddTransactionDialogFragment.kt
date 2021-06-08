@@ -33,7 +33,7 @@ class AddTransactionDialogFragment :
         (R.layout.dialog_fragment_add_transaction) {
 
     private val spinnerAdapter: SpinnerAdapter by lazy { SpinnerAdapter(requireContext()) }
-    private val viewModel: AddTransactionDialogFragmentViewModel by viewModels { viewModelFactory }
+    private val viewModel: AddTransactionViewModel by viewModels { viewModelFactory }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -44,8 +44,6 @@ class AddTransactionDialogFragment :
     }
 
     private fun initUI() {
-        viewBinding.dateTv.setText(getDateInDDMMMMyyyyFormat(Timestamp.now()))
-
         if (viewModel.transactionType == TransactionType.Income) {
             handleIncomeClick()
         } else {
@@ -75,7 +73,7 @@ class AddTransactionDialogFragment :
 
         viewModel.errorLiveData.observe(viewLifecycleOwner, OneTimeObserver {
             when (it.viewErrorType) {
-                AddTransactionDialogFragmentViewModel.ViewErrorType.NON_BLOCKING -> {
+                AddTransactionViewModel.ViewErrorType.NON_BLOCKING -> {
                     showSnackBarErrorView(it.message ?: getString(it.resID), true)
                 }
             }
@@ -140,7 +138,7 @@ class AddTransactionDialogFragment :
             amountTv.clearFocus()
             amountLayout.error = null
 
-            dateTv.setText("")
+            dateTv.setText(getDateInDDMMMMyyyyFormat(Timestamp.now()))
             dateTv.clearFocus()
             dateLayout.error = null
 
@@ -213,7 +211,7 @@ class AddTransactionDialogFragment :
     private fun getDescription(): String = viewBinding.descriptionTv.text.toString().trim()
 
     private fun isValidName(): Boolean = getName().isNotBlank()
-    private fun isValidAmount(): Boolean = getAmount().isNotBlank()
+    private fun isValidAmount(): Boolean = getAmount().isNotBlank() && getAmount().toLong() > 0L
     private fun isValidCategory(): Boolean = getCategory().isNotBlank()
     private fun isValidDate(): Boolean = getDate().isNotBlank()
 

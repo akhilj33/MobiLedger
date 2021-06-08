@@ -24,12 +24,7 @@ class AddBudgetDialogFragment :
         (R.layout.dialog_fragment_add_budget) {
 
     private val viewModel: AddBudgetDialogViewModel by viewModels { viewModelFactory }
-
-    private var isCategoryBudget: Boolean = true
     private val spinnerAdapter: SpinnerAdapter by lazy { SpinnerAdapter(requireContext()) }
-    private var expenseCategoryList: ArrayList<String>? = null
-    private var month: String = ""
-    private var budgetTotal: Long = 0
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -39,10 +34,10 @@ class AddBudgetDialogFragment :
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            expenseCategoryList = it.getStringArrayList(KEY_LIST)
-            isCategoryBudget = it.getBoolean(KEY_IS_CATEGORY_BUDGET)
-            month = it.getString(KEY_MONTH) as String
-            budgetTotal = it.getLong(KEY_BUDGET_TOTAL)
+            viewModel.expenseCategoryList = it.getStringArrayList(KEY_LIST) as ArrayList<String>
+            viewModel.isCategoryBudget = it.getBoolean(KEY_IS_CATEGORY_BUDGET)
+            viewModel.month = it.getString(KEY_MONTH) as String
+            viewModel.budgetTotal = it.getLong(KEY_BUDGET_TOTAL)
         }
     }
 
@@ -52,12 +47,12 @@ class AddBudgetDialogFragment :
         handleUI()
         setOnClickListener()
         (viewBinding.categorySpinnerTv as? AutoCompleteTextView)?.setAdapter(spinnerAdapter)
-        val spinnerExpenseList = expenseCategoryList?.sorted()
-        spinnerAdapter.addItems(spinnerExpenseList as List<String>)
+        val spinnerExpenseList = viewModel.expenseCategoryList.sorted()
+        spinnerAdapter.addItems(spinnerExpenseList)
     }
 
     private fun handleUI() {
-        if (isCategoryBudget) {
+        if (viewModel.isCategoryBudget) {
             viewBinding.spinnerCategory.visible()
         } else {
             viewBinding.spinnerCategory.gone()
@@ -91,7 +86,7 @@ class AddBudgetDialogFragment :
         viewBinding.btnSeBudget.setOnClickListener {
 
             when {
-                !isCategoryBudget -> {
+                !viewModel.isCategoryBudget -> {
                     addBudgetOverview()
                 }
                 else -> {
@@ -103,13 +98,13 @@ class AddBudgetDialogFragment :
 
     private fun addCategoryBudget() {
         if (doValidations()) {
-            viewModel.getMonthlyCategorySummary(getCategoryText(), getAmountText().toLong(), month, budgetTotal)
+            viewModel.getMonthlyCategorySummary(getCategoryText(), getAmountText().toLong())
         }
     }
 
     private fun addBudgetOverview() {
         if (doValidations()) {
-            viewModel.setBudget(MonthlyBudgetData(getAmountText().toLong(), budgetTotal), month)
+            viewModel.setBudget(MonthlyBudgetData(getAmountText().toLong(), viewModel.budgetTotal))
         }
     }
 
@@ -149,13 +144,13 @@ class AddBudgetDialogFragment :
     /*---------------------------------------Validations------------------------------------------*/
 
     private fun doValidations(): Boolean {
-        if (isCategoryBudget) {
+        return if (viewModel.isCategoryBudget) {
             updateViewBasedOnValidation(viewBinding.amountLayout, isValidAmount())
             updateViewBasedOnValidation(viewBinding.spinnerCategory, isValidCategory())
-            return isValidCategory() && isValidAmount()
+            isValidCategory() && isValidAmount()
         } else {
             updateViewBasedOnValidation(viewBinding.amountLayout, isValidAmount())
-            return isValidAmount()
+            isValidAmount()
         }
     }
 

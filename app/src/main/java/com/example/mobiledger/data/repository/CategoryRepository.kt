@@ -17,12 +17,25 @@ import timber.log.Timber
 interface CategoryRepository {
     suspend fun addUserIncomeCategoryDb(categoryList: List<String>): AppResult<Unit>
     suspend fun addUserExpenseCategoryDb(categoryList: List<String>): AppResult<Unit>
+
     suspend fun getUserIncomeCategories(): AppResult<IncomeCategoryListEntity>
     suspend fun getUserExpenseCategories(): AppResult<ExpenseCategoryListEntity>
+
     suspend fun updateUserIncomeCategory(newIncomeCategory: IncomeCategoryListEntity): AppResult<Unit>
     suspend fun updateUserExpenseCategory(newExpenseCategory: ExpenseCategoryListEntity): AppResult<Unit>
+
     suspend fun addMonthlyCategoryTransaction(monthYear: String, transactionEntity: TransactionEntity): AppResult<Unit>
-    suspend fun getMonthlyCategorySummary(monthYear: String, category: String): AppResult<MonthlyCategorySummary>
+    suspend fun deleteMonthlyCategoryTransaction(monthYear: String, transactionEntity: TransactionEntity): AppResult<Unit>
+
+    suspend fun getMonthlyCategorySummary(monthYear: String, category: String): AppResult<MonthlyCategorySummary?>
+    suspend fun addMonthlyCategorySummaryData(
+        monthYear: String,
+        category: String,
+        monthlyCategorySummary: MonthlyCategorySummary
+    ): AppResult<Unit>
+    suspend fun deleteMonthlyCategorySummary(monthYear: String, category: String): AppResult<Unit>
+    suspend fun updateMonthlyCategoryAmount(monthYear: String, category: String, categoryAmountChange: Long): AppResult<Unit>
+
     suspend fun getAllMonthlyCategories(monthYear: String): AppResult<List<MonthlyCategorySummary>>
     suspend fun getMonthlyCategoryTransactionReferences(monthYear: String, category: String): AppResult<List<DocumentReferenceEntity>>
     suspend fun getTransactionFromReference(transRef: DocumentReference): AppResult<TransactionEntity>
@@ -147,7 +160,17 @@ class CategoryRepositoryImpl(
         }
     }
 
-    override suspend fun getMonthlyCategorySummary(monthYear: String, category: String): AppResult<MonthlyCategorySummary> {
+    override suspend fun deleteMonthlyCategoryTransaction(monthYear: String, transactionEntity: TransactionEntity): AppResult<Unit> {
+        return withContext(dispatcher) {
+            val uId = cacheSource.getUID()
+            if (uId != null) {
+                categoryApi.deleteMonthlyCategoryTransaction(uId, monthYear, transactionEntity)
+            } else
+                AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
+        }
+    }
+
+    override suspend fun getMonthlyCategorySummary(monthYear: String, category: String): AppResult<MonthlyCategorySummary?> {
         return withContext(dispatcher) {
             val uId = cacheSource.getUID()
             if (uId != null) {
@@ -157,11 +180,46 @@ class CategoryRepositoryImpl(
         }
     }
 
+
+    override suspend fun addMonthlyCategorySummaryData(
+        monthYear: String,
+        category: String,
+        monthlyCategorySummary: MonthlyCategorySummary,
+    ): AppResult<Unit> {
+        return withContext(dispatcher) {
+            val uId = cacheSource.getUID()
+            if (uId != null) {
+                categoryApi.addMonthlyCategorySummaryData(uId, monthYear, category, monthlyCategorySummary)
+            } else
+                AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
+        }
+    }
+
+    override suspend fun deleteMonthlyCategorySummary(monthYear: String, category: String): AppResult<Unit> {
+        return withContext(dispatcher) {
+            val uId = cacheSource.getUID()
+            if (uId != null) {
+                categoryApi.deleteMonthlyCategorySummary(uId, monthYear, category)
+            } else
+                AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
+        }
+    }
+
+    override suspend fun updateMonthlyCategoryAmount(monthYear: String, category: String, categoryAmountChange: Long): AppResult<Unit> {
+        return withContext(dispatcher) {
+            val uId = cacheSource.getUID()
+            if (uId != null) {
+                categoryApi.updateMonthlyCategoryAmount(uId, monthYear, category, categoryAmountChange)
+            } else
+                AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
+        }
+    }
+
     override suspend fun getAllMonthlyCategories(monthYear: String): AppResult<List<MonthlyCategorySummary>> {
         return withContext(dispatcher) {
             val uId = cacheSource.getUID()
             if (uId != null) {
-                categoryApi.getAllMonthlyCategories(uId, monthYear)
+                categoryApi.getAllMonthlyCategorySummaries(uId, monthYear)
             } else
                 AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
         }

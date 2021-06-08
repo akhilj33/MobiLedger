@@ -1,14 +1,16 @@
 package com.example.mobiledger.presentation.categoryFragment
 
+import androidx.annotation.StringRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.example.mobiledger.R
 import com.example.mobiledger.common.base.BaseViewModel
 import com.example.mobiledger.domain.AppResult
 import com.example.mobiledger.domain.entities.ExpenseCategoryListEntity
 import com.example.mobiledger.domain.usecases.CategoryUseCase
 import com.example.mobiledger.presentation.Event
-import com.example.mobiledger.presentation.addtransaction.AddTransactionDialogFragmentViewModel
+import com.example.mobiledger.presentation.addtransaction.AddTransactionViewModel
 import kotlinx.coroutines.launch
 
 class ExpenseCategoryViewModel(
@@ -18,8 +20,8 @@ class ExpenseCategoryViewModel(
     val expenseCategoryList: LiveData<Event<ExpenseCategoryListEntity>> get() = _expenseCategoryList
     private val _expenseCategoryList: MutableLiveData<Event<ExpenseCategoryListEntity>> = MutableLiveData()
 
-    private val _errorLiveData: MutableLiveData<Event<AddTransactionDialogFragmentViewModel.ViewError>> = MutableLiveData()
-    val errorLiveData: LiveData<Event<AddTransactionDialogFragmentViewModel.ViewError>> = _errorLiveData
+    private val _errorLiveData: MutableLiveData<Event<ViewError>> = MutableLiveData()
+    val errorLiveData: LiveData<Event<ViewError>> = _errorLiveData
 
     private val _loadingState = MutableLiveData<Boolean>(false)
     val loadingState: LiveData<Boolean> get() = _loadingState
@@ -34,8 +36,8 @@ class ExpenseCategoryViewModel(
 
                 is AppResult.Failure -> {
                     _errorLiveData.value = Event(
-                        AddTransactionDialogFragmentViewModel.ViewError(
-                            viewErrorType = AddTransactionDialogFragmentViewModel.ViewErrorType.NON_BLOCKING,
+                        ViewError(
+                            viewErrorType = ViewErrorType.NON_BLOCKING,
                             message = result.error.message
                         )
                     )
@@ -54,8 +56,8 @@ class ExpenseCategoryViewModel(
                 }
                 is AppResult.Failure -> {
                     _errorLiveData.value = Event(
-                        AddTransactionDialogFragmentViewModel.ViewError(
-                            viewErrorType = AddTransactionDialogFragmentViewModel.ViewErrorType.NON_BLOCKING,
+                        ViewError(
+                            viewErrorType = ViewErrorType.NON_BLOCKING,
                             message = result.error.message
                         )
                     )
@@ -64,5 +66,13 @@ class ExpenseCategoryViewModel(
         }
         _loadingState.value = false
     }
+
+    enum class ViewErrorType { NON_BLOCKING }
+
+    data class ViewError(
+        val viewErrorType: ViewErrorType,
+        var message: String? = null,
+        @StringRes val resID: Int = R.string.generic_error_message
+    )
 }
 

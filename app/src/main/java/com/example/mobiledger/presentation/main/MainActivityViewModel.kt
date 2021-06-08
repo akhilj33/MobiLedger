@@ -8,7 +8,7 @@ import com.example.mobiledger.domain.AppResult
 import com.example.mobiledger.domain.enums.TransactionType
 import com.example.mobiledger.domain.usecases.BudgetUseCase
 import com.example.mobiledger.presentation.Event
-import com.example.mobiledger.presentation.addtransaction.AddTransactionDialogFragmentViewModel
+import com.example.mobiledger.presentation.addtransaction.AddTransactionViewModel
 import com.example.mobiledger.presentation.budget.MonthlyBudgetData
 import com.example.mobiledger.presentation.budget.MonthlyCategoryBudget
 import kotlinx.coroutines.launch
@@ -16,7 +16,6 @@ import kotlinx.coroutines.launch
 class MainActivityViewModel(
     private val budgetUseCase: BudgetUseCase
 ) : BaseViewModel() {
-
 
     /*------------------------------------------------Live Data--------------------------------------------------*/
 
@@ -40,6 +39,9 @@ class MainActivityViewModel(
 
     private val _addBudgetResultLiveData: MutableLiveData<Event<Unit>> = MutableLiveData()
     val addBudgetResultLiveData: LiveData<Event<Unit>> = _addBudgetResultLiveData
+
+    private val _updateTransactionResultLiveData: MutableLiveData<Event<Unit>> = MutableLiveData()
+    val updateTransactionResultLiveData: LiveData<Event<Unit>> = _updateTransactionResultLiveData
 
     private val _notificationIndicatorTotal = MutableLiveData<NotificationCallerPercentData>()
     val notificationIndicatorTotal: LiveData<NotificationCallerPercentData> get() = _notificationIndicatorTotal
@@ -86,7 +88,11 @@ class MainActivityViewModel(
         _addBudgetResultLiveData.value = Event(Unit)
     }
 
-    fun notificationHandler(notificationCallerData: AddTransactionDialogFragmentViewModel.NotificationCallerData) {
+    fun updateTransactionResult() {
+        _updateTransactionResultLiveData.value = Event(Unit)
+    }
+
+    fun notificationHandler(notificationCallerData: AddTransactionViewModel.NotificationCallerData) {
         viewModelScope.launch {
             when (val result = budgetUseCase.getMonthlyBudgetOverView(notificationCallerData.monthYear)) {
                 is AppResult.Success -> {
@@ -108,7 +114,7 @@ class MainActivityViewModel(
 
     private fun shouldTriggerTotalNotification(
         monthlyBudgetData: MonthlyBudgetData?,
-        notificationCallerData: AddTransactionDialogFragmentViewModel.NotificationCallerData
+        notificationCallerData: AddTransactionViewModel.NotificationCallerData
     ) {
         if (monthlyBudgetData?.maxBudget != null && (monthlyBudgetData.totalBudget.toFloat() / monthlyBudgetData.maxBudget.toFloat()) >= 1 && ((monthlyBudgetData.totalBudget.toFloat() - notificationCallerData.expenseTransaction.toFloat()) / monthlyBudgetData.maxBudget.toFloat()) < 1) {
             _notificationIndicatorTotal.value = NotificationCallerPercentData(notificationCallerData, 100)
@@ -121,7 +127,7 @@ class MainActivityViewModel(
 
     private fun shouldTriggerCategoryNotification(
         monthlyCategoryBudget: MonthlyCategoryBudget?,
-        notificationCallerData: AddTransactionDialogFragmentViewModel.NotificationCallerData
+        notificationCallerData: AddTransactionViewModel.NotificationCallerData
     ) {
         if (monthlyCategoryBudget?.categoryBudget != null && (monthlyCategoryBudget.categoryExpense.toFloat() / monthlyCategoryBudget.categoryBudget.toFloat()) >= 1 && ((monthlyCategoryBudget.categoryExpense.toFloat() - notificationCallerData.expenseTransaction.toFloat()) / monthlyCategoryBudget.categoryBudget.toFloat()) < 1) {
             _notificationIndicatorCategory.value = NotificationCallerPercentData(notificationCallerData, 100)
@@ -141,7 +147,7 @@ class MainActivityViewModel(
     }
 
     data class NotificationCallerPercentData(
-        val notificationCallerData: AddTransactionDialogFragmentViewModel.NotificationCallerData,
+        val notificationCallerData: AddTransactionViewModel.NotificationCallerData,
         val percentValue: Long
     )
 }

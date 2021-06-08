@@ -4,6 +4,7 @@ import android.app.NotificationManager
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.annotation.ColorRes
 import androidx.appcompat.widget.AppCompatImageView
@@ -13,6 +14,7 @@ import com.example.mobiledger.common.base.BaseActivity
 import com.example.mobiledger.common.utils.ConstantUtils
 import com.example.mobiledger.databinding.ActivityMainBinding
 import com.example.mobiledger.presentation.NormalObserver
+import com.example.mobiledger.presentation.OneTimeObserver
 import com.example.mobiledger.presentation.main.MainActivityViewModel.*
 import com.example.mobiledger.presentation.main.MainActivityViewModel.NavTab.*
 
@@ -147,6 +149,11 @@ class MainActivity :
     /*------------------------------------------------Live Data Observers----------------------------------------------------*/
 
     private fun setupObservers() {
+
+        viewModel.nativeToast.observe(this, OneTimeObserver{
+           val msg = it.msg ?: if(it.msgRes!=null) getString(it.msgRes) else null
+            if (msg!=null) Toast.makeText(this, msg, Toast.LENGTH_LONG).show()
+        })
 
         viewModel.bottomNavVisibilityLiveData.observe(this@MainActivity, { isVisible ->
             viewBinding.includeNav.navBar.visibility = if (isVisible) View.VISIBLE else View.GONE
