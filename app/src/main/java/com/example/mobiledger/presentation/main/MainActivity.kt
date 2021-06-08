@@ -1,22 +1,29 @@
 package com.example.mobiledger.presentation.main
 
 import android.app.NotificationManager
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.annotation.ColorRes
+import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.content.ContextCompat
+import androidx.work.*
 import com.example.mobiledger.R
 import com.example.mobiledger.common.base.BaseActivity
 import com.example.mobiledger.common.utils.ConstantUtils
+import com.example.mobiledger.common.utils.ReminderWorker
 import com.example.mobiledger.databinding.ActivityMainBinding
 import com.example.mobiledger.presentation.NormalObserver
 import com.example.mobiledger.presentation.OneTimeObserver
 import com.example.mobiledger.presentation.main.MainActivityViewModel.*
-import com.example.mobiledger.presentation.main.MainActivityViewModel.NavTab.*
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.util.*
+import java.util.concurrent.TimeUnit
 
 
 class MainActivity :
@@ -24,7 +31,7 @@ class MainActivity :
 
     private val viewModel: MainActivityViewModel by viewModels { viewModelFactory }
     private var mainActivityNavigator: MainActivityNavigator? = null
-    private var currentSelectedTab: NavTab = HOME
+    private var currentSelectedTab: NavTab = NavTab.HOME
     private var notificationManager: NotificationManager? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,28 +62,60 @@ class MainActivity :
         return viewBinding.fragmentContainer.id
     }
 
-
     override fun onDestroy() {
         super.onDestroy()
         mainActivityNavigator = null
     }
-
 
     private fun setNavOnClickListeners() {
         viewBinding.includeNav.homeView.setOnClickListener {
             highlightTab(NavTab.HOME)
         }
         viewBinding.includeNav.budgetView.setOnClickListener {
-            highlightTab(BUDGET())
+            highlightTab(NavTab.BUDGET())
         }
         viewBinding.includeNav.statsView.setOnClickListener {
-            highlightTab(STATS())
+            highlightTab(NavTab.STATS())
         }
         viewBinding.includeNav.accountView.setOnClickListener {
             highlightTab(
-                SPLIT()
+                NavTab.SPLIT()
             )
         }
+    }
+
+    private fun cancelReminder() {
+        WorkManager.getInstance().cancelAllWorkByTag(ConstantUtils.REMINDER_WORKER_TAG)
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun switchOnDailyReminder() {
+
+        val lastUsageTime = LocalDateTime
+            .now()
+            .format(DateTimeFormatter.ISO_DATE_TIME)
+
+        val data = Data.Builder()
+            .putString(
+                ConstantUtils.DATA_REMINDER,
+                lastUsageTime
+            )
+            .build()
+
+        val periodicWork =
+            PeriodicWorkRequestBuilder<ReminderWorker>(
+                1, TimeUnit.DAYS
+            )
+                .addTag(ConstantUtils.REMINDER_WORKER_TAG)
+                .setInputData(data)
+                .build()
+
+        WorkManager.getInstance()
+            .enqueueUniquePeriodicWork(
+                ConstantUtils.DAILY_REMINDER,
+                ExistingPeriodicWorkPolicy.REPLACE,
+                periodicWork
+            )
     }
 
     private fun resetTab() {
@@ -163,11 +202,11 @@ class MainActivity :
         viewModel.currentTab.observe(this@MainActivity, NormalObserver { tab ->
             resetTab()
             when (tab) {
-                is HOME -> ColorNav().colorHome(R.color.colorPrimary)
-                is BUDGET -> ColorNav().colorBudget(R.color.colorPrimary)
-                is STATS -> ColorNav().colorInsight(R.color.colorPrimary)
-                is SPLIT -> ColorNav().colorSplit(R.color.colorPrimary)
-                is DeselectAll -> {
+                is NavTab.HOME -> ColorNav().colorHome(R.color.colorPrimary)
+                is NavTab.BUDGET -> ColorNav().colorBudget(R.color.colorPrimary)
+                is NavTab.STATS -> ColorNav().colorInsight(R.color.colorPrimary)
+                is NavTab.SPLIT -> ColorNav().colorSplit(R.color.colorPrimary)
+                is NavTab.DeselectAll -> {
                 }
             }
         })
@@ -186,6 +225,18 @@ class MainActivity :
                 val message = "You have crossed ".plus(it.percentValue)
                     .plus("% of your for category ".plus(it.notificationCallerData.expenseCategory).plus(" for this month."))
                 sendNotification(notificationManager, ConstantUtils.CHANNEL_ID_TRANSACTION, title, message)
+            }
+        })
+
+        viewModel.activateReminder.observe(this@MainActivity, {
+            it.let {
+                if (it.peekContent()) {
+                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                        switchOnDailyReminder()
+                    }
+                } else {
+                    cancelReminder()
+                }
             }
         })
     }

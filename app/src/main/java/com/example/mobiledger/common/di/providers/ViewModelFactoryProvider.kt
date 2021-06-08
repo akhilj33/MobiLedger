@@ -25,7 +25,11 @@ class ViewModelFactoryProvider(private val useCaseProvider: UseCaseProvider) :
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         return when {
             modelClass.isAssignableFrom(MainActivityViewModel::class.java) -> {
-                MainActivityViewModel(useCaseProvider.provideBudgetUseCase()) as T
+                MainActivityViewModel(
+                    useCaseProvider.provideBudgetUseCase(),
+                    useCaseProvider.provideAuthUseCase(),
+                    useCaseProvider.provideUserSettingsUseCase()
+                ) as T
             }
 
             modelClass.isAssignableFrom(HomeViewModel::class.java) -> {
@@ -57,7 +61,10 @@ class ViewModelFactoryProvider(private val useCaseProvider: UseCaseProvider) :
             }
 
             modelClass.isAssignableFrom(ProfileViewModel::class.java) -> {
-                ProfileViewModel(useCaseProvider.provideProfileUseCase()) as T
+                ProfileViewModel(
+                    useCaseProvider.provideProfileUseCase(),
+                    useCaseProvider.provideUserSettingsUseCase()
+                ) as T
             }
 
             modelClass.isAssignableFrom(EditProfileViewModel::class.java) -> {
@@ -67,7 +74,8 @@ class ViewModelFactoryProvider(private val useCaseProvider: UseCaseProvider) :
                 AddTransactionViewModel(
                     useCaseProvider.provideTransactionUseCase(),
                     useCaseProvider.provideCategoryUseCase(),
-                    useCaseProvider.provideBudgetUseCase()
+                    useCaseProvider.provideBudgetUseCase(),
+                    useCaseProvider.provideUserSettingsUseCase()
                 ) as T
             }
             modelClass.isAssignableFrom(IncomeCategoryViewModel::class.java) -> {

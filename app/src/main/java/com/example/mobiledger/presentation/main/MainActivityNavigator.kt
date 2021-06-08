@@ -69,7 +69,7 @@ class MainActivityNavigator constructor(
         )
     }
 
-    override fun navigateSplashToAuthScreen() {
+    override fun navigateToAuthScreen() {
         popAllFragments()
         FragmentTransactionHelper.replaceFragment(
             fragmentManager,

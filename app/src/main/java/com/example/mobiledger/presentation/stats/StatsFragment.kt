@@ -15,6 +15,7 @@ import com.example.mobiledger.databinding.SnackViewErrorBinding
 import com.example.mobiledger.presentation.ConditionalOneTimeObserver
 import com.example.mobiledger.presentation.OneTimeObserver
 import com.example.mobiledger.presentation.main.MainActivityViewModel
+import com.example.mobiledger.presentation.main.NavTab
 
 class StatsFragment : BaseFragment<FragmentStatsBinding, StatsNavigator>(R.layout.fragment_stats) {
 
@@ -50,7 +51,7 @@ class StatsFragment : BaseFragment<FragmentStatsBinding, StatsNavigator>(R.layou
     private fun setUpObservers() {
         activityViewModel.currentTab.observe(viewLifecycleOwner, ConditionalOneTimeObserver { tab ->
             when (tab) {
-                is MainActivityViewModel.NavTab.STATS -> {
+                is NavTab.STATS -> {
                     resetState()
                     true
                 }

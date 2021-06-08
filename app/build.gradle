@@ -92,5 +92,7 @@ dependencies {
     implementation "com.airbnb.android:lottie:$lottieVersion"
     implementation "com.chauthai.swipereveallayout:swipe-reveal-layout:$swipeLayoutVersion"
     implementation "com.github.PhilJay:MPAndroidChart:$mpAndroidChart"
+    implementation "androidx.biometric:biometric:$biometric"
+    implementation "androidx.work:work-runtime-ktx:$work_version"
 
 }

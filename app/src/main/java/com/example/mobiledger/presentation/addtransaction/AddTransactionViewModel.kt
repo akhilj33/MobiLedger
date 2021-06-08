@@ -13,6 +13,7 @@ import com.example.mobiledger.domain.enums.TransactionType
 import com.example.mobiledger.domain.usecases.BudgetUseCase
 import com.example.mobiledger.domain.usecases.CategoryUseCase
 import com.example.mobiledger.domain.usecases.TransactionUseCase
+import com.example.mobiledger.domain.usecases.UserSettingsUseCase
 import com.example.mobiledger.presentation.Event
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
@@ -20,7 +21,8 @@ import kotlinx.coroutines.launch
 class AddTransactionViewModel(
     private val transactionUseCase: TransactionUseCase,
     private val categoryUseCase: CategoryUseCase,
-    private val budgetUseCase: BudgetUseCase
+    private val budgetUseCase: BudgetUseCase,
+    private val userSettingsUseCase: UserSettingsUseCase
 ) : BaseViewModel() {
 
     val dataUpdatedResult: LiveData<Event<Unit>> get() = _dataUpdatedResult
@@ -108,6 +110,7 @@ class AddTransactionViewModel(
                 categorySummaryAmountUpdateJob.await() is AppResult.Success && budgetAmountUpdateJob.await() is AppResult.Success
             ) {
                 _dataUpdatedResult.value = Event(Unit)
+                if (userSettingsUseCase.isNotificationEnabled())
                 _notificationIndicator.value =
                     NotificationCallerData(monthYear, newTransactionEntity.category, newTransactionEntity.amount)
             } else {
