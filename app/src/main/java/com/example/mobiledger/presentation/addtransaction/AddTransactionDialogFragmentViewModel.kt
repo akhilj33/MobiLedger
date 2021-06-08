@@ -14,6 +14,7 @@ import com.example.mobiledger.domain.entities.toMutableList
 import com.example.mobiledger.domain.enums.TransactionType
 import com.example.mobiledger.domain.usecases.CategoryUseCase
 import com.example.mobiledger.domain.usecases.TransactionUseCase
+import com.example.mobiledger.domain.usecases.UserSettingsUseCase
 import com.example.mobiledger.presentation.Event
 import com.example.mobiledger.presentation.budget.MonthlyCategorySummary
 import com.example.mobiledger.presentation.budget.isEmpty
@@ -24,7 +25,8 @@ import kotlinx.coroutines.withContext
 
 class AddTransactionDialogFragmentViewModel(
     private val transactionUseCase: TransactionUseCase,
-    private val categoryUseCase: CategoryUseCase
+    private val categoryUseCase: CategoryUseCase,
+    private val userSettingsUseCase: UserSettingsUseCase
 ) : BaseViewModel() {
 
     val dataUpdatedResult: LiveData<Event<Unit>> get() = _dataUpdatedResult
@@ -225,7 +227,7 @@ class AddTransactionDialogFragmentViewModel(
                             newMonthlyCategorySummary
                         )
                         val updateExpenseInBudget = transactionUseCase.updateExpenseInBudget(monthYear, newMonthlyCategorySummary)
-                        if (updateExpenseInBudget is AppResult.Success) {
+                        if (updateExpenseInBudget is AppResult.Success && userSettingsUseCase.isNotificationEnabled()) {
                             _notificationIndicator.value =
                                 NotificationCallerData(monthYear, transactionEntity.category, transactionEntity.amount)
                         }
@@ -233,7 +235,7 @@ class AddTransactionDialogFragmentViewModel(
                         val newMonthlyBudgetSummary = getUpdatedMonthlyCategorySummary(result.data, transactionEntity)
                         transactionUseCase.updateMonthlyCategorySummaryData(monthYear, transactionEntity.category, newMonthlyBudgetSummary)
                         val updateExpenseInBudget = transactionUseCase.updateExpenseInBudget(monthYear, newMonthlyBudgetSummary)
-                        if (updateExpenseInBudget is AppResult.Success) {
+                        if (updateExpenseInBudget is AppResult.Success && userSettingsUseCase.isNotificationEnabled()) {
                             _notificationIndicator.value =
                                 NotificationCallerData(monthYear, transactionEntity.category, transactionEntity.amount)
                         }

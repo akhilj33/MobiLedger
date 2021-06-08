@@ -9,25 +9,32 @@
         android:layout_height="match_parent">
 
         <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/horizontalGuideline_86"
+            android:id="@+id/verticalScreenGuideline_04"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.86" />
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.04" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/verticalScreenGuideline_96"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.96" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/horizontalGuideline_10"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent=".10" />
+            app:layout_constraintGuide_percent=".11" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/horizontalGuideline_30"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent=".30" />
+            app:layout_constraintGuide_percent=".29" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/horizontalGuideline_34"
@@ -78,7 +85,8 @@
             android:layout_marginStart="@dimen/cdp_10"
             android:layout_marginEnd="@dimen/cdp_10"
             android:layout_marginBottom="@dimen/cdp_20"
-            android:padding="@dimen/cdp_24"
+            android:background="@color/colorWhite"
+            android:padding="@dimen/cdp_12"
             app:layout_constraintBottom_toTopOf="@id/horizontalGuideline_30"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -87,8 +95,8 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:paddingEnd="@dimen/cdp_10"
-                android:paddingStart="@dimen/cdp_10">
+                android:paddingStart="@dimen/cdp_10"
+                android:paddingEnd="@dimen/cdp_10">
 
                 <ImageView
                     android:id="@+id/imgUser"
@@ -120,10 +128,11 @@
                     android:layout_alignTop="@id/imgUser"
                     android:layout_marginStart="@dimen/cdp_16"
                     android:layout_marginTop="10dp"
+                    android:padding="@dimen/cdp_4"
+                    style="@style/GelionSemiBoldBlue18"
                     android:layout_toEndOf="@id/imgUser"
                     android:text="@string/display_name"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:textSize="@dimen/csp_20" />
+                    android:textColor="@color/colorPrimaryDark" />
 
                 <TextView
                     android:id="@+id/emailTv"
@@ -131,10 +140,11 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@id/displayName"
                     android:layout_marginStart="@dimen/cdp_16"
+                    android:padding="@dimen/cdp_4"
+                    style="@style/GelionRegular18"
                     android:layout_toEndOf="@id/imgUser"
                     android:text="@string/email"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:textSize="@dimen/csp_16" />
+                    android:textColor="@color/colorPrimaryDark" />
 
                 <TextView
                     android:id="@+id/contactNumTv"
@@ -142,95 +152,139 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@id/emailTv"
                     android:layout_marginStart="@dimen/cdp_16"
+                    android:padding="@dimen/cdp_4"
+                    style="@style/GelionRegular18"
                     android:layout_toEndOf="@id/imgUser"
                     android:text="@string/contact_number"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:textSize="@dimen/csp_16" />
+                    android:textColor="@color/colorPrimaryDark" />
 
             </RelativeLayout>
 
         </androidx.cardview.widget.CardView>
 
-        <RelativeLayout
-            android:id="@+id/menuList"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/horizontalGuideline_34">
 
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/textCategory"
-                style="@style/GelionSemiBoldBlue16"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_marginStart="@dimen/cdp_16"
-                android:ellipsize="end"
-                android:maxLines="1"
-                android:text="@string/category"
-                android:textSize="@dimen/csp_18" />
-
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/textSetting"
-                style="@style/GelionSemiBoldBlue16"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/textCategory"
-                android:layout_alignParentStart="true"
-                android:layout_marginStart="@dimen/cdp_16"
-                android:layout_marginTop="@dimen/cdp_16"
-                android:ellipsize="end"
-                android:maxLines="1"
-                android:text="@string/settings"
-                android:textSize="@dimen/csp_18" />
-
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/textContactUs"
-                style="@style/GelionSemiBoldBlue16"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/textSetting"
-                android:layout_alignParentStart="true"
-                android:layout_marginStart="@dimen/cdp_16"
-                android:layout_marginTop="@dimen/cdp_16"
-                android:ellipsize="end"
-                android:maxLines="1"
-                android:text="@string/contact_us"
-                android:textSize="@dimen/csp_18" />
-
-        </RelativeLayout>
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/logoutCard"
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/touchIdLabel"
+            style="@style/GelionSemiBoldBlue18"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/cdp_10"
-            android:layout_marginBottom="@dimen/cdp_24"
-            android:padding="@dimen/cdp_24"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:lineSpacingExtra="7sp"
+            android:padding="@dimen/cdp_10"
+            android:text="Enable Biometrics"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_04"
+            app:layout_constraintTop_toBottomOf="@id/horizontalGuideline_34" />
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/toggleBtnBiometric"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:theme="@style/SCBSwitch"
+            app:layout_constraintBottom_toBottomOf="@id/touchIdLabel"
+            app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_96"
+            app:layout_constraintTop_toTopOf="@id/touchIdLabel" />
+
+        <TextView
+            android:id="@+id/notificationSwitch"
+            style="@style/GelionSemiBoldBlue18"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:lineSpacingExtra="7sp"
+            android:padding="@dimen/cdp_10"
+            android:text="Notification"
+            app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_96"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_04"
+            app:layout_constraintTop_toBottomOf="@id/touchIdLabel" />
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/toggleBtnNotification"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:theme="@style/SCBSwitch"
+            app:layout_constraintBottom_toBottomOf="@id/notificationSwitch"
+            app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_96"
+            app:layout_constraintHorizontal_bias="1"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/horizontalGuideline_86">
+            app:layout_constraintTop_toTopOf="@id/notificationSwitch" />
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:padding="@dimen/cdp_10">
+        <TextView
+            android:id="@+id/reminderSwitch"
+            style="@style/GelionSemiBoldBlue18"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:lineSpacingExtra="7sp"
+            android:padding="@dimen/cdp_10"
+            android:text="Daily Reminder"
+            app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_96"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_04"
+            app:layout_constraintTop_toBottomOf="@id/notificationSwitch" />
 
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/textLogout"
-                    style="@style/GelionSemiBoldBlue16"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentStart="true"
-                    android:layout_marginStart="@dimen/cdp_16"
-                    android:ellipsize="end"
-                    android:maxLines="1"
-                    android:text="@string/logout"
-                    android:textSize="@dimen/csp_18" />
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/toggleBtnReminder"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:theme="@style/SCBSwitch"
+            app:layout_constraintBottom_toBottomOf="@id/reminderSwitch"
+            app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_96"
+            app:layout_constraintHorizontal_bias="1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/reminderSwitch" />
 
-            </RelativeLayout>
-        </androidx.cardview.widget.CardView>
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/textCategory"
+            style="@style/GelionSemiBoldBlue18"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:padding="@dimen/cdp_10"
+            android:text="@string/category"
+            app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_96"
+            app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_04"
+            app:layout_constraintTop_toBottomOf="@id/reminderSwitch" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/textSetting"
+            style="@style/GelionSemiBoldBlue18"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:padding="@dimen/cdp_10"
+            android:text="@string/settings"
+            app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_96"
+            app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_04"
+            app:layout_constraintTop_toBottomOf="@id/textCategory" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/textContactUs"
+            style="@style/GelionSemiBoldBlue18"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:padding="@dimen/cdp_10"
+            android:text="@string/contact_us"
+            app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_96"
+            app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_04"
+            app:layout_constraintTop_toBottomOf="@id/textSetting" />
+
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/textLogout"
+            style="@style/GelionSemiBoldBlue16"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:padding="@dimen/cdp_10"
+            android:text="@string/logout"
+            android:textSize="@dimen/csp_18"
+            app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_96"
+            app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_04"
+            app:layout_constraintTop_toBottomOf="@id/textContactUs" />
 
 
         <ProgressBar

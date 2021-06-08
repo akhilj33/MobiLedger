@@ -6,7 +6,9 @@ import androidx.lifecycle.viewModelScope
 import com.example.mobiledger.common.base.BaseViewModel
 import com.example.mobiledger.domain.AppResult
 import com.example.mobiledger.domain.enums.TransactionType
+import com.example.mobiledger.domain.usecases.AuthUseCase
 import com.example.mobiledger.domain.usecases.BudgetUseCase
+import com.example.mobiledger.domain.usecases.UserSettingsUseCase
 import com.example.mobiledger.presentation.Event
 import com.example.mobiledger.presentation.addtransaction.AddTransactionDialogFragmentViewModel
 import com.example.mobiledger.presentation.budget.MonthlyBudgetData
@@ -14,9 +16,10 @@ import com.example.mobiledger.presentation.budget.MonthlyCategoryBudget
 import kotlinx.coroutines.launch
 
 class MainActivityViewModel(
-    private val budgetUseCase: BudgetUseCase
+    private val budgetUseCase: BudgetUseCase,
+    private val authUseCase: AuthUseCase,
+    private val userSettingsUseCase: UserSettingsUseCase
 ) : BaseViewModel() {
-
 
     /*------------------------------------------------Live Data--------------------------------------------------*/
 
@@ -46,6 +49,12 @@ class MainActivityViewModel(
 
     private val _notificationIndicatorCategory = MutableLiveData<NotificationCallerPercentData>()
     val notificationIndicatorCategory: LiveData<NotificationCallerPercentData> get() = _notificationIndicatorCategory
+
+    private val _userLogoutLiveData: MutableLiveData<Event<Boolean>> = MutableLiveData(Event(false))
+    val userLogoutLiveData: LiveData<Event<Boolean>> get() = _userLogoutLiveData
+
+    private val _activateReminder: MutableLiveData<Event<Boolean>> = MutableLiveData(Event(false))
+    val activateReminder: LiveData<Event<Boolean>> get() = _activateReminder
     /*---------------------------------------Bottom Tabs Info -------------------------------------------------*/
 
     fun updateCurrentTab(tab: NavTab) {
@@ -86,6 +95,10 @@ class MainActivityViewModel(
         _addBudgetResultLiveData.value = Event(Unit)
     }
 
+    fun activateDailyReminder(activate: Boolean) {
+        _activateReminder.value = Event(activate)
+    }
+
     fun notificationHandler(notificationCallerData: AddTransactionDialogFragmentViewModel.NotificationCallerData) {
         viewModelScope.launch {
             when (val result = budgetUseCase.getMonthlyBudgetOverView(notificationCallerData.monthYear)) {
@@ -103,6 +116,21 @@ class MainActivityViewModel(
                 is AppResult.Failure -> {
                 }
             }
+        }
+    }
+
+    fun logout() {
+        viewModelScope.launch {
+            when (authUseCase.logOut()) {
+                is AppResult.Success -> {
+                    userSettingsUseCase.removeUid()
+                    _userLogoutLiveData.value = Event(true)
+                }
+                is AppResult.Failure -> {
+                    _userLogoutLiveData.value = Event(false)
+                }
+            }
+
         }
     }
 
@@ -131,6 +159,7 @@ class MainActivityViewModel(
             _notificationIndicatorCategory.value = NotificationCallerPercentData(notificationCallerData, 50)
         }
     }
+
 
     sealed class NavTab {
         object HOME : NavTab()

@@ -19,6 +19,12 @@
         <item name="android:statusBarColor">@color/colorPrimary</item>
     </style>
 
+    <!--    SwitchCompat theme-->
+    <style name="SCBSwitch" parent="Theme.AppCompat.Light">
+        <!-- active thumb color-->
+        <item name="colorControlActivated">#0046fe</item>
+    </style>
+
     <style name="FullScreenDialogStatusBarGrey" parent="FullScreenDialog">
         <item name="android:windowBackground">@color/colorGray</item>
         <item name="android:statusBarColor">@color/colorGray</item>
