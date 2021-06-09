@@ -1,10 +1,16 @@
 package com.example.mobiledger.domain.usecases
 
+import com.example.mobiledger.common.utils.ErrorCodes
 import com.example.mobiledger.data.repository.TransactionRepository
+import com.example.mobiledger.domain.AppError
 import com.example.mobiledger.domain.AppResult
 import com.example.mobiledger.domain.entities.MonthlyTransactionSummaryEntity
 import com.example.mobiledger.domain.entities.TransactionEntity
+import com.example.mobiledger.domain.entities.isEmpty
+import com.example.mobiledger.domain.enums.TransactionType
 import com.example.mobiledger.presentation.budget.MonthlyCategorySummary
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 interface TransactionUseCase {
     suspend fun getMonthlySummaryEntity(monthYear: String): AppResult<MonthlyTransactionSummaryEntity>
@@ -13,13 +19,14 @@ interface TransactionUseCase {
     suspend fun addUserTransactionToFirebase(monthYear: String, transactionEntity: TransactionEntity): AppResult<Unit>
     suspend fun getTransactionListByMonth(monthYear: String): AppResult<List<TransactionEntity>>
     suspend fun deleteTransaction(transactionId: String, monthYear: String): AppResult<Unit>
-    suspend fun updateMonthlyCategorySummaryData(
-        monthYear: String,
-        category: String,
-        monthlyCategorySummary: MonthlyCategorySummary
+    suspend fun updateMonthlySummerData(
+        monthYear: String, transactionType: TransactionType, amountChanged: Long,
+        editCategoryTransactionType: EditCategoryTransactionType
     ): AppResult<Unit>
 
     suspend fun updateExpenseInBudget(monthYear: String, monthlyCategorySummary: MonthlyCategorySummary): AppResult<Unit>
+    suspend fun updateMonthlyTransaction(monthYear: String, transactionEntity: TransactionEntity): AppResult<Unit>
+    suspend fun updateOrAddTransactionSummary(monthYear: String, newTransactionEntity: TransactionEntity): AppResult<Unit>
 }
 
 class TransactionUseCaseImpl(private val transactionRepository: TransactionRepository) : TransactionUseCase {
@@ -49,16 +56,62 @@ class TransactionUseCaseImpl(private val transactionRepository: TransactionRepos
         return transactionRepository.deleteTransaction(transactionId, monthYear)
     }
 
-    override suspend fun updateMonthlyCategorySummaryData(
+    override suspend fun updateMonthlySummerData(
         monthYear: String,
-        category: String,
-        monthlyCategorySummary: MonthlyCategorySummary
+        transactionType: TransactionType,
+        amountChanged: Long,
+        editCategoryTransactionType: EditCategoryTransactionType
     ): AppResult<Unit> {
-        return transactionRepository.updateMonthlyCategorySummary(monthYear, category, monthlyCategorySummary)
+        return transactionRepository.updateMonthlySummerData(monthYear, transactionType, amountChanged, editCategoryTransactionType)
     }
 
     override suspend fun updateExpenseInBudget(
         monthYear: String,
         monthlyCategorySummary: MonthlyCategorySummary
     ): AppResult<Unit> = transactionRepository.updateExpenseInBudget(monthYear, monthlyCategorySummary)
+
+    override suspend fun updateMonthlyTransaction(monthYear: String, transactionEntity: TransactionEntity): AppResult<Unit> {
+        return transactionRepository.addUserTransactionToFirebase(monthYear, transactionEntity)
+    }
+
+    /**
+     * Responsibilities
+     * 1- If month is already present, It updates monthly summary data
+     * 2- If month is not present, It adds monthly category data
+     */
+    override suspend fun updateOrAddTransactionSummary(monthYear: String, newTransactionEntity: TransactionEntity): AppResult<Unit> {
+        return withContext(Dispatchers.IO) {
+            when (val result = getMonthlySummaryEntity(monthYear)) {
+                is AppResult.Success -> {
+                    val newAmount = newTransactionEntity.amount
+                    val category = newTransactionEntity.category
+                    if (result.data.isEmpty()) addMonthlySummaryToFirebase(monthYear, getUpdatedMonthlySummary(newTransactionEntity))
+                    else updateMonthlySummerData(monthYear, newTransactionEntity.transactionType, newTransactionEntity.amount, EditCategoryTransactionType.ADD)
+                }
+                is AppResult.Failure -> AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
+            }
+        }
+    }
 }
+
+    private suspend fun getUpdatedMonthlySummary(
+        transactionEntity: TransactionEntity
+    ): MonthlyTransactionSummaryEntity {
+        return withContext(Dispatchers.IO) {
+
+            val noOfTransaction = 1L
+            var noOfIncome = 0L
+            var noOfExpense = 0L
+            var totalIncome = 0L
+            var totalExpense = 0L
+            if (transactionEntity.transactionType == TransactionType.Income) {
+                noOfIncome += 1
+                totalIncome = transactionEntity.amount
+            } else if (transactionEntity.transactionType == TransactionType.Expense) {
+                noOfExpense = 1
+                totalExpense = transactionEntity.amount
+            }
+            val totalBalance = totalIncome - totalExpense
+            MonthlyTransactionSummaryEntity(noOfTransaction, noOfIncome, noOfExpense, totalBalance, totalIncome, totalExpense)
+        }
+    }

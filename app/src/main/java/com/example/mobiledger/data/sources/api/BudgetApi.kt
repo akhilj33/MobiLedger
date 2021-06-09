@@ -1,6 +1,8 @@
 package com.example.mobiledger.data.sources.api
 
 import com.example.mobiledger.common.utils.ConstantUtils
+import com.example.mobiledger.common.utils.ConstantUtils.CATEGORY_BUDGET
+import com.example.mobiledger.common.utils.ConstantUtils.CATEGORY_EXPENSE
 import com.example.mobiledger.common.utils.ErrorCodes
 import com.example.mobiledger.data.ErrorMapper
 import com.example.mobiledger.data.sources.auth.AuthSource
@@ -11,9 +13,7 @@ import com.example.mobiledger.presentation.budget.MonthlyBudgetData
 import com.example.mobiledger.presentation.budget.MonthlyCategoryBudget
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuthException
-import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.QuerySnapshot
+import com.google.firebase.firestore.*
 import kotlinx.coroutines.tasks.await
 
 interface BudgetApi {
@@ -23,6 +23,7 @@ interface BudgetApi {
     suspend fun addCategoryBudget(uid: String, monthYear: String, monthlyCategoryBudget: MonthlyCategoryBudget): AppResult<Unit>
     suspend fun updateBudgetTotal(uid: String, monthYear: String, totalBudgetData: Long): AppResult<Unit>
     suspend fun getMonthlyCategoryBudget(uid: String, monthYear: String, category: String): AppResult<MonthlyCategoryBudget>
+    suspend fun updateMonthlyCategoryBudgetAmounts(uid: String, monthYear: String, category: String, budgetChange: Long, expenseChange: Long): AppResult<Unit>
 }
 
 class BudgetApiImpl(private val firebaseDb: FirebaseFirestore, private val authSource: AuthSource) : BudgetApi {
@@ -236,6 +237,50 @@ class BudgetApiImpl(private val firebaseDb: FirebaseFirestore, private val authS
                     if (monthlyResult != null) AppResult.Success(monthlyResult)
                     else AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
                 }
+                else AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
+            }
+            is FireBaseResult.Failure -> {
+                AppResult.Failure(result.error)
+            }
+        }
+    }
+
+    override suspend fun updateMonthlyCategoryBudgetAmounts(
+        uid: String,
+        monthYear: String,
+        category: String,
+        budgetChange: Long,
+        expenseChange: Long
+    ): AppResult<Unit> {
+        var response: Task<Void>? = null
+        var exception: Exception? = null
+
+        try {
+            if (!authSource.isUserAuthorized()) throw FirebaseAuthException(
+                ErrorCodes.FIREBASE_UNAUTHORIZED,
+                ConstantUtils.UNAUTHORIZED_ERROR_MSG
+            )
+
+            response = firebaseDb.collection(ConstantUtils.USERS)
+                .document(uid)
+                .collection(ConstantUtils.MONTH)
+                .document(monthYear)
+                .collection(ConstantUtils.BUDGET)
+                .document(ConstantUtils.BUDGET_DETAILS)
+                .collection(ConstantUtils.CATEGORY_BUDGET)
+                .document(category)
+                .update(mapOf(CATEGORY_BUDGET to FieldValue.increment(budgetChange), CATEGORY_EXPENSE to FieldValue.increment(expenseChange)))
+
+            response.await()
+        } catch (e: Exception) {
+            exception = e
+            if((exception as FirebaseFirestoreException).code == FirebaseFirestoreException.Code.NOT_FOUND)
+                return AppResult.Success(Unit)
+        }
+
+        return when (val result = ErrorMapper.checkAndMapFirebaseApiError(response, exception)) {
+            is FireBaseResult.Success -> {
+                if (result.data != null) AppResult.Success(Unit)
                 else AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
             }
             is FireBaseResult.Failure -> {

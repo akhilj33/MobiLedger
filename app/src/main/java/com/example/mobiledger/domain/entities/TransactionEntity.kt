@@ -20,7 +20,7 @@ data class TransactionEntity(
         transactionTime = Timestamp.now()
     )
 
-    val id = Timestamp.now().seconds.toString()
+    var id = Timestamp.now().seconds.toString()
 }
 
 data class TransactionReference(

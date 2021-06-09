@@ -2,7 +2,7 @@ package com.example.mobiledger.common.di.providers
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.mobiledger.presentation.addtransaction.AddTransactionDialogFragmentViewModel
+import com.example.mobiledger.presentation.addtransaction.AddTransactionViewModel
 import com.example.mobiledger.presentation.auth.LoginViewModel
 import com.example.mobiledger.presentation.auth.SignUpViewModel
 import com.example.mobiledger.presentation.budget.AddBudgetDialogViewModel
@@ -70,10 +70,11 @@ class ViewModelFactoryProvider(private val useCaseProvider: UseCaseProvider) :
             modelClass.isAssignableFrom(EditProfileViewModel::class.java) -> {
                 EditProfileViewModel(useCaseProvider.provideProfileUseCase()) as T
             }
-            modelClass.isAssignableFrom(AddTransactionDialogFragmentViewModel::class.java) -> {
-                AddTransactionDialogFragmentViewModel(
+            modelClass.isAssignableFrom(AddTransactionViewModel::class.java) -> {
+                AddTransactionViewModel(
                     useCaseProvider.provideTransactionUseCase(),
                     useCaseProvider.provideCategoryUseCase(),
+                    useCaseProvider.provideBudgetUseCase(),
                     useCaseProvider.provideUserSettingsUseCase()
                 ) as T
             }
@@ -105,7 +106,8 @@ class ViewModelFactoryProvider(private val useCaseProvider: UseCaseProvider) :
                 StatsDetailViewModel(useCaseProvider.provideCategoryUseCase(), useCaseProvider.provideBudgetUseCase()) as T
             }
             modelClass.isAssignableFrom(TransactionDetailViewModel::class.java) -> {
-                TransactionDetailViewModel(useCaseProvider.provideCategoryUseCase()) as T
+                TransactionDetailViewModel(useCaseProvider.provideCategoryUseCase(), useCaseProvider.provideTransactionUseCase(),
+                useCaseProvider.provideBudgetUseCase()) as T
             }
             else -> throw IllegalArgumentException("Unknown ViewModel Class")
         }

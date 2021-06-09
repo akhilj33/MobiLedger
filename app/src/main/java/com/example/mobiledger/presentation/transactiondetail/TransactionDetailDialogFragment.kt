@@ -12,6 +12,7 @@ import com.example.mobiledger.common.base.BaseDialogFragment
 import com.example.mobiledger.common.base.BaseNavigator
 import com.example.mobiledger.common.extention.invisible
 import com.example.mobiledger.common.extention.visible
+import com.example.mobiledger.common.utils.DateUtils
 import com.example.mobiledger.common.utils.DateUtils.getDateInDDMMMMyyyyFormat
 import com.example.mobiledger.common.utils.JsonUtils.convertJsonStringToObject
 import com.example.mobiledger.common.utils.JsonUtils.convertToJsonString
@@ -24,6 +25,8 @@ import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.DateValidatorPointBackward
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.textfield.TextInputLayout
+import com.google.firebase.Timestamp
+import java.util.*
 
 class TransactionDetailDialogFragment :
     BaseDialogFragment<TransactionDetailFragmentBinding, BaseNavigator>(R.layout.transaction_detail_fragment) {
@@ -35,7 +38,7 @@ class TransactionDetailDialogFragment :
         super.onCreate(savedInstanceState)
         arguments?.apply {
             getString(TRANSACTION_ENTITY)?.let {
-                viewModel.transactionEntity = convertJsonStringToObject<TransactionEntity>(it)?: TransactionEntity()
+                viewModel.oldTransactionEntity = convertJsonStringToObject<TransactionEntity>(it) ?: TransactionEntity()
             }
         }
     }
@@ -50,25 +53,24 @@ class TransactionDetailDialogFragment :
 
     private fun initUI() {
         viewBinding.apply {
-            if (viewModel.transactionEntity.transactionType == TransactionType.Income) {
+            if (viewModel.oldTransactionEntity.transactionType == TransactionType.Income) {
                 toggleTransactionType.text = getString(R.string.income)
                 viewModel.getIncomeCategoryList()
             } else {
                 toggleTransactionType.text = getString(R.string.expense)
                 viewModel.getExpenseCategoryList()
             }
-            categorySpinnerTv.setText(viewModel.transactionEntity.category)
-            transactionNameTv.setText(viewModel.transactionEntity.name)
-            amountTv.setText(viewModel.transactionEntity.amount.toString())
-            amountTv.setText(viewModel.transactionEntity.amount.toString())
-            dateTv.setText(getDateInDDMMMMyyyyFormat(viewModel.transactionEntity.transactionTime))
-            descriptionTv.setText(viewModel.transactionEntity.description)
+            categorySpinnerTv.setText(viewModel.oldTransactionEntity.category)
+            transactionNameTv.setText(viewModel.oldTransactionEntity.name)
+            amountTv.setText(viewModel.oldTransactionEntity.amount.toString())
+            amountTv.setText(viewModel.oldTransactionEntity.amount.toString())
+            dateTv.setText(getDateInDDMMMMyyyyFormat(viewModel.oldTransactionEntity.transactionTime))
+            descriptionTv.setText(viewModel.oldTransactionEntity.description)
             viewBinding.btnUpdate.invisible()
         }
     }
 
     private fun setUpObserver() {
-
         viewModel.loadingState.observe(viewLifecycleOwner, Observer {
             if (it) {
                 viewBinding.transactionProgressBar.visibility = View.VISIBLE
@@ -77,21 +79,26 @@ class TransactionDetailDialogFragment :
             }
         })
 
-        viewModel.categoryListLiveData.observe(viewLifecycleOwner, OneTimeObserver { it ->
+        viewModel.categoryListLiveData.observe(viewLifecycleOwner, OneTimeObserver {
             spinnerAdapter.addItems(it)
         })
 
-//        viewModel.errorLiveData.observe(viewLifecycleOwner, OneTimeObserver {
-//            when (it.viewErrorType) {
-//                AddTransactionDialogFragmentViewModel.ViewErrorType.NON_BLOCKING -> {
-//                    showSnackBarErrorView(it.message ?: getString(it.resID), true)
-//                }
-//            }
-//        })
-//
-//        viewModel.categoryListLiveData.observe(viewLifecycleOwner, OneTimeObserver { it ->
-//            spinnerAdapter.addItems(it)
-//        })
+        viewModel.updateResultLiveData.observe(viewLifecycleOwner, OneTimeObserver{
+            activityViewModel.updateTransactionResult()
+            dismiss()
+        })
+
+        viewModel.errorLiveData.observe(viewLifecycleOwner, OneTimeObserver {
+            when (it.viewErrorType) {
+                TransactionDetailViewModel.ViewErrorType.NON_BLOCKING -> {
+                    showSnackBarErrorView(it.message ?: getString(it.resID), true)
+                }
+            }
+        })
+
+        viewModel.categoryListLiveData.observe(viewLifecycleOwner, OneTimeObserver { it ->
+            spinnerAdapter.addItems(it)
+        })
     }
 
     private fun setOnClickListeners() {
@@ -104,15 +111,27 @@ class TransactionDetailDialogFragment :
                 dismiss()
             }
 
-            btnUpdate.setOnClickListener {
-                if(checkAllFieldsSame()) dismiss()
-                else{
-                    if (doValidations()){
+            btnDelete.setOnClickListener {
+                viewModel.deleteTransaction()
+            }
 
+            btnUpdate.setOnClickListener {
+                if (checkAllFieldsSame()) dismiss()
+                else {
+                    if (doValidations()) {
+                        val timeStamp: Timestamp = if (viewModel.timeInMillis != null) {
+                            Timestamp(Date(viewModel.timeInMillis as Long))
+                        } else {
+                            viewModel.oldTransactionEntity.transactionTime
+                        }
+                        val newTransactionEntity = TransactionEntity(
+                            getName(), getAmount().toLong(), getCategory(), getDescription(),
+                            viewModel.oldTransactionEntity.transactionType, timeStamp
+                        ).apply { id = viewModel.oldTransactionEntity.id }
+                        handleFieldChanges(newTransactionEntity)
                     }
                 }
             }
-
         }
 
         datePicker.addOnPositiveButtonClickListener {
@@ -127,10 +146,29 @@ class TransactionDetailDialogFragment :
         viewBinding.descriptionTv.addTextChangedListener(descriptionTextWatcher)
     }
 
+    private fun handleFieldChanges(newTransactionEntity: TransactionEntity) {
+        val monthYear =
+            DateUtils.getDateInMMyyyyFormat(DateUtils.getCalendarFromMillis(newTransactionEntity.transactionTime.toDate().time))
+        when {
+            !isMonthYearSame(newTransactionEntity.transactionTime) -> {
+                viewModel.updateDatabaseOnMonthYearChanged(monthYear, newTransactionEntity)
+            }
+            !isCategorySame(newTransactionEntity.category) -> {
+                viewModel.updateDatabaseOnCategoryChanged(monthYear, newTransactionEntity)
+            }
+            !isAmountSame(newTransactionEntity.amount) -> {
+                viewModel.updateDatabaseOnAmountChanged(monthYear, newTransactionEntity)
+            }
+            else -> {
+                viewModel.updateDatabaseOnOtherFieldChanged(monthYear, newTransactionEntity)
+            }
+        }
+    }
+
     private fun checkAllFieldsSame(): Boolean {
-        viewModel.transactionEntity.apply {
+        viewModel.oldTransactionEntity.apply {
             return amount.toString() == getAmount() && category == getCategory() && name == getName() &&
-                    description==getDescription() && getDateInDDMMMMyyyyFormat(transactionTime)==getDate()
+                    description == getDescription() && getDateInDDMMMMyyyyFormat(transactionTime) == getDate()
         }
     }
 
@@ -149,10 +187,18 @@ class TransactionDetailDialogFragment :
     private fun getDescription(): String = viewBinding.descriptionTv.text.toString().trim()
 
     private fun isValidName(): Boolean = getName().isNotBlank()
-    private fun isValidAmount(): Boolean = getAmount().isNotBlank()
+    private fun isValidAmount(): Boolean = getAmount().isNotBlank() && getAmount().toLong() > 0L
     private fun isValidCategory(): Boolean = getCategory().isNotBlank()
     private fun isValidDate(): Boolean = getDate().isNotBlank()
-
+    
+    private fun isMonthYearSame(date: Timestamp): Boolean {
+        val oldMonthYear =
+            DateUtils.getDateInMMyyyyFormat(DateUtils.getCalendarFromMillis(viewModel.oldTransactionEntity.transactionTime.toDate().time))
+        val newMonthYear = DateUtils.getDateInMMyyyyFormat(DateUtils.getCalendarFromMillis(date.toDate().time))
+        return oldMonthYear==newMonthYear
+    }
+    private fun isCategorySame(category: String): Boolean = viewModel.oldTransactionEntity.category == category
+    private fun isAmountSame(amount: Long): Boolean = viewModel.oldTransactionEntity.amount == amount
 
     /*---------------------------------------Text Watchers-----------------------------------------*/
 

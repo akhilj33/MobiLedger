@@ -5,6 +5,7 @@ import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.annotation.ColorRes
 import androidx.annotation.RequiresApi
@@ -17,8 +18,8 @@ import com.example.mobiledger.common.utils.ConstantUtils
 import com.example.mobiledger.common.utils.ReminderWorker
 import com.example.mobiledger.databinding.ActivityMainBinding
 import com.example.mobiledger.presentation.NormalObserver
+import com.example.mobiledger.presentation.OneTimeObserver
 import com.example.mobiledger.presentation.main.MainActivityViewModel.*
-import com.example.mobiledger.presentation.main.MainActivityViewModel.NavTab.*
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
@@ -30,7 +31,7 @@ class MainActivity :
 
     private val viewModel: MainActivityViewModel by viewModels { viewModelFactory }
     private var mainActivityNavigator: MainActivityNavigator? = null
-    private var currentSelectedTab: NavTab = HOME
+    private var currentSelectedTab: NavTab = NavTab.HOME
     private var notificationManager: NotificationManager? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -71,14 +72,14 @@ class MainActivity :
             highlightTab(NavTab.HOME)
         }
         viewBinding.includeNav.budgetView.setOnClickListener {
-            highlightTab(BUDGET())
+            highlightTab(NavTab.BUDGET())
         }
         viewBinding.includeNav.statsView.setOnClickListener {
-            highlightTab(STATS())
+            highlightTab(NavTab.STATS())
         }
         viewBinding.includeNav.accountView.setOnClickListener {
             highlightTab(
-                SPLIT()
+                NavTab.SPLIT()
             )
         }
     }
@@ -188,6 +189,11 @@ class MainActivity :
 
     private fun setupObservers() {
 
+        viewModel.nativeToast.observe(this, OneTimeObserver{
+           val msg = it.msg ?: if(it.msgRes!=null) getString(it.msgRes) else null
+            if (msg!=null) Toast.makeText(this, msg, Toast.LENGTH_LONG).show()
+        })
+
         viewModel.bottomNavVisibilityLiveData.observe(this@MainActivity, { isVisible ->
             viewBinding.includeNav.navBar.visibility = if (isVisible) View.VISIBLE else View.GONE
         })
@@ -196,11 +202,11 @@ class MainActivity :
         viewModel.currentTab.observe(this@MainActivity, NormalObserver { tab ->
             resetTab()
             when (tab) {
-                is HOME -> ColorNav().colorHome(R.color.colorPrimary)
-                is BUDGET -> ColorNav().colorBudget(R.color.colorPrimary)
-                is STATS -> ColorNav().colorInsight(R.color.colorPrimary)
-                is SPLIT -> ColorNav().colorSplit(R.color.colorPrimary)
-                is DeselectAll -> {
+                is NavTab.HOME -> ColorNav().colorHome(R.color.colorPrimary)
+                is NavTab.BUDGET -> ColorNav().colorBudget(R.color.colorPrimary)
+                is NavTab.STATS -> ColorNav().colorInsight(R.color.colorPrimary)
+                is NavTab.SPLIT -> ColorNav().colorSplit(R.color.colorPrimary)
+                is NavTab.DeselectAll -> {
                 }
             }
         })

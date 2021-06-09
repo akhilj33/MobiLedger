@@ -8,6 +8,8 @@ import com.example.mobiledger.domain.AppError
 import com.example.mobiledger.domain.AppResult
 import com.example.mobiledger.domain.entities.MonthlyTransactionSummaryEntity
 import com.example.mobiledger.domain.entities.TransactionEntity
+import com.example.mobiledger.domain.enums.TransactionType
+import com.example.mobiledger.domain.usecases.EditCategoryTransactionType
 import com.example.mobiledger.presentation.budget.MonthlyCategorySummary
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -20,10 +22,11 @@ interface TransactionRepository {
     suspend fun getTransactionListByMonth(monthYear: String): AppResult<List<TransactionEntity>>
     suspend fun addUserTransactionToFirebase(monthYear: String, transactionEntity: TransactionEntity): AppResult<Unit>
     suspend fun deleteTransaction(transactionId: String, monthYear: String): AppResult<Unit>
-    suspend fun updateMonthlyCategorySummary(
+    suspend fun updateMonthlySummerData(
         monthYear: String,
-        category: String,
-        monthlyCategorySummary: MonthlyCategorySummary
+        transactionType: TransactionType,
+        amountChanged: Long,
+        editCategoryTransactionType: EditCategoryTransactionType
     ): AppResult<Unit>
 
     suspend fun updateExpenseInBudget(monthYear: String, monthlyCategorySummary: MonthlyCategorySummary): AppResult<Unit>
@@ -38,18 +41,19 @@ class TransactionRepositoryImpl(
         return withContext(dispatcher) {
             val uId = cacheSource.getUID()
             if (uId != null) {
-                val monthlySummaryExists = transactionDb.hasMonthlySummary(monthYear)
-                if (!monthlySummaryExists) {
-                    when (val firebaseResult = transactionApi.getMonthlySummaryEntity(uId, monthYear)) {
-                        is AppResult.Success -> {
-                            transactionDb.saveMonthlySummary(monthYear, firebaseResult.data)
-                        }
-                        is AppResult.Failure -> {
-                            return@withContext AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
-                        }
-                    }
-                }
-                transactionDb.fetchMonthlySummary(monthYear)
+//                val monthlySummaryExists = transactionDb.hasMonthlySummary(monthYear)
+//                if (!monthlySummaryExists) {
+//                    when (val firebaseResult = transactionApi.getMonthlySummaryEntity(uId, monthYear)) {
+//                        is AppResult.Success -> {
+//                            transactionDb.saveMonthlySummary(monthYear, firebaseResult.data)
+//                        }
+//                        is AppResult.Failure -> {
+//                            return@withContext AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
+//                        }
+//                    }
+//                }
+//                transactionDb.fetchMonthlySummary(monthYear)
+                transactionApi.getMonthlySummaryEntity(uId, monthYear)
             } else AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
         }
     }
@@ -60,9 +64,9 @@ class TransactionRepositoryImpl(
     ): AppResult<Unit> {
         return withContext(dispatcher) {
             val uId = cacheSource.getUID()
-            if (uId != null) transactionApi.addMonthlySummaryToFirebase(uId, monthYear, monthlySummaryEntity).also {
+            if (uId != null) transactionApi.addMonthlySummaryToFirebase(uId, monthYear, monthlySummaryEntity)/*.also {
                 if (it is AppResult.Success) transactionDb.saveMonthlySummary(monthYear, monthlySummaryEntity)
-            }
+            }*/
             else AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
         }
     }
@@ -70,9 +74,9 @@ class TransactionRepositoryImpl(
     override suspend fun updateMonthlySummary(monthYear: String, monthlySummaryEntity: MonthlyTransactionSummaryEntity): AppResult<Unit> {
         return withContext(dispatcher) {
             val uId = cacheSource.getUID()
-            if (uId != null) transactionApi.updateMonthlySummary(uId, monthYear, monthlySummaryEntity).also {
+            if (uId != null) transactionApi.updateMonthlySummary(uId, monthYear, monthlySummaryEntity)/*.also {
                 if (it is AppResult.Success) transactionDb.saveMonthlySummary(monthYear, monthlySummaryEntity)
-            }
+            }*/
             else AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
         }
     }
@@ -81,18 +85,19 @@ class TransactionRepositoryImpl(
         return withContext(dispatcher) {
             val uId = cacheSource.getUID()
             if (uId != null) {
-                val transactionsExists = transactionDb.hasTransactions()
-                if (!transactionsExists) {
-                    when (val firebaseResult = transactionApi.getTransactionListByMonth(uId, monthYear)) {
-                        is AppResult.Success -> {
-                            transactionDb.saveTransactionList(monthYear, firebaseResult.data)
-                        }
-                        is AppResult.Failure -> {
-                            return@withContext AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
-                        }
-                    }
-                }
-                transactionDb.fetchTransactions(monthYear)
+//                val transactionsExists = transactionDb.hasTransactions()
+//                if (!transactionsExists) {
+//                    when (val firebaseResult = transactionApi.getTransactionListByMonth(uId, monthYear)) {
+//                        is AppResult.Success -> {
+//                            transactionDb.saveTransactionList(monthYear, firebaseResult.data)
+//                        }
+//                        is AppResult.Failure -> {
+//                            return@withContext AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
+//                        }
+//                    }
+//                }
+//                transactionDb.fetchTransactions(monthYear)
+                transactionApi.getTransactionListByMonth(uId, monthYear)
             } else AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
         }
     }
@@ -101,11 +106,11 @@ class TransactionRepositoryImpl(
         return withContext(dispatcher) {
             val uId = cacheSource.getUID()
             if (uId != null)
-                transactionApi.addUserTransactionToFirebase(uId, monthYear, transactionEntity).also {
+                transactionApi.addUserTransactionToFirebase(uId, monthYear, transactionEntity)/*.also {
                     if (it is AppResult.Success) {
                         transactionDb.saveTransaction(monthYear, transactionEntity)
                     }
-                }
+                }*/
             else AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
         }
     }
@@ -114,24 +119,23 @@ class TransactionRepositoryImpl(
         return withContext(dispatcher) {
             val uId = cacheSource.getUID()
             if (uId != null)
-                transactionApi.deleteTransaction(uId, transactionId, monthYear).also {
+                transactionApi.deleteTransaction(uId, transactionId, monthYear)/*.also {
                     if (it is AppResult.Success) transactionDb.deleteTransaction(transactionId)
-                }
+                }*/
             else AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
         }
     }
 
-    override suspend fun updateMonthlyCategorySummary(
+    override suspend fun updateMonthlySummerData(
         monthYear: String,
-        category: String,
-        monthlyCategorySummary: MonthlyCategorySummary,
+        transactionType: TransactionType,
+        amountChanged: Long, editCategoryTransactionType: EditCategoryTransactionType
     ): AppResult<Unit> {
         return withContext(dispatcher) {
             val uId = cacheSource.getUID()
-            if (uId != null) {
-                transactionApi.updateMonthlyCategorySummary(uId, monthYear, category, monthlyCategorySummary)
-            } else
-                AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
+            if (uId != null)
+                transactionApi.updateMonthlySummerData(uId, monthYear, transactionType, amountChanged, editCategoryTransactionType)
+            else AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
         }
     }
 

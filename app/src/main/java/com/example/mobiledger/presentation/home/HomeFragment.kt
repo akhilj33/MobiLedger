@@ -44,6 +44,10 @@ class HomeFragment :
     }
 
     private fun setUpObservers() {
+        activityViewModel.updateTransactionResultLiveData.observe(viewLifecycleOwner, OneTimeObserver {
+            refreshView()
+        })
+
         viewModel.homeViewItemListLiveData.observe(viewLifecycleOwner, OneTimeObserver {
             homeAdapter.addItemList(it)
         })

@@ -11,6 +11,7 @@ import com.example.mobiledger.presentation.budget.BudgetFragment
 import com.example.mobiledger.presentation.home.HomeFragment
 import com.example.mobiledger.presentation.stats.StatsFragment
 import com.example.mobiledger.presentation.main.MainActivityViewModel.*
+import com.example.mobiledger.presentation.main.NavTab
 
 class DashboardFragment :
     BaseFragment<FragmentDashboardBinding, DashboardNavigator>(R.layout.fragment_dashboard) {

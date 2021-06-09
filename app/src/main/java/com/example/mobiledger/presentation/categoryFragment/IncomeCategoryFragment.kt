@@ -15,7 +15,7 @@ import com.example.mobiledger.domain.entities.IncomeCategoryListEntity
 import com.example.mobiledger.domain.enums.TransactionType
 import com.example.mobiledger.presentation.OneTimeObserver
 import com.example.mobiledger.presentation.categoryFragment.adapter.CategoryAdapter
-import com.example.mobiledger.presentation.addtransaction.AddTransactionDialogFragmentViewModel
+import com.example.mobiledger.presentation.addtransaction.AddTransactionViewModel
 
 class IncomeCategoryFragment : BaseFragment<FragmentIncomeCategoryBinding, BaseNavigator>(R.layout.fragment_income_category) {
 
@@ -55,7 +55,7 @@ class IncomeCategoryFragment : BaseFragment<FragmentIncomeCategoryBinding, BaseN
 
         viewModel.errorLiveData.observe(viewLifecycleOwner, OneTimeObserver {
             when (it.viewErrorType) {
-                AddTransactionDialogFragmentViewModel.ViewErrorType.NON_BLOCKING -> {
+                IncomeCategoryViewModel.ViewErrorType.NON_BLOCKING -> {
                     showSnackBarErrorView(it.message ?: getString(it.resID), true)
                 }
             }
