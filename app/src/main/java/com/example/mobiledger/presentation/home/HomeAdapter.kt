@@ -7,8 +7,9 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.chauthai.swipereveallayout.ViewBinderHelper
 import com.example.mobiledger.R
+import com.example.mobiledger.common.extention.gone
 import com.example.mobiledger.common.extention.toAmount
-import com.example.mobiledger.common.extention.totalTransactionTextBuilder
+import com.example.mobiledger.common.extention.visible
 import com.example.mobiledger.common.utils.DateUtils
 import com.example.mobiledger.common.utils.GraphUtils
 import com.example.mobiledger.databinding.*
@@ -58,7 +59,7 @@ class HomeAdapter(
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (val item = items[position]) {
-            is HomeViewItem.HeaderDataRow -> (holder as HeaderViewHolder).bind(item.data)
+            is HomeViewItem.HeaderDataRow -> (holder as HeaderViewHolder).bind(item.headerData)
             is HomeViewItem.MonthlyDataRow -> (holder as MonthlyDataViewHolder).bind(item.data)
             is HomeViewItem.MonthlyTotalPie -> (holder as MonthlyPieViewHolder).bind(item.pieEntryList)
             is HomeViewItem.TransactionListButton -> (holder as TransactionListButtonViewHolder).bind(item.numOfTransactions)
@@ -70,16 +71,23 @@ class HomeAdapter(
     /*---------------------------------View Holders---------------------------- */
 
     inner class HeaderViewHolder(private val viewBinding: HomeHeaderItemBinding) : RecyclerView.ViewHolder(viewBinding.root) {
-        fun bind(headerString: Int) {
-            viewBinding.tvHeader.text = context.resources.getString(headerString)
+        fun bind(headerData: HeaderData) {
+            viewBinding.apply {
+                tvHeader.text = context.resources.getString(headerData.headerString)
+                if (headerData.isSecondaryHeaderVisible) tvViewAll.visible()
+                else tvViewAll.gone()
+
+            }
+
         }
     }
 
     inner class MonthlyDataViewHolder(private val viewBinding: HomeMonthlyDataItemBinding) : RecyclerView.ViewHolder(viewBinding.root) {
         fun bind(item: MonthlyData) {
             viewBinding.apply {
-                tvIncomeAmount.text = item.incomeAmount
-                tvExpenseAmount.text = item.expenseAmount
+                tvIncomeAmount.text = item.incomeAmount.toAmount()
+                tvExpenseAmount.text = item.expenseAmount.toAmount()
+                tvSavingAmount.text = (item.incomeAmount-item.expenseAmount).toAmount()
             }
         }
     }
@@ -96,7 +104,7 @@ class HomeAdapter(
         RecyclerView.ViewHolder(viewBinding.root) {
         fun bind(item: String) {
             viewBinding.apply {
-                tvTransactionTitle.text = item.totalTransactionTextBuilder(context)
+                seeAllText.text = context.getString(R.string.see_all_transactions, item)
                 root.setOnClickListener {
                     onAllTransactionClicked()
                 }
@@ -122,7 +130,7 @@ class HomeAdapter(
                 viewBinderHelper.bind(swipelayout, item.id)
                 viewBinderHelper.closeLayout(item.id)
                 tvTransactionName.text = item.name
-                tvAmount.text = item.amount.toString().toAmount()
+                tvAmount.text = item.amount.toAmount()
                 tvCategory.text = item.category
                 ivCategoryIcon.background = ContextCompat.getDrawable(context, data.categoryIcon)
                 tvTime.text = DateUtils.getDateInDDMMMMyyyyFormat(item.transactionTime)

@@ -108,8 +108,9 @@
 
     <!-- Budget Fragment -->
     <string name="make_budget">Make Budget</string>
-    <string name="see_all">See all</string>
+    <string name="see_all_transactions">See all %1$s transactions</string>
     <string name="transactions">transactions</string>
+    <string name="update_budget_heading">Update %1$s Budget</string>
 
     <!-- NOTIFICATION -->
     <string name="channel_transaction">Transaction channel</string>

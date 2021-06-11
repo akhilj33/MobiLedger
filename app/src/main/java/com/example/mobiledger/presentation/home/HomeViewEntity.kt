@@ -7,7 +7,7 @@ import com.example.mobiledger.domain.enums.TransactionType
 import com.github.mikephil.charting.data.PieEntry
 
 sealed class HomeViewItem(val viewType: HomeViewType) {
-    data class HeaderDataRow(@StringRes val data: Int, val type: HomeViewType = HomeViewType.Header) : HomeViewItem(type)
+    data class HeaderDataRow(val headerData: HeaderData, val type: HomeViewType = HomeViewType.Header) : HomeViewItem(type)
     data class MonthlyDataRow(val data: MonthlyData, val type: HomeViewType = HomeViewType.MonthlyData) : HomeViewItem(type)
     data class MonthlyTotalPie(val pieEntryList: ArrayList<PieEntry>, val type: HomeViewType = HomeViewType.MonthlyTotalPieChart) :
         HomeViewItem(type)
@@ -19,7 +19,9 @@ sealed class HomeViewItem(val viewType: HomeViewType) {
     object EmptyDataRow : HomeViewItem(HomeViewType.EmptyData)
 }
 
-data class MonthlyData(val incomeAmount: String, val expenseAmount: String)
+data class HeaderData(@StringRes val headerString: Int, val isSecondaryHeaderVisible: Boolean = false)
+
+data class MonthlyData(val incomeAmount: Long, val expenseAmount: Long)
 
 data class TransactionData(
     val id: String,

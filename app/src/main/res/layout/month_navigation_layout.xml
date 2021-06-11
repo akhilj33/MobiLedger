@@ -25,8 +25,8 @@
             android:id="@+id/leftArrow"
             android:layout_width="@dimen/cdp_32"
             android:layout_height="@dimen/cdp_32"
+            android:layout_marginStart="@dimen/cdp_64"
             app:layout_constraintBottom_toBottomOf="@id/tvMonth"
-            app:layout_constraintEnd_toStartOf="@id/tvMonth"
             app:layout_constraintStart_toStartOf="@id/verticalStartGuideline"
             app:layout_constraintTop_toTopOf="@id/tvMonth"
             app:srcCompat="@drawable/arrow_left" />
@@ -47,9 +47,9 @@
             android:layout_width="@dimen/cdp_32"
             android:layout_height="@dimen/cdp_32"
             android:tint="@color/colorGrey"
+            android:layout_marginEnd="@dimen/cdp_64"
             app:layout_constraintBottom_toBottomOf="@id/tvMonth"
             app:layout_constraintEnd_toStartOf="@id/verticalEndGuideline"
-            app:layout_constraintStart_toEndOf="@id/tvMonth"
             app:layout_constraintTop_toTopOf="@id/tvMonth"
             app:srcCompat="@drawable/arrow_right" />
 

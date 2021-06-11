@@ -139,12 +139,12 @@ class HomeViewModel(
     ): MutableList<HomeViewItem> {
         return withContext(Dispatchers.IO) {
             val homeViewItemList = mutableListOf<HomeViewItem>()
-            homeViewItemList.add(HomeViewItem.HeaderDataRow(R.string.overview_report))
+            homeViewItemList.add(HomeViewItem.HeaderDataRow(HeaderData(R.string.overview_report)))
             homeViewItemList.add(
                 HomeViewItem.MonthlyDataRow(
                     MonthlyData(
-                        monthlyResult.totalIncome.toString().toAmount(),
-                        monthlyResult.totalExpense.toString().toAmount()
+                        monthlyResult.totalIncome,
+                        monthlyResult.totalExpense
                     )
                 )
             )
@@ -155,15 +155,15 @@ class HomeViewModel(
                 homeViewItemList.add(HomeViewItem.MonthlyTotalPie(pieEntryList))
 
             if (transactionList.isNotEmpty()) {
-                homeViewItemList.add(HomeViewItem.TransactionListButton(transactionList.size.toString()))
-                homeViewItemList.add(HomeViewItem.HeaderDataRow(R.string.latest_transaction))
+                homeViewItemList.add(HomeViewItem.HeaderDataRow(HeaderData(R.string.latest_transaction, true)))
                 var newList = transactionList
                 val tempList = newList
                 if (transactionList.size > 10)
-                    newList = transactionList.subList(0, 11)
+                    newList = transactionList.subList(0, 10)
                 newList.forEach {
                     homeViewItemList.add(HomeViewItem.TransactionDataRow(mapToTransactionData(it)))
                 }
+                homeViewItemList.add(HomeViewItem.TransactionListButton(transactionList.size.toString()))
                 transList.clear()
                 tempList.forEach {
                     transList.add(mapToTransactionData(it))
@@ -183,7 +183,7 @@ class HomeViewModel(
                 transactionEntity = this,
                 id = id,
                 name = name,
-                amount = amount.toString().toAmount(),
+                amount = amount.toAmount(),
                 transactionType = transactionType,
                 category = category,
                 categoryIcon = getCategoryIcon(category, transactionType)

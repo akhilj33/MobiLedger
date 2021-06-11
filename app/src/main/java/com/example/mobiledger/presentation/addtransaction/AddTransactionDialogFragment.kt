@@ -98,12 +98,10 @@ class AddTransactionDialogFragment :
     private fun setOnClickListeners() {
         viewBinding.apply {
             toggleIncome.setOnClickListener {
-                clearAllFields()
                 viewModel.transactionType = TransactionType.Income
                 handleIncomeClick()
             }
             toggleExpense.setOnClickListener {
-                clearAllFields()
                 viewModel.transactionType = TransactionType.Expense
                 handleExpenseClick()
             }
@@ -154,11 +152,13 @@ class AddTransactionDialogFragment :
     }
 
     private fun handleExpenseClick() {
+        clearAllFields()
         updateToggleButton()
         viewModel.getExpenseCategoryList()
     }
 
     private fun handleIncomeClick() {
+        clearAllFields()
         updateToggleButton()
         viewModel.getIncomeCategoryList()
     }

@@ -1,4 +1,4 @@
-package com.example.mobiledger.presentation.budget
+package com.example.mobiledger.presentation.budget.budgetscreen
 
 import android.content.res.ColorStateList
 import android.os.Bundle
@@ -12,15 +12,15 @@ import com.example.mobiledger.R
 import com.example.mobiledger.common.base.BaseFragment
 import com.example.mobiledger.common.utils.DateUtils
 import com.example.mobiledger.common.utils.showAddBudgetDialogFragment
+import com.example.mobiledger.common.utils.showUpdateBudgetDialogFragment
 import com.example.mobiledger.databinding.FragmentBudgetBinding
 import com.example.mobiledger.presentation.OneTimeObserver
-
 
 class BudgetFragment : BaseFragment<FragmentBudgetBinding, BudgetNavigator>(R.layout.fragment_budget) {
 
     private val viewModel: BudgetViewModel by viewModels { viewModelFactory }
 
-    private val budgetAdapter: BudgetAdapter by lazy { BudgetAdapter(onMakeBudgetClick, onBudgetOverviewClick, onAddBudgetCategoryClick) }
+    private val budgetAdapter: BudgetAdapter by lazy { BudgetAdapter(onMakeBudgetClick, onBudgetOverviewClick, onAddBudgetCategoryClick, onBudgetCategoryClick) }
 
 //    override fun getSnackBarErrorView(): SnackViewErrorBinding = viewBinding.includeErrorView
 
@@ -54,6 +54,10 @@ class BudgetFragment : BaseFragment<FragmentBudgetBinding, BudgetNavigator>(R.la
     }
 
     private fun setUpObserver() {
+
+        activityViewModel.updateBudgetResultLiveData.observe(viewLifecycleOwner, OneTimeObserver {
+            refreshView()
+        })
 
         activityViewModel.addBudgetResultLiveData.observe(viewLifecycleOwner, OneTimeObserver {
             refreshView()
@@ -112,6 +116,12 @@ class BudgetFragment : BaseFragment<FragmentBudgetBinding, BudgetNavigator>(R.la
             viewModel.giveFinalExpenseList(),
             DateUtils.getDateInMMyyyyFormat(viewModel.getCurrentMonth()),
             viewModel.budgetTotal
+        )
+    }
+
+    private val onBudgetCategoryClick = fun(category: String, categoryBudget: Long){
+        showUpdateBudgetDialogFragment(
+            requireActivity().supportFragmentManager, viewModel.getCurrentMonth(), category, categoryBudget
         )
     }
 

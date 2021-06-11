@@ -18,9 +18,10 @@ interface BudgetRepository {
     suspend fun getCategoryBudgetListByMonth(monthYear: String): AppResult<List<MonthlyCategoryBudget>>
     suspend fun setMonthlyBudget(monthYear: String, monthlyBudgetData: MonthlyBudgetData): AppResult<Unit>
     suspend fun addCategoryBudget(monthYear: String, monthlyCategoryBudget: MonthlyCategoryBudget): AppResult<Unit>
-    suspend fun updateBudgetTotal(monthYear: String, totalBudgetData: Long): AppResult<Unit>
+    suspend fun updateMonthlyBudgetData(monthYear: String, monthlyLimitChange: Long, totalBudgetChange:Long): AppResult<Unit>
     suspend fun getMonthlyCategoryBudget(monthYear: String, category: String): AppResult<MonthlyCategoryBudget>
     suspend fun updateMonthlyCategoryBudgetAmounts(monthYear: String, category: String, budgetChange: Long, expenseChange: Long): AppResult<Unit>
+    suspend fun deleteBudgetCategory(monthYear: String, category: String): AppResult<Unit>
 
 }
 
@@ -71,11 +72,11 @@ class BudgetRepositoryImpl(
         }
     }
 
-    override suspend fun updateBudgetTotal(monthYear: String, totalBudgetData: Long): AppResult<Unit> {
+    override suspend fun updateMonthlyBudgetData(monthYear: String, monthlyLimitChange: Long, totalBudgetChange:Long): AppResult<Unit> {
         return withContext(dispatcher) {
             val uId = cacheSource.getUID()
             if (uId != null) {
-                budgetApi.updateBudgetTotal(uId, monthYear, totalBudgetData)
+                budgetApi.updateMonthlyBudgetData(uId, monthYear, monthlyLimitChange, totalBudgetChange)
             } else
                 AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
         }
@@ -101,6 +102,16 @@ class BudgetRepositoryImpl(
             val uId = cacheSource.getUID()
             if (uId != null) {
                 budgetApi.updateMonthlyCategoryBudgetAmounts(uId, monthYear, category, budgetChange, expenseChange)
+            } else
+                AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
+        }
+    }
+
+    override suspend fun deleteBudgetCategory(monthYear: String, category: String): AppResult<Unit> {
+        return withContext(dispatcher) {
+            val uId = cacheSource.getUID()
+            if (uId != null) {
+                budgetApi.deleteBudgetCategory(uId, monthYear, category)
             } else
                 AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
         }

@@ -1,8 +1,14 @@
 package com.example.mobiledger.data.sources.api
 
-import com.example.mobiledger.common.utils.ConstantUtils
+import com.example.mobiledger.common.utils.ConstantUtils.BUDGET
+import com.example.mobiledger.common.utils.ConstantUtils.BUDGET_DETAILS
 import com.example.mobiledger.common.utils.ConstantUtils.CATEGORY_BUDGET
 import com.example.mobiledger.common.utils.ConstantUtils.CATEGORY_EXPENSE
+import com.example.mobiledger.common.utils.ConstantUtils.MAX_BUDGET
+import com.example.mobiledger.common.utils.ConstantUtils.MONTH
+import com.example.mobiledger.common.utils.ConstantUtils.TOTAL_BUDGET
+import com.example.mobiledger.common.utils.ConstantUtils.UNAUTHORIZED_ERROR_MSG
+import com.example.mobiledger.common.utils.ConstantUtils.USERS
 import com.example.mobiledger.common.utils.ErrorCodes
 import com.example.mobiledger.data.ErrorMapper
 import com.example.mobiledger.data.sources.auth.AuthSource
@@ -21,9 +27,17 @@ interface BudgetApi {
     suspend fun getMonthlyBudgetOverView(uid: String, monthYear: String): AppResult<MonthlyBudgetData?>
     suspend fun setMonthlyBudget(uid: String, monthYear: String, monthlyBudgetData: MonthlyBudgetData): AppResult<Unit>
     suspend fun addCategoryBudget(uid: String, monthYear: String, monthlyCategoryBudget: MonthlyCategoryBudget): AppResult<Unit>
-    suspend fun updateBudgetTotal(uid: String, monthYear: String, totalBudgetData: Long): AppResult<Unit>
+    suspend fun updateMonthlyBudgetData(uid: String, monthYear: String, monthlyLimitChange: Long, totalBudgetChange:Long): AppResult<Unit>
     suspend fun getMonthlyCategoryBudget(uid: String, monthYear: String, category: String): AppResult<MonthlyCategoryBudget>
-    suspend fun updateMonthlyCategoryBudgetAmounts(uid: String, monthYear: String, category: String, budgetChange: Long, expenseChange: Long): AppResult<Unit>
+    suspend fun updateMonthlyCategoryBudgetAmounts(
+        uid: String,
+        monthYear: String,
+        category: String,
+        budgetChange: Long,
+        expenseChange: Long
+    ): AppResult<Unit>
+
+    suspend fun deleteBudgetCategory(uid: String, monthYear: String, category: String): AppResult<Unit>
 }
 
 class BudgetApiImpl(private val firebaseDb: FirebaseFirestore, private val authSource: AuthSource) : BudgetApi {
@@ -35,15 +49,15 @@ class BudgetApiImpl(private val firebaseDb: FirebaseFirestore, private val authS
         try {
             if (!authSource.isUserAuthorized()) throw FirebaseAuthException(
                 ErrorCodes.FIREBASE_UNAUTHORIZED,
-                ConstantUtils.UNAUTHORIZED_ERROR_MSG
+                UNAUTHORIZED_ERROR_MSG
             )
-            response = firebaseDb.collection(ConstantUtils.USERS)
+            response = firebaseDb.collection(USERS)
                 .document(uid)
-                .collection(ConstantUtils.MONTH)
+                .collection(MONTH)
                 .document(monthYear)
-                .collection(ConstantUtils.BUDGET)
-                .document(ConstantUtils.BUDGET_DETAILS)
-                .collection(ConstantUtils.CATEGORY_BUDGET)
+                .collection(BUDGET)
+                .document(BUDGET_DETAILS)
+                .collection(CATEGORY_BUDGET)
                 .get()
 
             response.await()
@@ -74,14 +88,14 @@ class BudgetApiImpl(private val firebaseDb: FirebaseFirestore, private val authS
         try {
             if (!authSource.isUserAuthorized()) throw FirebaseAuthException(
                 ErrorCodes.FIREBASE_UNAUTHORIZED,
-                ConstantUtils.UNAUTHORIZED_ERROR_MSG
+                UNAUTHORIZED_ERROR_MSG
             )
-            response = firebaseDb.collection(ConstantUtils.USERS)
+            response = firebaseDb.collection(USERS)
                 .document(uid)
-                .collection(ConstantUtils.MONTH)
+                .collection(MONTH)
                 .document(monthYear)
-                .collection(ConstantUtils.BUDGET)
-                .document(ConstantUtils.BUDGET_DETAILS)
+                .collection(BUDGET)
+                .document(BUDGET_DETAILS)
                 .get()
 
             response.await()
@@ -110,15 +124,15 @@ class BudgetApiImpl(private val firebaseDb: FirebaseFirestore, private val authS
         try {
             if (!authSource.isUserAuthorized()) throw FirebaseAuthException(
                 ErrorCodes.FIREBASE_UNAUTHORIZED,
-                ConstantUtils.UNAUTHORIZED_ERROR_MSG
+                UNAUTHORIZED_ERROR_MSG
             )
 
-            response = firebaseDb.collection(ConstantUtils.USERS)
+            response = firebaseDb.collection(USERS)
                 .document(uid)
-                .collection(ConstantUtils.MONTH)
+                .collection(MONTH)
                 .document(monthYear)
-                .collection(ConstantUtils.BUDGET)
-                .document(ConstantUtils.BUDGET_DETAILS)
+                .collection(BUDGET)
+                .document(BUDGET_DETAILS)
                 .set(monthlyBudgetData)
 
             response.await()
@@ -143,16 +157,16 @@ class BudgetApiImpl(private val firebaseDb: FirebaseFirestore, private val authS
         try {
             if (!authSource.isUserAuthorized()) throw FirebaseAuthException(
                 ErrorCodes.FIREBASE_UNAUTHORIZED,
-                ConstantUtils.UNAUTHORIZED_ERROR_MSG
+                UNAUTHORIZED_ERROR_MSG
             )
 
-            response = firebaseDb.collection(ConstantUtils.USERS)
+            response = firebaseDb.collection(USERS)
                 .document(uid)
-                .collection(ConstantUtils.MONTH)
+                .collection(MONTH)
                 .document(monthYear)
-                .collection(ConstantUtils.BUDGET)
-                .document(ConstantUtils.BUDGET_DETAILS)
-                .collection(ConstantUtils.CATEGORY_BUDGET)
+                .collection(BUDGET)
+                .document(BUDGET_DETAILS)
+                .collection(CATEGORY_BUDGET)
                 .document(monthlyCategoryBudget.categoryName)
                 .set(monthlyCategoryBudget)
 
@@ -171,24 +185,28 @@ class BudgetApiImpl(private val firebaseDb: FirebaseFirestore, private val authS
         }
     }
 
-    override suspend fun updateBudgetTotal(uid: String, monthYear: String, totalBudgetData: Long): AppResult<Unit> {
+    override suspend fun updateMonthlyBudgetData(uid: String, monthYear: String, monthlyLimitChange: Long, totalBudgetChange:Long): AppResult<Unit> {
         var response: Task<Void>? = null
         var exception: Exception? = null
 
-        val totalBudgetMap: Map<String, Long> = mutableMapOf(Pair("totalBudget", totalBudgetData))
         try {
             if (!authSource.isUserAuthorized()) throw FirebaseAuthException(
                 ErrorCodes.FIREBASE_UNAUTHORIZED,
-                ConstantUtils.UNAUTHORIZED_ERROR_MSG
+                UNAUTHORIZED_ERROR_MSG
             )
 
-            response = firebaseDb.collection(ConstantUtils.USERS)
+            response = firebaseDb.collection(USERS)
                 .document(uid)
-                .collection(ConstantUtils.MONTH)
+                .collection(MONTH)
                 .document(monthYear)
-                .collection(ConstantUtils.BUDGET)
-                .document(ConstantUtils.BUDGET_DETAILS)
-                .update(totalBudgetMap)
+                .collection(BUDGET)
+                .document(BUDGET_DETAILS)
+                .update(
+                    mapOf(
+                        MAX_BUDGET to FieldValue.increment(monthlyLimitChange),
+                        TOTAL_BUDGET to FieldValue.increment(totalBudgetChange)
+                    )
+                )
 
             response.await()
         } catch (e: Exception) {
@@ -212,16 +230,16 @@ class BudgetApiImpl(private val firebaseDb: FirebaseFirestore, private val authS
         try {
             if (!authSource.isUserAuthorized()) throw FirebaseAuthException(
                 ErrorCodes.FIREBASE_UNAUTHORIZED,
-                ConstantUtils.UNAUTHORIZED_ERROR_MSG
+                UNAUTHORIZED_ERROR_MSG
             )
 
-            response = firebaseDb.collection(ConstantUtils.USERS)
+            response = firebaseDb.collection(USERS)
                 .document(uid)
-                .collection(ConstantUtils.MONTH)
+                .collection(MONTH)
                 .document(monthYear)
-                .collection(ConstantUtils.BUDGET)
-                .document(ConstantUtils.BUDGET_DETAILS)
-                .collection(ConstantUtils.CATEGORY_BUDGET)
+                .collection(BUDGET)
+                .document(BUDGET_DETAILS)
+                .collection(CATEGORY_BUDGET)
                 .document(category)
                 .get()
 
@@ -236,8 +254,7 @@ class BudgetApiImpl(private val firebaseDb: FirebaseFirestore, private val authS
                     val monthlyResult = monthlyCategoryBudgetMapper(result = result.data.result!!)
                     if (monthlyResult != null) AppResult.Success(monthlyResult)
                     else AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
-                }
-                else AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
+                } else AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
             }
             is FireBaseResult.Failure -> {
                 AppResult.Failure(result.error)
@@ -258,24 +275,65 @@ class BudgetApiImpl(private val firebaseDb: FirebaseFirestore, private val authS
         try {
             if (!authSource.isUserAuthorized()) throw FirebaseAuthException(
                 ErrorCodes.FIREBASE_UNAUTHORIZED,
-                ConstantUtils.UNAUTHORIZED_ERROR_MSG
+                UNAUTHORIZED_ERROR_MSG
             )
 
-            response = firebaseDb.collection(ConstantUtils.USERS)
+            response = firebaseDb.collection(USERS)
                 .document(uid)
-                .collection(ConstantUtils.MONTH)
+                .collection(MONTH)
                 .document(monthYear)
-                .collection(ConstantUtils.BUDGET)
-                .document(ConstantUtils.BUDGET_DETAILS)
-                .collection(ConstantUtils.CATEGORY_BUDGET)
+                .collection(BUDGET)
+                .document(BUDGET_DETAILS)
+                .collection(CATEGORY_BUDGET)
                 .document(category)
-                .update(mapOf(CATEGORY_BUDGET to FieldValue.increment(budgetChange), CATEGORY_EXPENSE to FieldValue.increment(expenseChange)))
+                .update(
+                    mapOf(
+                        CATEGORY_BUDGET to FieldValue.increment(budgetChange),
+                        CATEGORY_EXPENSE to FieldValue.increment(expenseChange)
+                    )
+                )
 
             response.await()
         } catch (e: Exception) {
             exception = e
-            if((exception as FirebaseFirestoreException).code == FirebaseFirestoreException.Code.NOT_FOUND)
+            if ((exception as FirebaseFirestoreException).code == FirebaseFirestoreException.Code.NOT_FOUND)
                 return AppResult.Success(Unit)
+        }
+
+        return when (val result = ErrorMapper.checkAndMapFirebaseApiError(response, exception)) {
+            is FireBaseResult.Success -> {
+                if (result.data != null) AppResult.Success(Unit)
+                else AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
+            }
+            is FireBaseResult.Failure -> {
+                AppResult.Failure(result.error)
+            }
+        }
+    }
+
+    override suspend fun deleteBudgetCategory(uid: String, monthYear: String, category: String): AppResult<Unit> {
+        var response: Task<Void>? = null
+        var exception: Exception? = null
+
+        try {
+            if (!authSource.isUserAuthorized()) throw FirebaseAuthException(
+                ErrorCodes.FIREBASE_UNAUTHORIZED,
+                UNAUTHORIZED_ERROR_MSG
+            )
+
+            response = firebaseDb.collection(USERS)
+                .document(uid)
+                .collection(MONTH)
+                .document(monthYear)
+                .collection(BUDGET)
+                .document(BUDGET_DETAILS)
+                .collection(CATEGORY_BUDGET)
+                .document(category)
+                .delete()
+
+            response.await()
+        } catch (e: Exception) {
+            exception = e
         }
 
         return when (val result = ErrorMapper.checkAndMapFirebaseApiError(response, exception)) {

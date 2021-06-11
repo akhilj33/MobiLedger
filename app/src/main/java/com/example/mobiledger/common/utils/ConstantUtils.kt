@@ -37,4 +37,5 @@ object ConstantUtils {
     const val REMINDER_MESSAGE = "Don't miss thr transactions for the day!"
     const val DATA_REMINDER = "DATA_REMINDER"
     const val DAILY_REMINDER = "DAILY_REMINDER"
+    const val OTHERS = "Others"
 }

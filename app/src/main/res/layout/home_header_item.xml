@@ -30,5 +30,20 @@
             app:layout_constraintStart_toStartOf="@id/verticalStartGuideline"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tvViewAll"
+            style="@style/GelionSemiBoldAccent12"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/curved_bar"
+            android:paddingVertical="@dimen/cdp_4"
+            android:paddingHorizontal="@dimen/cdp_10"
+            android:layout_marginEnd="@dimen/cdp_16"
+            android:text="VIEW ALL"
+            android:visibility="gone"
+            app:layout_constraintTop_toTopOf="@id/tvHeader"
+            app:layout_constraintBottom_toBottomOf="@id/tvHeader"
+            app:layout_constraintEnd_toEndOf="@id/verticalEndGuideline"/>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

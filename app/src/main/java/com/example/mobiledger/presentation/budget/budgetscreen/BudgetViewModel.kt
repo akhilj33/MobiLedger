@@ -1,4 +1,4 @@
-package com.example.mobiledger.presentation.budget
+package com.example.mobiledger.presentation.budget.budgetscreen
 
 import androidx.annotation.StringRes
 import androidx.lifecycle.LiveData
@@ -7,12 +7,14 @@ import androidx.lifecycle.viewModelScope
 import com.example.mobiledger.R
 import com.example.mobiledger.common.base.BaseViewModel
 import com.example.mobiledger.common.utils.DateUtils
+import com.example.mobiledger.common.utils.DateUtils.getDateInMMyyyyFormat
 import com.example.mobiledger.common.utils.DefaultCategoryUtils
 import com.example.mobiledger.domain.AppResult
 import com.example.mobiledger.domain.enums.TransactionType
 import com.example.mobiledger.domain.usecases.BudgetUseCase
 import com.example.mobiledger.domain.usecases.CategoryUseCase
 import com.example.mobiledger.presentation.Event
+import com.example.mobiledger.presentation.budget.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
@@ -80,8 +82,8 @@ class BudgetViewModel(
         _isLoading.value = true
         viewModelScope.launch {
             val monthlyBudgetCategoryList =
-                async { budgetUseCase.getCategoryBudgetListByMonth(DateUtils.getDateInMMyyyyFormat(getCurrentMonth())) }
-            val monthlyBudgetData = async { budgetUseCase.getMonthlyBudgetOverView(DateUtils.getDateInMMyyyyFormat(getCurrentMonth())) }
+                async { budgetUseCase.getCategoryBudgetListByMonth(getDateInMMyyyyFormat(getCurrentMonth())) }
+            val monthlyBudgetData = async { budgetUseCase.getMonthlyBudgetOverView(getDateInMMyyyyFormat(getCurrentMonth())) }
             when (val monthlyBudgetDataResult = monthlyBudgetData.await()) {
                 is AppResult.Success -> {
                     val monthlyBudgetCategoryListResult = monthlyBudgetCategoryList.await()
@@ -140,8 +142,8 @@ class BudgetViewModel(
                 budgetViewItemList.add(
                     BudgetViewItem.BudgetOverviewData(
                         MonthlyBudgetOverviewData(
-                            monthlyResult.maxBudget.toString(),
-                            monthlyResult.totalBudget.toString()
+                            monthlyResult.maxBudget,
+                            monthlyResult.totalBudget
                         )
                     )
                 )
@@ -200,8 +202,8 @@ private fun mapToCategoryBudgetData(budgetCategoryData: MonthlyCategoryBudget): 
     budgetCategoryData.apply {
         return BudgetCategoryData(
             categoryName = categoryName,
-            totalCategoryBudget = categoryBudget.toString(),
-            totalCategoryExpense = categoryExpense.toString(),
+            totalCategoryBudget = categoryBudget,
+            totalCategoryExpense = categoryExpense,
             categoryIcon = DefaultCategoryUtils.getCategoryIcon(categoryName, TransactionType.Expense)
         )
     }

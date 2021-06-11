@@ -15,12 +15,13 @@ interface BudgetUseCase {
     suspend fun getCategoryBudgetListByMonth(monthYear: String): AppResult<List<MonthlyCategoryBudget>>
     suspend fun setMonthlyBudget(monthYear: String, monthlyBudgetData: MonthlyBudgetData): AppResult<Unit>
     suspend fun addCategoryBudget(monthYear: String, monthlyCategoryBudget: MonthlyCategoryBudget): AppResult<Unit>
-    suspend fun updateBudgetTotal(monthYear: String, totalBudgetData: Long): AppResult<Unit>
+    suspend fun updateMonthlyBudgetSummary(monthYear: String, monthlyLimitChange: Long = 0L, totalBudgetChange:Long=0L): AppResult<Unit>
     suspend fun getMonthlyCategoryBudget(monthYear: String, category: String): AppResult<MonthlyCategoryBudget>
+    suspend fun updateMonthlyCategoryBudgetData(monthYear: String, category: String, budgetChange: Long = 0L, expenseChange: Long = 0L): AppResult<Unit>
     suspend fun updateMonthlyCategoryBudgetAmounts(monthYear: String, category: String, budgetChange: Long = 0L, expenseChange: Long = 0L): AppResult<Unit>
     suspend fun updateMonthlyCategoryBudgetOnCategoryChanged(monthYear: String, oldCategory: String, newCategory: String,
                                                              oldAmount: Long, newAmount: Long): AppResult<Unit>
-
+    suspend fun deleteBudgetCategory(monthYear: String, category: String): AppResult<Unit>
 }
 
 class BudgetUseCaseImpl(private val budgetRepository: BudgetRepository) : BudgetUseCase {
@@ -36,11 +37,27 @@ class BudgetUseCaseImpl(private val budgetRepository: BudgetRepository) : Budget
     override suspend fun addCategoryBudget(monthYear: String, monthlyCategoryBudget: MonthlyCategoryBudget): AppResult<Unit> =
         budgetRepository.addCategoryBudget(monthYear, monthlyCategoryBudget)
 
-    override suspend fun updateBudgetTotal(monthYear: String, totalBudgetData: Long): AppResult<Unit> =
-        budgetRepository.updateBudgetTotal(monthYear, totalBudgetData)
+    override suspend fun updateMonthlyBudgetSummary(monthYear: String, monthlyLimitChange: Long, totalBudgetChange:Long): AppResult<Unit> =
+        budgetRepository.updateMonthlyBudgetData(monthYear, monthlyLimitChange, totalBudgetChange)
 
     override suspend fun getMonthlyCategoryBudget(monthYear: String, category: String): AppResult<MonthlyCategoryBudget> {
         return budgetRepository.getMonthlyCategoryBudget(monthYear, category)
+    }
+
+    override suspend fun updateMonthlyCategoryBudgetData(
+        monthYear: String,
+        category: String,
+        budgetChange: Long,
+        expenseChange: Long
+    ): AppResult<Unit> {
+       return withContext(Dispatchers.IO){
+            val updateMonthlyBudgetSummaryJob = async { updateMonthlyBudgetSummary(monthYear, budgetChange, expenseChange) }
+            val updateCategoryAmountJob = async { budgetRepository.updateMonthlyCategoryBudgetAmounts(monthYear, category, budgetChange, expenseChange) }
+
+            if (updateCategoryAmountJob.await() is AppResult.Success && updateMonthlyBudgetSummaryJob.await() is AppResult.Success)
+                AppResult.Success(Unit)
+            else AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
+        }
     }
 
     override suspend fun updateMonthlyCategoryBudgetAmounts(
@@ -49,7 +66,22 @@ class BudgetUseCaseImpl(private val budgetRepository: BudgetRepository) : Budget
         budgetChange: Long,
         expenseChange: Long
     ): AppResult<Unit> {
-        return budgetRepository.updateMonthlyCategoryBudgetAmounts(monthYear, category, budgetChange,expenseChange)
+        return withContext(Dispatchers.IO){
+            if (budgetChange == 0L)
+                budgetRepository.updateMonthlyCategoryBudgetAmounts(monthYear, category, budgetChange,expenseChange)
+            else{
+                when(val result = getMonthlyCategoryBudget(monthYear, category)){
+                    is AppResult.Success -> {
+                        val newBudget = result.data.categoryBudget + budgetChange
+                        if (newBudget > 0L){
+                            updateMonthlyCategoryBudgetData(monthYear, category, budgetChange,expenseChange)
+                        }
+                        else deleteBudgetCategory(monthYear, category)
+                    }
+                    is AppResult.Failure -> AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
+                }
+            }
+        }
     }
 
     override suspend fun updateMonthlyCategoryBudgetOnCategoryChanged(
@@ -66,9 +98,11 @@ class BudgetUseCaseImpl(private val budgetRepository: BudgetRepository) : Budget
             if (updateOldBudgetJob.await() is AppResult.Success && updateNewBudgetJob.await() is AppResult.Success)
                 AppResult.Success(Unit)
             else AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
-
-
         }
+    }
+
+    override suspend fun deleteBudgetCategory(monthYear: String, category: String): AppResult<Unit> {
+        return budgetRepository.deleteBudgetCategory(monthYear, category)
     }
 
 }

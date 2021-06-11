@@ -1,4 +1,4 @@
-package com.example.mobiledger.presentation.budget
+package com.example.mobiledger.presentation.budget.addbudget
 
 import android.os.Bundle
 import android.text.Editable
@@ -10,12 +10,12 @@ import com.example.mobiledger.R
 import com.example.mobiledger.common.base.BaseDialogFragment
 import com.example.mobiledger.common.base.BaseNavigator
 import com.example.mobiledger.common.extention.gone
-import com.example.mobiledger.common.extention.setWidthPercent
 import com.example.mobiledger.common.extention.visible
 import com.example.mobiledger.common.utils.AnimationDialogUtils
 import com.example.mobiledger.databinding.DialogFragmentAddBudgetBinding
 import com.example.mobiledger.presentation.OneTimeObserver
 import com.example.mobiledger.presentation.addtransaction.SpinnerAdapter
+import com.example.mobiledger.presentation.budget.MonthlyBudgetData
 import com.google.android.material.textfield.TextInputLayout
 import java.util.*
 
@@ -25,11 +25,6 @@ class AddBudgetDialogFragment :
 
     private val viewModel: AddBudgetDialogViewModel by viewModels { viewModelFactory }
     private val spinnerAdapter: SpinnerAdapter by lazy { SpinnerAdapter(requireContext()) }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        setWidthPercent(85)
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -104,7 +99,7 @@ class AddBudgetDialogFragment :
 
     private fun addBudgetOverview() {
         if (doValidations()) {
-            viewModel.setBudget(MonthlyBudgetData(getAmountText().toLong(), viewModel.budgetTotal))
+            viewModel.setMonthlyBudgetLimit(MonthlyBudgetData(getAmountText().toLong(), viewModel.budgetTotal))
         }
     }
 

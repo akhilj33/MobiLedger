@@ -7,7 +7,7 @@ import com.example.mobiledger.common.base.BaseFragment
 import com.example.mobiledger.databinding.FragmentDashboardBinding
 import com.example.mobiledger.presentation.NormalObserver
 import com.example.mobiledger.presentation.SplitFragment
-import com.example.mobiledger.presentation.budget.BudgetFragment
+import com.example.mobiledger.presentation.budget.budgetscreen.BudgetFragment
 import com.example.mobiledger.presentation.home.HomeFragment
 import com.example.mobiledger.presentation.stats.StatsFragment
 import com.example.mobiledger.presentation.main.MainActivityViewModel.*

@@ -9,6 +9,7 @@ import android.view.inputmethod.InputMethodManager
 import androidx.core.content.ContextCompat
 import com.example.mobiledger.R
 import com.example.mobiledger.common.base.BaseFragment
+import kotlin.math.absoluteValue
 import kotlin.math.roundToInt
 
 fun View.hideKeyboard() {
@@ -61,10 +62,11 @@ fun View.changeStatusBarColor(
 }
 
 
-fun String.toAmount() = "\u20B9$this"
+fun Long.toAmount(): String {
+    return if (this >= 0) "\u20B9" + this.toString()
+    else "-" + "\u20B9" + this.absoluteValue.toString()
+}
 fun String.toPercent() = "$this \u0025"
 fun String.roundToOneDecimal(num: Float) = " %.1f".format(num)
-fun String.totalTransactionTextBuilder(context: Context) =
-    context.getString(R.string.see_all).plus(" $this ").plus(context.getString(R.string.transactions))
 
 fun Long.toPercent(total: Long) = ((this.toFloat() / total) * 100).roundToInt()

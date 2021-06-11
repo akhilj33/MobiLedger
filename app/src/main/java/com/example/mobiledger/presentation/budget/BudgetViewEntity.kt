@@ -39,12 +39,12 @@ fun MonthlyCategorySummary.isEmpty(): Boolean = this == MonthlyCategorySummary()
 
 data class BudgetCategoryData(
     val categoryName: String,
-    val totalCategoryBudget: String,
-    val totalCategoryExpense: String,
+    val totalCategoryBudget: Long,
+    val totalCategoryExpense: Long,
     @DrawableRes val categoryIcon: Int
 )
 
-data class MonthlyBudgetOverviewData(val maxBudget: String, val totalBudget: String)
+data class MonthlyBudgetOverviewData(val maxBudget: Long, val totalBudget: Long)
 
 
 enum class BudgetViewType { Header, MonthlyBudgetOverview, BtnAddCategory, BudgetData, EmptyBudget }

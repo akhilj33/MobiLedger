@@ -3,6 +3,7 @@ package com.example.mobiledger.common.utils
 import android.content.Context
 import android.graphics.Color
 import android.graphics.Color.rgb
+import android.graphics.Typeface
 import android.view.LayoutInflater
 import com.example.mobiledger.R
 import com.example.mobiledger.databinding.MarkerLayoutBinding
@@ -34,7 +35,7 @@ object GraphUtils {
         if (!showLegend) pieChart.legend.isEnabled = false
         val pieDataSet = PieDataSet(list, "")
         pieDataSet.yValuePosition = PieDataSet.ValuePosition.OUTSIDE_SLICE
-//        pieDataSet.sliceSpace = 3f
+        pieDataSet.sliceSpace = 1f
         pieDataSet.selectionShift = 5f
         pieDataSet.colors = getGraphColorList()
         val pieData = PieData(pieDataSet)
@@ -42,7 +43,8 @@ object GraphUtils {
         pieData.setValueTextColor(Color.BLACK)
         pieData.setValueFormatter(DecimalRemover(DecimalFormat("###,###,###"), pieChart))
         pieChart.data = pieData
-        pieChart.setCenterTextSize(30f)
+        pieChart.setCenterTextSize(14f)
+        pieChart.setCenterTextTypeface(Typeface.DEFAULT_BOLD)
         pieChart.setDrawEntryLabels(false)
         pieChart.setTouchEnabled(false)
         pieChart.animateY(1000, Easing.EaseInOutCubic)
@@ -98,7 +100,7 @@ object GraphUtils {
     // 3 - Remove grids
     fun lineChart(lineChart: LineChart, arrayList: List<Entry>, context: Context) {
         val dataSet = LineDataSet(arrayList, "Unused label")
-        dataSet.apply{
+        dataSet.apply {
             this.color = Color.BLACK
             this.valueTextColor = Color.GRAY
             this.highLightColor = Color.RED
@@ -138,15 +140,13 @@ object GraphUtils {
         lineChart.invalidate()
     }
 
-
-
     fun getGraphColorList() = listOf(
-        rgb(255, 82, 82), rgb(130, 177, 255),
-        rgb(255, 196, 0), rgb(124, 179, 66),
+        rgb(124, 179, 66), rgb(255, 82, 82),
+        rgb(130, 177, 255), rgb(255, 196, 0),
         rgb(141, 110, 99), rgb(77, 182, 172)
     )
 
-    val otherColor = rgb(161, 136, 127)
+    val otherColor = rgb(141, 110, 99)
 }
 
 class MyMarker(context: Context) : MarkerView(context, R.layout.marker_layout) {
