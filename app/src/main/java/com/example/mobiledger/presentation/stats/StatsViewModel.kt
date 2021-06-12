@@ -8,6 +8,7 @@ import com.example.mobiledger.R
 import com.example.mobiledger.common.base.BaseViewModel
 import com.example.mobiledger.common.extention.toAmount
 import com.example.mobiledger.common.extention.toPercent
+import com.example.mobiledger.common.utils.ConstantUtils.OTHERS
 import com.example.mobiledger.common.utils.DateUtils
 import com.example.mobiledger.common.utils.DateUtils.getDateInMMyyyyFormat
 import com.example.mobiledger.common.utils.DefaultCategoryUtils.getCategoryIcon
@@ -119,7 +120,7 @@ class StatsViewModel(private val categoryUseCase: CategoryUseCase, private val b
                         R.string.expenses_breakup
                     )
                 )
-                statsViewItemList.add(StatsViewItem.HeaderDataRow(R.string.expense, totalExpenseSum.toString().toAmount()))
+                statsViewItemList.add(StatsViewItem.HeaderDataRow(R.string.expense, totalExpenseSum.toAmount()))
                 expensePieAndCategoryList.forEach {
                     statsViewItemList.add(StatsViewItem.CategoryDataRow(it.second))
                 }
@@ -135,7 +136,7 @@ class StatsViewModel(private val categoryUseCase: CategoryUseCase, private val b
                         R.string.income_breakup
                     )
                 )
-                statsViewItemList.add(StatsViewItem.HeaderDataRow(R.string.income, totalIncomeSum.toString().toAmount()))
+                statsViewItemList.add(StatsViewItem.HeaderDataRow(R.string.income, totalIncomeSum.toAmount()))
                 incomePieAndCategoryList.forEach {
                     statsViewItemList.add(StatsViewItem.CategoryDataRow(it.second))
                 }
@@ -144,9 +145,8 @@ class StatsViewModel(private val categoryUseCase: CategoryUseCase, private val b
             if (incomeList.isNotEmpty() || expenseList.isNotEmpty()) {
                 barEntryList.add(BarEntry(barEntryCount, totalIncomeSum.toFloat() - totalExpenseSum.toFloat()))
                 barChartLabelList.add(R.string.saving)
-                statsGraphViewItemList.add(StatsGraphViewItem.BarGraphRow(barEntryList, barChartLabelList, R.string.income_vs_expense))
+                statsGraphViewItemList.add(0, StatsGraphViewItem.BarGraphRow(barEntryList, barChartLabelList, R.string.income_vs_expense))
             }
-
 
             if (statsGraphViewItemList.isNotEmpty())
                 statsViewItemList.add(0, StatsViewItem.GraphDataRow(statsGraphViewItemList))
@@ -164,15 +164,15 @@ class StatsViewModel(private val categoryUseCase: CategoryUseCase, private val b
             if (length < 5) {
                 return@withContext getPairList(list, totalSum, transactionType)
             } else {
-                val resultList = getPairList(list.subList(0, 5), totalSum, transactionType)
-                val remainingSum = list.subList(5, length).sumOf { it.categoryAmount }
+                val resultList = getPairList(list.subList(0, 4), totalSum, transactionType)
+                val remainingSum = list.subList(4, length).sumOf { it.categoryAmount }
                 val percentageValue = remainingSum.toPercent(totalSum)
                 val categoryData = CategoryData(
-                    getOtherCategoryName(transactionType),
+                    OTHERS,
                     getCategoryIcon(getOtherCategoryName(transactionType), transactionType),
                     transactionType,
                     percentageValue.toString(),
-                    GraphUtils.otherColor.toHexString(), remainingSum
+                    "#" + GraphUtils.otherColor.toHexString(), remainingSum
                 )
                 resultList.add(Pair(PieEntry(percentageValue.toFloat()), categoryData))
                 resultList

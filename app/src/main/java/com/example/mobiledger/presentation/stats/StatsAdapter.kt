@@ -78,7 +78,7 @@ class StatsAdapter(private val onCategoryItemClick:(categoryName: String, amount
                 tvCategoryName.text = item.name
                 colorIndicator.backgroundTintList = ColorStateList.valueOf(Color.parseColor(item.color))
                 (item.percent + "%").also { tvPercentage.text = it }
-                tvAmount.text = item.amount.toString().toAmount()
+                tvAmount.text = item.amount.toAmount()
 
                 if (item.categoryType == TransactionType.Income)
                     root.setOnClickListener { onCategoryItemClick(item.name, item.amount) }

@@ -8,7 +8,7 @@ import com.example.mobiledger.presentation.auth.AuthViewPagerFragment
 import com.example.mobiledger.presentation.auth.LoginNavigator
 import com.example.mobiledger.presentation.auth.SignUpFragment
 import com.example.mobiledger.presentation.auth.SignUpNavigator
-import com.example.mobiledger.presentation.budget.BudgetNavigator
+import com.example.mobiledger.presentation.budget.budgetscreen.BudgetNavigator
 import com.example.mobiledger.presentation.categoryFragment.CategoryFragment
 import com.example.mobiledger.presentation.dashboard.DashboardFragment
 import com.example.mobiledger.presentation.home.HomeNavigator

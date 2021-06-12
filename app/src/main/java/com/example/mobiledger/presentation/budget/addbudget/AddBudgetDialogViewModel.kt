@@ -1,4 +1,4 @@
-package com.example.mobiledger.presentation.budget
+package com.example.mobiledger.presentation.budget.addbudget
 
 import androidx.annotation.StringRes
 import androidx.lifecycle.LiveData
@@ -6,15 +6,14 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.mobiledger.R
 import com.example.mobiledger.common.base.BaseViewModel
-import com.example.mobiledger.common.utils.DateUtils
 import com.example.mobiledger.domain.AppResult
 import com.example.mobiledger.domain.usecases.BudgetUseCase
 import com.example.mobiledger.domain.usecases.CategoryUseCase
-import com.example.mobiledger.domain.usecases.TransactionUseCase
 import com.example.mobiledger.presentation.Event
+import com.example.mobiledger.presentation.budget.MonthlyBudgetData
+import com.example.mobiledger.presentation.budget.MonthlyCategoryBudget
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import java.util.*
 
 class AddBudgetDialogViewModel(
@@ -37,7 +36,7 @@ class AddBudgetDialogViewModel(
     var budgetTotal: Long= 0L
     var isCategoryBudget: Boolean = true
 
-    fun setBudget(monthlyBudgetData: MonthlyBudgetData) {
+    fun setMonthlyBudgetLimit(monthlyBudgetData: MonthlyBudgetData) {
         _isLoading.value = true
         viewModelScope.launch {
             val setBudgetJob =
@@ -62,16 +61,16 @@ class AddBudgetDialogViewModel(
     }
 
     //   ------------------- Add new category budget -------------------
-    fun getMonthlyCategorySummary(category: String, amt: Long) {
+    fun getMonthlyCategorySummary(category: String, categoryBudget: Long) {
         _isLoading.value = true
         viewModelScope.launch {
             when (val result = categoryUseCase.getMonthlyCategorySummary(month, category)) {
                 is AppResult.Success -> {
                    val categoryExpense =  if (result.data != null) result.data.categoryAmount else 0L
-                    addCategoryBudgetToFirebase(category, amt, categoryExpense, month, budgetTotal)
+                    addCategoryBudgetToFirebase(category, categoryBudget, categoryExpense, month)
                 }
                 is AppResult.Failure -> {
-                    addCategoryBudgetToFirebase(category, amt, 0, month, budgetTotal)
+                    addCategoryBudgetToFirebase(category, categoryBudget, 0, month)
                     _errorLiveData.value = Event(
                         ViewError(
                             viewErrorType = ViewErrorType.NON_BLOCKING,
@@ -86,13 +85,13 @@ class AddBudgetDialogViewModel(
     }
 
 
-    private fun addCategoryBudgetToFirebase(category: String, amt: Long, categoryExpense: Long, month: String, budgetTotal: Long) {
+    private fun addCategoryBudgetToFirebase(category: String, categoryBudget: Long, categoryExpense: Long, month: String) {
         viewModelScope.launch {
             _isLoading.value = true
-            when (val result = budgetUseCase.addCategoryBudget(month, MonthlyCategoryBudget(category, amt, categoryExpense)
+            when (val result = budgetUseCase.addCategoryBudget(month, MonthlyCategoryBudget(category, categoryBudget, categoryExpense)
             )) {
                 is AppResult.Success -> {
-                    updateTotalBudget(amt, month, budgetTotal)
+                    updateTotalBudget(categoryBudget, month)
                 }
 
                 is AppResult.Failure -> {
@@ -109,10 +108,10 @@ class AddBudgetDialogViewModel(
     }
 
 
-    private fun updateTotalBudget(amt: Long, month: String, budgetTotal: Long) {
+    private fun updateTotalBudget(categoryBudget: Long, month: String) {
         _isLoading.value = true
         viewModelScope.launch {
-            when (val result = budgetUseCase.updateBudgetTotal(month, amt + budgetTotal)) {
+            when (val result = budgetUseCase.updateMonthlyBudgetSummary(month, totalBudgetChange = categoryBudget)) {
                 is AppResult.Success -> {
                     _dataUpdatedResult.value = Event(result.data)
                 }

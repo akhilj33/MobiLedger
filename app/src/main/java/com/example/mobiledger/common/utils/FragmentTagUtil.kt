@@ -6,8 +6,9 @@ import com.example.mobiledger.presentation.addtransaction.AddTransactionDialogFr
 import com.example.mobiledger.presentation.auth.AuthViewPagerFragment
 import com.example.mobiledger.presentation.auth.LoginFragment
 import com.example.mobiledger.presentation.auth.SignUpFragment
-import com.example.mobiledger.presentation.budget.AddBudgetDialogFragment
-import com.example.mobiledger.presentation.budget.BudgetFragment
+import com.example.mobiledger.presentation.budget.addbudget.AddBudgetDialogFragment
+import com.example.mobiledger.presentation.budget.budgetscreen.BudgetFragment
+import com.example.mobiledger.presentation.budget.updatebudget.UpdateBudgetDialogFragment
 import com.example.mobiledger.presentation.categoryFragment.AddCategoryDialogFragment
 import com.example.mobiledger.presentation.categoryFragment.CategoryFragment
 import com.example.mobiledger.presentation.categoryFragment.ExpenseCategoryFragment
@@ -43,8 +44,7 @@ object FragmentTagUtil {
     private const val STATS_DETAIL_FRAGMENT = "STATS_DETAIL_FRAGMENT"
     private const val TRANSACTION_LIST_FRAGMENT = "TRANSACTION_LIST_FRAGMENT"
     private const val TRANSACTION_DETAIL_FRAGMENT = "TRANSACTION_DETAIL_FRAGMENT"
-
-
+    private const val UPDATE_BUDGET_FRAGMENT = "UPDATE_BUDGET_FRAGMENT"
 
     fun getFragmentName(fragment: Fragment): String {
         return when (fragment) {
@@ -68,6 +68,7 @@ object FragmentTagUtil {
             is StatsDetailFragment -> STATS_DETAIL_FRAGMENT
             is TransactionListFragment -> TRANSACTION_LIST_FRAGMENT
             is TransactionDetailDialogFragment -> TRANSACTION_DETAIL_FRAGMENT
+            is UpdateBudgetDialogFragment -> UPDATE_BUDGET_FRAGMENT
             else -> throw RuntimeException("Fragment Name mapping doesn't exist in ${FragmentTagUtil.javaClass.simpleName} class")
         }
     }

@@ -1,4 +1,4 @@
-package com.example.mobiledger.presentation.budget
+package com.example.mobiledger.presentation.budget.budgetscreen
 
 import com.example.mobiledger.common.base.BaseNavigator
 

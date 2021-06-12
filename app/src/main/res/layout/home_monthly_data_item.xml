@@ -63,10 +63,11 @@
             app:cardBackgroundColor="@color/colorWhite"
             app:cardCornerRadius="@dimen/cdp_8"
             app:cardElevation="@dimen/cdp_4"
+            android:layout_marginStart="@dimen/cdp_8"
             app:cardPreventCornerOverlap="true"
             app:cardUseCompatPadding="true"
-            app:layout_constraintEnd_toEndOf="@id/verticalGuideline48"
-            app:layout_constraintStart_toStartOf="@id/verticalGuideline8"
+            app:layout_constraintEnd_toStartOf="@id/expenseCardView"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/horizontalTopGuideline">
 
             <LinearLayout
@@ -74,13 +75,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:padding="@dimen/cdp_16">
+                android:padding="@dimen/cdp_8">
 
                 <com.google.android.material.textview.MaterialTextView
                     style="@style/GelionSemiBoldBlue16"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="@dimen/csp_22"
                     android:textAlignment="center"
                     android:text="@string/income" />
 
@@ -108,8 +108,8 @@
             app:cardPreventCornerOverlap="true"
             app:cardUseCompatPadding="true"
             app:layout_constraintBottom_toBottomOf="@id/incomeCardView"
-            app:layout_constraintEnd_toEndOf="@id/verticalGuideline92"
-            app:layout_constraintStart_toStartOf="@id/verticalGuideline52"
+            app:layout_constraintEnd_toStartOf="@id/savingCardView"
+            app:layout_constraintStart_toEndOf="@id/incomeCardView"
             app:layout_constraintTop_toTopOf="@id/horizontalTopGuideline">
 
             <LinearLayout
@@ -117,19 +117,62 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="@dimen/cdp_16">
+                android:padding="@dimen/cdp_8">
 
                 <com.google.android.material.textview.MaterialTextView
                     style="@style/GelionSemiBoldBlue16"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="@dimen/csp_22"
                     android:textAlignment="center"
                     android:text="@string/expense" />
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/tvExpenseAmount"
                     style="@style/GelionRegularRed18"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    app:autoSizeMaxTextSize="@dimen/csp_18"
+                    app:autoSizeMinTextSize="@dimen/csp_12"
+                    app:autoSizeStepGranularity="2sp"
+                    app:autoSizeTextType="uniform"
+                    android:textAlignment="center"
+                    android:layout_marginTop="@dimen/cdp_8" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/savingCardView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:cardBackgroundColor="@color/colorWhite"
+            app:cardCornerRadius="@dimen/cdp_8"
+            app:cardElevation="@dimen/cdp_4"
+            app:cardPreventCornerOverlap="true"
+            app:cardUseCompatPadding="true"
+            android:layout_marginEnd="@dimen/cdp_8"
+            app:layout_constraintBottom_toBottomOf="@id/incomeCardView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/expenseCardView"
+            app:layout_constraintTop_toTopOf="@id/horizontalTopGuideline">
+
+            <LinearLayout
+                android:id="@+id/savingLL"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="@dimen/cdp_8">
+
+                <com.google.android.material.textview.MaterialTextView
+                    style="@style/GelionSemiBoldBlue16"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="center"
+                    android:text="@string/saving" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tvSavingAmount"
+                    style="@style/GelionRegularBlue18"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ellipsize="end"

@@ -1,56 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/statsDetailCardView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        app:cardBackgroundColor="@color/colorWhite"
+        app:cardCornerRadius="@dimen/cdp_8"
+        app:cardElevation="@dimen/cdp_4"
+        app:cardPreventCornerOverlap="true"
+        app:cardUseCompatPadding="true">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/allTransactionBar"
-            android:layout_width="0dp"
-            android:layout_height="@dimen/cdp_56"
-            android:layout_marginEnd="@dimen/cdp_24"
-            android:layout_marginTop="@dimen/cdp_16"
-            android:background="@drawable/horizontal_bar"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            android:id="@+id/headerLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:padding="@dimen/cdp_16">
 
             <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/ivMoneyPlant"
-                android:layout_width="@dimen/cdp_28"
-                android:layout_height="@dimen/cdp_28"
-                android:layout_marginStart="@dimen/cdp_20"
-                app:layout_constraintBottom_toBottomOf="parent"
+                android:id="@+id/headerIv"
+                android:layout_width="@dimen/cdp_48"
+                android:layout_height="@dimen/cdp_48"
+                app:layout_constraintDimensionRatio="w,1:1"
+                app:srcCompat="@drawable/list_icon"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_money_plant" />
-
-            <TextView
-                android:id="@+id/tvTransactionTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/cdp_20"
-                android:layout_marginBottom="@dimen/cdp_4"
-                android:textSize="@dimen/csp_20"
-                android:textColor="@color/colorWhite"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@id/ivMoneyPlant"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_chainStyle="packed" />
+                app:layout_constraintEnd_toStartOf="@id/seeAllText"/>
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/seeAllText"
+                style="@style/GelionRegularNavyBlue16"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/cdp_16"
+                tools:text="See all 10 transactions"
+                app:layout_constraintTop_toTopOf="@id/headerIv"
+                app:layout_constraintBottom_toBottomOf="@id/headerIv"
+                app:layout_constraintStart_toEndOf="@id/headerIv"
+                app:layout_constraintEnd_toStartOf="@id/arrowIv"/>
 
             <androidx.appcompat.widget.AppCompatImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/cdp_20"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_arrow_white" />
-
+                android:id="@+id/arrowIv"
+                android:layout_width="@dimen/cdp_36"
+                android:layout_height="@dimen/cdp_36"
+                app:layout_constraintDimensionRatio="w,1:1"
+                app:srcCompat="@drawable/arrow_right"
+                app:layout_constraintStart_toEndOf="@id/seeAllText"
+                app:layout_constraintTop_toTopOf="@id/seeAllText"
+                app:layout_constraintBottom_toBottomOf="@id/seeAllText"
+                app:layout_constraintEnd_toEndOf="parent"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
 </layout>

@@ -148,4 +148,8 @@ class HomeFragment :
     companion object {
         fun newInstance() = HomeFragment()
     }
+
+    override fun onBackPressHandled(): Boolean {
+        return super.onBackPressHandled()
+    }
 }

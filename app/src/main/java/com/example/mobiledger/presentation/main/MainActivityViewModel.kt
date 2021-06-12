@@ -47,6 +47,9 @@ class MainActivityViewModel(
     private val _updateTransactionResultLiveData: MutableLiveData<Event<Unit>> = MutableLiveData()
     val updateTransactionResultLiveData: LiveData<Event<Unit>> = _updateTransactionResultLiveData
 
+    private val _updateBudgetResultLiveData: MutableLiveData<Event<Unit>> = MutableLiveData()
+    val updateBudgetResultLiveData: LiveData<Event<Unit>> = _updateBudgetResultLiveData
+
     private val _notificationIndicatorTotal = MutableLiveData<NotificationCallerPercentData>()
     val notificationIndicatorTotal: LiveData<NotificationCallerPercentData> get() = _notificationIndicatorTotal
 
@@ -104,6 +107,10 @@ class MainActivityViewModel(
 
     fun updateTransactionResult() {
         _updateTransactionResultLiveData.value = Event(Unit)
+    }
+
+    fun updateBudgetResult() {
+        _updateBudgetResultLiveData.value = Event(Unit)
     }
 
     fun notificationHandler(notificationCallerData: AddTransactionViewModel.NotificationCallerData) {

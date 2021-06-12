@@ -1,4 +1,4 @@
-package com.example.mobiledger.presentation.budget
+package com.example.mobiledger.presentation.budget.budgetscreen
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -9,12 +9,17 @@ import com.example.mobiledger.common.extention.roundToOneDecimal
 import com.example.mobiledger.common.extention.toAmount
 import com.example.mobiledger.common.extention.toPercent
 import com.example.mobiledger.databinding.*
+import com.example.mobiledger.presentation.budget.BudgetCategoryData
+import com.example.mobiledger.presentation.budget.BudgetViewItem
+import com.example.mobiledger.presentation.budget.BudgetViewType
+import com.example.mobiledger.presentation.budget.MonthlyBudgetOverviewData
 
 
 class BudgetAdapter(
     val onMakeBudgetClick: () -> Unit,
     val onBudgetOverViewClick: () -> Unit,
-    val onAddBudgetCategoryClick: () -> Unit
+    val onAddBudgetCategoryClick: () -> Unit,
+    val onBudgetCategoryClick: (category: String, budget: Long) -> Unit
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private lateinit var context: Context
@@ -33,33 +38,19 @@ class BudgetAdapter(
             BudgetViewType.Header -> BudgetHeaderViewHolder(BudgetHeaderLayoutBinding.inflate(layoutInflater, parent, false))
 
             BudgetViewType.MonthlyBudgetOverview -> MonthlyBudgetOverviewViewHolder(
-                MonthlyBudgetOverviewItemBinding.inflate(
-                    layoutInflater,
-                    parent,
-                    false
-                )
+                MonthlyBudgetOverviewItemBinding.inflate(layoutInflater, parent, false)
             )
 
             BudgetViewType.BtnAddCategory -> AddBudgetCategoryViewHolder(
-                AddBudgetCategoryBinding.inflate(
-                    layoutInflater,
-                    parent,
-                    false
-                )
+                AddBudgetCategoryBinding.inflate(layoutInflater, parent, false)
             )
 
             BudgetViewType.BudgetData -> BudgetDataViewHolder(
-                BudgetCategoryItemBinding.inflate(
-                    layoutInflater,
-                    parent,
-                    false
-                )
+                BudgetCategoryItemBinding.inflate(layoutInflater, parent, false)
             )
 
             BudgetViewType.EmptyBudget -> BudgetEmptyViewHolder(
-                BudgetEmptyItemBinding.inflate(
-                    layoutInflater, parent, false
-                )
+                BudgetEmptyItemBinding.inflate(layoutInflater, parent, false)
             )
 
         }
@@ -67,11 +58,11 @@ class BudgetAdapter(
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (val item = items[position]) {
-            is BudgetViewItem.BudgetHeaderData -> (holder as BudgetAdapter.BudgetHeaderViewHolder).bind(item.data)
-            is BudgetViewItem.BudgetOverviewData -> (holder as BudgetAdapter.MonthlyBudgetOverviewViewHolder).bind(item.data)
-            is BudgetViewItem.BtnAddCategory -> (holder as BudgetAdapter.AddBudgetCategoryViewHolder).bind()
-            is BudgetViewItem.BudgetCategory -> (holder as BudgetAdapter.BudgetDataViewHolder).bind(item.data)
-            is BudgetViewItem.BudgetEmpty -> (holder as BudgetAdapter.BudgetEmptyViewHolder).bind()
+            is BudgetViewItem.BudgetHeaderData -> (holder as BudgetHeaderViewHolder).bind(item.data)
+            is BudgetViewItem.BudgetOverviewData -> (holder as MonthlyBudgetOverviewViewHolder).bind(item.data)
+            is BudgetViewItem.BtnAddCategory -> (holder as AddBudgetCategoryViewHolder).bind()
+            is BudgetViewItem.BudgetCategory -> (holder as BudgetDataViewHolder).bind(item.data)
+            is BudgetViewItem.BudgetEmpty -> (holder as BudgetEmptyViewHolder).bind()
         }
     }
 
@@ -108,6 +99,7 @@ class BudgetAdapter(
     inner class BudgetDataViewHolder(private val viewBinding: BudgetCategoryItemBinding) : RecyclerView.ViewHolder(viewBinding.root) {
         fun bind(item: BudgetCategoryData) {
             viewBinding.apply {
+                budgetCategoryRoot.setOnClickListener { onBudgetCategoryClick(item.categoryName, item.totalCategoryBudget) }
                 tvBudgetAmount.text = item.totalCategoryBudget.toAmount()
                 tvCategoryName.text = item.categoryName
                 tvAmount.text = item.totalCategoryExpense.toAmount()
@@ -138,7 +130,6 @@ class BudgetAdapter(
             }
         }
     }
-
 
     /*---------------------------------Utility Functions---------------------------- */
 
