@@ -163,7 +163,6 @@ class HomeViewModel(
                 newList.forEach {
                     homeViewItemList.add(HomeViewItem.TransactionDataRow(mapToTransactionData(it)))
                 }
-                homeViewItemList.add(HomeViewItem.TransactionListButton(transactionList.size.toString()))
                 transList.clear()
                 tempList.forEach {
                     transList.add(mapToTransactionData(it))

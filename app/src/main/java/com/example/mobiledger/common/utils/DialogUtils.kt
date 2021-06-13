@@ -4,6 +4,7 @@ import androidx.fragment.app.FragmentManager
 import com.example.mobiledger.common.extention.getName
 import com.example.mobiledger.domain.entities.TransactionEntity
 import com.example.mobiledger.presentation.addtransaction.AddTransactionDialogFragment
+import com.example.mobiledger.presentation.budget.MonthlyBudgetData
 import com.example.mobiledger.presentation.budget.addbudget.AddBudgetDialogFragment
 import com.example.mobiledger.presentation.budget.updatebudget.UpdateBudgetDialogFragment
 import com.example.mobiledger.presentation.categoryFragment.AddCategoryDialogFragment
@@ -40,12 +41,13 @@ fun showAddCategoryDialogFragment(fragmentManager: FragmentManager, list: List<S
 
 fun showAddBudgetDialogFragment(
     fragmentManager: FragmentManager,
-    isCategoryBudget: Boolean,
+    monthlyLimit: Long,
     list: ArrayList<String>,
     month: String,
-    budgetTotal: Long
+    budgetTotal: Long,
+    isAddCategory: Boolean
 ) {
-    val dialog = AddBudgetDialogFragment.newInstance(isCategoryBudget, list, month, budgetTotal)
+    val dialog = AddBudgetDialogFragment.newInstance(monthlyLimit, list, month, budgetTotal, isAddCategory)
     dialog.show(
         fragmentManager,
         dialog.getName()
@@ -56,9 +58,10 @@ fun showUpdateBudgetDialogFragment(
     fragmentManager: FragmentManager,
     month: Calendar,
     category: String,
-    categoryBudget: Long
+    categoryBudget: Long,
+    monthlyBudgetData: MonthlyBudgetData
 ) {
-    val dialog = UpdateBudgetDialogFragment.newInstance(month, category, categoryBudget)
+    val dialog = UpdateBudgetDialogFragment.newInstance(month, category, categoryBudget, monthlyBudgetData)
     dialog.show(
         fragmentManager,
         dialog.getName()

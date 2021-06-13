@@ -18,6 +18,9 @@ class UpdateBudgetViewModel(private val budgetUseCase: BudgetUseCase) : BaseView
     lateinit var monthYear: Calendar
     lateinit var categoryName: String
     var amount: Long = 0L
+    var monthlyLimit: Long = 0L
+    var monthlyTotalBudget: Long = 0L
+
 
     private val _errorLiveData: MutableLiveData<Event<ViewError>> = MutableLiveData()
     val errorLiveData: LiveData<Event<ViewError>> = _errorLiveData

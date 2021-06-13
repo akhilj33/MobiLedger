@@ -45,13 +45,6 @@ class HomeAdapter(
             HomeViewType.Header -> HeaderViewHolder(HomeHeaderItemBinding.inflate(layoutInflater, parent, false))
             HomeViewType.MonthlyData -> MonthlyDataViewHolder(HomeMonthlyDataItemBinding.inflate(layoutInflater, parent, false))
             HomeViewType.MonthlyTotalPieChart -> MonthlyPieViewHolder(HomeMonthlyPieItemBinding.inflate(layoutInflater, parent, false))
-            HomeViewType.TransactionList -> TransactionListButtonViewHolder(
-                AllTransactionButtonLayoutBinding.inflate(
-                    layoutInflater,
-                    parent,
-                    false
-                )
-            )
             HomeViewType.TransactionData -> TransactionDataViewHolder(HomeTransactionItemBinding.inflate(layoutInflater, parent, false))
             HomeViewType.EmptyData -> EmptyDataViewHolder(HomeEmptyItemBinding.inflate(layoutInflater, parent, false))
         }
@@ -62,7 +55,6 @@ class HomeAdapter(
             is HomeViewItem.HeaderDataRow -> (holder as HeaderViewHolder).bind(item.headerData)
             is HomeViewItem.MonthlyDataRow -> (holder as MonthlyDataViewHolder).bind(item.data)
             is HomeViewItem.MonthlyTotalPie -> (holder as MonthlyPieViewHolder).bind(item.pieEntryList)
-            is HomeViewItem.TransactionListButton -> (holder as TransactionListButtonViewHolder).bind(item.numOfTransactions)
             is HomeViewItem.TransactionDataRow -> (holder as TransactionDataViewHolder).bind(item.data)
             is HomeViewItem.EmptyDataRow -> (holder as EmptyDataViewHolder).bind()
         }
@@ -73,12 +65,11 @@ class HomeAdapter(
     inner class HeaderViewHolder(private val viewBinding: HomeHeaderItemBinding) : RecyclerView.ViewHolder(viewBinding.root) {
         fun bind(headerData: HeaderData) {
             viewBinding.apply {
+                tvViewAll.setOnClickListener { onAllTransactionClicked() }
                 tvHeader.text = context.resources.getString(headerData.headerString)
                 if (headerData.isSecondaryHeaderVisible) tvViewAll.visible()
                 else tvViewAll.gone()
-
             }
-
         }
     }
 
@@ -96,18 +87,6 @@ class HomeAdapter(
         fun bind(item: ArrayList<PieEntry>) {
             viewBinding.apply {
                 GraphUtils.pieChart(pieChart, item, true)
-            }
-        }
-    }
-
-    inner class TransactionListButtonViewHolder(private val viewBinding: AllTransactionButtonLayoutBinding) :
-        RecyclerView.ViewHolder(viewBinding.root) {
-        fun bind(item: String) {
-            viewBinding.apply {
-                seeAllText.text = context.getString(R.string.see_all_transactions, item)
-                root.setOnClickListener {
-                    onAllTransactionClicked()
-                }
             }
         }
     }

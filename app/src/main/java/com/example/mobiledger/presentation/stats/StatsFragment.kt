@@ -14,7 +14,6 @@ import com.example.mobiledger.databinding.FragmentStatsBinding
 import com.example.mobiledger.databinding.SnackViewErrorBinding
 import com.example.mobiledger.presentation.ConditionalOneTimeObserver
 import com.example.mobiledger.presentation.OneTimeObserver
-import com.example.mobiledger.presentation.main.MainActivityViewModel
 import com.example.mobiledger.presentation.main.NavTab
 
 class StatsFragment : BaseFragment<FragmentStatsBinding, StatsNavigator>(R.layout.fragment_stats) {
@@ -127,8 +126,8 @@ class StatsFragment : BaseFragment<FragmentStatsBinding, StatsNavigator>(R.layou
         }
     }
 
-    private val onCategoryItemClick = fun(categoryName: String, amount: Long){
-        navigator?.navigateToStatsDetailScreen(categoryName, amount, viewModel.getCurrentMonth())
+    private val onCategoryItemClick = fun(categoryNameList: List<String>, amount: Long){
+        navigator?.navigateToStatsDetailScreen(categoryNameList, amount, viewModel.getCurrentMonth())
     }
 
     companion object {

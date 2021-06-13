@@ -8,11 +8,11 @@ import com.example.mobiledger.R
 import com.example.mobiledger.common.base.BaseViewModel
 import com.example.mobiledger.common.extention.toPercent
 import com.example.mobiledger.common.utils.DateUtils
-import com.example.mobiledger.common.utils.DateUtils.getDateInDDFormat
 import com.example.mobiledger.common.utils.DateUtils.getDateInDDMMMMyyyyFormat
 import com.example.mobiledger.common.utils.DateUtils.getDateInMMMMyyyyFormat
 import com.example.mobiledger.domain.AppResult
 import com.example.mobiledger.domain.entities.TransactionEntity
+import com.example.mobiledger.domain.enums.TransactionType
 import com.example.mobiledger.domain.usecases.BudgetUseCase
 import com.example.mobiledger.domain.usecases.CategoryUseCase
 import com.example.mobiledger.presentation.Event
@@ -20,10 +20,7 @@ import com.example.mobiledger.presentation.budget.MonthlyCategoryBudget
 import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.data.Entry
 import com.google.firebase.Timestamp
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import java.util.*
 import kotlin.math.absoluteValue
 
@@ -38,39 +35,73 @@ class StatsDetailViewModel(private val categoryUseCase: CategoryUseCase, private
     private val _errorLiveData: MutableLiveData<Event<ViewError>> = MutableLiveData()
     val errorLiveData: LiveData<Event<ViewError>> = _errorLiveData
 
-    lateinit var category: String
+    lateinit var categoryList: List<String>
     lateinit var monthYear: Calendar
     var amount: Long = 0L
 
     fun getDate() = getDateInMMMMyyyyFormat(monthYear)
     fun getAbsoluteStringAmount() = amount.absoluteValue.toString()
 
-    fun getCategoryDetails() {
+    fun getCategoryListDetails() {
         _isLoading.value = true
         viewModelScope.launch {
+            if (categoryList.isEmpty()) {
+                _errorLiveData.value = Event(
+                    ViewError(
+                        viewErrorType = ViewErrorType.NON_BLOCKING,
+                    )
+                )
+            } else {
+                var isFailure = false
+                val runningTask = categoryList.map {
+                    async { getCategoryDetails(it) }
+                }
+
+                val result = runningTask.awaitAll()
+
+                val transactionEntityList = mutableListOf<List<TransactionEntity>>()
+                val monthlyCategoryBudgetList = mutableListOf<MonthlyCategoryBudget?>()
+
+                result.forEach loop@{
+                    if (it is AppResult.Success) {
+                        transactionEntityList.add(it.data.first)
+                        monthlyCategoryBudgetList.add(it.data.second)
+                    } else if (it is AppResult.Failure) {
+                        if (needToHandleAppError(it.error)) {
+                            _errorLiveData.value = Event(
+                                ViewError(
+                                    viewErrorType = ViewErrorType.NON_BLOCKING,
+                                    message = it.error.message
+                                )
+                            )
+                        }
+                        isFailure = true
+                        return@loop
+                    }
+                }
+
+                if (!isFailure)
+                    _statsDetailViewItemListLiveData.value =
+                        Event(renderViewEntity(transactionEntityList.flatten(), monthlyCategoryBudgetList))
+            }
+            _isLoading.value = false
+        }
+    }
+
+    private suspend fun getCategoryDetails(category: String): AppResult<Pair<List<TransactionEntity>, MonthlyCategoryBudget?>> {
+        return withContext(Dispatchers.IO) {
             val transactionListJob =
                 async { categoryUseCase.getMonthlyCategoryTransaction(DateUtils.getDateInMMyyyyFormat(monthYear), category) }
             val categoryBudgetJob = async { budgetUseCase.getMonthlyCategoryBudget(DateUtils.getDateInMMyyyyFormat(monthYear), category) }
             when (val result = transactionListJob.await()) {
                 is AppResult.Success -> {
                     val categoryResult = categoryBudgetJob.await()
-                    _statsDetailViewItemListLiveData.value = if (categoryResult is AppResult.Success)
-                        Event(renderViewEntity(result.data, categoryResult.data))
-                    else
-                        Event(renderViewEntity(result.data))
-                    _isLoading.value = false
-
+                    if (categoryResult is AppResult.Success)
+                        AppResult.Success(Pair(result.data, categoryResult.data))
+                    else AppResult.Success(Pair(result.data, null))
                 }
                 is AppResult.Failure -> {
-                    if (needToHandleAppError(result.error)) {
-                        _errorLiveData.value = Event(
-                            ViewError(
-                                viewErrorType = ViewErrorType.NON_BLOCKING,
-                                message = result.error.message
-                            )
-                        )
-                    }
-                    _isLoading.value = false
+                    result
                 }
             }
         }
@@ -80,7 +111,7 @@ class StatsDetailViewModel(private val categoryUseCase: CategoryUseCase, private
 
     private suspend fun renderViewEntity(
         list: List<TransactionEntity>,
-        monthlyCategoryBudget: MonthlyCategoryBudget? = null
+        monthlyCategoryBudgetList: List<MonthlyCategoryBudget?>
     ): List<StatsDetailViewItem> {
         return withContext(Dispatchers.IO) {
             val transactionEntityList = list.sortedBy { it.transactionTime }
@@ -92,8 +123,13 @@ class StatsDetailViewModel(private val categoryUseCase: CategoryUseCase, private
             val barChartLabelList = mutableListOf<Int>()
             var barEntryCount = 0f
 
-            if (monthlyCategoryBudget != null) {
-                barEntryList.add(BarEntry(barEntryCount++, monthlyCategoryBudget.categoryBudget.toFloat()))
+            if (monthlyCategoryBudgetList.isNotEmpty() && list[0].transactionType == TransactionType.Expense) {
+                val totalMonthlyCategoryBudget = MonthlyCategoryBudget(
+                    categoryBudget = monthlyCategoryBudgetList.sumOf { it?.categoryBudget ?: 0L },
+                    categoryExpense = monthlyCategoryBudgetList.sumOf { it?.categoryExpense ?: 0L }
+                )
+
+                barEntryList.add(BarEntry(barEntryCount++, totalMonthlyCategoryBudget.categoryBudget.toFloat()))
                 barChartLabelList.add(R.string.budget)
                 barEntryList.add(BarEntry(barEntryCount, amount.absoluteValue.toFloat()))
                 barChartLabelList.add(R.string.expense)
@@ -114,14 +150,16 @@ class StatsDetailViewModel(private val categoryUseCase: CategoryUseCase, private
                 )
                 lineEntryList.add(Entry(it.transactionTime.seconds.toFloat(), it.amount.toFloat()))
             }
-            statsDetailGraphViewItemList.add(StatsDetailGraphViewItem.LineGraphRow(lineEntryList, R.string.monthly_analysis))
-            statsDetailViewItemList.add(0, StatsDetailViewItem.GraphDataRow(statsDetailGraphViewItemList))
+            if (lineEntryList.size > 1)
+                statsDetailGraphViewItemList.add(0, StatsDetailGraphViewItem.LineGraphRow(lineEntryList, R.string.monthly_analysis))
+            if (statsDetailGraphViewItemList.isNotEmpty())
+                statsDetailViewItemList.add(0, StatsDetailViewItem.GraphDataRow(statsDetailGraphViewItemList))
             statsDetailViewItemList
         }
     }
 
     fun reloadData() {
-        getCategoryDetails()
+        getCategoryListDetails()
     }
 
     enum class ViewErrorType { NON_BLOCKING }

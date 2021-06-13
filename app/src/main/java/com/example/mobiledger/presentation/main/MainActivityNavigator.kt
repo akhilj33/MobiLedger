@@ -95,10 +95,10 @@ class MainActivityNavigator constructor(
         )
     }
 
-    override fun navigateToStatsDetailScreen(categoryName: String, amount: Long, monthYear: Calendar) {
+    override fun navigateToStatsDetailScreen(categoryNameList: List<String>, amount: Long, monthYear: Calendar) {
         FragmentTransactionHelper.replaceFragment(
             fragmentManager,
-            StatsDetailFragment.newInstance(categoryName,amount,monthYear),
+            StatsDetailFragment.newInstance(categoryNameList,amount,monthYear),
             containerId, addToBackStack = true
         )
     }

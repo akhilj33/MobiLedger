@@ -42,6 +42,7 @@ class BudgetViewModel(
     var existingBudgetCatList: ArrayList<String> = arrayListOf()
 
     var budgetTotal: Long = 0
+    var monthlyLimit: Long = 0
     private var monthCount = 0
 
 
@@ -112,7 +113,7 @@ class BudgetViewModel(
         viewModelScope.launch {
             when (monthlyBudgetCategoryList) {
                 is AppResult.Success -> {
-                    _budgetViewItemListLiveData.value = Event(renderHomeViewList(monthlyBudgetCategoryList.data, monthlyBudgetData))
+                    _budgetViewItemListLiveData.value = Event(renderBudgetViewList(monthlyBudgetCategoryList.data, monthlyBudgetData))
                     _isLoading.value = false
                 }
                 is AppResult.Failure -> {
@@ -130,7 +131,7 @@ class BudgetViewModel(
         }
     }
 
-    private suspend fun renderHomeViewList(
+    private suspend fun renderBudgetViewList(
         budgetCategoryList: List<MonthlyCategoryBudget>,
         monthlyResult: MonthlyBudgetData?
     ): MutableList<BudgetViewItem> {
@@ -148,6 +149,7 @@ class BudgetViewModel(
                     )
                 )
                 budgetTotal = monthlyResult.totalBudget
+                monthlyLimit = monthlyResult.maxBudget
 
                 budgetViewItemList.add(BudgetViewItem.BtnAddCategory)
 
@@ -185,6 +187,9 @@ class BudgetViewModel(
     }
 
     fun reloadData() {
+        monthlyLimit = 0
+        budgetTotal = 0
+        existingBudgetCatList = arrayListOf()
         getBudgetData()
     }
 

@@ -15,6 +15,7 @@ import com.example.mobiledger.common.utils.showAddBudgetDialogFragment
 import com.example.mobiledger.common.utils.showUpdateBudgetDialogFragment
 import com.example.mobiledger.databinding.FragmentBudgetBinding
 import com.example.mobiledger.presentation.OneTimeObserver
+import com.example.mobiledger.presentation.budget.MonthlyBudgetData
 
 class BudgetFragment : BaseFragment<FragmentBudgetBinding, BudgetNavigator>(R.layout.fragment_budget) {
 
@@ -92,36 +93,36 @@ class BudgetFragment : BaseFragment<FragmentBudgetBinding, BudgetNavigator>(R.la
     private val onMakeBudgetClick = fun() {
         showAddBudgetDialogFragment(
             requireActivity().supportFragmentManager,
-            false,
+            viewModel.monthlyLimit,
             viewModel.giveFinalExpenseList(),
             DateUtils.getDateInMMyyyyFormat(viewModel.getCurrentMonth()),
-            0
+            0, false
         )
     }
 
     private val onBudgetOverviewClick = fun() {
         showAddBudgetDialogFragment(
             requireActivity().supportFragmentManager,
-            false,
+            viewModel.monthlyLimit,
             viewModel.giveFinalExpenseList(),
             DateUtils.getDateInMMyyyyFormat(viewModel.getCurrentMonth()),
-            viewModel.budgetTotal
+            viewModel.budgetTotal, false
         )
     }
 
     private val onAddBudgetCategoryClick = fun() {
         showAddBudgetDialogFragment(
             requireActivity().supportFragmentManager,
-            true,
+            viewModel.monthlyLimit,
             viewModel.giveFinalExpenseList(),
             DateUtils.getDateInMMyyyyFormat(viewModel.getCurrentMonth()),
-            viewModel.budgetTotal
+            viewModel.budgetTotal, true
         )
     }
 
     private val onBudgetCategoryClick = fun(category: String, categoryBudget: Long){
         showUpdateBudgetDialogFragment(
-            requireActivity().supportFragmentManager, viewModel.getCurrentMonth(), category, categoryBudget
+            requireActivity().supportFragmentManager, viewModel.getCurrentMonth(), category, categoryBudget, MonthlyBudgetData(viewModel.monthlyLimit, viewModel.budgetTotal)
         )
     }
 

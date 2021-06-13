@@ -90,7 +90,7 @@
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tvAmount"
-            style="@style/GelionRegularNavyBlue16"
+            style="@style/GelionRegularBlue16"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             tools:text="₹ 4763478343"
@@ -100,9 +100,26 @@
             app:autoSizeStepGranularity="1sp"
             android:maxLines="1"
             app:autoSizeTextType="uniform"
-            app:layout_constraintBottom_toBottomOf="@id/horizontalEndGuideline_16dp"
+            app:layout_constraintBottom_toBottomOf="@id/tvTransactionName"
             app:layout_constraintStart_toStartOf="@id/verticalStartGuideline70"
             app:layout_constraintEnd_toEndOf="@id/verticalEndGuideline"
-            app:layout_constraintTop_toBottomOf="@id/tvTransactionName" />
+            app:layout_constraintTop_toTopOf="@id/tvTransactionName" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tvCategoryName"
+            style="@style/GelionRegularBlue16"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            tools:text="Entertainment"
+            android:gravity="center"
+            app:autoSizeMinTextSize="@dimen/csp_12"
+            app:autoSizeMaxTextSize="@dimen/csp_16"
+            app:autoSizeStepGranularity="1sp"
+            android:maxLines="1"
+            app:autoSizeTextType="uniform"
+            app:layout_constraintBottom_toBottomOf="@id/tvPercentage"
+            app:layout_constraintStart_toStartOf="@id/verticalStartGuideline70"
+            app:layout_constraintEnd_toEndOf="@id/verticalEndGuideline"
+            app:layout_constraintTop_toTopOf="@id/tvPercentage" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

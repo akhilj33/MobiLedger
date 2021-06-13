@@ -8,11 +8,12 @@ import androidx.fragment.app.viewModels
 import com.example.mobiledger.R
 import com.example.mobiledger.common.base.BaseDialogFragment
 import com.example.mobiledger.common.base.BaseNavigator
-import com.example.mobiledger.common.extention.invisible
-import com.example.mobiledger.common.extention.visible
+import com.example.mobiledger.common.extention.disable
+import com.example.mobiledger.common.extention.enable
 import com.example.mobiledger.common.utils.DateUtils.getDateInMMMMyyyyFormat
 import com.example.mobiledger.databinding.FragmentUpdateBudgetDialogBinding
 import com.example.mobiledger.presentation.OneTimeObserver
+import com.example.mobiledger.presentation.budget.MonthlyBudgetData
 import com.google.android.material.textfield.TextInputLayout
 import java.util.*
 
@@ -30,8 +31,14 @@ class UpdateBudgetDialogFragment :
             getString(CATEGORY_NAME)?.let {
                 viewModel.categoryName = it
             }
-            getLong(AMOUNT).let {
+            getLong(OLD_BUDGET).let {
                 viewModel.amount = it
+            }
+            getLong(KEY_MONTHLY_LIMIT).let {
+                viewModel.monthlyLimit = it
+            }
+            getLong(KEY_TOTAL_BUDGET).let {
+                viewModel.monthlyTotalBudget = it
             }
         }
     }
@@ -50,11 +57,13 @@ class UpdateBudgetDialogFragment :
             }
 
             btnUpdate.setOnClickListener {
-                val amtChange = getAmount().toLong() - viewModel.amount
-                if (amtChange == 0L) dismiss()
-                else {
-                    if (doValidations()) {
-                        viewModel.updateBudgetAmount(amtChange)
+                if (it.isEnabled) {
+                    val amtChange = getAmount().toLong() - viewModel.amount
+                    if (amtChange == 0L) dismiss()
+                    else {
+                        if (doValidations()) {
+                            viewModel.updateBudgetAmount(amtChange)
+                        }
                     }
                 }
             }
@@ -68,7 +77,7 @@ class UpdateBudgetDialogFragment :
             updateBudgetHeading.text = getString(R.string.update_budget_heading, viewModel.categoryName)
             updateBudgetSubHeadingHeading.text = getDateInMMMMyyyyFormat(viewModel.monthYear)
             amountTv.setText(viewModel.amount.toString())
-            viewBinding.btnUpdate.invisible()
+            viewBinding.btnUpdate.disable()
         }
     }
 
@@ -97,6 +106,8 @@ class UpdateBudgetDialogFragment :
 
     private fun getAmount(): String = viewBinding.amountTv.text.toString().trim()
     private fun isValidAmount(): Boolean = getAmount().isNotBlank() && getAmount().toLong() > 0L
+    private fun isBudgetOverflow(): Boolean = viewModel.monthlyTotalBudget + getAmount().toLong() > viewModel.monthlyLimit
+
 
     private val amountTextWatcher = object : TextWatcher {
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
@@ -105,8 +116,8 @@ class UpdateBudgetDialogFragment :
 
         override fun afterTextChanged(editable: Editable?) {
             if (isValidAmount()) {
-                viewBinding.btnUpdate.visible()
-                updateViewBasedOnValidation(viewBinding.amountLayout, isValid = true)
+                viewBinding.btnUpdate.enable()
+                updateAmountViewBasedOnValidation(viewBinding.amountLayout, isValid = true)
             }
         }
     }
@@ -114,33 +125,42 @@ class UpdateBudgetDialogFragment :
     /*---------------------------------------Validations------------------------------------------*/
 
     private fun doValidations(): Boolean {
-        updateViewBasedOnValidation(viewBinding.amountLayout, isValidAmount())
-        return isValidAmount()
+        updateAmountViewBasedOnValidation(viewBinding.amountLayout, isValidAmount())
+        return isValidAmount() && !isBudgetOverflow()
     }
 
-    private fun updateViewBasedOnValidation(
+    private fun updateAmountViewBasedOnValidation(
         textInputLayout: TextInputLayout,
         isValid: Boolean
     ) {
         if (isValid) {
-            textInputLayout.error = null
+            if (isBudgetOverflow()) textInputLayout.error =
+                getString(R.string.budget_overflow_error, (viewModel.monthlyLimit - viewModel.monthlyTotalBudget).toString())
+            else
+                textInputLayout.error = null
         } else {
-            textInputLayout.error = getString(R.string.field_invalid)
+            textInputLayout.error = getString(R.string.field_required)
         }
     }
 
     companion object {
+        private const val KEY_TOTAL_BUDGET = "totalBudget"
+        private const val KEY_MONTHLY_LIMIT = "KEY_MONTHLY_LIMIT"
         private const val MONTH_YEAR = "MONTH_YEAR"
         private const val CATEGORY_NAME = "CATEGORY_NAME"
-        private const val AMOUNT = "AMOUNT"
+        private const val OLD_BUDGET = "AMOUNT"
 
-        fun newInstance(monthYear: Calendar, categoryName: String, amount: Long) = UpdateBudgetDialogFragment().apply {
-            arguments = Bundle().apply {
-                putSerializable(MONTH_YEAR, monthYear)
-                putString(CATEGORY_NAME, categoryName)
-                putLong(AMOUNT, amount)
+        fun newInstance(monthYear: Calendar, categoryName: String, oldCategoryBudget: Long, monthlyBudgetData: MonthlyBudgetData) =
+            UpdateBudgetDialogFragment().apply {
+
+                arguments = Bundle().apply {
+                    putSerializable(MONTH_YEAR, monthYear)
+                    putString(CATEGORY_NAME, categoryName)
+                    putLong(OLD_BUDGET, oldCategoryBudget)
+                    putLong(KEY_MONTHLY_LIMIT, monthlyBudgetData.maxBudget)
+                    putLong(KEY_TOTAL_BUDGET, monthlyBudgetData.totalBudget)
+                }
             }
-        }
     }
 
 
