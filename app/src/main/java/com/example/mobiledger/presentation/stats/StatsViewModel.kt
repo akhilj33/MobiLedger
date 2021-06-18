@@ -172,7 +172,8 @@ class StatsViewModel(private val categoryUseCase: CategoryUseCase, private val b
                     getCategoryIcon(getOtherCategoryName(transactionType), transactionType),
                     transactionType,
                     percentageValue.toString(),
-                    "#" + GraphUtils.otherColor.toHexString(), remainingSum
+                    "#" + GraphUtils.otherColor.toHexString(), remainingSum,
+                    list.subList(4, length).map { it.categoryName }
                 )
                 resultList.add(Pair(PieEntry(percentageValue.toFloat()), categoryData))
                 resultList
@@ -196,7 +197,8 @@ class StatsViewModel(private val categoryUseCase: CategoryUseCase, private val b
                     getCategoryIcon(summary.categoryName, transactionType),
                     transactionType,
                     percentageValue.toString(),
-                    "#" + getGraphColorList()[i].toHexString(), summary.categoryAmount
+                    "#" + getGraphColorList()[i].toHexString(), summary.categoryAmount,
+                    listOf(summary.categoryName)
                 )
                 resultList.add(Pair(PieEntry(percentageValue.toFloat()), categoryData))
             }

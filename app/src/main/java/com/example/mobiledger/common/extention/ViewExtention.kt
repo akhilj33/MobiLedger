@@ -1,7 +1,6 @@
 package com.example.mobiledger.common.extention
 
 import android.app.Activity
-import android.content.Context
 import android.os.Build
 import android.view.View
 import android.view.WindowManager
@@ -36,6 +35,14 @@ fun View.gone() {
     this.visibility = View.GONE
 }
 
+fun View.enable() {
+    this.isEnabled = true
+}
+
+fun View.disable() {
+    this.isEnabled = false
+}
+
 @Suppress("DEPRECATION")
 fun View.changeStatusBarColor(
     activity: Activity,
@@ -66,6 +73,7 @@ fun Long.toAmount(): String {
     return if (this >= 0) "\u20B9" + this.toString()
     else "-" + "\u20B9" + this.absoluteValue.toString()
 }
+
 fun String.toPercent() = "$this \u0025"
 fun String.roundToOneDecimal(num: Float) = " %.1f".format(num)
 

@@ -111,6 +111,8 @@
     <string name="see_all_transactions">See all %1$s transactions</string>
     <string name="transactions">transactions</string>
     <string name="update_budget_heading">Update %1$s Budget</string>
+    <string name="budget_overflow_error">Monthly total budget exceeded your monthly limit. Enter value below ₹%1$s or increase your monthly limit.</string>
+
 
     <!-- NOTIFICATION -->
     <string name="channel_transaction">Transaction channel</string>
@@ -127,6 +129,7 @@
     <!-- SPLASH SCREEN -->
     <string name="login_using_credentials">Login using credentials</string>
     <string name="retry">Retry</string>
+    <string name="view_all">VIEW ALL</string>
 
 
 </resources>

@@ -3,21 +3,20 @@ package com.example.mobiledger.common.utils
 import android.content.Context
 import android.graphics.Color
 import android.graphics.Color.rgb
+import android.graphics.DashPathEffect
 import android.graphics.Typeface
-import android.view.LayoutInflater
+import androidx.core.content.ContextCompat
 import com.example.mobiledger.R
-import com.example.mobiledger.databinding.MarkerLayoutBinding
 import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.charts.PieChart
-import com.github.mikephil.charting.components.MarkerView
+import com.github.mikephil.charting.components.LimitLine
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.components.XAxis.XAxisPosition
 import com.github.mikephil.charting.data.*
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.github.mikephil.charting.formatter.PercentFormatter
-import com.github.mikephil.charting.highlight.Highlight
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.*
@@ -52,7 +51,6 @@ object GraphUtils {
 
     fun barChart(barChart: BarChart, arrayList: List<BarEntry>, xAxisValues: List<String>) {
         barChart.description.isEnabled = false
-        barChart.xAxis.setDrawGridLines(false)
         barChart.setPinchZoom(false)
         barChart.setDrawBarShadow(false)
         barChart.setMaxVisibleValueCount(25)
@@ -71,19 +69,27 @@ object GraphUtils {
         xAxis.textSize = 13f
         xAxis.isGranularityEnabled = true
         xAxis.valueFormatter = IndexAxisValueFormatter(xAxisValues)
+        xAxis.setDrawAxisLine(true)
 
         barChart.axisLeft.setDrawGridLines(false)
         barChart.axisRight.setDrawGridLines(false)
         barChart.axisRight.isEnabled = false
         barChart.axisLeft.isEnabled = true
+        barChart.axisLeft.setDrawLabels(false)
         barChart.xAxis.setDrawGridLines(false)
         barChart.extraBottomOffset = 4f
         // add a nice and smooth animation
-        // add a nice and smooth animation
         barChart.animateY(1500)
 
-
         barChart.legend.isEnabled = false
+
+        if (checkToShowLimitLine(xAxisValues, arrayList)) {
+            val line = LimitLine(0f)
+            line.lineWidth = 0.5f
+            line.enableDashedLine(30f, 10f, 0f)
+            line.lineColor = R.color.colorAppBlue
+            barChart.axisLeft.addLimitLine(line)
+        }
 
         barChart.axisRight.setDrawLabels(false)
         barChart.axisLeft.setDrawLabels(true)
@@ -94,50 +100,53 @@ object GraphUtils {
         barChart.invalidate()
     }
 
-    //todo
-    // 1 - marker not working
-    // 2 - Padding not adding between first item and white axis
-    // 3 - Remove grids
     fun lineChart(lineChart: LineChart, arrayList: List<Entry>, context: Context) {
-        val dataSet = LineDataSet(arrayList, "Unused label")
-        dataSet.apply {
-            this.color = Color.BLACK
-            this.valueTextColor = Color.GRAY
-            this.highLightColor = Color.RED
-            this.setCircleColor(Color.BLACK)
-            this.circleHoleColor = Color.BLACK
-            this.setDrawValues(false)
-            this.lineWidth = 1.5f
-            this.isHighlightEnabled = true
-            this.setDrawHighlightIndicators(false)
-        }
-
         with(lineChart) {
-            // (1)
-            axisLeft.isEnabled = true
             axisRight.isEnabled = false
-            xAxis.isEnabled = true
-            xAxis.position = XAxisPosition.BOTTOM
-            xAxis.labelRotationAngle = 45f
-            xAxis.labelCount = 10
-            xAxis.spaceMin = 0.1f
-            xAxis.spaceMax = 0.1f
-            xAxis.setAvoidFirstLastClipping(true)
             legend.isEnabled = false
             description.isEnabled = false
 
-            // (2)
-            setTouchEnabled(true)
-            isDragEnabled = true
-            setScaleEnabled(false)
-            setPinchZoom(false)
+            xAxis.apply {
+                enableGridDashedLine(10f, 10f, 0f)
+                axisMaximum = arrayList.last().x + 86400
+                axisMinimum = arrayList[0].x - 86400
+                labelCount = arrayList.size
+                position = XAxisPosition.BOTTOM
+                labelRotationAngle = 45f
+                valueFormatter = LineChartXAxisValueFormatter()
+            }
 
-            xAxis.valueFormatter = LineChartXAxisValueFormatter()
+            axisLeft.apply {
+                axisMaximum = ((arrayList.maxByOrNull { it.y })?.y ?: 100000f) * 1.5f
+                axisMinimum = 0f
+                enableGridDashedLine(10f, 10f, 0f)
+                setDrawZeroLine(false)
+                setDrawLimitLinesBehindData(false)
+            }
         }
 
-        lineChart.marker = MyMarker(context)
-        lineChart.data = LineData(dataSet)
-        lineChart.invalidate()
+        val lineDataSet = LineDataSet(arrayList, "")
+        lineDataSet.apply {
+            setDrawIcons(false)
+            enableDashedLine(10f, 5f, 0f)
+            enableDashedHighlightLine(10f, 5f, 0f)
+            color = Color.DKGRAY
+            setCircleColor(Color.DKGRAY)
+            lineWidth = 1f
+            circleRadius = 3f
+            setDrawCircleHole(false)
+            valueTextSize = 10f
+            setDrawFilled(true)
+            formLineWidth = 1f
+            formLineDashEffect = DashPathEffect(floatArrayOf(10f, 5f), 0f)
+            formSize = 15f
+            val drawable = ContextCompat.getDrawable(context, R.drawable.fade_blue)
+            fillDrawable = drawable
+        }
+
+        val data = LineData(lineDataSet)
+        lineChart.data = data
+
     }
 
     fun getGraphColorList() = listOf(
@@ -147,16 +156,6 @@ object GraphUtils {
     )
 
     val otherColor = rgb(141, 110, 99)
-}
-
-class MyMarker(context: Context) : MarkerView(context, R.layout.marker_layout) {
-
-    override fun refreshContent(entry: Entry, highlight: Highlight) {
-        val viewBinding = MarkerLayoutBinding.inflate(LayoutInflater.from(context))
-        viewBinding.monthName.text = entry.x.toString()
-        viewBinding.tvAmount.text = entry.y.toString()
-        super.refreshContent(entry, highlight)
-    }
 }
 
 class LineChartXAxisValueFormatter : IndexAxisValueFormatter() {
@@ -182,4 +181,12 @@ class DecimalRemover(format: DecimalFormat?, pieChart: PieChart) : PercentFormat
     init {
         this.mFormat = format
     }
+}
+
+private fun checkToShowLimitLine(xAxisValues: List<String>, arrayList: List<BarEntry>): Boolean {
+    val index = xAxisValues.indexOf("Saving")
+    if (index != -1) {
+        return arrayList[index].y < 0f
+    }
+    return false
 }

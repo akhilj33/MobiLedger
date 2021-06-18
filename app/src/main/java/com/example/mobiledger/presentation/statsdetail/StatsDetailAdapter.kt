@@ -82,6 +82,7 @@ class StatsDetailAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 tvTransactionName.text = item.transactionEntity.name
                 (item.percent + "%").also { tvPercentage.text = it }
                 tvAmount.text = item.transactionEntity.amount.toString()
+                tvCategoryName.text = item.transactionEntity.category
             }
         }
     }

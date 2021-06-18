@@ -10,6 +10,8 @@ import androidx.lifecycle.Observer
 import com.example.mobiledger.R
 import com.example.mobiledger.common.base.BaseDialogFragment
 import com.example.mobiledger.common.base.BaseNavigator
+import com.example.mobiledger.common.extention.disable
+import com.example.mobiledger.common.extention.enable
 import com.example.mobiledger.common.extention.invisible
 import com.example.mobiledger.common.extention.visible
 import com.example.mobiledger.common.utils.DateUtils
@@ -66,7 +68,7 @@ class TransactionDetailDialogFragment :
             amountTv.setText(viewModel.oldTransactionEntity.amount.toString())
             dateTv.setText(getDateInDDMMMMyyyyFormat(viewModel.oldTransactionEntity.transactionTime))
             descriptionTv.setText(viewModel.oldTransactionEntity.description)
-            viewBinding.btnUpdate.invisible()
+            viewBinding.btnUpdate.disable()
         }
     }
 
@@ -116,19 +118,21 @@ class TransactionDetailDialogFragment :
             }
 
             btnUpdate.setOnClickListener {
-                if (checkAllFieldsSame()) dismiss()
-                else {
-                    if (doValidations()) {
-                        val timeStamp: Timestamp = if (viewModel.timeInMillis != null) {
-                            Timestamp(Date(viewModel.timeInMillis as Long))
-                        } else {
-                            viewModel.oldTransactionEntity.transactionTime
+                if (it.isEnabled) {
+                    if (checkAllFieldsSame()) dismiss()
+                    else {
+                        if (doValidations()) {
+                            val timeStamp: Timestamp = if (viewModel.timeInMillis != null) {
+                                Timestamp(Date(viewModel.timeInMillis as Long))
+                            } else {
+                                viewModel.oldTransactionEntity.transactionTime
+                            }
+                            val newTransactionEntity = TransactionEntity(
+                                getName(), getAmount().toLong(), getCategory(), getDescription(),
+                                viewModel.oldTransactionEntity.transactionType, timeStamp
+                            ).apply { id = viewModel.oldTransactionEntity.id }
+                            handleFieldChanges(newTransactionEntity)
                         }
-                        val newTransactionEntity = TransactionEntity(
-                            getName(), getAmount().toLong(), getCategory(), getDescription(),
-                            viewModel.oldTransactionEntity.transactionType, timeStamp
-                        ).apply { id = viewModel.oldTransactionEntity.id }
-                        handleFieldChanges(newTransactionEntity)
                     }
                 }
             }
@@ -209,7 +213,7 @@ class TransactionDetailDialogFragment :
 
         override fun afterTextChanged(editable: Editable?) {
             if (isValidName()) {
-                viewBinding.btnUpdate.visible()
+                viewBinding.btnUpdate.enable()
                 updateViewBasedOnValidation(viewBinding.transactionNameLayout, isValid = true)
             }
         }
@@ -222,7 +226,7 @@ class TransactionDetailDialogFragment :
 
         override fun afterTextChanged(editable: Editable?) {
             if (isValidAmount()) {
-                viewBinding.btnUpdate.visible()
+                viewBinding.btnUpdate.enable()
                 updateViewBasedOnValidation(viewBinding.amountLayout, isValid = true)
             }
         }
@@ -235,7 +239,7 @@ class TransactionDetailDialogFragment :
 
         override fun afterTextChanged(editable: Editable?) {
             if (isValidCategory()) {
-                viewBinding.btnUpdate.visible()
+                viewBinding.btnUpdate.enable()
                 updateViewBasedOnValidation(viewBinding.spinnerCategory, isValid = true)
             }
         }
@@ -248,7 +252,7 @@ class TransactionDetailDialogFragment :
 
         override fun afterTextChanged(editable: Editable?) {
             if (isValidDate()) {
-                viewBinding.btnUpdate.visible()
+                viewBinding.btnUpdate.enable()
                 updateViewBasedOnValidation(viewBinding.dateLayout, isValid = true)
             }
         }
@@ -260,7 +264,7 @@ class TransactionDetailDialogFragment :
         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) = Unit
 
         override fun afterTextChanged(editable: Editable?) {
-            viewBinding.btnUpdate.visible()
+            viewBinding.btnUpdate.enable()
         }
     }
 

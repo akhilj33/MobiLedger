@@ -21,7 +21,7 @@ interface BudgetUseCase {
     suspend fun updateMonthlyCategoryBudgetAmounts(monthYear: String, category: String, budgetChange: Long = 0L, expenseChange: Long = 0L): AppResult<Unit>
     suspend fun updateMonthlyCategoryBudgetOnCategoryChanged(monthYear: String, oldCategory: String, newCategory: String,
                                                              oldAmount: Long, newAmount: Long): AppResult<Unit>
-    suspend fun deleteBudgetCategory(monthYear: String, category: String): AppResult<Unit>
+    suspend fun deleteBudgetCategoryAndUpdateSummary(monthYear: String, category: String, budgetChange: Long): AppResult<Unit>
 }
 
 class BudgetUseCaseImpl(private val budgetRepository: BudgetRepository) : BudgetUseCase {
@@ -51,7 +51,7 @@ class BudgetUseCaseImpl(private val budgetRepository: BudgetRepository) : Budget
         expenseChange: Long
     ): AppResult<Unit> {
        return withContext(Dispatchers.IO){
-            val updateMonthlyBudgetSummaryJob = async { updateMonthlyBudgetSummary(monthYear, budgetChange, expenseChange) }
+            val updateMonthlyBudgetSummaryJob = async { updateMonthlyBudgetSummary(monthYear, totalBudgetChange = budgetChange) }
             val updateCategoryAmountJob = async { budgetRepository.updateMonthlyCategoryBudgetAmounts(monthYear, category, budgetChange, expenseChange) }
 
             if (updateCategoryAmountJob.await() is AppResult.Success && updateMonthlyBudgetSummaryJob.await() is AppResult.Success)
@@ -76,7 +76,7 @@ class BudgetUseCaseImpl(private val budgetRepository: BudgetRepository) : Budget
                         if (newBudget > 0L){
                             updateMonthlyCategoryBudgetData(monthYear, category, budgetChange,expenseChange)
                         }
-                        else deleteBudgetCategory(monthYear, category)
+                        else deleteBudgetCategoryAndUpdateSummary(monthYear, category, budgetChange)
                     }
                     is AppResult.Failure -> AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
                 }
@@ -101,8 +101,15 @@ class BudgetUseCaseImpl(private val budgetRepository: BudgetRepository) : Budget
         }
     }
 
-    override suspend fun deleteBudgetCategory(monthYear: String, category: String): AppResult<Unit> {
-        return budgetRepository.deleteBudgetCategory(monthYear, category)
+    override suspend fun deleteBudgetCategoryAndUpdateSummary(monthYear: String, category: String, budgetChange: Long): AppResult<Unit> {
+        return withContext(Dispatchers.IO){
+            val updateMonthlyBudgetSummaryJob = async { updateMonthlyBudgetSummary(monthYear, totalBudgetChange = budgetChange) }
+            val deleteCategoryJob = async { budgetRepository.deleteBudgetCategory(monthYear, category) }
+
+            if (deleteCategoryJob.await() is AppResult.Success && updateMonthlyBudgetSummaryJob.await() is AppResult.Success)
+                AppResult.Success(Unit)
+            else AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
+        }
     }
 
 }

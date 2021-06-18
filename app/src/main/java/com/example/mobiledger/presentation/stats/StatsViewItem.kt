@@ -22,6 +22,7 @@ data class CategoryData(
     val percent: String,
     val color: String,
     val amount: Long,
+    val categoryList: List<String>
 )
 
 sealed class StatsGraphViewItem(val viewType: StatsGraphViewType) {

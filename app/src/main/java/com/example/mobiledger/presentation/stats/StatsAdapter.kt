@@ -18,7 +18,7 @@ import com.example.mobiledger.databinding.StatsHeaderItemBinding
 import com.example.mobiledger.domain.enums.TransactionType
 import java.util.*
 
-class StatsAdapter(private val onCategoryItemClick:(categoryName: String, amount: Long)->Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class StatsAdapter(private val onCategoryItemClick:(categoryNameList: List<String>, amount: Long)->Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private lateinit var context: Context
 
@@ -81,9 +81,9 @@ class StatsAdapter(private val onCategoryItemClick:(categoryName: String, amount
                 tvAmount.text = item.amount.toAmount()
 
                 if (item.categoryType == TransactionType.Income)
-                    root.setOnClickListener { onCategoryItemClick(item.name, item.amount) }
+                    root.setOnClickListener { onCategoryItemClick(item.categoryList, item.amount) }
                 else if (item.categoryType == TransactionType.Expense)
-                    root.setOnClickListener { onCategoryItemClick(item.name, 0L - item.amount) }
+                    root.setOnClickListener { onCategoryItemClick(item.categoryList, 0L - item.amount) }
             }
         }
     }
