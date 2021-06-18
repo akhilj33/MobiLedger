@@ -10,6 +10,8 @@ import com.example.mobiledger.R
 import com.example.mobiledger.common.base.BaseFragment
 import com.example.mobiledger.common.base.BaseNavigator
 import com.example.mobiledger.common.utils.DateUtils.getDateInMMMMyyyyFormat
+import com.example.mobiledger.common.utils.JsonUtils.convertJsonStringToObject
+import com.example.mobiledger.common.utils.JsonUtils.convertToJsonString
 import com.example.mobiledger.databinding.FragmentStatsDetailBinding
 import com.example.mobiledger.databinding.SnackViewErrorBinding
 import com.example.mobiledger.presentation.OneTimeObserver
@@ -24,7 +26,7 @@ class StatsDetailFragment : BaseFragment<FragmentStatsDetailBinding, BaseNavigat
         super.onCreate(savedInstanceState)
         arguments?.apply {
             getString(CATEGORY)?.let {
-                viewModel.category = it
+                viewModel.categoryList = convertJsonStringToObject(it)?: emptyList()
             }
             getLong(AMOUNT).let {
                 viewModel.amount = it
@@ -43,7 +45,7 @@ class StatsDetailFragment : BaseFragment<FragmentStatsDetailBinding, BaseNavigat
         setUpObservers()
         setOnClickListeners()
         initUI()
-        viewModel.getCategoryDetails()
+        viewModel.getCategoryListDetails()
     }
 
     private fun setOnClickListeners() {
@@ -53,26 +55,28 @@ class StatsDetailFragment : BaseFragment<FragmentStatsDetailBinding, BaseNavigat
     }
 
     private fun initUI() {
+        val headerName = if (viewModel.categoryList.size > 1 ) requireContext().getString(R.string.others)
+                         else viewModel.categoryList[0]
         viewBinding.monthHeader.text = requireContext().getString(
             R.string.stats_detail_header,
-            viewModel.category,
+            headerName,
             getDateInMMMMyyyyFormat(viewModel.monthYear)
         )
-        initHeaderText()
+        initHeaderCardView()
     }
 
-    private fun initHeaderText() {
+    private fun initHeaderCardView() {
         viewBinding.headerText.apply {
             if (viewModel.amount >= 0L) {
                 text = requireContext().getString(
                     R.string.stats_detail_header_income, viewModel.getAbsoluteStringAmount(),
-                    viewModel.category, viewModel.getDate()
+                    viewModel.categoryList.joinToString(), viewModel.getDate()
                 )
                 setTextColor(ContextCompat.getColorStateList(requireContext(), R.color.colorGreen))
             } else {
                 text = requireContext().getString(
                     R.string.stats_detail_header_expense, viewModel.getAbsoluteStringAmount(),
-                    viewModel.category, viewModel.getDate()
+                    viewModel.categoryList.joinToString(), viewModel.getDate()
                 )
                 setTextColor(ContextCompat.getColorStateList(requireContext(), R.color.colorDarkRed))
             }
@@ -124,10 +128,10 @@ class StatsDetailFragment : BaseFragment<FragmentStatsDetailBinding, BaseNavigat
         private const val CATEGORY = "CATEGORY_NAME"
         private const val AMOUNT = "CATEGORY_AMOUNT"
         private const val MONTH_YEAR = "MONTH_YEAR"
-        fun newInstance(category: String, amount: Long, monthYear: Calendar) =
+        fun newInstance(categoryList: List<String>, amount: Long, monthYear: Calendar) =
             StatsDetailFragment().apply {
                 arguments = Bundle().apply {
-                    putString(CATEGORY, category)
+                    putString(CATEGORY, convertToJsonString(categoryList))
                     putLong(AMOUNT, amount)
                     putSerializable(MONTH_YEAR, monthYear)
                 }

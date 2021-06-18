@@ -39,7 +39,7 @@
             android:paddingVertical="@dimen/cdp_4"
             android:paddingHorizontal="@dimen/cdp_10"
             android:layout_marginEnd="@dimen/cdp_16"
-            android:text="VIEW ALL"
+            android:text="@string/view_all"
             android:visibility="gone"
             app:layout_constraintTop_toTopOf="@id/tvHeader"
             app:layout_constraintBottom_toBottomOf="@id/tvHeader"

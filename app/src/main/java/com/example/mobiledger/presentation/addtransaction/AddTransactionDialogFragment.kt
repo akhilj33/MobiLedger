@@ -113,6 +113,9 @@ class AddTransactionDialogFragment :
             btnSubmitTransaction.setOnClickListener {
                 addTransaction()
             }
+            closeIv.setOnClickListener {
+                dismiss()
+            }
         }
 
         datePicker.addOnPositiveButtonClickListener {

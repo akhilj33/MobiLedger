@@ -30,9 +30,10 @@ class AddBudgetDialogFragment :
         super.onCreate(savedInstanceState)
         arguments?.let {
             viewModel.expenseCategoryList = it.getStringArrayList(KEY_LIST) as ArrayList<String>
-            viewModel.isCategoryBudget = it.getBoolean(KEY_IS_CATEGORY_BUDGET)
+            viewModel.monthlyLimit = it.getLong(KEY_MONTHLY_LIMIT)
             viewModel.month = it.getString(KEY_MONTH) as String
             viewModel.budgetTotal = it.getLong(KEY_BUDGET_TOTAL)
+            viewModel.isCategoryBudget = it.getBoolean(KEY_IS_ADD_CATEGORY)
         }
     }
 
@@ -108,6 +109,7 @@ class AddBudgetDialogFragment :
 
     private fun isValidAmount(): Boolean = (getAmountText().isNotBlank() && getAmountText().toLong() >= 0)
     private fun isValidCategory(): Boolean = getCategoryText().isNotBlank()
+    private fun isBudgetOverflow():Boolean = viewModel.budgetTotal+getAmountText().toLong() > viewModel.monthlyLimit
 
     /*---------------------------------------Text Watchers-----------------------------------------*/
 
@@ -118,7 +120,7 @@ class AddBudgetDialogFragment :
 
         override fun afterTextChanged(editable: Editable?) {
             if (isValidAmount()) {
-                updateViewBasedOnValidation(viewBinding.amountLayout, isValid = true)
+                updateAmountViewBasedOnValidation(viewBinding.amountLayout, isValid = true)
             }
         }
     }
@@ -140,12 +142,26 @@ class AddBudgetDialogFragment :
 
     private fun doValidations(): Boolean {
         return if (viewModel.isCategoryBudget) {
-            updateViewBasedOnValidation(viewBinding.amountLayout, isValidAmount())
+            updateAmountViewBasedOnValidation(viewBinding.amountLayout, isValidAmount())
             updateViewBasedOnValidation(viewBinding.spinnerCategory, isValidCategory())
-            isValidCategory() && isValidAmount()
+            isValidCategory() && isValidAmount() && !isBudgetOverflow()
         } else {
             updateViewBasedOnValidation(viewBinding.amountLayout, isValidAmount())
             isValidAmount()
+        }
+    }
+
+    private fun updateAmountViewBasedOnValidation(
+        textInputLayout: TextInputLayout,
+        isValid: Boolean
+    ) {
+        if (isValid) {
+            if (viewModel.isCategoryBudget && isBudgetOverflow()){
+                textInputLayout.error = getString(R.string.budget_overflow_error, (viewModel.monthlyLimit - viewModel.budgetTotal).toString())
+            }
+            else textInputLayout.error = null
+        } else {
+            textInputLayout.error = getString(R.string.field_required)
         }
     }
 
@@ -161,18 +177,20 @@ class AddBudgetDialogFragment :
     }
 
     companion object {
+        private const val KEY_IS_ADD_CATEGORY = "KEY_IS_ADD_CATEGORY"
         private const val KEY_LIST = "getList"
-        private const val KEY_IS_CATEGORY_BUDGET = "isCategoryBudget"
+        private const val KEY_MONTHLY_LIMIT = "KEY_MONTHLY_LIMIT"
         private const val KEY_MONTH = "month"
         private const val KEY_BUDGET_TOTAL = "budgetTotal"
-        fun newInstance(isCategoryBudget: Boolean, list: List<String>, month: String, budgetTotal: Long) = AddBudgetDialogFragment().apply {
+        fun newInstance(monthlyLimit: Long, list: List<String>, month: String, budgetTotal: Long, isAddCategory: Boolean) =
+            AddBudgetDialogFragment().apply {
             arguments = Bundle().apply {
-                putBoolean(KEY_IS_CATEGORY_BUDGET, isCategoryBudget)
+                putLong(KEY_MONTHLY_LIMIT, monthlyLimit)
                 putStringArrayList(KEY_LIST, list as ArrayList<String>)
                 putString(KEY_MONTH, month)
                 putLong(KEY_BUDGET_TOTAL, budgetTotal)
+                putBoolean(KEY_IS_ADD_CATEGORY, isAddCategory)
             }
         }
     }
-
 }

@@ -33,8 +33,9 @@
             android:id="@+id/closeIv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_90"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/topGuideline"
+            android:layout_marginEnd="@dimen/cdp_24"
             app:srcCompat="@drawable/cancel_icon"/>
 
         <com.google.android.material.button.MaterialButton
@@ -181,21 +182,6 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnUpdate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/cdp_24"
-            android:layout_marginBottom="@dimen/cdp_48"
-            android:text="@string/update"
-            android:textSize="@dimen/csp_16"
-            android:visibility="invisible"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/btnDelete"
-            app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_10"
-            app:layout_constraintTop_toBottomOf="@id/descriptionLayout"
-            tools:visibility="visible" />
-
-        <com.google.android.material.button.MaterialButton
             android:id="@+id/btnDelete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -204,9 +190,23 @@
             android:text="@string/delete"
             android:textSize="@dimen/csp_16"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_90"
-            app:layout_constraintStart_toEndOf="@id/btnUpdate"
-            app:layout_constraintTop_toBottomOf="@id/descriptionLayout" />
+            app:layout_constraintEnd_toStartOf="@id/btnUpdate"
+            app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_10"
+            app:layout_constraintTop_toBottomOf="@id/descriptionLayout"
+            tools:visibility="visible" />
 
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnUpdate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/cdp_24"
+            android:layout_marginBottom="@dimen/cdp_48"
+            android:text="@string/update"
+            android:textSize="@dimen/csp_16"
+            android:enabled="false"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_90"
+            app:layout_constraintStart_toEndOf="@id/btnDelete"
+            app:layout_constraintTop_toBottomOf="@id/descriptionLayout" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
