@@ -116,6 +116,10 @@
     </style>
 
     <style name="GelionRegularBlue18" parent="GelionRegular18">
+        <item name="android:textColor">@color/colorAppBlue</item>
+    </style>
+
+    <style name="GelionRegularPurple18" parent="GelionRegular18">
         <item name="android:textColor">@color/colorPurple</item>
     </style>
 

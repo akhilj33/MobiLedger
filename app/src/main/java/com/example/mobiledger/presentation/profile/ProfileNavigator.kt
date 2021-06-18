@@ -6,4 +6,5 @@ interface ProfileNavigator : BaseNavigator {
     fun navigateToEditProfileScreen()
     fun navigateToCategoryFragmentScreen()
     fun navigateToAuthScreen()
+    fun navigateToBudgetTemplateFragment()
 }

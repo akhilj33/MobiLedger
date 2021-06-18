@@ -38,4 +38,6 @@ object ConstantUtils {
     const val DATA_REMINDER = "DATA_REMINDER"
     const val DAILY_REMINDER = "DAILY_REMINDER"
     const val OTHERS = "Others"
+    const val BUDGET_TEMPLATES = "BudgetTemplates"
+    const val BUDGET_TEMPLATE_CATEGORY_LIST = "BudgetTemplatesCategoryList"
 }

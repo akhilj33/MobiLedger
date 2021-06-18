@@ -1,6 +1,6 @@
 package com.example.mobiledger.common.di.providers
 
-import androidx.lifecycle.ViewModel
+import  androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.mobiledger.presentation.addtransaction.AddTransactionViewModel
 import com.example.mobiledger.presentation.auth.LoginViewModel
@@ -8,6 +8,9 @@ import com.example.mobiledger.presentation.auth.SignUpViewModel
 import com.example.mobiledger.presentation.budget.addbudget.AddBudgetDialogViewModel
 import com.example.mobiledger.presentation.budget.budgetscreen.BudgetViewModel
 import com.example.mobiledger.presentation.budget.updatebudget.UpdateBudgetViewModel
+import com.example.mobiledger.presentation.budgetTemplate.AddBudgetTemplateDialogFragmentViewModel
+import com.example.mobiledger.presentation.budgetTemplate.BudgetTemplateViewModel
+import com.example.mobiledger.presentation.budgetTemplate.EditBudgetTemplateViewModel
 import com.example.mobiledger.presentation.categoryFragment.AddCategoryDialogViewModel
 import com.example.mobiledger.presentation.categoryFragment.ExpenseCategoryViewModel
 import com.example.mobiledger.presentation.categoryFragment.IncomeCategoryViewModel
@@ -100,18 +103,36 @@ class ViewModelFactoryProvider(private val useCaseProvider: UseCaseProvider) :
                     useCaseProvider.provideCategoryUseCase()
                 ) as T
             }
+
             modelClass.isAssignableFrom(StatsViewModel::class.java) -> {
                 StatsViewModel(useCaseProvider.provideCategoryUseCase(), useCaseProvider.provideBudgetUseCase()) as T
             }
+
             modelClass.isAssignableFrom(StatsDetailViewModel::class.java) -> {
                 StatsDetailViewModel(useCaseProvider.provideCategoryUseCase(), useCaseProvider.provideBudgetUseCase()) as T
             }
+
             modelClass.isAssignableFrom(TransactionDetailViewModel::class.java) -> {
-                TransactionDetailViewModel(useCaseProvider.provideCategoryUseCase(), useCaseProvider.provideTransactionUseCase(),
-                useCaseProvider.provideBudgetUseCase()) as T
+                TransactionDetailViewModel(
+                    useCaseProvider.provideCategoryUseCase(), useCaseProvider.provideTransactionUseCase(),
+                    useCaseProvider.provideBudgetUseCase()
+                ) as T
             }
+
             modelClass.isAssignableFrom(UpdateBudgetViewModel::class.java) -> {
                 UpdateBudgetViewModel(useCaseProvider.provideBudgetUseCase()) as T
+            }
+
+            modelClass.isAssignableFrom(AddBudgetTemplateDialogFragmentViewModel::class.java) -> {
+                AddBudgetTemplateDialogFragmentViewModel(useCaseProvider.provideBudgetTemplateUseCase()) as T
+            }
+
+            modelClass.isAssignableFrom(BudgetTemplateViewModel::class.java) -> {
+                BudgetTemplateViewModel(useCaseProvider.provideBudgetTemplateUseCase()) as T
+            }
+
+            modelClass.isAssignableFrom(EditBudgetTemplateViewModel::class.java) -> {
+                EditBudgetTemplateViewModel(useCaseProvider.provideBudgetTemplateUseCase()) as T
             }
             else -> throw IllegalArgumentException("Unknown ViewModel Class")
         }

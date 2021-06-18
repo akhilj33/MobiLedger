@@ -128,5 +128,17 @@
     <string name="login_using_credentials">Login using credentials</string>
     <string name="retry">Retry</string>
 
+    <!-- Budget Template -->
+    <string name="budget_template">Budget Template</string>
+    <string name="new_template">New Template</string>
+    <string name="max_limit_rs">Max budget limit (₹)</string>
+    <string name="add_template">Add Template</string>
+    <string name="add_budget_template">Add Budget Template</string>
+    <string name="maximum_budget_limit">Maximum Budget Limit</string>
+    <string name="enable_biometrics">Enable Biometrics</string>
+    <string name="notification">Notification</string>
+    <string name="daily_reminder">Daily Reminder</string>
+    <string name="budget_templates">Budget Templates</string>
+
 
 </resources>

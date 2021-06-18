@@ -63,7 +63,7 @@ class TransactionListFragment :
         private const val KEY_LIST = "getList"
         fun newInstance(list: ArrayList<TransactionData>) = TransactionListFragment().apply {
             arguments = Bundle().apply {
-                putSerializable(KEY_LIST, list);
+                putSerializable(KEY_LIST, list)
             }
         }
     }

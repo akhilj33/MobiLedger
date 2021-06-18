@@ -6,10 +6,10 @@ import com.example.mobiledger.domain.entities.TransactionEntity
 import com.example.mobiledger.presentation.addtransaction.AddTransactionDialogFragment
 import com.example.mobiledger.presentation.budget.addbudget.AddBudgetDialogFragment
 import com.example.mobiledger.presentation.budget.updatebudget.UpdateBudgetDialogFragment
+import com.example.mobiledger.presentation.budgetTemplate.AddBudgetTemplateDialogFragment
 import com.example.mobiledger.presentation.categoryFragment.AddCategoryDialogFragment
 import com.example.mobiledger.presentation.transactiondetail.TransactionDetailDialogFragment
 import java.util.*
-import kotlin.collections.ArrayList
 
 fun showAddTransactionDialogFragment(fragmentManager: FragmentManager) {
     val dialog = AddTransactionDialogFragment.newInstance()
@@ -59,6 +59,16 @@ fun showUpdateBudgetDialogFragment(
     categoryBudget: Long
 ) {
     val dialog = UpdateBudgetDialogFragment.newInstance(month, category, categoryBudget)
+    dialog.show(
+        fragmentManager,
+        dialog.getName()
+    )
+}
+
+fun showAddNewTemplateDialogFragment(
+    fragmentManager: FragmentManager,
+) {
+    val dialog = AddBudgetTemplateDialogFragment.newInstance()
     dialog.show(
         fragmentManager,
         dialog.getName()

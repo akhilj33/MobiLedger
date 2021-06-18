@@ -67,6 +67,4 @@ class CategoryAdapter(
         categoryList.addAll(list)
         notifyDataSetChanged()
     }
-
-
 }

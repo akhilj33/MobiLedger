@@ -9,6 +9,9 @@ import com.example.mobiledger.presentation.auth.LoginNavigator
 import com.example.mobiledger.presentation.auth.SignUpFragment
 import com.example.mobiledger.presentation.auth.SignUpNavigator
 import com.example.mobiledger.presentation.budget.budgetscreen.BudgetNavigator
+import com.example.mobiledger.presentation.budgetTemplate.BudgetTemplateFragment
+import com.example.mobiledger.presentation.budgetTemplate.BudgetTemplateNavigator
+import com.example.mobiledger.presentation.budgetTemplate.EditBudgetTemplateFragment
 import com.example.mobiledger.presentation.categoryFragment.CategoryFragment
 import com.example.mobiledger.presentation.dashboard.DashboardFragment
 import com.example.mobiledger.presentation.home.HomeNavigator
@@ -26,7 +29,8 @@ import java.util.*
 class MainActivityNavigator constructor(
     @IdRes private val containerId: Int,
     private val fragmentManager: FragmentManager
-) : HomeNavigator, LoginNavigator, SignUpNavigator, SplashNavigator, ProfileNavigator, BudgetNavigator, StatsNavigator {
+) : HomeNavigator, LoginNavigator, SignUpNavigator, SplashNavigator, ProfileNavigator, BudgetNavigator, StatsNavigator,
+    BudgetTemplateNavigator {
 
 
     /*---------------------------------Main Activity-------------------------------------*/
@@ -123,6 +127,22 @@ class MainActivityNavigator constructor(
         FragmentTransactionHelper.replaceFragment(
             fragmentManager,
             TransactionListFragment.newInstance(transactionList),
+            containerId, addToBackStack = true
+        )
+    }
+
+    override fun navigateToEditBudgetTemplateScreen(id: String) {
+        FragmentTransactionHelper.replaceFragment(
+            fragmentManager,
+            EditBudgetTemplateFragment.newInstance(id),
+            containerId, addToBackStack = true
+        )
+    }
+
+    override fun navigateToBudgetTemplateFragment() {
+        FragmentTransactionHelper.replaceFragment(
+            fragmentManager,
+            BudgetTemplateFragment.newInstance(),
             containerId, addToBackStack = true
         )
     }
