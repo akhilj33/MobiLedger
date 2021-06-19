@@ -11,6 +11,7 @@ import com.example.mobiledger.presentation.budget.budgetscreen.BudgetFragment
 import com.example.mobiledger.presentation.budget.updatebudget.UpdateBudgetDialogFragment
 import com.example.mobiledger.presentation.budgetTemplate.AddBudgetTemplateDialogFragment
 import com.example.mobiledger.presentation.budgetTemplate.BudgetTemplateFragment
+import com.example.mobiledger.presentation.budgetTemplate.EditBudgetTemplateDialogFragment
 import com.example.mobiledger.presentation.budgetTemplate.EditBudgetTemplateFragment
 import com.example.mobiledger.presentation.categoryFragment.AddCategoryDialogFragment
 import com.example.mobiledger.presentation.categoryFragment.CategoryFragment
@@ -51,6 +52,7 @@ object FragmentTagUtil {
     private const val BUDGET_TEMPLATE_FRAGMENT = "BUDGET_TEMPLATE_FRAGMENT"
     private const val EDIT_BUDGET_TEMPLATE_FRAGMENT = "EDIT_BUDGET_TEMPLATE_FRAGMENT"
     private const val ADD_BUDGET_TEMPLATE_DIALOG_FRAGMENT = "ADD_BUDGET_TEMPLATE_DIALOG_FRAGMENT"
+    private const val EDIT_BUDGET_TEMPLATE_DIALOG_FRAGMENT = "EDIT_BUDGET_TEMPLATE_DIALOG_FRAGMENT"
 
     fun getFragmentName(fragment: Fragment): String {
         return when (fragment) {
@@ -78,6 +80,7 @@ object FragmentTagUtil {
             is BudgetTemplateFragment -> BUDGET_TEMPLATE_FRAGMENT
             is EditBudgetTemplateFragment -> EDIT_BUDGET_TEMPLATE_FRAGMENT
             is AddBudgetTemplateDialogFragment -> ADD_BUDGET_TEMPLATE_DIALOG_FRAGMENT
+            is EditBudgetTemplateDialogFragment -> EDIT_BUDGET_TEMPLATE_DIALOG_FRAGMENT
             else -> throw RuntimeException("Fragment Name mapping doesn't exist in ${FragmentTagUtil.javaClass.simpleName} class")
         }
     }

@@ -123,14 +123,14 @@
 
                 <TextView
                     android:id="@+id/displayName"
+                    style="@style/GelionSemiBoldBlue18"
                     android:layout_width="245dp"
                     android:layout_height="wrap_content"
                     android:layout_alignTop="@id/imgUser"
                     android:layout_marginStart="@dimen/cdp_16"
                     android:layout_marginTop="10dp"
-                    android:padding="@dimen/cdp_4"
-                    style="@style/GelionSemiBoldBlue18"
                     android:layout_toEndOf="@id/imgUser"
+                    android:padding="@dimen/cdp_4"
                     android:text="@string/display_name"
                     android:textColor="@color/colorPrimaryDark" />
 

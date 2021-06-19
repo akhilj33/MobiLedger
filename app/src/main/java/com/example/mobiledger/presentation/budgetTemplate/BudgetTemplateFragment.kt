@@ -8,6 +8,7 @@ import com.example.mobiledger.R
 import com.example.mobiledger.common.base.BaseFragment
 import com.example.mobiledger.common.utils.showAddNewTemplateDialogFragment
 import com.example.mobiledger.databinding.FragmentBudgetTemplateBinding
+import com.example.mobiledger.presentation.OneTimeObserver
 import com.example.mobiledger.presentation.budgetTemplate.budgetTemplateAdapters.BudgetTemplateFragmentRecyclerAdapter
 
 class BudgetTemplateFragment : BaseFragment<FragmentBudgetTemplateBinding, BudgetTemplateNavigator>(R.layout.fragment_budget_template) {
@@ -18,7 +19,6 @@ class BudgetTemplateFragment : BaseFragment<FragmentBudgetTemplateBinding, Budge
 
     private val budgetTemplateFragmentRecyclerAdapter: BudgetTemplateFragmentRecyclerAdapter by lazy {
         BudgetTemplateFragmentRecyclerAdapter(
-            onDeleteItemClick,
             onTemplateItemClick
         )
     }
@@ -47,6 +47,11 @@ class BudgetTemplateFragment : BaseFragment<FragmentBudgetTemplateBinding, Budge
                 budgetTemplateFragmentRecyclerAdapter.addList(it.peekContent())
             }
         })
+        activityViewModel.addNewBudgetTemplate.observe(viewLifecycleOwner, OneTimeObserver {
+            it.let {
+                viewModel.refreshData()
+            }
+        })
     }
 
     private fun initRecyclerView() {
@@ -56,10 +61,6 @@ class BudgetTemplateFragment : BaseFragment<FragmentBudgetTemplateBinding, Budge
                 layoutManager = linearLayoutManager
                 adapter = budgetTemplateFragmentRecyclerAdapter
             }
-    }
-
-    private val onDeleteItemClick = fun(id: String) {
-
     }
 
     private val onTemplateItemClick = fun(id: String) {

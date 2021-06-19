@@ -44,6 +44,7 @@ class AddBudgetTemplateDialogFragment :
 
         viewModel.dataAdded.observe(viewLifecycleOwner, {
             if (it) {
+                activityViewModel.addNewBudgetTemplate()
                 dismiss()
             }
         })

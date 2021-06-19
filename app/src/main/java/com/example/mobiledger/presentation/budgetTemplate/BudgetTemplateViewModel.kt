@@ -29,6 +29,10 @@ class BudgetTemplateViewModel(
         getBudgetTemplateList()
     }
 
+    fun refreshData() {
+        getBudgetTemplateList()
+    }
+
     private fun getBudgetTemplateList() {
         _loadingState.value = true
         viewModelScope.launch {

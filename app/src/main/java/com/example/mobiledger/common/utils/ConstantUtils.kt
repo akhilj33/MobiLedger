@@ -40,4 +40,5 @@ object ConstantUtils {
     const val OTHERS = "Others"
     const val BUDGET_TEMPLATES = "BudgetTemplates"
     const val BUDGET_TEMPLATE_CATEGORY_LIST = "BudgetTemplatesCategoryList"
+    const val MAX_BUDGET_LIMIT = "maxBudgetLimit"
 }

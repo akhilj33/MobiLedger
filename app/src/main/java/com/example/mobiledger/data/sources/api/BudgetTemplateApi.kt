@@ -12,6 +12,7 @@ import com.example.mobiledger.domain.entities.NewBudgetTemplateEntity
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuthException
 import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
 import kotlinx.coroutines.tasks.await
@@ -30,6 +31,10 @@ interface BudgetTemplateApi {
     ): AppResult<Unit>
 
     suspend fun getBudgetTemplateSummary(uid: String, id: String): AppResult<NewBudgetTemplateEntity>
+    suspend fun updateBudgetCategoryAmount(uid: String, id: String, category: String, value: Long): AppResult<Unit>
+    suspend fun deleteCategoryFromBudgetTemplate(uid: String, id: String, category: String): AppResult<Unit>
+    suspend fun deleteBudgetTemplate(uid: String, id: String): AppResult<Unit>
+    suspend fun updateBudgetTemplateMaxLimit(uid: String, id: String, value: Long): AppResult<Unit>
 }
 
 class BudgetTemplateApiImpl(private val firebaseDb: FirebaseFirestore, private val authSource: AuthSource) : BudgetTemplateApi {
@@ -196,6 +201,140 @@ class BudgetTemplateApiImpl(private val firebaseDb: FirebaseFirestore, private v
                 } else {
                     AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
                 }
+            }
+            is FireBaseResult.Failure -> {
+                AppResult.Failure(result.error)
+            }
+        }
+    }
+
+    override suspend fun updateBudgetCategoryAmount(uid: String, id: String, category: String, value: Long): AppResult<Unit> {
+        var response: Task<Void>? = null
+        var exception: Exception? = null
+
+        try {
+            if (!authSource.isUserAuthorized()) throw FirebaseAuthException(
+                ErrorCodes.FIREBASE_UNAUTHORIZED,
+                ConstantUtils.UNAUTHORIZED_ERROR_MSG
+            )
+
+            response = firebaseDb.collection(ConstantUtils.USERS)
+                .document(uid)
+                .collection(ConstantUtils.BUDGET_TEMPLATES)
+                .document(id)
+                .collection(ConstantUtils.BUDGET_TEMPLATE_CATEGORY_LIST)
+                .document(category)
+                .update(
+                    mapOf(
+                        ConstantUtils.CATEGORY_BUDGET to FieldValue.increment(value)
+                    )
+                )
+
+            response.await()
+        } catch (e: Exception) {
+            exception = e
+        }
+
+        return when (val result = ErrorMapper.checkAndMapFirebaseApiError(response, exception)) {
+            is FireBaseResult.Success -> {
+                AppResult.Success(Unit)
+            }
+            is FireBaseResult.Failure -> {
+                AppResult.Failure(result.error)
+            }
+        }
+    }
+
+    override suspend fun deleteBudgetTemplate(uid: String, id: String): AppResult<Unit> {
+        var response: Task<Void>? = null
+        var exception: Exception? = null
+
+        try {
+            if (!authSource.isUserAuthorized()) throw FirebaseAuthException(
+                ErrorCodes.FIREBASE_UNAUTHORIZED,
+                ConstantUtils.UNAUTHORIZED_ERROR_MSG
+            )
+
+            response = firebaseDb.collection(ConstantUtils.USERS)
+                .document(uid)
+                .collection(ConstantUtils.BUDGET_TEMPLATES)
+                .document(id)
+                .delete()
+
+            response.await()
+        } catch (e: Exception) {
+            exception = e
+        }
+
+        return when (val result = ErrorMapper.checkAndMapFirebaseApiError(response, exception)) {
+            is FireBaseResult.Success -> {
+                if (result.data != null) AppResult.Success(Unit)
+                else AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
+            }
+            is FireBaseResult.Failure -> {
+                AppResult.Failure(result.error)
+            }
+        }
+    }
+
+    override suspend fun updateBudgetTemplateMaxLimit(uid: String, id: String, value: Long): AppResult<Unit> {
+        var response: Task<Void>? = null
+        var exception: Exception? = null
+
+        try {
+            if (!authSource.isUserAuthorized()) throw FirebaseAuthException(
+                ErrorCodes.FIREBASE_UNAUTHORIZED,
+                ConstantUtils.UNAUTHORIZED_ERROR_MSG
+            )
+
+            response = firebaseDb.collection(ConstantUtils.USERS)
+                .document(uid)
+                .collection(ConstantUtils.BUDGET_TEMPLATES)
+                .document(id)
+                .update(ConstantUtils.MAX_BUDGET_LIMIT, value)
+
+            response.await()
+        } catch (e: Exception) {
+            exception = e
+        }
+
+        return when (val result = ErrorMapper.checkAndMapFirebaseApiError(response, exception)) {
+            is FireBaseResult.Success -> {
+                AppResult.Success(Unit)
+            }
+            is FireBaseResult.Failure -> {
+                AppResult.Failure(result.error)
+            }
+        }
+    }
+
+    override suspend fun deleteCategoryFromBudgetTemplate(uid: String, id: String, category: String): AppResult<Unit> {
+        var response: Task<Void>? = null
+        var exception: Exception? = null
+
+        try {
+            if (!authSource.isUserAuthorized()) throw FirebaseAuthException(
+                ErrorCodes.FIREBASE_UNAUTHORIZED,
+                ConstantUtils.UNAUTHORIZED_ERROR_MSG
+            )
+
+            response = firebaseDb.collection(ConstantUtils.USERS)
+                .document(uid)
+                .collection(ConstantUtils.BUDGET_TEMPLATES)
+                .document(id)
+                .collection(ConstantUtils.BUDGET_TEMPLATE_CATEGORY_LIST)
+                .document(category)
+                .delete()
+
+            response.await()
+        } catch (e: Exception) {
+            exception = e
+        }
+
+        return when (val result = ErrorMapper.checkAndMapFirebaseApiError(response, exception)) {
+            is FireBaseResult.Success -> {
+                if (result.data != null) AppResult.Success(Unit)
+                else AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
             }
             is FireBaseResult.Failure -> {
                 AppResult.Failure(result.error)

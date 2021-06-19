@@ -8,6 +8,7 @@ import com.example.mobiledger.presentation.budget.MonthlyBudgetData
 import com.example.mobiledger.presentation.budget.addbudget.AddBudgetDialogFragment
 import com.example.mobiledger.presentation.budget.updatebudget.UpdateBudgetDialogFragment
 import com.example.mobiledger.presentation.budgetTemplate.AddBudgetTemplateDialogFragment
+import com.example.mobiledger.presentation.budgetTemplate.EditBudgetTemplateDialogFragment
 import com.example.mobiledger.presentation.categoryFragment.AddCategoryDialogFragment
 import com.example.mobiledger.presentation.transactiondetail.TransactionDetailDialogFragment
 import java.util.*
@@ -72,6 +73,33 @@ fun showAddNewTemplateDialogFragment(
     fragmentManager: FragmentManager,
 ) {
     val dialog = AddBudgetTemplateDialogFragment.newInstance()
+    dialog.show(
+        fragmentManager,
+        dialog.getName()
+    )
+}
+
+fun showEditBudgetTemplateDialogFragment(
+    fragmentManager: FragmentManager,
+    templateId: String,
+    list: ArrayList<String>,
+    category: String,
+    oldBudget: Long,
+    totalBudget: Long,
+    maxLimit: Long,
+    isAddCategory: Boolean,
+    isUpdateMaxLimit: Boolean
+) {
+    val dialog = EditBudgetTemplateDialogFragment.newInstance(
+        templateId,
+        isAddCategory,
+        category,
+        oldBudget,
+        list,
+        maxLimit,
+        totalBudget,
+        isUpdateMaxLimit
+    )
     dialog.show(
         fragmentManager,
         dialog.getName()

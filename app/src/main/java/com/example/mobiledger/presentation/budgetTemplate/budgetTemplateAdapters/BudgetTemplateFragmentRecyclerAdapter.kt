@@ -9,7 +9,6 @@ import com.example.mobiledger.databinding.ItemBudgetTemplateListBinding
 import com.example.mobiledger.domain.entities.NewBudgetTemplateEntity
 
 class BudgetTemplateFragmentRecyclerAdapter(
-    val onDeleteItemClicked: (String) -> Unit,
     val onTemplateItemClick: (String) -> Unit,
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -41,9 +40,6 @@ class BudgetTemplateFragmentRecyclerAdapter(
                 tvTemplateName.text = newBudgetTemplateEntity.name
                 tvTemplateAmount.text = newBudgetTemplateEntity.maxBudgetLimit.toString()
                 tvTemplateDate.text = DateUtils.getDateInDDMMMMyyyyFormat(newBudgetTemplateEntity.transactionTime)
-                deleteCategory.setOnClickListener {
-                    onDeleteItemClicked(newBudgetTemplateEntity.id)
-                }
                 root.setOnClickListener {
                     onTemplateItemClick(newBudgetTemplateEntity.id)
                 }

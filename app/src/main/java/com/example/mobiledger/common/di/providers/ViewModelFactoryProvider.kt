@@ -10,6 +10,7 @@ import com.example.mobiledger.presentation.budget.budgetscreen.BudgetViewModel
 import com.example.mobiledger.presentation.budget.updatebudget.UpdateBudgetViewModel
 import com.example.mobiledger.presentation.budgetTemplate.AddBudgetTemplateDialogFragmentViewModel
 import com.example.mobiledger.presentation.budgetTemplate.BudgetTemplateViewModel
+import com.example.mobiledger.presentation.budgetTemplate.EditBudgetTemplateDialogViewModel
 import com.example.mobiledger.presentation.budgetTemplate.EditBudgetTemplateViewModel
 import com.example.mobiledger.presentation.categoryFragment.AddCategoryDialogViewModel
 import com.example.mobiledger.presentation.categoryFragment.ExpenseCategoryViewModel
@@ -132,7 +133,15 @@ class ViewModelFactoryProvider(private val useCaseProvider: UseCaseProvider) :
             }
 
             modelClass.isAssignableFrom(EditBudgetTemplateViewModel::class.java) -> {
-                EditBudgetTemplateViewModel(useCaseProvider.provideBudgetTemplateUseCase()) as T
+                EditBudgetTemplateViewModel(
+                    useCaseProvider.provideBudgetTemplateUseCase(),
+                    useCaseProvider.provideCategoryUseCase()
+                ) as T
+            }
+            modelClass.isAssignableFrom(EditBudgetTemplateDialogViewModel::class.java) -> {
+                EditBudgetTemplateDialogViewModel(
+                    useCaseProvider.provideBudgetTemplateUseCase()
+                ) as T
             }
             else -> throw IllegalArgumentException("Unknown ViewModel Class")
         }

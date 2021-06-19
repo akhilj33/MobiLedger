@@ -57,7 +57,7 @@ class UpdateBudgetDialogFragment :
             }
 
             btnUpdate.setOnClickListener {
-                if (it.isEnabled) {
+                if (it.isEnabled && !getAmount().isNullOrEmpty()) {
                     val amtChange = getAmount().toLong() - viewModel.amount
                     if (amtChange == 0L) dismiss()
                     else {
@@ -66,6 +66,7 @@ class UpdateBudgetDialogFragment :
                         }
                     }
                 }
+                doValidations()
             }
 
             amountTv.addTextChangedListener(amountTextWatcher)

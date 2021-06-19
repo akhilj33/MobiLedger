@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -63,7 +62,6 @@
             android:layout_marginTop="@dimen/cdp_24"
             android:hint="@string/amount_rs"
             app:errorEnabled="true"
-            app:layout_constraintBottom_toTopOf="@id/btnSeBudget"
             app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_90"
             app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_10"
             app:layout_constraintTop_toBottomOf="@id/spinner_category">
@@ -90,6 +88,35 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_90"
             app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_10"
+            app:layout_constraintTop_toBottomOf="@id/amountLayout" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnDelete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/cdp_24"
+            android:layout_marginBottom="@dimen/cdp_48"
+            android:text="@string/delete"
+            android:textSize="@dimen/csp_16"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/btnUpdate"
+            app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_10"
+            app:layout_constraintTop_toBottomOf="@id/amountLayout" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnUpdate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/cdp_24"
+            android:layout_marginBottom="@dimen/cdp_48"
+            android:text="@string/update"
+            android:textSize="@dimen/csp_16"
+            android:enabled="false"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_90"
+            app:layout_constraintStart_toEndOf="@id/btnDelete"
             app:layout_constraintTop_toBottomOf="@id/amountLayout" />
 
         <ProgressBar

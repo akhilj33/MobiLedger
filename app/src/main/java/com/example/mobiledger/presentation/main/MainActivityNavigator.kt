@@ -143,7 +143,7 @@ class MainActivityNavigator constructor(
         FragmentTransactionHelper.replaceFragment(
             fragmentManager,
             BudgetTemplateFragment.newInstance(),
-            containerId, addToBackStack = true
+            containerId, addToBackStack = false
         )
     }
 }

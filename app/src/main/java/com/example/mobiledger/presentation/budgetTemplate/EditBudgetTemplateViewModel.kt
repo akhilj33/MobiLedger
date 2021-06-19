@@ -10,11 +10,14 @@ import com.example.mobiledger.domain.AppResult
 import com.example.mobiledger.domain.entities.BudgetTemplateCategoryEntity
 import com.example.mobiledger.domain.entities.NewBudgetTemplateEntity
 import com.example.mobiledger.domain.usecases.BudgetTemplateUseCase
+import com.example.mobiledger.domain.usecases.CategoryUseCase
 import com.example.mobiledger.presentation.Event
 import kotlinx.coroutines.launch
+import java.util.*
 
 class EditBudgetTemplateViewModel(
-    private val budgetTemplateUseCase: BudgetTemplateUseCase
+    private val budgetTemplateUseCase: BudgetTemplateUseCase,
+    private val categoryUseCase: CategoryUseCase
 ) : BaseViewModel() {
 
     private val _loadingState = MutableLiveData<Boolean>(false)
@@ -29,37 +32,26 @@ class EditBudgetTemplateViewModel(
     private val _budgetTemplateSummary: MutableLiveData<Event<NewBudgetTemplateEntity>> = MutableLiveData()
     val budgetTemplateSummary: MutableLiveData<Event<NewBudgetTemplateEntity>> = _budgetTemplateSummary
 
+    private val _dataDeleted = MutableLiveData<Boolean>(false)
+    val dataDeleted: LiveData<Boolean> get() = _dataDeleted
+
     private val _totalSum = MutableLiveData<Long>(0)
     val totalSum: LiveData<Long> get() = _totalSum
 
-    private val _dataAdded = MutableLiveData<Boolean>(false)
-    val dataAdded: LiveData<Boolean> get() = _dataAdded
 
     lateinit var id: String
     var budgetCategoriesList = emptyList<BudgetTemplateCategoryEntity>()
+    var totalSumVal: Long = 0
+    var maxLimit: Long = 0
 
-    fun addNewBudgetTemplateCategory(category: String, categoryBudget: Long) {
-        viewModelScope.launch {
-            _loadingState.value = true
-            when (val result = budgetTemplateUseCase.addBudgetTemplateCategory(
-                id, BudgetTemplateCategoryEntity(category, categoryBudget)
-            )) {
-                is AppResult.Success -> {
-                    _loadingState.value = false
-                    _dataAdded.value = true
-                }
 
-                is AppResult.Failure -> {
-                    _errorLiveData.value = Event(
-                        ViewError(
-                            viewErrorType = ViewErrorType.NON_BLOCKING,
-                            message = result.error.message
-                        )
-                    )
-                    _loadingState.value = false
-                }
-            }
-        }
+    var expenseCatList: ArrayList<String> = arrayListOf()
+    var existingBudgetCatList: ArrayList<String> = arrayListOf()
+
+    fun refreshData() {
+        getBudgetTemplateCategoryList(id)
+        getBudgetTemplateSummary(id)
+        getExpenseCategoryList()
     }
 
     fun getBudgetTemplateCategoryList(id: String) {
@@ -91,6 +83,7 @@ class EditBudgetTemplateViewModel(
             when (val result = budgetTemplateUseCase.getBudgetTemplateSummary(id)) {
                 is AppResult.Success -> {
                     _budgetTemplateSummary.value = Event(result.data)
+                    maxLimit = Event(result.data).peekContent().maxBudgetLimit
                 }
 
                 is AppResult.Failure -> {
@@ -111,9 +104,59 @@ class EditBudgetTemplateViewModel(
             var sum: Long = 0
             budgetCategoriesList.forEach {
                 sum += it.categoryBudget
+                existingBudgetCatList.add(it.category)
             }
             _totalSum.value = sum
+            totalSumVal = sum
         }
+    }
+
+    //-------------------- GET BUDGET DATA --------------------
+    fun getExpenseCategoryList() {
+        _loadingState.value = true
+        viewModelScope.launch {
+            when (val result = categoryUseCase.getUserExpenseCategories()) {
+                is AppResult.Success -> {
+                    expenseCatList.addAll(result.data.expenseCategoryList)
+                }
+
+                is AppResult.Failure -> {
+                    _errorLiveData.value = Event(
+                        ViewError(
+                            viewErrorType = ViewErrorType.NON_BLOCKING,
+                            message = result.error.message
+                        )
+                    )
+                }
+            }
+        }
+        _loadingState.value = false
+    }
+
+    fun deleteBudgetTemplate() {
+        _loadingState.value = true
+        viewModelScope.launch {
+            when (val result = budgetTemplateUseCase.deleteBudgetTemplate(id)) {
+                is AppResult.Success -> {
+                    _dataDeleted.value = true
+                }
+                is AppResult.Failure -> {
+                    _errorLiveData.value = Event(
+                        ViewError(
+                            viewErrorType = ViewErrorType.NON_BLOCKING,
+                            message = result.error.message
+                        )
+                    )
+                    _loadingState.value = false
+                }
+            }
+        }
+    }
+
+
+    fun giveFinalExpenseList(): ArrayList<String> {
+        expenseCatList.removeAll(existingBudgetCatList)
+        return expenseCatList
     }
 
     enum class ViewErrorType { NON_BLOCKING }

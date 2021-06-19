@@ -80,7 +80,7 @@
     <string name="add_new_income_category">Add new income category</string>
     <string name="add_new_expense_category">Add new expense category</string>
     <string name="maximum_budget">Maximum \nBudget</string>
-    <string name="total_budget">Total \nBudget</string>
+    <string name="total_budget">Total Budget</string>
     <string name="set_your_monthly_budget">Set your monthly budget</string>
     <string name="percent_of_budget_spent">Budget spent:  </string>
     <string name="set_your_budget">Set your budget</string>
@@ -142,6 +142,9 @@
     <string name="notification">Notification</string>
     <string name="daily_reminder">Daily Reminder</string>
     <string name="budget_templates">Budget Templates</string>
+    <string name="delete_budget_templates">Delete</string>
+    <string name="delete_budget_templates_msg">Are you sure you want to delete this template?</string>
+    <string name="update_your_budget">Update Your Budget</string>
 
 
 </resources>

@@ -20,6 +20,10 @@ interface BudgetTemplateRepository {
     suspend fun getBudgetTemplateCategoryList(id: String): AppResult<List<BudgetTemplateCategoryEntity>>
     suspend fun addBudgetTemplateCategory(id: String, budgetTemplateCategoryEntity: BudgetTemplateCategoryEntity): AppResult<Unit>
     suspend fun getBudgetTemplateSummary(id: String): AppResult<NewBudgetTemplateEntity>
+    suspend fun updateBudgetCategoryAmount(id: String, category: String, value: Long): AppResult<Unit>
+    suspend fun deleteCategoryFromBudgetTemplate(id: String, category: String): AppResult<Unit>
+    suspend fun deleteBudgetTemplate(id: String): AppResult<Unit>
+    suspend fun updateBudgetTemplateMaxLimit(id: String, value: Long): AppResult<Unit>
 }
 
 class BudgetTemplateRepositoryImpl(
@@ -70,6 +74,42 @@ class BudgetTemplateRepositoryImpl(
             val uId = cacheSource.getUID()
             if (uId != null) {
                 budgetTemplateApi.getBudgetTemplateSummary(uId, id)
+            } else AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
+        }
+    }
+
+    override suspend fun updateBudgetCategoryAmount(id: String, category: String, value: Long): AppResult<Unit> {
+        return withContext(dispatcher) {
+            val uId = cacheSource.getUID()
+            if (uId != null) {
+                budgetTemplateApi.updateBudgetCategoryAmount(uId, id, category, value)
+            } else AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
+        }
+    }
+
+    override suspend fun deleteCategoryFromBudgetTemplate(id: String, category: String): AppResult<Unit> {
+        return withContext(dispatcher) {
+            val uId = cacheSource.getUID()
+            if (uId != null) {
+                budgetTemplateApi.deleteCategoryFromBudgetTemplate(uId, id, category)
+            } else AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
+        }
+    }
+
+    override suspend fun deleteBudgetTemplate(id: String): AppResult<Unit> {
+        return withContext(dispatcher) {
+            val uId = cacheSource.getUID()
+            if (uId != null) {
+                budgetTemplateApi.deleteBudgetTemplate(uId, id)
+            } else AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
+        }
+    }
+
+    override suspend fun updateBudgetTemplateMaxLimit(id: String, value: Long): AppResult<Unit> {
+        return withContext(dispatcher) {
+            val uId = cacheSource.getUID()
+            if (uId != null) {
+                budgetTemplateApi.updateBudgetTemplateMaxLimit(uId, id, value)
             } else AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
         }
     }

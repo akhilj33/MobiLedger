@@ -14,6 +14,10 @@ interface BudgetTemplateUseCase {
     suspend fun getBudgetTemplateCategoryList(id: String): AppResult<List<BudgetTemplateCategoryEntity>>
     suspend fun addBudgetTemplateCategory(id: String, budgetTemplateCategoryEntity: BudgetTemplateCategoryEntity): AppResult<Unit>
     suspend fun getBudgetTemplateSummary(id: String): AppResult<NewBudgetTemplateEntity>
+    suspend fun updateBudgetCategoryAmount(id: String, category: String, value: Long): AppResult<Unit>
+    suspend fun deleteCategoryFromBudgetTemplate(id: String, category: String): AppResult<Unit>
+    suspend fun deleteBudgetTemplate(id: String): AppResult<Unit>
+    suspend fun updateBudgetTemplateMaxLimit(id: String, value: Long): AppResult<Unit>
 }
 
 
@@ -36,4 +40,15 @@ class BudgetTemplateUseCaseImpl(private val budgetTemplateRepository: BudgetTemp
 
     override suspend fun getBudgetTemplateSummary(id: String): AppResult<NewBudgetTemplateEntity> =
         budgetTemplateRepository.getBudgetTemplateSummary(id)
+
+    override suspend fun updateBudgetCategoryAmount(id: String, category: String, value: Long): AppResult<Unit> =
+        budgetTemplateRepository.updateBudgetCategoryAmount(id, category, value)
+
+    override suspend fun deleteCategoryFromBudgetTemplate(id: String, category: String): AppResult<Unit> =
+        budgetTemplateRepository.deleteCategoryFromBudgetTemplate(id, category)
+
+    override suspend fun deleteBudgetTemplate(id: String): AppResult<Unit> = budgetTemplateRepository.deleteBudgetTemplate(id)
+
+    override suspend fun updateBudgetTemplateMaxLimit(id: String, value: Long): AppResult<Unit> =
+        budgetTemplateRepository.updateBudgetTemplateMaxLimit(id, value)
 }

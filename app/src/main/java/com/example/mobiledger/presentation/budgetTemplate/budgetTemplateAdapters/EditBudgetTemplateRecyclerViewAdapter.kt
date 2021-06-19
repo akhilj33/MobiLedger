@@ -3,12 +3,15 @@ package com.example.mobiledger.presentation.budgetTemplate.budgetTemplateAdapter
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.example.mobiledger.common.utils.DefaultCategoryUtils
 import com.example.mobiledger.databinding.BudgetTemplateCategoryItemBinding
 import com.example.mobiledger.domain.entities.BudgetTemplateCategoryEntity
+import com.example.mobiledger.domain.enums.TransactionType
 
 class EditBudgetTemplateRecyclerViewAdapter(
-    val onTemplateItemClick: (String) -> Unit,
+    val onTemplateItemClick: (BudgetTemplateCategoryEntity) -> Unit,
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private lateinit var context: Context
@@ -19,7 +22,6 @@ class EditBudgetTemplateRecyclerViewAdapter(
         super.onAttachedToRecyclerView(recyclerView)
         context = recyclerView.context
     }
-
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -38,9 +40,13 @@ class EditBudgetTemplateRecyclerViewAdapter(
             viewBinding.apply {
                 tvCategoryName.text = budgetTemplateCategoryEntity.category
                 tvBudgetAmount.text = budgetTemplateCategoryEntity.categoryBudget.toString()
-
+                viewBinding.ivCategoryIcon.background =
+                    ContextCompat.getDrawable(
+                        context,
+                        DefaultCategoryUtils.getCategoryIcon(budgetTemplateCategoryEntity.category, TransactionType.Expense)
+                    )
                 root.setOnClickListener {
-                    onTemplateItemClick(budgetTemplateCategoryEntity.category)
+                    onTemplateItemClick(budgetTemplateCategoryEntity)
                 }
             }
         }
