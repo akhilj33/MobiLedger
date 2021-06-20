@@ -1,10 +1,10 @@
 package com.example.mobiledger.presentation.profile
 
+
 import android.os.Bundle
 import android.view.View
 import androidx.biometric.BiometricManager
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import com.example.mobiledger.R
 import com.example.mobiledger.common.base.BaseFragment
 import com.example.mobiledger.common.showAlertDialog
@@ -45,7 +45,7 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding, ProfileNavigator>(R
             updateProfileUI(it)
         })
 
-        viewModel.loadingState.observe(viewLifecycleOwner, Observer {
+        viewModel.loadingState.observe(viewLifecycleOwner, {
             if (it) {
                 viewBinding.profileProgressBar.visibility = View.VISIBLE
             } else {
@@ -69,20 +69,26 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding, ProfileNavigator>(R
     }
 
     private fun setOnClickListener() {
-        viewBinding.btnBack.setOnClickListener {
-            activity?.onBackPressed()
-        }
+        viewBinding.apply {
+            btnBack.setOnClickListener {
+                activity?.onBackPressed()
+            }
 
-        viewBinding.imgEdit.setOnClickListener {
-            navigator?.navigateToEditProfileScreen()
-        }
+            imgEdit.setOnClickListener {
+                navigator?.navigateToEditProfileScreen()
+            }
 
-        viewBinding.textCategory.setOnClickListener {
-            navigator?.navigateToCategoryFragmentScreen()
-        }
+            textCategory.setOnClickListener {
+                navigator?.navigateToCategoryFragmentScreen()
+            }
 
-        viewBinding.textLogout.setOnClickListener {
-            logout()
+            textLogout.setOnClickListener {
+                logout()
+            }
+
+            textBudgetTemplate.setOnClickListener {
+                navigator?.navigateToBudgetTemplateFragment()
+            }
         }
     }
 

@@ -47,6 +47,7 @@ dependencies {
     implementation "com.google.android.material:material:$materialVersion"
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'androidx.biometric:biometric-ktx:1.2.0-alpha03'
 
     // Unit testing dependencies
     testImplementation "junit:junit:$junit4Version"

@@ -172,7 +172,7 @@
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/tvSavingAmount"
-                    style="@style/GelionRegularBlue18"
+                    style="@style/GelionRegularPurple18"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ellipsize="end"

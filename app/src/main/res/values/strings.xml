@@ -80,7 +80,7 @@
     <string name="add_new_income_category">Add new income category</string>
     <string name="add_new_expense_category">Add new expense category</string>
     <string name="maximum_budget">Maximum \nBudget</string>
-    <string name="total_budget">Total \nBudget</string>
+    <string name="total_budget">Total Budget</string>
     <string name="set_your_monthly_budget">Set your monthly budget</string>
     <string name="percent_of_budget_spent">Budget spent:  </string>
     <string name="set_your_budget">Set your budget</string>
@@ -130,6 +130,21 @@
     <string name="login_using_credentials">Login using credentials</string>
     <string name="retry">Retry</string>
     <string name="view_all">VIEW ALL</string>
+
+    <!-- Budget Template -->
+    <string name="budget_template">Budget Template</string>
+    <string name="new_template">New Template</string>
+    <string name="max_limit_rs">Max budget limit (₹)</string>
+    <string name="add_template">Add Template</string>
+    <string name="add_budget_template">Add Budget Template</string>
+    <string name="maximum_budget_limit">Maximum Budget Limit</string>
+    <string name="enable_biometrics">Enable Biometrics</string>
+    <string name="notification">Notification</string>
+    <string name="daily_reminder">Daily Reminder</string>
+    <string name="budget_templates">Budget Templates</string>
+    <string name="delete_budget_templates">Delete</string>
+    <string name="delete_budget_templates_msg">Are you sure you want to delete this template?</string>
+    <string name="update_your_budget">Update Your Budget</string>
 
 
 </resources>

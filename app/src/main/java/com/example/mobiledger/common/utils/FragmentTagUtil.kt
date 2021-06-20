@@ -9,6 +9,10 @@ import com.example.mobiledger.presentation.auth.SignUpFragment
 import com.example.mobiledger.presentation.budget.addbudget.AddBudgetDialogFragment
 import com.example.mobiledger.presentation.budget.budgetscreen.BudgetFragment
 import com.example.mobiledger.presentation.budget.updatebudget.UpdateBudgetDialogFragment
+import com.example.mobiledger.presentation.budgetTemplate.AddBudgetTemplateDialogFragment
+import com.example.mobiledger.presentation.budgetTemplate.BudgetTemplateFragment
+import com.example.mobiledger.presentation.budgetTemplate.EditBudgetTemplateDialogFragment
+import com.example.mobiledger.presentation.budgetTemplate.EditBudgetTemplateFragment
 import com.example.mobiledger.presentation.categoryFragment.AddCategoryDialogFragment
 import com.example.mobiledger.presentation.categoryFragment.CategoryFragment
 import com.example.mobiledger.presentation.categoryFragment.ExpenseCategoryFragment
@@ -20,8 +24,8 @@ import com.example.mobiledger.presentation.profile.ProfileFragment
 import com.example.mobiledger.presentation.splash.SplashFragment
 import com.example.mobiledger.presentation.stats.StatsFragment
 import com.example.mobiledger.presentation.statsdetail.StatsDetailFragment
-import com.example.mobiledger.presentation.transactiondetail.TransactionDetailDialogFragment
 import com.example.mobiledger.presentation.transactionList.TransactionListFragment
+import com.example.mobiledger.presentation.transactiondetail.TransactionDetailDialogFragment
 
 object FragmentTagUtil {
     const val DASHBOARD_FRAGMENT_TAG = "DASHBOARD_FRAGMENT_TAG"
@@ -45,6 +49,10 @@ object FragmentTagUtil {
     private const val TRANSACTION_LIST_FRAGMENT = "TRANSACTION_LIST_FRAGMENT"
     private const val TRANSACTION_DETAIL_FRAGMENT = "TRANSACTION_DETAIL_FRAGMENT"
     private const val UPDATE_BUDGET_FRAGMENT = "UPDATE_BUDGET_FRAGMENT"
+    private const val BUDGET_TEMPLATE_FRAGMENT = "BUDGET_TEMPLATE_FRAGMENT"
+    private const val EDIT_BUDGET_TEMPLATE_FRAGMENT = "EDIT_BUDGET_TEMPLATE_FRAGMENT"
+    private const val ADD_BUDGET_TEMPLATE_DIALOG_FRAGMENT = "ADD_BUDGET_TEMPLATE_DIALOG_FRAGMENT"
+    private const val EDIT_BUDGET_TEMPLATE_DIALOG_FRAGMENT = "EDIT_BUDGET_TEMPLATE_DIALOG_FRAGMENT"
 
     fun getFragmentName(fragment: Fragment): String {
         return when (fragment) {
@@ -69,6 +77,10 @@ object FragmentTagUtil {
             is TransactionListFragment -> TRANSACTION_LIST_FRAGMENT
             is TransactionDetailDialogFragment -> TRANSACTION_DETAIL_FRAGMENT
             is UpdateBudgetDialogFragment -> UPDATE_BUDGET_FRAGMENT
+            is BudgetTemplateFragment -> BUDGET_TEMPLATE_FRAGMENT
+            is EditBudgetTemplateFragment -> EDIT_BUDGET_TEMPLATE_FRAGMENT
+            is AddBudgetTemplateDialogFragment -> ADD_BUDGET_TEMPLATE_DIALOG_FRAGMENT
+            is EditBudgetTemplateDialogFragment -> EDIT_BUDGET_TEMPLATE_DIALOG_FRAGMENT
             else -> throw RuntimeException("Fragment Name mapping doesn't exist in ${FragmentTagUtil.javaClass.simpleName} class")
         }
     }
