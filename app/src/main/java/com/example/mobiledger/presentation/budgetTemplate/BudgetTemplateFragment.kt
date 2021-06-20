@@ -28,6 +28,7 @@ class BudgetTemplateFragment : BaseFragment<FragmentBudgetTemplateBinding, Budge
         setOnClickListener()
         setUpObserver()
         initRecyclerView()
+        viewModel.refreshData()
     }
 
     private fun setOnClickListener() {

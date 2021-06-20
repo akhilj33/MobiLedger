@@ -133,8 +133,9 @@ class EditBudgetTemplateFragment :
 
         viewModel.dataDeleted.observe(viewLifecycleOwner, {
             it.let {
-                if (it)
-                    navigator?.navigateToBudgetTemplateFragment()
+                if (it) {
+                    activity?.onBackPressed()
+                }
             }
         })
 

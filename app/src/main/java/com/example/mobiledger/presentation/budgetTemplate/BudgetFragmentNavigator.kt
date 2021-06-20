@@ -4,5 +4,4 @@ import com.example.mobiledger.common.base.BaseNavigator
 
 interface BudgetTemplateNavigator : BaseNavigator {
     fun navigateToEditBudgetTemplateScreen(id: String)
-    fun navigateToBudgetTemplateFragment()
 }
