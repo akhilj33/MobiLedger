@@ -5,7 +5,7 @@ import com.example.mobiledger.domain.AppResult
 import com.example.mobiledger.domain.entities.UserEntity
 
 interface ProfileUseCase {
-    suspend fun fetchUserFromFirebase(): AppResult<UserEntity>
+    suspend fun fetchUserFromFirebase(isPTR: Boolean = false): AppResult<UserEntity>
     suspend fun updateUserNameInFirebase(username: String): AppResult<Unit>
     suspend fun updateEmailInFirebase(email: String): AppResult<Unit>
     suspend fun updatePhoneInFirebase(phoneNo: String): AppResult<Unit>
@@ -13,8 +13,8 @@ interface ProfileUseCase {
 }
 
 class ProfileUseCaseImpl(private val profileRepository: ProfileRepository) : ProfileUseCase {
-    override suspend fun fetchUserFromFirebase(): AppResult<UserEntity> {
-        return profileRepository.fetchUserFromFirebase()
+    override suspend fun fetchUserFromFirebase(isPTR: Boolean): AppResult<UserEntity> {
+        return profileRepository.fetchUserFromFirebase(isPTR)
     }
 
     override suspend fun updateUserNameInFirebase(username: String): AppResult<Unit> {

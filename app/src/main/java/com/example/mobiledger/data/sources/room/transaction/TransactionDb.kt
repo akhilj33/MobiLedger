@@ -5,11 +5,16 @@ import com.example.mobiledger.domain.AppError
 import com.example.mobiledger.domain.AppResult
 import com.example.mobiledger.domain.entities.MonthlyTransactionSummaryEntity
 import com.example.mobiledger.domain.entities.TransactionEntity
+import com.example.mobiledger.domain.enums.EditCategoryTransactionType
+import com.example.mobiledger.domain.enums.TransactionType
 
 interface TransactionDb {
     suspend fun fetchMonthlySummary(monthYear: String): AppResult<MonthlyTransactionSummaryEntity>
     suspend fun saveMonthlySummary(monthYear: String, monthlySummary: MonthlyTransactionSummaryEntity)
     suspend fun hasMonthlySummary(monthYear: String): Boolean
+    suspend fun updateMonthlySummary(monthYear: String,
+                                     transactionType: TransactionType,
+                                     amountChanged: Long, editCategoryTransactionType: EditCategoryTransactionType)
     suspend fun saveTransaction(monthYear: String, transactionEntity: TransactionEntity)
     suspend fun saveTransactionList(monthYear: String, transactionEntityList: List<TransactionEntity>)
     suspend fun hasTransactions(): Boolean
@@ -34,6 +39,33 @@ class TransactionDbImpl(private val transactionDao: TransactionDao, private val 
     override suspend fun hasMonthlySummary(monthYear: String): Boolean {
         val monthlySummaryCount = monthlySummaryDao.hasMonthlySummary(monthYear)
         return !(monthlySummaryCount == null || monthlySummaryCount == 0)
+    }
+
+    override suspend fun updateMonthlySummary(
+        monthYear: String,
+        transactionType: TransactionType,
+        amountChanged: Long,
+        editCategoryTransactionType: EditCategoryTransactionType
+    ) {
+        val oldMonthlySummaryRoomItem = monthlySummaryDao.fetchMonthlySummary(monthYear)
+
+        var newTotalBalance = oldMonthlySummaryRoomItem?.totalBalance?:0
+        var newTotalIncome = oldMonthlySummaryRoomItem?.totalIncome?:0
+        var newTotalExpense = oldMonthlySummaryRoomItem?.totalExpense?:0
+
+
+        if (transactionType == TransactionType.Income) {
+                newTotalIncome += amountChanged
+                newTotalBalance += amountChanged
+
+        } else if (transactionType == TransactionType.Expense) {
+            newTotalExpense += amountChanged
+            newTotalBalance -= amountChanged
+        }
+
+       monthlySummaryDao.saveMonthlySummary(MonthlySummaryRoomItem(monthYear, editCategoryTransactionType.increment, editCategoryTransactionType.increment,
+            editCategoryTransactionType.increment, newTotalBalance, newTotalIncome, newTotalExpense))
+
     }
 
     override suspend fun saveTransaction(monthYear: String, transactionEntity: TransactionEntity) {

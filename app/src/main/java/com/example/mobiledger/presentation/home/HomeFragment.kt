@@ -32,7 +32,7 @@ class HomeFragment :
 
     override fun refreshView() {
         hideSnackBarErrorView()
-        viewModel.reloadData()
+        viewModel.reloadData(true)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -40,7 +40,7 @@ class HomeFragment :
         initRecyclerView()
         setOnClickListener()
         setUpObservers()
-        viewModel.getHomeData()
+        viewModel.getHomeData(false)
     }
 
     private fun setUpObservers() {

@@ -29,7 +29,7 @@ class StatsFragment : BaseFragment<FragmentStatsBinding, StatsNavigator>(R.layou
 
     override fun refreshView() {
         hideSnackBarErrorView()
-        viewModel.reloadData()
+        viewModel.reloadData(true)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

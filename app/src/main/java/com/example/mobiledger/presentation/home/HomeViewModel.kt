@@ -50,16 +50,16 @@ class HomeViewModel(
     private var monthCount = 0
     var transList: ArrayList<TransactionData> = arrayListOf()
 
-    fun getHomeData() {
+    fun getHomeData(isPTR: Boolean) {
         _isLoading.value = true
-        getUserName()
-        getTransactionData()
+        getUserName(isPTR)
+        getTransactionData(isPTR)
         updateMonthLiveData()
     }
 
-    private fun getUserName() {
+    private fun getUserName(isPTR: Boolean) {
         viewModelScope.launch {
-            when (val result = profileUseCase.fetchUserFromFirebase()) {
+            when (val result = profileUseCase.fetchUserFromFirebase(isPTR)) {
                 is AppResult.Success -> {
                     val name = result.data.userName ?: ""
                     _userNameLiveData.value = extractFirstName(name)
@@ -84,10 +84,10 @@ class HomeViewModel(
         return regex.find(userName.capitalize(Locale.getDefault()))?.value ?: ""
     }
 
-    private fun getTransactionData() {
+    private fun getTransactionData(isPTR: Boolean) {
         viewModelScope.launch {
-            val monthlyData = async { transactionUseCase.getMonthlySummaryEntity(getDateInMMyyyyFormat(getCurrentMonth())) }
-            val transactionList = async { transactionUseCase.getTransactionListByMonth(getDateInMMyyyyFormat(getCurrentMonth())) }
+            val monthlyData = async { transactionUseCase.getMonthlySummaryEntity(getDateInMMyyyyFormat(getCurrentMonth()), isPTR) }
+            val transactionList = async { transactionUseCase.getTransactionListByMonth(getDateInMMyyyyFormat(getCurrentMonth()), isPTR) }
             when (val monthlyResult = monthlyData.await()) {
                 is AppResult.Success -> {
                     val transactionResult = transactionList.await()
@@ -115,7 +115,7 @@ class HomeViewModel(
             when (transactionResult) {
                 is AppResult.Success -> {
                     _homeViewItemListLiveData.value =
-                        Event(renderHomeViewList(transactionResult.data.sortedByDescending{ it.transactionTime }, monthlyResult))
+                        Event(renderHomeViewList(transactionResult.data.sortedByDescending { it.transactionTime }, monthlyResult))
                     _isLoading.value = false
                 }
                 is AppResult.Failure -> {
@@ -190,11 +190,11 @@ class HomeViewModel(
         }
     }
 
-    fun deleteTransaction(transactionId: String, position: Int){
+    fun deleteTransaction(transactionId: String, position: Int) {
         _isLoading.value = true
         viewModelScope.launch {
-            when(val result = transactionUseCase.deleteTransaction(transactionId, getDateInMMyyyyFormat(getCurrentMonth()))){
-                is AppResult.Success ->{
+            when (val result = transactionUseCase.deleteTransaction(transactionId, getDateInMMyyyyFormat(getCurrentMonth()))) {
+                is AppResult.Success -> {
                     _deleteTransactionLiveData.value = Event(position)
                     _isLoading.value = false
                 }
@@ -231,8 +231,8 @@ class HomeViewModel(
         reloadData()
     }
 
-    fun reloadData() {
-        getHomeData()
+    fun reloadData(isPTR: Boolean = false) {
+        getHomeData(isPTR)
     }
 
     enum class ViewErrorType { NON_BLOCKING }

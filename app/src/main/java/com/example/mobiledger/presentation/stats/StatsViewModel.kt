@@ -48,16 +48,16 @@ class StatsViewModel(private val categoryUseCase: CategoryUseCase, private val b
 
     private var monthCount = 0
 
-    fun getStatsData() {
+    fun getStatsData(isPTR: Boolean = false) {
         _isLoading.value = true
-        getAllCategoriesMonthlySummary()
+        getAllCategoriesMonthlySummary(isPTR)
         updateMonthLiveData()
     }
 
-    private fun getAllCategoriesMonthlySummary() {
+    private fun getAllCategoriesMonthlySummary(isPTR: Boolean) {
         _isLoading.value = true
         viewModelScope.launch {
-            val monthlyCategoryJob = async { categoryUseCase.getAllMonthlyCategories(getDateInMMyyyyFormat(getCurrentMonth())) }
+            val monthlyCategoryJob = async { categoryUseCase.getAllMonthlyCategories(getDateInMMyyyyFormat(getCurrentMonth()), isPTR) }
             val monthlyBudgetJob = async { budgetUseCase.getMonthlyBudgetOverView(getDateInMMyyyyFormat(getCurrentMonth())) }
             when (val result = monthlyCategoryJob.await()) {
                 is AppResult.Success -> {
@@ -217,16 +217,16 @@ class StatsViewModel(private val categoryUseCase: CategoryUseCase, private val b
 
     fun getPreviousMonthData() {
         --monthCount
-        reloadData()
+        reloadData(false)
     }
 
     fun getNextMonthData() {
         ++monthCount
-        reloadData()
+        reloadData(false)
     }
 
-    fun reloadData() {
-        getStatsData()
+    fun reloadData(isPTR: Boolean) {
+        getStatsData(isPTR)
     }
 
     enum class ViewErrorType { NON_BLOCKING }

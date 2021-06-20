@@ -46,4 +46,8 @@ object DateUtils {
         set(Calendar.MILLISECOND, 0)
     }
 
+    fun isCurrentMonthYear(monthYear: String):Boolean{
+        return monthYear==getDateInMMyyyyFormat(getCurrentDate())
+    }
+
 }
