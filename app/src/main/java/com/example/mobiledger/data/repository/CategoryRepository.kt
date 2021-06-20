@@ -1,5 +1,6 @@
 package com.example.mobiledger.data.repository
 
+import com.example.mobiledger.common.utils.DateUtils.isCurrentMonthYear
 import com.example.mobiledger.common.utils.ErrorCodes
 import com.example.mobiledger.data.sources.api.CategoryApi
 import com.example.mobiledger.data.sources.cache.CacheSource
@@ -27,17 +28,22 @@ interface CategoryRepository {
     suspend fun addMonthlyCategoryTransaction(monthYear: String, transactionEntity: TransactionEntity): AppResult<Unit>
     suspend fun deleteMonthlyCategoryTransaction(monthYear: String, transactionEntity: TransactionEntity): AppResult<Unit>
 
-    suspend fun getMonthlyCategorySummary(monthYear: String, category: String): AppResult<MonthlyCategorySummary?>
-    suspend fun addMonthlyCategorySummaryData(
+    suspend fun getMonthlyCategorySummary(monthYear: String, category: String, isPTR: Boolean): AppResult<MonthlyCategorySummary?>
+    suspend fun addMonthlyCategorySummary(
         monthYear: String,
         category: String,
         monthlyCategorySummary: MonthlyCategorySummary
     ): AppResult<Unit>
-    suspend fun deleteMonthlyCategorySummary(monthYear: String, category: String): AppResult<Unit>
-    suspend fun updateMonthlyCategoryAmount(monthYear: String, category: String, categoryAmountChange: Long): AppResult<Unit>
 
-    suspend fun getAllMonthlyCategories(monthYear: String): AppResult<List<MonthlyCategorySummary>>
-    suspend fun getMonthlyCategoryTransactionReferences(monthYear: String, category: String): AppResult<List<DocumentReferenceEntity>>
+    suspend fun deleteMonthlyCategorySummary(monthYear: String, category: String): AppResult<Unit>
+
+    suspend fun getAllMonthlyCategories(monthYear: String, isPTR: Boolean): AppResult<List<MonthlyCategorySummary>>
+    suspend fun getMonthlyCategoryTransactionReferences(
+        monthYear: String,
+        category: String,
+        isPTR: Boolean
+    ): AppResult<List<DocumentReferenceEntity>>
+
     suspend fun getTransactionFromReference(transRef: DocumentReference): AppResult<TransactionEntity>
 }
 
@@ -91,7 +97,7 @@ class CategoryRepositoryImpl(
             }
             if (incomeCategoryListEntity.incomeCategoryList.isNotEmpty() && expenseCategoryListEntity.expenseCategoryList.isNotEmpty()) {
                 val categoryList = CategoryListEntity(uid, incomeCategoryListEntity, expenseCategoryListEntity)
-                categoryDb.saveUser(categoryList)
+                categoryDb.saveUserCategoryList(categoryList)
             }
         }
     }
@@ -154,7 +160,13 @@ class CategoryRepositoryImpl(
         return withContext(dispatcher) {
             val uId = cacheSource.getUID()
             if (uId != null) {
-                categoryApi.addMonthlyCategoryTransaction(uId, monthYear, transactionEntity)
+                categoryApi.addMonthlyCategoryTransaction(uId, monthYear, transactionEntity).also {
+                    if (it is AppResult.Success && isCurrentMonthYear(monthYear)) categoryDb.saveMonthlyCategoryTransaction(
+                        uId,
+                        monthYear,
+                        transactionEntity
+                    )
+                }
             } else
                 AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
         }
@@ -164,24 +176,48 @@ class CategoryRepositoryImpl(
         return withContext(dispatcher) {
             val uId = cacheSource.getUID()
             if (uId != null) {
-                categoryApi.deleteMonthlyCategoryTransaction(uId, monthYear, transactionEntity)
+                categoryApi.deleteMonthlyCategoryTransaction(uId, monthYear, transactionEntity).also {
+                    if (it is AppResult.Success && isCurrentMonthYear(monthYear)) categoryDb.deleteMonthlyCategoryTransaction(
+                        uId,
+                        monthYear,
+                        transactionEntity
+                    )
+                }
             } else
                 AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
         }
     }
 
-    override suspend fun getMonthlyCategorySummary(monthYear: String, category: String): AppResult<MonthlyCategorySummary?> {
+    override suspend fun getMonthlyCategorySummary(
+        monthYear: String,
+        category: String,
+        isPTR: Boolean
+    ): AppResult<MonthlyCategorySummary?> {
         return withContext(dispatcher) {
             val uId = cacheSource.getUID()
             if (uId != null) {
-                categoryApi.getMonthlyCategorySummary(uId, monthYear, category)
+                if (isCurrentMonthYear(monthYear)) {
+                    val monthlyCategorySummaryExists = categoryDb.hasMonthlyCategorySummary(monthYear, category)
+                    if (!monthlyCategorySummaryExists || isPTR) {
+                        when (val firebaseResult = categoryApi.getMonthlyCategorySummary(uId, monthYear, category)) {
+                            is AppResult.Success -> {
+                                categoryDb.saveMonthlyCategorySummary(monthYear, firebaseResult.data ?: MonthlyCategorySummary())
+                            }
+                            is AppResult.Failure -> {
+                                return@withContext AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
+                            }
+                        }
+                    }
+                    categoryDb.fetchMonthlyCategorySummary(monthYear, category)
+                } else categoryApi.getMonthlyCategorySummary(uId, monthYear, category)
+
             } else
                 AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
         }
     }
 
 
-    override suspend fun addMonthlyCategorySummaryData(
+    override suspend fun addMonthlyCategorySummary(
         monthYear: String,
         category: String,
         monthlyCategorySummary: MonthlyCategorySummary,
@@ -189,7 +225,12 @@ class CategoryRepositoryImpl(
         return withContext(dispatcher) {
             val uId = cacheSource.getUID()
             if (uId != null) {
-                categoryApi.addMonthlyCategorySummaryData(uId, monthYear, category, monthlyCategorySummary)
+                categoryApi.addMonthlyCategorySummary(uId, monthYear, category, monthlyCategorySummary).also {
+                    if (it is AppResult.Success && isCurrentMonthYear(monthYear)) categoryDb.saveMonthlyCategorySummary(
+                        monthYear,
+                        monthlyCategorySummary
+                    )
+                }
             } else
                 AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
         }
@@ -199,44 +240,69 @@ class CategoryRepositoryImpl(
         return withContext(dispatcher) {
             val uId = cacheSource.getUID()
             if (uId != null) {
-                categoryApi.deleteMonthlyCategorySummary(uId, monthYear, category)
+                categoryApi.deleteMonthlyCategorySummary(uId, monthYear, category).also {
+                    if (it is AppResult.Success && isCurrentMonthYear(monthYear)) categoryDb.deleteMonthlyCategorySummary(
+                        monthYear,
+                        category
+                    )
+                }
             } else
                 AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
         }
     }
 
-    override suspend fun updateMonthlyCategoryAmount(monthYear: String, category: String, categoryAmountChange: Long): AppResult<Unit> {
+    override suspend fun getAllMonthlyCategories(monthYear: String, isPTR: Boolean): AppResult<List<MonthlyCategorySummary>> {
         return withContext(dispatcher) {
             val uId = cacheSource.getUID()
             if (uId != null) {
-                categoryApi.updateMonthlyCategoryAmount(uId, monthYear, category, categoryAmountChange)
+                if (isCurrentMonthYear(monthYear)) {
+                    val monthlyCategoryTransactionsExists = categoryDb.hasMonthlyCategorySummary(monthYear)
+                    if (!monthlyCategoryTransactionsExists || isPTR) {
+                        when (val firebaseResult = categoryApi.getAllMonthlyCategorySummaries(uId, monthYear)) {
+                            is AppResult.Success -> {
+                                categoryDb.saveAllMonthlyCategorySummaries(monthYear, firebaseResult.data)
+                            }
+                            is AppResult.Failure -> {
+                                return@withContext AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
+                            }
+                        }
+                    }
+                    categoryDb.fetchAllMonthlyCategorySummaries(monthYear)
+                } else categoryApi.getAllMonthlyCategorySummaries(uId, monthYear)
             } else
                 AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
         }
     }
 
-    override suspend fun getAllMonthlyCategories(monthYear: String): AppResult<List<MonthlyCategorySummary>> {
+    override suspend fun getMonthlyCategoryTransactionReferences(
+        monthYear: String,
+        category: String,
+        isPTR: Boolean
+    ): AppResult<List<DocumentReferenceEntity>> {
         return withContext(dispatcher) {
             val uId = cacheSource.getUID()
             if (uId != null) {
-                categoryApi.getAllMonthlyCategorySummaries(uId, monthYear)
-            } else
-                AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
-        }
-    }
-
-    override suspend fun getMonthlyCategoryTransactionReferences(monthYear: String, category: String): AppResult<List<DocumentReferenceEntity>> {
-        return withContext(dispatcher) {
-            val uId = cacheSource.getUID()
-            if (uId != null) {
-                categoryApi.getMonthlyCategoryTransactionReferences(uId, monthYear, category)
+                if (isCurrentMonthYear(monthYear)) {
+                    val monthlyCategoryTransactionsExists = categoryDb.hasMonthlyCategoryTransaction(monthYear, category)
+                    if (!monthlyCategoryTransactionsExists || isPTR) {
+                        when (val firebaseResult = categoryApi.getMonthlyCategoryTransactionReferences(uId, monthYear, category)) {
+                            is AppResult.Success -> {
+                                categoryDb.addAllMonthlyCategoryTransactions(monthYear, category, firebaseResult.data)
+                            }
+                            is AppResult.Failure -> {
+                                return@withContext AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
+                            }
+                        }
+                    }
+                    categoryDb.fetchMonthlyCategoryTransactionsList(monthYear, category)
+                } else categoryApi.getMonthlyCategoryTransactionReferences(uId, monthYear, category)
             } else
                 AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
         }
     }
 
     override suspend fun getTransactionFromReference(transRef: DocumentReference): AppResult<TransactionEntity> {
-        return withContext(dispatcher){
+        return withContext(dispatcher) {
             categoryApi.getTransactionFromReference(transRef)
         }
     }

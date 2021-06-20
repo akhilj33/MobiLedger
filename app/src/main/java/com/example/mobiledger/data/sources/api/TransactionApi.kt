@@ -21,8 +21,8 @@ import com.example.mobiledger.domain.FireBaseResult
 import com.example.mobiledger.domain.entities.MonthlyTransactionSummaryEntity
 import com.example.mobiledger.domain.entities.TransactionEntity
 import com.example.mobiledger.domain.entities.toMutableMap
+import com.example.mobiledger.domain.enums.EditCategoryTransactionType
 import com.example.mobiledger.domain.enums.TransactionType
-import com.example.mobiledger.domain.usecases.EditCategoryTransactionType
 import com.example.mobiledger.presentation.budget.MonthlyCategorySummary
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuthException

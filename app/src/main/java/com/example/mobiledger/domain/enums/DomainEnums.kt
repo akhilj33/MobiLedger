@@ -17,3 +17,7 @@ enum class TransactionType(val type: String) {
 enum class SignInType(val type: String) {
     Google("google"), Email("email")
 }
+
+enum class EditCategoryTransactionType(val increment: Long){
+    ADD(1), DELETE(-1), NOTHING(0)
+}

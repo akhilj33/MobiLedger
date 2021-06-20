@@ -42,7 +42,7 @@ class StatsDetailViewModel(private val categoryUseCase: CategoryUseCase, private
     fun getDate() = getDateInMMMMyyyyFormat(monthYear)
     fun getAbsoluteStringAmount() = amount.absoluteValue.toString()
 
-    fun getCategoryListDetails() {
+    fun getCategoryListDetails(isPTR: Boolean) {
         _isLoading.value = true
         viewModelScope.launch {
             if (categoryList.isEmpty()) {
@@ -54,7 +54,7 @@ class StatsDetailViewModel(private val categoryUseCase: CategoryUseCase, private
             } else {
                 var isFailure = false
                 val runningTask = categoryList.map {
-                    async { getCategoryDetails(it) }
+                    async { getCategoryDetails(it, isPTR) }
                 }
 
                 val result = runningTask.awaitAll()
@@ -88,10 +88,10 @@ class StatsDetailViewModel(private val categoryUseCase: CategoryUseCase, private
         }
     }
 
-    private suspend fun getCategoryDetails(category: String): AppResult<Pair<List<TransactionEntity>, MonthlyCategoryBudget?>> {
+    private suspend fun getCategoryDetails(category: String, isPTR: Boolean): AppResult<Pair<List<TransactionEntity>, MonthlyCategoryBudget?>> {
         return withContext(Dispatchers.IO) {
             val transactionListJob =
-                async { categoryUseCase.getMonthlyCategoryTransaction(DateUtils.getDateInMMyyyyFormat(monthYear), category) }
+                async { categoryUseCase.getMonthlyCategoryTransaction(DateUtils.getDateInMMyyyyFormat(monthYear), category, isPTR) }
             val categoryBudgetJob = async { budgetUseCase.getMonthlyCategoryBudget(DateUtils.getDateInMMyyyyFormat(monthYear), category) }
             when (val result = transactionListJob.await()) {
                 is AppResult.Success -> {
@@ -158,8 +158,8 @@ class StatsDetailViewModel(private val categoryUseCase: CategoryUseCase, private
         }
     }
 
-    fun reloadData() {
-        getCategoryListDetails()
+    fun reloadData(isPTR: Boolean) {
+        getCategoryListDetails(isPTR)
     }
 
     enum class ViewErrorType { NON_BLOCKING }

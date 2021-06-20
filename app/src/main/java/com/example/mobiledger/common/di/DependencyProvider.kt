@@ -21,14 +21,14 @@ object DependencyProvider {
     /*-------------------------------Sources------------------------------------------*/
 
     private val retrofitProvider: RetrofitProvider = RetrofitProvider()
-    private val firebaseAuthProvider: FirebaseProvider = FirebaseProvider()
+    private val firebaseProvider: FirebaseProvider = FirebaseProvider()
 
     private val authSourceProvider: AuthSourceProvider by lazy {
-        AuthSourceProvider(firebaseAuthProvider)
+        AuthSourceProvider(firebaseProvider)
     }
 
     private val apiSourceProvider: ApiSourceProvider by lazy {
-        ApiSourceProvider(retrofitProvider, firebaseAuthProvider, authSourceProvider)
+        ApiSourceProvider(retrofitProvider, firebaseProvider, authSourceProvider)
     }
 
     private val cacheSourceProvider: CacheSourceProvider by lazy {
@@ -61,7 +61,7 @@ object DependencyProvider {
     /*-------------------------------Room Db------------------------------------------*/
 
     private val dbProvider: DbProvider by lazy {
-        DbProvider(daoProvider)
+        DbProvider(daoProvider, firebaseProvider)
     }
 
     /*-------------------------------Public Providers------------------------------------------*/

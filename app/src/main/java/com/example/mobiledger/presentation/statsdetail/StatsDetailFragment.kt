@@ -45,7 +45,7 @@ class StatsDetailFragment : BaseFragment<FragmentStatsDetailBinding, BaseNavigat
         setUpObservers()
         setOnClickListeners()
         initUI()
-        viewModel.getCategoryListDetails()
+        viewModel.getCategoryListDetails(false)
     }
 
     private fun setOnClickListeners() {
@@ -113,7 +113,7 @@ class StatsDetailFragment : BaseFragment<FragmentStatsDetailBinding, BaseNavigat
 
     override fun refreshView() {
         hideSnackBarErrorView()
-        viewModel.reloadData()
+        viewModel.reloadData(true)
     }
 
     private fun initRecyclerView() {

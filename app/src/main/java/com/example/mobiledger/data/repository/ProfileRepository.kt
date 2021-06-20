@@ -12,7 +12,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 interface ProfileRepository {
-    suspend fun fetchUserFromFirebase(): AppResult<UserEntity>
+    suspend fun fetchUserFromFirebase(isPTR: Boolean): AppResult<UserEntity>
     suspend fun updateUserNameInFirebase(username: String): AppResult<Unit>
     suspend fun updateEmailInFirebase(email: String): AppResult<Unit>
     suspend fun updatePhoneNoInFirebase(phoneNo: String): AppResult<Unit>
@@ -24,12 +24,12 @@ class ProfileRepositoryImpl(
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ProfileRepository {
 
-    override suspend fun fetchUserFromFirebase(): AppResult<UserEntity> {
+    override suspend fun fetchUserFromFirebase(isPTR: Boolean): AppResult<UserEntity> {
         return withContext(dispatcher) {
             val uId = cacheSource.getUID()
             if (uId != null) {
                 val userExists = profileDb.hasUser()
-                if (!userExists) {
+                if (!userExists || isPTR) {
                     when (val firebaseResult = userApi.fetchUserDataFromFirebaseDb(uId)) {
                         is AppResult.Success -> {
                             profileDb.saveUser(firebaseResult.data)

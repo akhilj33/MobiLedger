@@ -12,10 +12,10 @@ import com.example.mobiledger.domain.AppError
 import com.example.mobiledger.domain.AppResult
 import com.example.mobiledger.domain.entities.TransactionEntity
 import com.example.mobiledger.domain.entities.toMutableList
+import com.example.mobiledger.domain.enums.EditCategoryTransactionType
 import com.example.mobiledger.domain.enums.TransactionType
 import com.example.mobiledger.domain.usecases.BudgetUseCase
 import com.example.mobiledger.domain.usecases.CategoryUseCase
-import com.example.mobiledger.domain.usecases.EditCategoryTransactionType
 import com.example.mobiledger.domain.usecases.TransactionUseCase
 import com.example.mobiledger.presentation.Event
 import kotlinx.coroutines.Dispatchers

@@ -20,6 +20,7 @@ import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuthException
 import com.google.firebase.firestore.*
 import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withTimeout
 
 interface CategoryApi {
     suspend fun addDefaultIncomeCategories(uid: String, categoryList: List<String>): AppResult<Unit>
@@ -32,12 +33,13 @@ interface CategoryApi {
     suspend fun updateUserExpenseCategory(uid: String, newExpenseCategory: ExpenseCategoryListEntity): AppResult<Unit>
 
     suspend fun getMonthlyCategorySummary(uid: String, monthYear: String, category: String): AppResult<MonthlyCategorySummary?>
-    suspend fun addMonthlyCategorySummaryData(
+    suspend fun addMonthlyCategorySummary(
         uid: String,
         monthYear: String,
         category: String,
         monthlyCategorySummary: MonthlyCategorySummary
     ): AppResult<Unit>
+
     suspend fun deleteMonthlyCategorySummary(uid: String, monthYear: String, category: String): AppResult<Unit>
     suspend fun updateMonthlyCategoryAmount(uid: String, monthYear: String, category: String, categoryAmountChange: Long): AppResult<Unit>
 
@@ -56,6 +58,7 @@ interface CategoryApi {
 }
 
 class CategoryApiImpl(private val firebaseDb: FirebaseFirestore, private val authSource: AuthSource) : CategoryApi {
+
     override suspend fun addDefaultIncomeCategories(uid: String, categoryList: List<String>): AppResult<Unit> {
         var response: Task<Void>? = null
         var exception: Exception? = null
@@ -65,7 +68,7 @@ class CategoryApiImpl(private val firebaseDb: FirebaseFirestore, private val aut
                 .collection(USER_CATEGORIES).document(INCOME_CATEGORY_LIST)
 
             response = docRef.set(IncomeCategoryListEntity(categoryList))
-            response.await()
+            response.await(60000)
         } catch (e: Exception) {
             exception = e
         }
@@ -77,6 +80,12 @@ class CategoryApiImpl(private val firebaseDb: FirebaseFirestore, private val aut
             is FireBaseResult.Failure -> {
                 AppResult.Failure(result.error)
             }
+        }
+    }
+
+    suspend fun <T> Task<T>.await(milliSec: Long): T {
+        return withTimeout(milliSec) {
+            this@await.await()
         }
     }
 
@@ -328,7 +337,12 @@ class CategoryApiImpl(private val firebaseDb: FirebaseFirestore, private val aut
 
     }
 
-    override suspend fun updateMonthlyCategoryAmount(uid: String, monthYear: String, category: String, categoryAmountChange: Long): AppResult<Unit> {
+    override suspend fun updateMonthlyCategoryAmount(
+        uid: String,
+        monthYear: String,
+        category: String,
+        categoryAmountChange: Long
+    ): AppResult<Unit> {
         var response: Task<Void>? = null
         var exception: Exception? = null
 
@@ -425,8 +439,7 @@ class CategoryApiImpl(private val firebaseDb: FirebaseFirestore, private val aut
                         val monthlyCategoryResult = monthlyCategoryEntityMapper(result.data.result as DocumentSnapshot)
                         if (monthlyCategoryResult != null) AppResult.Success(monthlyCategoryResult)
                         else AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
-                    }
-                    else AppResult.Success(null)
+                    } else AppResult.Success(null)
                 } else {
                     AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
                 }
@@ -437,7 +450,7 @@ class CategoryApiImpl(private val firebaseDb: FirebaseFirestore, private val aut
         }
     }
 
-    override suspend fun addMonthlyCategorySummaryData(
+    override suspend fun addMonthlyCategorySummary(
         uid: String,
         monthYear: String,
         category: String,

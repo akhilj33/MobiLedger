@@ -8,6 +8,7 @@ import com.example.mobiledger.domain.entities.DocumentReferenceEntity
 import com.example.mobiledger.domain.entities.ExpenseCategoryListEntity
 import com.example.mobiledger.domain.entities.IncomeCategoryListEntity
 import com.example.mobiledger.domain.entities.TransactionEntity
+import com.example.mobiledger.domain.enums.EditCategoryTransactionType
 import com.example.mobiledger.presentation.budget.MonthlyCategorySummary
 import com.google.firebase.firestore.DocumentReference
 import kotlinx.coroutines.Dispatchers
@@ -25,7 +26,7 @@ interface CategoryUseCase {
     suspend fun updateUserIncomeCategory(newIncomeCategory: IncomeCategoryListEntity): AppResult<Unit>
     suspend fun updateUserExpenseCategory(newExpenseCategory: ExpenseCategoryListEntity): AppResult<Unit>
 
-    suspend fun getMonthlyCategorySummary(monthYear: String, category: String): AppResult<MonthlyCategorySummary?>
+    suspend fun getMonthlyCategorySummary(monthYear: String, category: String, isPTR: Boolean = false): AppResult<MonthlyCategorySummary?>
     suspend fun addMonthlyCategorySummaryData(
         monthYear: String,
         category: String,
@@ -39,10 +40,14 @@ interface CategoryUseCase {
         monthYear: String,
         oldTransactionEntity: TransactionEntity,
         categoryAmountChange: Long,
-        editCategoryTransactionType: EditCategoryTransactionType
+        editCategoryTransactionType: EditCategoryTransactionType, isPTR: Boolean = false
     ): AppResult<Unit>
 
-    suspend fun updateOrAddMonthlyCategorySummary(monthYear: String, newTransactionEntity: TransactionEntity): AppResult<Unit>
+    suspend fun updateOrAddMonthlyCategorySummary(
+        monthYear: String,
+        newTransactionEntity: TransactionEntity,
+        isPTR: Boolean = false
+    ): AppResult<Unit>
 
     suspend fun updateMonthlyCategoryData(
         monthYear: String,
@@ -56,12 +61,17 @@ interface CategoryUseCase {
     suspend fun updateCategoryDataOnCategoryChanged(
         monthYear: String,
         oldTransactionEntity: TransactionEntity,
-        newTransactionEntity: TransactionEntity,
+        newTransactionEntity: TransactionEntity, isPTR: Boolean = false
     ): AppResult<Unit>
 
-    suspend fun getAllMonthlyCategories(monthYear: String): AppResult<List<MonthlyCategorySummary>>
-    suspend fun getMonthlyCategoryTransactionReferences(monthYear: String, category: String): AppResult<List<DocumentReferenceEntity>>
-    suspend fun getMonthlyCategoryTransaction(monthYear: String, category: String): AppResult<List<TransactionEntity>>
+    suspend fun getAllMonthlyCategories(monthYear: String, isPTR: Boolean = false): AppResult<List<MonthlyCategorySummary>>
+    suspend fun getMonthlyCategoryTransactionReferences(
+        monthYear: String,
+        category: String,
+        isPTR: Boolean
+    ): AppResult<List<DocumentReferenceEntity>>
+
+    suspend fun getMonthlyCategoryTransaction(monthYear: String, category: String, isPTR: Boolean = false): AppResult<List<TransactionEntity>>
 }
 
 class CategoryUseCaseImpl(private val categoryRepository: CategoryRepository) : CategoryUseCase {
@@ -92,8 +102,12 @@ class CategoryUseCaseImpl(private val categoryRepository: CategoryRepository) : 
         return categoryRepository.deleteMonthlyCategoryTransaction(monthYear, transactionEntity)
     }
 
-    override suspend fun getMonthlyCategorySummary(monthYear: String, category: String): AppResult<MonthlyCategorySummary?> {
-        return categoryRepository.getMonthlyCategorySummary(monthYear, category)
+    override suspend fun getMonthlyCategorySummary(
+        monthYear: String,
+        category: String,
+        isPTR: Boolean
+    ): AppResult<MonthlyCategorySummary?> {
+        return categoryRepository.getMonthlyCategorySummary(monthYear, category, isPTR)
     }
 
     override suspend fun addMonthlyCategorySummaryData(
@@ -101,7 +115,7 @@ class CategoryUseCaseImpl(private val categoryRepository: CategoryRepository) : 
         category: String,
         monthlyCategorySummary: MonthlyCategorySummary
     ): AppResult<Unit> {
-        return categoryRepository.addMonthlyCategorySummaryData(monthYear, category, monthlyCategorySummary)
+        return categoryRepository.addMonthlyCategorySummary(monthYear, category, monthlyCategorySummary)
     }
 
     /**
@@ -109,7 +123,7 @@ class CategoryUseCaseImpl(private val categoryRepository: CategoryRepository) : 
      * 1- Deletes monthly category data i.e. monthly category summary and transactions linked
      */
     override suspend fun deleteMonthlyCategory(monthYear: String, transactionEntity: TransactionEntity): AppResult<Unit> {
-      return withContext(Dispatchers.IO){
+        return withContext(Dispatchers.IO) {
             val deleteMonthlySummaryJob = async { deleteMonthlyCategorySummary(monthYear, transactionEntity.category) }
             val deleteMonthlyCategoryTransactionJob = async { deleteMonthlyCategoryTransaction(monthYear, transactionEntity) }
 
@@ -133,11 +147,11 @@ class CategoryUseCaseImpl(private val categoryRepository: CategoryRepository) : 
         monthYear: String,
         oldTransactionEntity: TransactionEntity,
         categoryAmountChange: Long,
-        editCategoryTransactionType: EditCategoryTransactionType
+        editCategoryTransactionType: EditCategoryTransactionType, isPTR: Boolean
     ): AppResult<Unit> {
         return withContext(Dispatchers.IO) {
             val category = oldTransactionEntity.category
-            when (val result = getMonthlyCategorySummary(monthYear, category)) {
+            when (val result = getMonthlyCategorySummary(monthYear, category, isPTR)) {
                 is AppResult.Success -> {
                     if (result.data == null) return@withContext AppResult.Success(Unit)
                     val newCategoryAmount = result.data.categoryAmount + categoryAmountChange
@@ -153,15 +167,16 @@ class CategoryUseCaseImpl(private val categoryRepository: CategoryRepository) : 
         }
     }
 
-    override suspend fun getAllMonthlyCategories(monthYear: String): AppResult<List<MonthlyCategorySummary>> {
-        return categoryRepository.getAllMonthlyCategories(monthYear)
+    override suspend fun getAllMonthlyCategories(monthYear: String, isPTR: Boolean): AppResult<List<MonthlyCategorySummary>> {
+        return categoryRepository.getAllMonthlyCategories(monthYear, isPTR)
     }
 
     override suspend fun getMonthlyCategoryTransactionReferences(
         monthYear: String,
-        category: String
+        category: String,
+        isPTR: Boolean
     ): AppResult<List<DocumentReferenceEntity>> {
-        return categoryRepository.getMonthlyCategoryTransactionReferences(monthYear, category)
+        return categoryRepository.getMonthlyCategoryTransactionReferences(monthYear, category, isPTR)
 
     }
 
@@ -173,9 +188,13 @@ class CategoryUseCaseImpl(private val categoryRepository: CategoryRepository) : 
      * Responsibilities
      * 1- Fetches all transactions linked to a specific category
      */
-    override suspend fun getMonthlyCategoryTransaction(monthYear: String, category: String): AppResult<List<TransactionEntity>> {
+    override suspend fun getMonthlyCategoryTransaction(
+        monthYear: String,
+        category: String,
+        isPTR: Boolean
+    ): AppResult<List<TransactionEntity>> {
         return withContext(Dispatchers.IO) {
-            when (val result = getMonthlyCategoryTransactionReferences(monthYear, category)) {
+            when (val result = getMonthlyCategoryTransactionReferences(monthYear, category, isPTR)) {
                 is AppResult.Success -> {
                     val list = mutableListOf<TransactionEntity>()
                     val runningTask = result.data.map {
@@ -206,9 +225,13 @@ class CategoryUseCaseImpl(private val categoryRepository: CategoryRepository) : 
      * 1- If category is already present, It updates monthly category data
      * 2- If category is not present, It adds monthly category data
      */
-    override suspend fun updateOrAddMonthlyCategorySummary(monthYear: String, newTransactionEntity: TransactionEntity): AppResult<Unit> {
+    override suspend fun updateOrAddMonthlyCategorySummary(
+        monthYear: String,
+        newTransactionEntity: TransactionEntity,
+        isPTR: Boolean
+    ): AppResult<Unit> {
         return withContext(Dispatchers.IO) {
-            when (val result = getMonthlyCategorySummary(monthYear, newTransactionEntity.category)) {
+            when (val result = getMonthlyCategorySummary(monthYear, newTransactionEntity.category, isPTR)) {
                 is AppResult.Success -> {
                     val newAmount = newTransactionEntity.amount
                     val category = newTransactionEntity.category
@@ -240,7 +263,7 @@ class CategoryUseCaseImpl(private val categoryRepository: CategoryRepository) : 
             val updateTransJob = when (editCategoryTransactionType) {
                 EditCategoryTransactionType.DELETE -> async { deleteMonthlyCategoryTransaction(monthYear, transactionEntity) }
                 EditCategoryTransactionType.ADD -> async { addMonthlyCategoryTransaction(monthYear, transactionEntity) }
-                else -> async{ AppResult.Success(Unit) }
+                else -> async { AppResult.Success(Unit) }
             }
 
             if (updateSummaryJob.await() is AppResult.Success && updateTransJob.await() is AppResult.Success)
@@ -258,20 +281,24 @@ class CategoryUseCaseImpl(private val categoryRepository: CategoryRepository) : 
     override suspend fun updateCategoryDataOnCategoryChanged(
         monthYear: String,
         oldTransactionEntity: TransactionEntity,
-        newTransactionEntity: TransactionEntity,
+        newTransactionEntity: TransactionEntity, isPTR: Boolean
     ): AppResult<Unit> {
         return withContext(Dispatchers.IO) {
             val updateOldCategoryAmountJob =
-                async { updateMonthlyCategoryAmount(monthYear, oldTransactionEntity, -oldTransactionEntity.amount, EditCategoryTransactionType.DELETE) }
-            val updateNewCategoryJob = async { updateOrAddMonthlyCategorySummary(monthYear, newTransactionEntity) }
+                async {
+                    updateMonthlyCategoryAmount(
+                        monthYear,
+                        oldTransactionEntity,
+                        -oldTransactionEntity.amount,
+                        EditCategoryTransactionType.DELETE,
+                        isPTR
+                    )
+                }
+            val updateNewCategoryJob = async { updateOrAddMonthlyCategorySummary(monthYear, newTransactionEntity, isPTR) }
 
             if (updateNewCategoryJob.await() is AppResult.Success && updateOldCategoryAmountJob.await() is AppResult.Success)
                 AppResult.Success(Unit)
             else AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
         }
     }
-}
-
-enum class EditCategoryTransactionType{
-    ADD, DELETE, NOTHING
 }
