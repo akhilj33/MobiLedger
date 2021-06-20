@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/horizontalGuidelineTop16"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_begin="@dimen/cdp_16" />
+
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/verticalStartGuideline04"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.04" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/verticalStartGuideline60"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.60" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/verticalEndGuideline96"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.96" />
+
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tvTemplateName"
+            style="@style/GelionSemiBoldBlue18"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="2"
+            app:layout_constraintEnd_toEndOf="@id/verticalStartGuideline60"
+            app:layout_constraintStart_toEndOf="@id/verticalStartGuideline04"
+            app:layout_constraintTop_toBottomOf="@id/horizontalGuidelineTop16" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tvTemplateAmount"
+            style="@style/GelionSemiBoldBlue18"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:layout_marginTop="@dimen/cdp_8"
+            app:layout_constraintEnd_toEndOf="@id/verticalEndGuideline96"
+            app:layout_constraintStart_toEndOf="@id/verticalStartGuideline60"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tvTemplateDate"
+            style="@style/GelionSemiBoldBlue16"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:layout_marginTop="@dimen/cdp_8"
+            android:layout_marginBottom="@dimen/cdp_16"
+            app:layout_constraintEnd_toEndOf="@id/verticalStartGuideline60"
+            app:layout_constraintStart_toEndOf="@id/verticalStartGuideline04"
+            app:layout_constraintTop_toBottomOf="@id/tvTemplateName"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -123,14 +123,14 @@
 
                 <TextView
                     android:id="@+id/displayName"
+                    style="@style/GelionSemiBoldBlue18"
                     android:layout_width="245dp"
                     android:layout_height="wrap_content"
                     android:layout_alignTop="@id/imgUser"
                     android:layout_marginStart="@dimen/cdp_16"
                     android:layout_marginTop="10dp"
-                    android:padding="@dimen/cdp_4"
-                    style="@style/GelionSemiBoldBlue18"
                     android:layout_toEndOf="@id/imgUser"
+                    android:padding="@dimen/cdp_4"
                     android:text="@string/display_name"
                     android:textColor="@color/colorPrimaryDark" />
 
@@ -170,7 +170,7 @@
             android:layout_height="wrap_content"
             android:lineSpacingExtra="7sp"
             android:padding="@dimen/cdp_10"
-            android:text="Enable Biometrics"
+            android:text="@string/enable_biometrics"
             app:layout_constraintHorizontal_bias="0"
             app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_04"
             app:layout_constraintTop_toBottomOf="@id/horizontalGuideline_34" />
@@ -191,7 +191,7 @@
             android:layout_height="wrap_content"
             android:lineSpacingExtra="7sp"
             android:padding="@dimen/cdp_10"
-            android:text="Notification"
+            android:text="@string/notification"
             app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_96"
             app:layout_constraintHorizontal_bias="0"
             app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_04"
@@ -215,7 +215,7 @@
             android:layout_height="wrap_content"
             android:lineSpacingExtra="7sp"
             android:padding="@dimen/cdp_10"
-            android:text="Daily Reminder"
+            android:text="@string/daily_reminder"
             app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_96"
             app:layout_constraintHorizontal_bias="0"
             app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_04"
@@ -246,14 +246,14 @@
             app:layout_constraintTop_toBottomOf="@id/reminderSwitch" />
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/textSetting"
+            android:id="@+id/textBudgetTemplate"
             style="@style/GelionSemiBoldBlue18"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:maxLines="1"
             android:padding="@dimen/cdp_10"
-            android:text="@string/settings"
+            android:text="@string/budget_templates"
             app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_96"
             app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_04"
             app:layout_constraintTop_toBottomOf="@id/textCategory" />
@@ -269,7 +269,7 @@
             android:text="@string/contact_us"
             app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_96"
             app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_04"
-            app:layout_constraintTop_toBottomOf="@id/textSetting" />
+            app:layout_constraintTop_toBottomOf="@id/textBudgetTemplate" />
 
 
         <com.google.android.material.textview.MaterialTextView

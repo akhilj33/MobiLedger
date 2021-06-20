@@ -7,10 +7,11 @@ import com.example.mobiledger.presentation.addtransaction.AddTransactionDialogFr
 import com.example.mobiledger.presentation.budget.MonthlyBudgetData
 import com.example.mobiledger.presentation.budget.addbudget.AddBudgetDialogFragment
 import com.example.mobiledger.presentation.budget.updatebudget.UpdateBudgetDialogFragment
+import com.example.mobiledger.presentation.budgetTemplate.AddBudgetTemplateDialogFragment
+import com.example.mobiledger.presentation.budgetTemplate.EditBudgetTemplateDialogFragment
 import com.example.mobiledger.presentation.categoryFragment.AddCategoryDialogFragment
 import com.example.mobiledger.presentation.transactiondetail.TransactionDetailDialogFragment
 import java.util.*
-import kotlin.collections.ArrayList
 
 fun showAddTransactionDialogFragment(fragmentManager: FragmentManager) {
     val dialog = AddTransactionDialogFragment.newInstance()
@@ -62,6 +63,43 @@ fun showUpdateBudgetDialogFragment(
     monthlyBudgetData: MonthlyBudgetData
 ) {
     val dialog = UpdateBudgetDialogFragment.newInstance(month, category, categoryBudget, monthlyBudgetData)
+    dialog.show(
+        fragmentManager,
+        dialog.getName()
+    )
+}
+
+fun showAddNewTemplateDialogFragment(
+    fragmentManager: FragmentManager,
+) {
+    val dialog = AddBudgetTemplateDialogFragment.newInstance()
+    dialog.show(
+        fragmentManager,
+        dialog.getName()
+    )
+}
+
+fun showEditBudgetTemplateDialogFragment(
+    fragmentManager: FragmentManager,
+    templateId: String,
+    list: ArrayList<String>,
+    category: String,
+    oldBudget: Long,
+    totalBudget: Long,
+    maxLimit: Long,
+    isAddCategory: Boolean,
+    isUpdateMaxLimit: Boolean
+) {
+    val dialog = EditBudgetTemplateDialogFragment.newInstance(
+        templateId,
+        isAddCategory,
+        category,
+        oldBudget,
+        list,
+        maxLimit,
+        totalBudget,
+        isUpdateMaxLimit
+    )
     dialog.show(
         fragmentManager,
         dialog.getName()

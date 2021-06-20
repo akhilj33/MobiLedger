@@ -28,4 +28,7 @@ class UseCaseProvider(private val repositoryProvider: RepositoryProvider) {
 
     fun provideBudgetUseCase(): BudgetUseCase =
         BudgetUseCaseImpl(repositoryProvider.provideBudgetRepository())
+
+    fun provideBudgetTemplateUseCase(): BudgetTemplateUseCase =
+        BudgetTemplateUseCaseImpl(repositoryProvider.provideBudgetTemplateRepository())
 }
