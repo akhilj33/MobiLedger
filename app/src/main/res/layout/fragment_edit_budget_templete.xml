@@ -102,7 +102,20 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tv_maxBudget" />
+
+                <Button
+                    android:id="@+id/btnApply"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/apply"
+                    android:visibility="gone"
+                    android:layout_marginTop="@dimen/cdp_8"
+                    app:layout_constraintTop_toBottomOf="@id/tv_maxBudgetAmt"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
             </androidx.constraintlayout.widget.ConstraintLayout>
+
         </com.google.android.material.card.MaterialCardView>
 
         <TextView
@@ -157,6 +170,5 @@
             app:layout_constraintEnd_toEndOf="@id/verticalEndGuideline"
             app:layout_constraintStart_toStartOf="@id/verticalStartGuideline"
             app:layout_constraintTop_toBottomOf="@id/btnAddCategoryBudget" />
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

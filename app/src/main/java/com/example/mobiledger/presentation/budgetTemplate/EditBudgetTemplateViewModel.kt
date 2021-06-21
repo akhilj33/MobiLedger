@@ -40,6 +40,7 @@ class EditBudgetTemplateViewModel(
 
 
     lateinit var id: String
+    var toApply = false
     var budgetCategoriesList = emptyList<BudgetTemplateCategoryEntity>()
     var totalSumVal: Long = 0
     var maxLimit: Long = 0
@@ -158,6 +159,7 @@ class EditBudgetTemplateViewModel(
         expenseCatList.removeAll(existingBudgetCatList)
         return expenseCatList
     }
+
 
     enum class ViewErrorType { NON_BLOCKING }
 

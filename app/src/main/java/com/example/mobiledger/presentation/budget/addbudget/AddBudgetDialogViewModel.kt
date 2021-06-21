@@ -33,7 +33,7 @@ class AddBudgetDialogViewModel(
 
     lateinit var expenseCategoryList: ArrayList<String>
     lateinit var month: String
-    var budgetTotal: Long= 0L
+    var budgetTotal: Long = 0L
     var monthlyLimit: Long = 0L
     var isCategoryBudget: Boolean = false
 
@@ -62,12 +62,13 @@ class AddBudgetDialogViewModel(
     }
 
     //   ------------------- Add new category budget -------------------
+
     fun getMonthlyCategorySummary(category: String, categoryBudget: Long) {
         _isLoading.value = true
         viewModelScope.launch {
             when (val result = categoryUseCase.getMonthlyCategorySummary(month, category)) {
                 is AppResult.Success -> {
-                   val categoryExpense =  if (result.data != null) result.data.categoryAmount else 0L
+                    val categoryExpense = if (result.data != null) result.data.categoryAmount else 0L
                     addCategoryBudgetToFirebase(category, categoryBudget, categoryExpense, month)
                 }
                 is AppResult.Failure -> {
@@ -89,7 +90,8 @@ class AddBudgetDialogViewModel(
     private fun addCategoryBudgetToFirebase(category: String, categoryBudget: Long, categoryExpense: Long, month: String) {
         viewModelScope.launch {
             _isLoading.value = true
-            when (val result = budgetUseCase.addCategoryBudget(month, MonthlyCategoryBudget(category, categoryBudget, categoryExpense)
+            when (val result = budgetUseCase.addCategoryBudget(
+                month, MonthlyCategoryBudget(category, categoryBudget, categoryExpense)
             )) {
                 is AppResult.Success -> {
                     updateTotalBudget(categoryBudget, month)

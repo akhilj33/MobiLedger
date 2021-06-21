@@ -108,6 +108,7 @@
 
     <!-- Budget Fragment -->
     <string name="make_budget">Make Budget</string>
+    <string name="apply_template">Apply Template</string>
     <string name="see_all_transactions">See all %1$s transactions</string>
     <string name="transactions">transactions</string>
     <string name="update_budget_heading">Update %1$s Budget</string>
@@ -145,6 +146,8 @@
     <string name="delete_budget_templates">Delete</string>
     <string name="delete_budget_templates_msg">Are you sure you want to delete this template?</string>
     <string name="update_your_budget">Update Your Budget</string>
-
+    <string name="apply">Apply</string>
+    <string name="templates">Templates</string>
+    <string name="apply_template_msg">Are you sure you want to apply this template?</string>
 
 </resources>

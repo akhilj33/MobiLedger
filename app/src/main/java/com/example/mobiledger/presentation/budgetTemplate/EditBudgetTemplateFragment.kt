@@ -30,7 +30,7 @@ class EditBudgetTemplateFragment :
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.apply {
-            getString(ID)?.let {
+            getString(KEY_ID)?.let {
                 viewModel.id = it
             }
         }
@@ -48,6 +48,7 @@ class EditBudgetTemplateFragment :
 
     private fun setOnClickListener() {
         viewBinding.apply {
+
             btnAddCategoryBudget.setOnClickListener {
                 showEditBudgetTemplateDialogFragment(
                     requireActivity().supportFragmentManager,
@@ -162,11 +163,11 @@ class EditBudgetTemplateFragment :
     }
 
     companion object {
-        private const val ID = "ID"
+        private const val KEY_ID = "ID"
         fun newInstance(id: String) = EditBudgetTemplateFragment()
             .apply {
                 arguments = Bundle().apply {
-                    putString(ID, id)
+                    putString(KEY_ID, id)
                 }
             }
     }

@@ -128,8 +128,8 @@ class EditBudgetTemplateDialogFragment :
                         }
                     }
                 }
-                doValidations()
             }
+            doValidations()
         }
 
         viewBinding.btnSeBudget.setOnClickListener {
@@ -192,8 +192,13 @@ class EditBudgetTemplateDialogFragment :
             updateViewBasedOnValidation(viewBinding.spinnerCategory, isValidCategory())
             isValidCategory() && isValidAmount() && !isBudgetOverflow()
         } else {
-            updateViewBasedOnValidation(viewBinding.amountLayout, isValidAmount())
-            isValidAmount() && !isBudgetOverflow()
+            if (viewModel.isUpdateMaxLimit) {
+                updateViewBasedOnValidation(viewBinding.amountLayout, isValidAmount())
+                isValidAmount()
+            } else {
+                updateViewBasedOnValidation(viewBinding.amountLayout, isValidAmount())
+                isValidAmount() && !isBudgetOverflow()
+            }
         }
     }
 

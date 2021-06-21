@@ -7,6 +7,7 @@ import com.example.mobiledger.presentation.auth.AuthViewPagerFragment
 import com.example.mobiledger.presentation.auth.LoginFragment
 import com.example.mobiledger.presentation.auth.SignUpFragment
 import com.example.mobiledger.presentation.budget.addbudget.AddBudgetDialogFragment
+import com.example.mobiledger.presentation.budget.addbudget.applyTemplate.ApplyTemplateDialogFragment
 import com.example.mobiledger.presentation.budget.budgetscreen.BudgetFragment
 import com.example.mobiledger.presentation.budget.updatebudget.UpdateBudgetDialogFragment
 import com.example.mobiledger.presentation.budgetTemplate.AddBudgetTemplateDialogFragment
@@ -53,6 +54,7 @@ object FragmentTagUtil {
     private const val EDIT_BUDGET_TEMPLATE_FRAGMENT = "EDIT_BUDGET_TEMPLATE_FRAGMENT"
     private const val ADD_BUDGET_TEMPLATE_DIALOG_FRAGMENT = "ADD_BUDGET_TEMPLATE_DIALOG_FRAGMENT"
     private const val EDIT_BUDGET_TEMPLATE_DIALOG_FRAGMENT = "EDIT_BUDGET_TEMPLATE_DIALOG_FRAGMENT"
+    private const val APPLY_TEMPLATE_DIALOG_FRAGMENT = "APPLY_TEMPLATE_DIALOG_FRAGMENT"
 
     fun getFragmentName(fragment: Fragment): String {
         return when (fragment) {
@@ -81,6 +83,7 @@ object FragmentTagUtil {
             is EditBudgetTemplateFragment -> EDIT_BUDGET_TEMPLATE_FRAGMENT
             is AddBudgetTemplateDialogFragment -> ADD_BUDGET_TEMPLATE_DIALOG_FRAGMENT
             is EditBudgetTemplateDialogFragment -> EDIT_BUDGET_TEMPLATE_DIALOG_FRAGMENT
+            is ApplyTemplateDialogFragment -> APPLY_TEMPLATE_DIALOG_FRAGMENT
             else -> throw RuntimeException("Fragment Name mapping doesn't exist in ${FragmentTagUtil.javaClass.simpleName} class")
         }
     }

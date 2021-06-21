@@ -17,6 +17,7 @@ import com.example.mobiledger.presentation.budget.MonthlyBudgetOverviewData
 
 class BudgetAdapter(
     val onMakeBudgetClick: () -> Unit,
+    val onApplyTemplateClick: () -> Unit,
     val onBudgetOverViewClick: () -> Unit,
     val onAddBudgetCategoryClick: () -> Unit,
     val onBudgetCategoryClick: (category: String, budget: Long) -> Unit
@@ -126,6 +127,9 @@ class BudgetAdapter(
             viewBinding.apply {
                 btnMakeBudget.setOnClickListener {
                     onMakeBudgetClick()
+                }
+                btnApplyTemplate.setOnClickListener {
+                    onApplyTemplateClick()
                 }
             }
         }

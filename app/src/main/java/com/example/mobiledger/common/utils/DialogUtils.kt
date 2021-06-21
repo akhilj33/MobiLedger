@@ -6,6 +6,7 @@ import com.example.mobiledger.domain.entities.TransactionEntity
 import com.example.mobiledger.presentation.addtransaction.AddTransactionDialogFragment
 import com.example.mobiledger.presentation.budget.MonthlyBudgetData
 import com.example.mobiledger.presentation.budget.addbudget.AddBudgetDialogFragment
+import com.example.mobiledger.presentation.budget.addbudget.applyTemplate.ApplyTemplateDialogFragment
 import com.example.mobiledger.presentation.budget.updatebudget.UpdateBudgetDialogFragment
 import com.example.mobiledger.presentation.budgetTemplate.AddBudgetTemplateDialogFragment
 import com.example.mobiledger.presentation.budgetTemplate.EditBudgetTemplateDialogFragment
@@ -100,6 +101,17 @@ fun showEditBudgetTemplateDialogFragment(
         totalBudget,
         isUpdateMaxLimit
     )
+    dialog.show(
+        fragmentManager,
+        dialog.getName()
+    )
+}
+
+fun showApplyTemplateDialogFragment(
+    fragmentManager: FragmentManager,
+    month: String
+) {
+    val dialog = ApplyTemplateDialogFragment.newInstance(month)
     dialog.show(
         fragmentManager,
         dialog.getName()

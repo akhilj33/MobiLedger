@@ -23,7 +23,7 @@ import java.util.*
 
 class BudgetViewModel(
     private val budgetUseCase: BudgetUseCase,
-    private val categoryUseCase: CategoryUseCase
+    private val categoryUseCase: CategoryUseCase,
 ) : BaseViewModel() {
 
     val budgetViewItemListLiveData: LiveData<Event<MutableList<BudgetViewItem>>> get() = _budgetViewItemListLiveData
@@ -38,6 +38,7 @@ class BudgetViewModel(
     private val _errorLiveData: MutableLiveData<Event<ViewError>> = MutableLiveData()
     val errorLiveData: LiveData<Event<ViewError>> = _errorLiveData
 
+
     var expenseCatList: ArrayList<String> = arrayListOf()
     var existingBudgetCatList: ArrayList<String> = arrayListOf()
 
@@ -47,9 +48,12 @@ class BudgetViewModel(
 
 
     fun getBudgetData() {
+        _isLoading.value = true
         getMonthlyBudgetSummary()
         updateMonthLiveData()
+        getExpenseCategoryList()
     }
+
     //-------------------- GET BUDGET DATA --------------------
     fun getExpenseCategoryList() {
         _isLoading.value = true
@@ -99,7 +103,6 @@ class BudgetViewModel(
                             )
                         )
                     }
-                    _isLoading.value = false
                 }
             }
         }
@@ -114,7 +117,6 @@ class BudgetViewModel(
             when (monthlyBudgetCategoryList) {
                 is AppResult.Success -> {
                     _budgetViewItemListLiveData.value = Event(renderBudgetViewList(monthlyBudgetCategoryList.data, monthlyBudgetData))
-                    _isLoading.value = false
                 }
                 is AppResult.Failure -> {
                     if (needToHandleAppError(monthlyBudgetCategoryList.error)) {

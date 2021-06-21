@@ -12,6 +12,7 @@ import com.example.mobiledger.R
 import com.example.mobiledger.common.base.BaseFragment
 import com.example.mobiledger.common.utils.DateUtils
 import com.example.mobiledger.common.utils.showAddBudgetDialogFragment
+import com.example.mobiledger.common.utils.showApplyTemplateDialogFragment
 import com.example.mobiledger.common.utils.showUpdateBudgetDialogFragment
 import com.example.mobiledger.databinding.FragmentBudgetBinding
 import com.example.mobiledger.presentation.OneTimeObserver
@@ -21,7 +22,15 @@ class BudgetFragment : BaseFragment<FragmentBudgetBinding, BudgetNavigator>(R.la
 
     private val viewModel: BudgetViewModel by viewModels { viewModelFactory }
 
-    private val budgetAdapter: BudgetAdapter by lazy { BudgetAdapter(onMakeBudgetClick, onBudgetOverviewClick, onAddBudgetCategoryClick, onBudgetCategoryClick) }
+    private val budgetAdapter: BudgetAdapter by lazy {
+        BudgetAdapter(
+            onMakeBudgetClick,
+            onApplyTemplateClick,
+            onBudgetOverviewClick,
+            onAddBudgetCategoryClick,
+            onBudgetCategoryClick
+        )
+    }
 
 //    override fun getSnackBarErrorView(): SnackViewErrorBinding = viewBinding.includeErrorView
 
@@ -40,7 +49,6 @@ class BudgetFragment : BaseFragment<FragmentBudgetBinding, BudgetNavigator>(R.la
         setUpObserver()
         initRecyclerView()
         viewModel.getBudgetData()
-        viewModel.getExpenseCategoryList()
     }
 
     private fun setOnClickListener() {
@@ -64,6 +72,10 @@ class BudgetFragment : BaseFragment<FragmentBudgetBinding, BudgetNavigator>(R.la
             refreshView()
         })
 
+        activityViewModel.templateAppliedReolad.observe(viewLifecycleOwner, OneTimeObserver {
+            viewModel.getBudgetData()
+        })
+
         viewModel.budgetViewItemListLiveData.observe(viewLifecycleOwner, OneTimeObserver {
             budgetAdapter.addItemList(it)
         })
@@ -73,13 +85,14 @@ class BudgetFragment : BaseFragment<FragmentBudgetBinding, BudgetNavigator>(R.la
         })
 
         viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
-            if (isLoading) {
-                showSwipeRefresh()
-            } else {
-                hideSwipeRefresh()
+            isLoading.let {
+                if (isLoading) {
+                    showSwipeRefresh()
+                } else {
+                    hideSwipeRefresh()
+                }
             }
         }
-
     }
 
     private fun initRecyclerView() {
@@ -97,6 +110,13 @@ class BudgetFragment : BaseFragment<FragmentBudgetBinding, BudgetNavigator>(R.la
             viewModel.giveFinalExpenseList(),
             DateUtils.getDateInMMyyyyFormat(viewModel.getCurrentMonth()),
             0, false
+        )
+    }
+
+    private val onApplyTemplateClick = fun() {
+        showApplyTemplateDialogFragment(
+            requireActivity().supportFragmentManager,
+            DateUtils.getDateInMMyyyyFormat(viewModel.getCurrentMonth())
         )
     }
 
@@ -120,9 +140,13 @@ class BudgetFragment : BaseFragment<FragmentBudgetBinding, BudgetNavigator>(R.la
         )
     }
 
-    private val onBudgetCategoryClick = fun(category: String, categoryBudget: Long){
+    private val onBudgetCategoryClick = fun(category: String, categoryBudget: Long) {
         showUpdateBudgetDialogFragment(
-            requireActivity().supportFragmentManager, viewModel.getCurrentMonth(), category, categoryBudget, MonthlyBudgetData(viewModel.monthlyLimit, viewModel.budgetTotal)
+            requireActivity().supportFragmentManager,
+            viewModel.getCurrentMonth(),
+            category,
+            categoryBudget,
+            MonthlyBudgetData(viewModel.monthlyLimit, viewModel.budgetTotal)
         )
     }
 

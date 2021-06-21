@@ -27,7 +27,7 @@ interface BudgetApi {
     suspend fun getMonthlyBudgetOverView(uid: String, monthYear: String): AppResult<MonthlyBudgetData?>
     suspend fun setMonthlyBudget(uid: String, monthYear: String, monthlyBudgetData: MonthlyBudgetData): AppResult<Unit>
     suspend fun addCategoryBudget(uid: String, monthYear: String, monthlyCategoryBudget: MonthlyCategoryBudget): AppResult<Unit>
-    suspend fun updateMonthlyBudgetData(uid: String, monthYear: String, monthlyLimitChange: Long, totalBudgetChange:Long): AppResult<Unit>
+    suspend fun updateMonthlyBudgetData(uid: String, monthYear: String, monthlyLimitChange: Long, totalBudgetChange: Long): AppResult<Unit>
     suspend fun getMonthlyCategoryBudget(uid: String, monthYear: String, category: String): AppResult<MonthlyCategoryBudget>
     suspend fun updateMonthlyCategoryBudgetAmounts(
         uid: String,
@@ -185,7 +185,12 @@ class BudgetApiImpl(private val firebaseDb: FirebaseFirestore, private val authS
         }
     }
 
-    override suspend fun updateMonthlyBudgetData(uid: String, monthYear: String, monthlyLimitChange: Long, totalBudgetChange:Long): AppResult<Unit> {
+    override suspend fun updateMonthlyBudgetData(
+        uid: String,
+        monthYear: String,
+        monthlyLimitChange: Long,
+        totalBudgetChange: Long
+    ): AppResult<Unit> {
         var response: Task<Void>? = null
         var exception: Exception? = null
 
@@ -346,6 +351,7 @@ class BudgetApiImpl(private val firebaseDb: FirebaseFirestore, private val authS
             }
         }
     }
+
 }
 
 

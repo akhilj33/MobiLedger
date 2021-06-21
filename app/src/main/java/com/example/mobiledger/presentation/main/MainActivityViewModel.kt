@@ -67,6 +67,9 @@ class MainActivityViewModel(
 
     private val _addNewBudgetTemplate: MutableLiveData<Event<Unit>> = MutableLiveData()
     val addNewBudgetTemplate: LiveData<Event<Unit>> = _addNewBudgetTemplate
+
+    private val _templateAppliedReolad: MutableLiveData<Event<Unit>> = MutableLiveData()
+    val templateAppliedReolad: LiveData<Event<Unit>> = _templateAppliedReolad
     /*---------------------------------------Bottom Tabs Info -------------------------------------------------*/
 
     fun updateCurrentTab(tab: NavTab) {
@@ -125,6 +128,10 @@ class MainActivityViewModel(
 
     fun addNewBudgetTemplate() {
         _addNewBudgetTemplate.value = Event(Unit)
+    }
+
+    fun templateApplied() {
+        _templateAppliedReolad.value = Event(Unit)
     }
 
     fun notificationHandler(notificationCallerData: AddTransactionViewModel.NotificationCallerData) {
