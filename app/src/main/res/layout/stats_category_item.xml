@@ -47,8 +47,8 @@
             android:layout_width="@dimen/cdp_48"
             android:layout_height="@dimen/cdp_48"
             android:background="@drawable/oval_shape"
-            app:layout_constraintBottom_toBottomOf="@id/horizontalEndGuideline_16dp"
             app:layout_constraintDimensionRatio="w,1:1"
+            app:layout_constraintBottom_toBottomOf="@id/horizontalEndGuideline_16dp"
             app:layout_constraintStart_toStartOf="@id/verticalStartGuideline"
             app:layout_constraintTop_toTopOf="@id/horizontalStartGuideline_16dp" />
 

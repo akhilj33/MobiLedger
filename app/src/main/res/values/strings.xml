@@ -150,4 +150,24 @@
     <string name="templates">Templates</string>
     <string name="apply_template_msg">Are you sure you want to apply this template?</string>
 
+
+    <!-- On Boarding -->
+
+    <string name="i_have_read_all_the_terms_and_conditions">I have read all the terms and conditions</string>
+    <string name="accept">Accept</string>
+    <string name="terms_and_conditions">Terms And Conditions</string>
+
+    <!-- About Us -->
+    <string name="about_us">About Us</string>
+    <string name="akhil_jain">Akhil Jain</string>
+    <string name="meet_the_developers">Meet the developers</string>
+    <string name="anant_raman">Anant Raman</string>
+    <string name="anantraman_email">anantraman.india@gmail.com</string>
+    <string name="about_us_message">We are a couple of working professionals who are passionate about mobile technologies.
+        We have good experience in mobile android application development and this is our attempt to come up with a fine
+        product to manage budget and finances for our customers.</string>
+    <string name="akhilj33_email">akhilj33@gmail.com</string>
+    <string name="next">Next</string>
+
+
 </resources>

@@ -4,9 +4,9 @@ import androidx.annotation.IdRes
 import androidx.fragment.app.FragmentManager
 import com.example.mobiledger.common.utils.FragmentTagUtil
 import com.example.mobiledger.common.utils.FragmentTransactionHelper
+import com.example.mobiledger.presentation.aboutUs.AboutUsFragment
 import com.example.mobiledger.presentation.auth.AuthViewPagerFragment
 import com.example.mobiledger.presentation.auth.LoginNavigator
-import com.example.mobiledger.presentation.auth.SignUpFragment
 import com.example.mobiledger.presentation.auth.SignUpNavigator
 import com.example.mobiledger.presentation.budget.budgetscreen.BudgetNavigator
 import com.example.mobiledger.presentation.budgetTemplate.BudgetTemplateFragment
@@ -16,6 +16,9 @@ import com.example.mobiledger.presentation.categoryFragment.CategoryFragment
 import com.example.mobiledger.presentation.dashboard.DashboardFragment
 import com.example.mobiledger.presentation.home.HomeNavigator
 import com.example.mobiledger.presentation.home.TransactionData
+import com.example.mobiledger.presentation.onBoarding.OnBoardingFragment
+import com.example.mobiledger.presentation.onBoarding.OnBoardingNavigator
+import com.example.mobiledger.presentation.onBoarding.TermsAndConditionFragment
 import com.example.mobiledger.presentation.profile.EditProfileFragment
 import com.example.mobiledger.presentation.profile.ProfileFragment
 import com.example.mobiledger.presentation.profile.ProfileNavigator
@@ -30,7 +33,7 @@ class MainActivityNavigator constructor(
     @IdRes private val containerId: Int,
     private val fragmentManager: FragmentManager
 ) : HomeNavigator, LoginNavigator, SignUpNavigator, SplashNavigator, ProfileNavigator, BudgetNavigator, StatsNavigator,
-    BudgetTemplateNavigator {
+    BudgetTemplateNavigator, OnBoardingNavigator {
 
 
     /*---------------------------------Main Activity-------------------------------------*/
@@ -65,19 +68,21 @@ class MainActivityNavigator constructor(
         )
     }
 
-    override fun navigateLoginToSignUpScreen() {
-        FragmentTransactionHelper.replaceFragment(
-            fragmentManager,
-            SignUpFragment.newInstance(),
-            containerId, addToBackStack = true
-        )
-    }
 
     override fun navigateToAuthScreen() {
         popAllFragments()
         FragmentTransactionHelper.replaceFragment(
             fragmentManager,
             AuthViewPagerFragment.newInstance(),
+            containerId, addToBackStack = true
+        )
+    }
+
+    override fun navigateToOnBoarding() {
+        popAllFragments()
+        FragmentTransactionHelper.replaceFragment(
+            fragmentManager,
+            OnBoardingFragment.newInstance(),
             containerId, addToBackStack = true
         )
     }
@@ -102,7 +107,7 @@ class MainActivityNavigator constructor(
     override fun navigateToStatsDetailScreen(categoryNameList: List<String>, amount: Long, monthYear: Calendar) {
         FragmentTransactionHelper.replaceFragment(
             fragmentManager,
-            StatsDetailFragment.newInstance(categoryNameList,amount,monthYear),
+            StatsDetailFragment.newInstance(categoryNameList, amount, monthYear),
             containerId, addToBackStack = true
         )
     }
@@ -143,7 +148,23 @@ class MainActivityNavigator constructor(
         FragmentTransactionHelper.replaceFragment(
             fragmentManager,
             BudgetTemplateFragment.newInstance(),
-            containerId, addToBackStack = false
+            containerId, addToBackStack = true
+        )
+    }
+
+    override fun navigateToAboutUsFragment() {
+        FragmentTransactionHelper.replaceFragment(
+            fragmentManager,
+            AboutUsFragment.newInstance(),
+            containerId, addToBackStack = true
+        )
+    }
+
+    override fun navigateToTermsAndCondition() {
+        FragmentTransactionHelper.replaceFragment(
+            fragmentManager,
+            TermsAndConditionFragment.newInstance(),
+            containerId, addToBackStack = true
         )
     }
 }

@@ -2,6 +2,7 @@ package com.example.mobiledger.common.utils
 
 import androidx.fragment.app.Fragment
 import com.example.mobiledger.presentation.SplitFragment
+import com.example.mobiledger.presentation.aboutUs.AboutUsFragment
 import com.example.mobiledger.presentation.addtransaction.AddTransactionDialogFragment
 import com.example.mobiledger.presentation.auth.AuthViewPagerFragment
 import com.example.mobiledger.presentation.auth.LoginFragment
@@ -20,6 +21,8 @@ import com.example.mobiledger.presentation.categoryFragment.ExpenseCategoryFragm
 import com.example.mobiledger.presentation.categoryFragment.IncomeCategoryFragment
 import com.example.mobiledger.presentation.dashboard.DashboardFragment
 import com.example.mobiledger.presentation.home.HomeFragment
+import com.example.mobiledger.presentation.onBoarding.OnBoardingFragment
+import com.example.mobiledger.presentation.onBoarding.TermsAndConditionFragment
 import com.example.mobiledger.presentation.profile.EditProfileFragment
 import com.example.mobiledger.presentation.profile.ProfileFragment
 import com.example.mobiledger.presentation.splash.SplashFragment
@@ -55,6 +58,9 @@ object FragmentTagUtil {
     private const val ADD_BUDGET_TEMPLATE_DIALOG_FRAGMENT = "ADD_BUDGET_TEMPLATE_DIALOG_FRAGMENT"
     private const val EDIT_BUDGET_TEMPLATE_DIALOG_FRAGMENT = "EDIT_BUDGET_TEMPLATE_DIALOG_FRAGMENT"
     private const val APPLY_TEMPLATE_DIALOG_FRAGMENT = "APPLY_TEMPLATE_DIALOG_FRAGMENT"
+    private const val ON_BOARDING_FRAGMENT = "ON_BOARDING_FRAGMENT"
+    private const val TERMS_AND_CONDITION_FRAGMENT = "TERMS_AND_CONDITION_FRAGMENT"
+    private const val ABOUT_US_FRAGMENT = "ABOUT_US_FRAGMENT"
 
     fun getFragmentName(fragment: Fragment): String {
         return when (fragment) {
@@ -84,6 +90,10 @@ object FragmentTagUtil {
             is AddBudgetTemplateDialogFragment -> ADD_BUDGET_TEMPLATE_DIALOG_FRAGMENT
             is EditBudgetTemplateDialogFragment -> EDIT_BUDGET_TEMPLATE_DIALOG_FRAGMENT
             is ApplyTemplateDialogFragment -> APPLY_TEMPLATE_DIALOG_FRAGMENT
+            is OnBoardingFragment -> ON_BOARDING_FRAGMENT
+            is TermsAndConditionFragment -> TERMS_AND_CONDITION_FRAGMENT
+            is AboutUsFragment -> ABOUT_US_FRAGMENT
+
             else -> throw RuntimeException("Fragment Name mapping doesn't exist in ${FragmentTagUtil.javaClass.simpleName} class")
         }
     }

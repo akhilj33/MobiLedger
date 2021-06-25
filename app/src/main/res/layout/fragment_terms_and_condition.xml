@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".presentation.onBoarding.TermsAndConditionFragment">
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/verticalScreenGuideline_10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.10" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/verticalScreenGuideline_90"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.90" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/terms_and_conditions"
+            style="@style/GelionSemiBoldBlue24"
+            android:textAlignment="center"
+            android:layout_marginTop="@dimen/cdp_32"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_10"
+            app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_90" />
+
+        <androidx.appcompat.widget.AppCompatCheckBox
+            android:id="@+id/checkBoxTAndC"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_10"
+            app:layout_constraintBottom_toTopOf="@id/btnAccept" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/i_have_read_all_the_terms_and_conditions"
+            app:layout_constraintStart_toEndOf="@id/checkBoxTAndC"
+            app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_90"
+            app:layout_constraintTop_toTopOf="@id/checkBoxTAndC"
+            app:layout_constraintBottom_toBottomOf="@id/checkBoxTAndC" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnAccept"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/cdp_32"
+            android:text="@string/accept"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_10"
+            app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_90" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

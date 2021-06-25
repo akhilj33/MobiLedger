@@ -235,12 +235,9 @@ abstract class BaseFragment<B : ViewDataBinding, NV : BaseNavigator>(
 /*----------------------------------------Status Bar----------------------------------------*/
 
     enum class StatusBarColor(@ColorRes val color: Int, val isLightColor: Boolean) {
-//        BLUE(R.color.blue, isLightColor = false),
-//        LIGHT_GREY(R.color.lightGrey, isLightColor = true),
-//        TRANSPARENT(R.color.transparent, isLightColor = true),
-//        WHITE(R.color.white, isLightColor = true),
-//        PEACH(R.color.peach, isLightColor = false),
-//        PALE_BLUE(R.color.paleBlue, isLightColor = false),
-//        MID_GREY(R.color.midGrey, isLightColor = true)
+        BLUE(R.color.colorAppBlue, isLightColor = false),
+        LIGHT_GREY(R.color.colorGray, isLightColor = true),
+        TRANSPARENT(R.color.transparent, isLightColor = true),
+        WHITE(R.color.colorWhite, isLightColor = true),
     }
 }

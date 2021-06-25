@@ -23,5 +23,7 @@
     <color name="colorLightGreen">#3CB371</color>
     <color name="colorLightRed">#FF6347</color>
     <color name="colorPurple">#6200EE</color>
+    <color name="inactiveDotGrey">#b2bfca</color>
+    <color name="transparent">#00000000</color>
 
 </resources>
