@@ -12,6 +12,8 @@ interface UserSettingsUseCase {
     suspend fun saveReminderEnabled(isEnabled: Boolean)
     suspend fun isReminderEnabled(): Boolean
     suspend fun removeUid()
+    suspend fun isTermsAndConditionAccepted(): Boolean
+    suspend fun acceptTermsAndCondition(isAccepted: Boolean)
 }
 
 class UserSettingsUseCaseImpl(
@@ -38,4 +40,8 @@ class UserSettingsUseCaseImpl(
     override suspend fun isReminderEnabled(): Boolean = userSettingsRepository.isReminderEnable()
 
     override suspend fun removeUid() = userSettingsRepository.removeUid()
+
+    override suspend fun isTermsAndConditionAccepted(): Boolean = userSettingsRepository.isTermsAndConditionAccepted()
+
+    override suspend fun acceptTermsAndCondition(isAccepted: Boolean) = userSettingsRepository.acceptTermsAndCondition(isAccepted)
 }

@@ -66,7 +66,7 @@ class AddBudgetDialogFragment :
             showAnimatedDialog()
         })
 
-        viewModel.isLoading.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+        viewModel.isLoading.observe(viewLifecycleOwner, {
             if (it) {
                 viewBinding.addBudgetProgressBar.visibility = View.VISIBLE
             } else {

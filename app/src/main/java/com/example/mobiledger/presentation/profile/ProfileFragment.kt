@@ -89,6 +89,10 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding, ProfileNavigator>(R
             textBudgetTemplate.setOnClickListener {
                 navigator?.navigateToBudgetTemplateFragment()
             }
+
+            textAboutUs.setOnClickListener {
+                navigator?.navigateToAboutUsFragment()
+            }
         }
     }
 

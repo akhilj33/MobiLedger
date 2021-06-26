@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.SharedPreferences
 
 interface CacheSource {
-
     suspend fun saveUid(uid: String)
     suspend fun getUID(): String?
     suspend fun saveBiometricEnable(isEnable: Boolean)
@@ -14,6 +13,8 @@ interface CacheSource {
     suspend fun saveReminderEnable(isEnable: Boolean)
     suspend fun isReminderEnable(): Boolean
     suspend fun removeUid()
+    suspend fun isTermsAndConditionAccepted(): Boolean
+    suspend fun acceptTermsAndCondition(isAccepted: Boolean)
 }
 
 class SharedPreferenceSource(val context: Context) : CacheSource {
@@ -24,6 +25,7 @@ class SharedPreferenceSource(val context: Context) : CacheSource {
         private const val NOTIFICATION = "notification"
         private const val BIOMETRIC = "biometric"
         private const val REMINDER = "reminder"
+        private const val T_AND_C = "tAndC"
     }
 
     private val sharedPref: SharedPreferences =
@@ -63,6 +65,14 @@ class SharedPreferenceSource(val context: Context) : CacheSource {
 
     override suspend fun removeUid() {
         sharedPref.edit().remove(UID).apply()
+    }
+
+    override suspend fun isTermsAndConditionAccepted(): Boolean {
+        return sharedPref.getBoolean(T_AND_C, false)
+    }
+
+    override suspend fun acceptTermsAndCondition(isAccepted: Boolean) {
+        sharedPref.edit().putBoolean(T_AND_C, isAccepted).apply()
     }
 
 }

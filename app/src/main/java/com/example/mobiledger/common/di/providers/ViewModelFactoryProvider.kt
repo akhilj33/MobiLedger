@@ -18,6 +18,8 @@ import com.example.mobiledger.presentation.categoryFragment.ExpenseCategoryViewM
 import com.example.mobiledger.presentation.categoryFragment.IncomeCategoryViewModel
 import com.example.mobiledger.presentation.home.HomeViewModel
 import com.example.mobiledger.presentation.main.MainActivityViewModel
+import com.example.mobiledger.presentation.onBoarding.OnBoardingViewModel
+import com.example.mobiledger.presentation.onBoarding.TermsAndConditionViewModel
 import com.example.mobiledger.presentation.profile.EditProfileViewModel
 import com.example.mobiledger.presentation.profile.ProfileViewModel
 import com.example.mobiledger.presentation.splash.SplashViewModel
@@ -149,6 +151,14 @@ class ViewModelFactoryProvider(private val useCaseProvider: UseCaseProvider) :
                     useCaseProvider.provideBudgetUseCase(),
                     useCaseProvider.provideCategoryUseCase(),
                     useCaseProvider.provideBudgetTemplateUseCase()
+                ) as T
+            }
+            modelClass.isAssignableFrom(OnBoardingViewModel::class.java) -> {
+                OnBoardingViewModel() as T
+            }
+            modelClass.isAssignableFrom(TermsAndConditionViewModel::class.java) -> {
+                TermsAndConditionViewModel(
+                    useCaseProvider.provideUserSettingsUseCase()
                 ) as T
             }
             else -> throw IllegalArgumentException("Unknown ViewModel Class")
