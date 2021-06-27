@@ -8,16 +8,40 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import androidx.core.app.NotificationCompat
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.example.mobiledger.R
 import com.example.mobiledger.presentation.main.MainActivity
+import java.util.*
+import java.util.concurrent.TimeUnit
 
-
-class ReminderWorker(val context: Context, val workerParams: WorkerParameters) : Worker(context, workerParams) {
+class DailyReminderWorker(val context: Context, params: WorkerParameters) : Worker(context, params) {
 
     override fun doWork(): Result {
+
         createNotification(ConstantUtils.APP_NAME, ConstantUtils.REMINDER_MESSAGE)
+
+        val currentDate = Calendar.getInstance()
+        val dueDate = Calendar.getInstance()
+        // Set Execution around 08:00:00 PM
+        dueDate.set(Calendar.HOUR_OF_DAY, 20)
+        dueDate.set(Calendar.MINUTE, 0)
+        dueDate.set(Calendar.SECOND, 0)
+        if (dueDate.before(currentDate)) {
+            dueDate.add(Calendar.HOUR_OF_DAY, 24)
+        }
+        val timeDiff = dueDate.timeInMillis.minus(currentDate.timeInMillis)
+
+        val dailyWorkRequest = OneTimeWorkRequestBuilder<DailyReminderWorker>()
+            .setInitialDelay(timeDiff, TimeUnit.MILLISECONDS)
+            .addTag(ConstantUtils.REMINDER_WORKER_TAG)
+            .build()
+
+        WorkManager.getInstance()
+            .enqueue(dailyWorkRequest)
+
         return Result.success()
     }
 

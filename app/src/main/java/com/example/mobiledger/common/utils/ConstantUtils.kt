@@ -34,7 +34,7 @@ object ConstantUtils {
     const val CATEGORY_EXPENSE = "categoryExpense"
     const val REMINDER_WORKER_TAG = "ReminderWorkerTag"
     const val CHANNEL_ID_REMINDER = "ChannelIDReminder"
-    const val REMINDER_MESSAGE = "Don't miss thr transactions for the day!"
+    const val REMINDER_MESSAGE = "Don't miss the transactions for the day!"
     const val DATA_REMINDER = "DATA_REMINDER"
     const val DAILY_REMINDER = "DAILY_REMINDER"
     const val OTHERS = "Others"
