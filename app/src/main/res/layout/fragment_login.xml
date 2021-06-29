@@ -99,6 +99,7 @@
             android:textColor="@color/colorPrimary"
             android:textSize="@dimen/csp_16"
             app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_90"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_10"
             app:layout_constraintTop_toBottomOf="@id/btnLogin" />
 

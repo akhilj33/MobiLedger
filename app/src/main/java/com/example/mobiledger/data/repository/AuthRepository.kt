@@ -14,6 +14,7 @@ interface AuthRepository {
     suspend fun signInViaGoogle(idToken: String?): AppResult<Pair<Boolean, UserEntity>>
     suspend fun isUserAuthorized(): Boolean
     suspend fun logOut(): AppResult<Boolean>
+    suspend fun sendPasswordResetEmail(email: String): AppResult<Unit>
 }
 
 class AuthRepositoryImpl(
@@ -47,6 +48,12 @@ class AuthRepositoryImpl(
     override suspend fun logOut(): AppResult<Boolean> {
         return withContext(dispatcher) {
             authSource.logOut()
+        }
+    }
+
+    override suspend fun sendPasswordResetEmail(email: String): AppResult<Unit> {
+        return withContext(dispatcher) {
+            authSource.sendPasswordResetEmail(email)
         }
     }
 }

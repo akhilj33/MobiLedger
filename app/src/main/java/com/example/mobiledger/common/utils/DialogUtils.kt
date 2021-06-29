@@ -4,6 +4,7 @@ import androidx.fragment.app.FragmentManager
 import com.example.mobiledger.common.extention.getName
 import com.example.mobiledger.domain.entities.TransactionEntity
 import com.example.mobiledger.presentation.addtransaction.AddTransactionDialogFragment
+import com.example.mobiledger.presentation.auth.ForgetPasswordDialogFragment
 import com.example.mobiledger.presentation.budget.MonthlyBudgetData
 import com.example.mobiledger.presentation.budget.addbudget.AddBudgetDialogFragment
 import com.example.mobiledger.presentation.budget.addbudget.applyTemplate.ApplyTemplateDialogFragment
@@ -112,6 +113,16 @@ fun showApplyTemplateDialogFragment(
     month: String
 ) {
     val dialog = ApplyTemplateDialogFragment.newInstance(month)
+    dialog.show(
+        fragmentManager,
+        dialog.getName()
+    )
+}
+
+fun showForgetPasswordDialog(
+    fragmentManager: FragmentManager,
+) {
+    val dialog = ForgetPasswordDialogFragment.newInstance()
     dialog.show(
         fragmentManager,
         dialog.getName()

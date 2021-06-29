@@ -18,6 +18,7 @@ interface AuthSource {
     suspend fun isUserAuthorized(): Boolean
     suspend fun logOut(): AppResult<Boolean>
     suspend fun getCurrentUser(): FirebaseUser?
+    suspend fun sendPasswordResetEmail(email: String): AppResult<Unit>
 }
 
 class AuthSourceImpl(
@@ -141,6 +142,28 @@ class AuthSourceImpl(
 
     override suspend fun getCurrentUser(): FirebaseUser? {
         return firebaseAuth.currentUser
+    }
+
+    override suspend fun sendPasswordResetEmail(email: String): AppResult<Unit> {
+        var response: Task<Void>? = null
+        var exception: Exception? = null
+        try {
+            response = firebaseAuth.sendPasswordResetEmail(email)
+            response.await()
+        } catch (e: Exception) {
+            exception = e
+        }
+
+        return when (val result = ErrorMapper.checkAndMapFirebaseApiError(response, exception)) {
+            is FireBaseResult.Success -> {
+                if (result.data != null) {
+                    AppResult.Success(Unit)
+                } else {
+                    AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
+                }
+            }
+            is FireBaseResult.Failure -> AppResult.Failure(result.error)
+        }
     }
 }
 

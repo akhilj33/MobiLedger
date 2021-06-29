@@ -3,6 +3,7 @@ package com.example.mobiledger.common.di.providers
 import  androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.mobiledger.presentation.addtransaction.AddTransactionViewModel
+import com.example.mobiledger.presentation.auth.ForgetPasswordViewModel
 import com.example.mobiledger.presentation.auth.LoginViewModel
 import com.example.mobiledger.presentation.auth.SignUpViewModel
 import com.example.mobiledger.presentation.budget.addbudget.AddBudgetDialogViewModel
@@ -159,6 +160,11 @@ class ViewModelFactoryProvider(private val useCaseProvider: UseCaseProvider) :
             modelClass.isAssignableFrom(TermsAndConditionViewModel::class.java) -> {
                 TermsAndConditionViewModel(
                     useCaseProvider.provideUserSettingsUseCase()
+                ) as T
+            }
+            modelClass.isAssignableFrom(ForgetPasswordViewModel::class.java) -> {
+                ForgetPasswordViewModel(
+                    useCaseProvider.provideAuthUseCase()
                 ) as T
             }
             else -> throw IllegalArgumentException("Unknown ViewModel Class")
