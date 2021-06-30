@@ -30,13 +30,6 @@
             app:layout_constraintGuide_percent=".11" />
 
         <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/horizontalGuideline_30"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_percent=".29" />
-
-        <androidx.constraintlayout.widget.Guideline
             android:id="@+id/horizontalGuideline_34"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -81,13 +74,12 @@
         <androidx.cardview.widget.CardView
             android:id="@+id/profileCard"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/cdp_10"
             android:layout_marginEnd="@dimen/cdp_10"
             android:layout_marginBottom="@dimen/cdp_20"
             android:background="@color/colorWhite"
             android:padding="@dimen/cdp_12"
-            app:layout_constraintBottom_toTopOf="@id/horizontalGuideline_30"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/horizontalGuideline_10">
@@ -95,6 +87,8 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:paddingBottom="@dimen/cdp_16"
+                android:paddingTop="@dimen/cdp_16"
                 android:paddingStart="@dimen/cdp_10"
                 android:paddingEnd="@dimen/cdp_10">
 
@@ -170,10 +164,11 @@
             android:layout_height="wrap_content"
             android:lineSpacingExtra="7sp"
             android:padding="@dimen/cdp_10"
+            android:layout_marginTop="@dimen/cdp_16"
             android:text="@string/enable_biometrics"
             app:layout_constraintHorizontal_bias="0"
             app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_04"
-            app:layout_constraintTop_toBottomOf="@id/horizontalGuideline_34" />
+            app:layout_constraintTop_toBottomOf="@id/profileCard" />
 
         <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/toggleBtnBiometric"

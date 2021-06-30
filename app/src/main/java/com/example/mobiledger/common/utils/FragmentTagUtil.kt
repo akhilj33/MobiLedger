@@ -5,6 +5,7 @@ import com.example.mobiledger.presentation.SplitFragment
 import com.example.mobiledger.presentation.aboutUs.AboutUsFragment
 import com.example.mobiledger.presentation.addtransaction.AddTransactionDialogFragment
 import com.example.mobiledger.presentation.auth.AuthViewPagerFragment
+import com.example.mobiledger.presentation.auth.ForgetPasswordDialogFragment
 import com.example.mobiledger.presentation.auth.LoginFragment
 import com.example.mobiledger.presentation.auth.SignUpFragment
 import com.example.mobiledger.presentation.budget.addbudget.AddBudgetDialogFragment
@@ -61,6 +62,7 @@ object FragmentTagUtil {
     private const val ON_BOARDING_FRAGMENT = "ON_BOARDING_FRAGMENT"
     private const val TERMS_AND_CONDITION_FRAGMENT = "TERMS_AND_CONDITION_FRAGMENT"
     private const val ABOUT_US_FRAGMENT = "ABOUT_US_FRAGMENT"
+    private const val FORGET_PASSWORD = "FORGET_PASSWORD"
 
     fun getFragmentName(fragment: Fragment): String {
         return when (fragment) {
@@ -93,6 +95,7 @@ object FragmentTagUtil {
             is OnBoardingFragment -> ON_BOARDING_FRAGMENT
             is TermsAndConditionFragment -> TERMS_AND_CONDITION_FRAGMENT
             is AboutUsFragment -> ABOUT_US_FRAGMENT
+            is ForgetPasswordDialogFragment -> FORGET_PASSWORD
 
             else -> throw RuntimeException("Fragment Name mapping doesn't exist in ${FragmentTagUtil.javaClass.simpleName} class")
         }

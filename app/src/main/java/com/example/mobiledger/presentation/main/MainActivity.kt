@@ -15,7 +15,7 @@ import androidx.work.*
 import com.example.mobiledger.R
 import com.example.mobiledger.common.base.BaseActivity
 import com.example.mobiledger.common.utils.ConstantUtils
-import com.example.mobiledger.common.utils.ReminderWorker
+import com.example.mobiledger.common.utils.DailyReminderWorker
 import com.example.mobiledger.databinding.ActivityMainBinding
 import com.example.mobiledger.presentation.NormalObserver
 import com.example.mobiledger.presentation.OneTimeObserver
@@ -102,20 +102,24 @@ class MainActivity :
             )
             .build()
 
-        val periodicWork =
-            PeriodicWorkRequestBuilder<ReminderWorker>(
-                1, TimeUnit.DAYS
-            )
-                .addTag(ConstantUtils.REMINDER_WORKER_TAG)
-                .setInputData(data)
-                .build()
+        val currentDate = Calendar.getInstance()
+        val dueDate = Calendar.getInstance()
+// Set Execution around 08:00:00 PM
+        dueDate.set(Calendar.HOUR_OF_DAY, 20)
+        dueDate.set(Calendar.MINUTE, 0)
+        dueDate.set(Calendar.SECOND, 0)
+        if (dueDate.before(currentDate)) {
+            dueDate.add(Calendar.HOUR_OF_DAY, 24)
+        }
+        val timeDiff = dueDate.timeInMillis.minus(currentDate.timeInMillis)
+
+        val dailyWorkRequest = OneTimeWorkRequestBuilder<DailyReminderWorker>()
+            .setInitialDelay(timeDiff, TimeUnit.MILLISECONDS)
+            .addTag(ConstantUtils.REMINDER_WORKER_TAG).build()
 
         WorkManager.getInstance()
-            .enqueueUniquePeriodicWork(
-                ConstantUtils.DAILY_REMINDER,
-                ExistingPeriodicWorkPolicy.REPLACE,
-                periodicWork
-            )
+            .enqueue(dailyWorkRequest)
+
     }
 
     private fun resetTab() {
@@ -189,9 +193,9 @@ class MainActivity :
 
     private fun setupObservers() {
 
-        viewModel.nativeToast.observe(this, OneTimeObserver{
-           val msg = it.msg ?: if(it.msgRes!=null) getString(it.msgRes) else null
-            if (msg!=null) Toast.makeText(this, msg, Toast.LENGTH_LONG).show()
+        viewModel.nativeToast.observe(this, OneTimeObserver {
+            val msg = it.msg ?: if (it.msgRes != null) getString(it.msgRes) else null
+            if (msg != null) Toast.makeText(this, msg, Toast.LENGTH_LONG).show()
         })
 
         viewModel.bottomNavVisibilityLiveData.observe(this@MainActivity, { isVisible ->

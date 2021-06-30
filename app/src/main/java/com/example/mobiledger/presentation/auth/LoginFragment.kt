@@ -12,6 +12,7 @@ import androidx.lifecycle.Observer
 import com.example.mobiledger.R
 import com.example.mobiledger.common.base.BaseFragment
 import com.example.mobiledger.common.utils.ValidationUtils
+import com.example.mobiledger.common.utils.showForgetPasswordDialog
 import com.example.mobiledger.databinding.FragmentLoginBinding
 import com.example.mobiledger.databinding.SnackViewErrorBinding
 import com.example.mobiledger.presentation.OneTimeObserver
@@ -43,9 +44,17 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, LoginNavigator>(R.layou
                 initSignInWithGoogle()
             }
 
+            tvForgetPassword.setOnClickListener {
+                sendResetPasswordEmail()
+            }
+
             textPassword.addTextChangedListener(passwordTextWatcher)
             textEmail.addTextChangedListener(emailTextWatcher)
         }
+    }
+
+    private fun sendResetPasswordEmail() {
+        showForgetPasswordDialog(requireActivity().supportFragmentManager)
     }
 
     private fun setUpObserver() {
@@ -54,8 +63,6 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, LoginNavigator>(R.layou
             OneTimeObserver {
                 navigator?.launchDashboard()
             })
-
-
 
         viewModel.loadingState.observe(viewLifecycleOwner, Observer {
             if (it) {
