@@ -65,7 +65,7 @@ class DailyReminderWorker(val context: Context, params: WorkerParameters) : Work
                 NotificationChannel(
                     ConstantUtils.CHANNEL_ID_REMINDER,
                     ConstantUtils.REMINDER_CHANNEL,
-                    NotificationManager.IMPORTANCE_DEFAULT
+                    NotificationManager.IMPORTANCE_HIGH
                 )
             notificationManager.createNotificationChannel(notificationChannel)
         }

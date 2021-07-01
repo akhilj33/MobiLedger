@@ -9,8 +9,11 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.example.mobiledger.R
 import com.example.mobiledger.common.base.BaseFragment
+import com.example.mobiledger.common.extention.disable
+import com.example.mobiledger.common.extention.enable
 import com.example.mobiledger.common.showToast
 import com.example.mobiledger.common.utils.ValidationUtils
+import com.example.mobiledger.common.utils.showTermsAndConditionDialogFragment
 import com.example.mobiledger.databinding.FragmentSignUpBinding
 import com.example.mobiledger.databinding.SnackViewErrorBinding
 import com.example.mobiledger.presentation.OneTimeObserver
@@ -26,6 +29,7 @@ class SignUpFragment :
         super.onViewCreated(view, savedInstanceState)
         setOnClick()
         setUpObserver()
+        viewBinding.btnSignup.disable()
     }
 
     override fun isBottomNavVisible(): Boolean = false
@@ -60,6 +64,17 @@ class SignUpFragment :
         viewBinding.apply {
             btnSignup.setOnClickListener {
                 signUp(getNameText(), getEmailText(), getPasswordText(), getConfirmPasswordText(), getContactText())
+            }
+
+            checkBoxTAndC.setOnCheckedChangeListener { buttonView, isChecked ->
+                if (isChecked)
+                    viewBinding.btnSignup.enable()
+                else
+                    viewBinding.btnSignup.disable()
+            }
+
+            tAndCText.setOnClickListener {
+                showTermsAndConditionDialogFragment(requireActivity().supportFragmentManager)
             }
 
             nameEditText.addTextChangedListener(nameTextWatcher)

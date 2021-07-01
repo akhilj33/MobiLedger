@@ -153,7 +153,7 @@
 
     <!-- On Boarding -->
 
-    <string name="i_have_read_all_the_terms_and_conditions">I have read all the terms and conditions</string>
+    <string name="i_have_read_all_the_terms_and_conditions">I accept all the terms and conditions for signing up and using this app.</string>
     <string name="accept">Accept</string>
     <string name="terms_and_conditions">Terms And Conditions</string>
 
