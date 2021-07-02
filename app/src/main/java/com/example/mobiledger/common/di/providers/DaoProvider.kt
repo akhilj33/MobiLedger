@@ -15,4 +15,5 @@ class DaoProvider(private val mobiLedgerDatabase: MobiLedgerDatabase) {
     fun provideCategoryDao(): CategoryDao = mobiLedgerDatabase.categoryDao()
     fun provideCategorySummaryDao(): MonthlyCategorySummaryDao = mobiLedgerDatabase.monthlyCategorySummaryDao()
     fun provideCategoryRefDao(): CategoryTransactionsRefDao = mobiLedgerDatabase.categoryTransactionsRefDao()
+    fun provideDb(): MobiLedgerDatabase = mobiLedgerDatabase
 }

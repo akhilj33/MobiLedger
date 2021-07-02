@@ -24,7 +24,7 @@ object DependencyProvider {
     private val firebaseProvider: FirebaseProvider = FirebaseProvider()
 
     private val authSourceProvider: AuthSourceProvider by lazy {
-        AuthSourceProvider(firebaseProvider)
+        AuthSourceProvider(firebaseProvider, daoProvider)
     }
 
     private val apiSourceProvider: ApiSourceProvider by lazy {

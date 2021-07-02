@@ -26,6 +26,19 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
+        <TextView
+            android:id="@+id/textEmptyBudget"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/GelionSemiBoldBlue18"
+            android:textAlignment="center"
+            android:text="@string/you_have_not_created_the_budget_for_this_month"
+            android:layout_marginStart="@dimen/cdp_36"
+            android:layout_marginEnd="@dimen/cdp_36"
+            android:layout_marginTop="@dimen/cdp_24"
+            app:layout_constraintTop_toBottomOf="@id/btnApplyTemplate"
+            app:layout_constraintStart_toStartOf="parent" />
+
         <com.airbnb.lottie.LottieAnimationView
             android:layout_width="326dp"
             android:layout_height="290dp"
@@ -33,10 +46,10 @@
             app:lottie_rawRes="@raw/empty_budget_screen"
             app:lottie_autoPlay="true"
             app:lottie_loop="true"
-            android:layout_marginTop="@dimen/cdp_36"
+            android:layout_marginTop="@dimen/cdp_24"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/btnApplyTemplate"
+            app:layout_constraintTop_toBottomOf="@id/textEmptyBudget"
             app:layout_constraintBottom_toBottomOf="parent" />
 
 
