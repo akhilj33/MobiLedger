@@ -54,7 +54,7 @@ class UserSettingsRepositoryImpl(
     }
 
     override suspend fun clearDataOnLogout() {
-        cacheSource.clearDataOnLogout()
+        cacheSource.clearSharedPreferenceOnLogout()
     }
 
     override suspend fun isTermsAndConditionAccepted(): Boolean {

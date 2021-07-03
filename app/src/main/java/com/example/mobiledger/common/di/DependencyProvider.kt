@@ -24,7 +24,7 @@ object DependencyProvider {
     private val firebaseProvider: FirebaseProvider = FirebaseProvider()
 
     private val authSourceProvider: AuthSourceProvider by lazy {
-        AuthSourceProvider(firebaseProvider, daoProvider)
+        AuthSourceProvider(firebaseProvider, provideDatabaseProvider())
     }
 
     private val apiSourceProvider: ApiSourceProvider by lazy {
@@ -71,5 +71,7 @@ object DependencyProvider {
     fun provideViewModelFactory(): ViewModelProvider.Factory = viewModelFactory
 
     fun provideUseCaseProvider(): UseCaseProvider = useCaseProvider
+
+    fun provideDatabaseProvider(): MobiLedgerDatabase = mobiLedgerDatabase
 
 }

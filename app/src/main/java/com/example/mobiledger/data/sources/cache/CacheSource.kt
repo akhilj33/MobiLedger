@@ -12,7 +12,7 @@ interface CacheSource {
     suspend fun isNotificationEnable(): Boolean
     suspend fun saveReminderEnable(isEnable: Boolean)
     suspend fun isReminderEnable(): Boolean
-    suspend fun clearDataOnLogout()
+    suspend fun clearSharedPreferenceOnLogout()
     suspend fun isTermsAndConditionAccepted(): Boolean
     suspend fun acceptTermsAndCondition(isAccepted: Boolean)
 }
@@ -63,7 +63,7 @@ class SharedPreferenceSource(val context: Context) : CacheSource {
         return sharedPref.getBoolean(REMINDER, false)
     }
 
-    override suspend fun clearDataOnLogout() {
+    override suspend fun clearSharedPreferenceOnLogout() {
         sharedPref.edit().clear().apply()
         acceptTermsAndCondition(true)
     }
