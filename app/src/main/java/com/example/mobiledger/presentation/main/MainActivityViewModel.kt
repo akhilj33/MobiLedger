@@ -164,7 +164,7 @@ class MainActivityViewModel(
         viewModelScope.launch {
             when (authUseCase.logOut()) {
                 is AppResult.Success -> {
-                    userSettingsUseCase.removeUid()
+                    userSettingsUseCase.clearDataOnLogout()
                     _userLogoutLiveData.value = Event(true)
                 }
                 is AppResult.Failure -> {

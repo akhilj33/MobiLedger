@@ -2,6 +2,7 @@ package com.example.mobiledger.data.sources.auth
 
 import com.example.mobiledger.common.utils.ErrorCodes
 import com.example.mobiledger.data.ErrorMapper
+import com.example.mobiledger.data.sources.room.MobiLedgerDatabase
 import com.example.mobiledger.domain.AppError
 import com.example.mobiledger.domain.AppResult
 import com.example.mobiledger.domain.FireBaseResult
@@ -22,7 +23,7 @@ interface AuthSource {
 }
 
 class AuthSourceImpl(
-    private val firebaseAuth: FirebaseAuth
+    private val firebaseAuth: FirebaseAuth, private val mobiLedgerDatabase: MobiLedgerDatabase
 ) : AuthSource {
 
     override suspend fun loginUserViaEmail(email: String, password: String): AppResult<UserEntity> {
@@ -131,6 +132,7 @@ class AuthSourceImpl(
         return when (val result = ErrorMapper.checkAndMapFirebaseApiError(response, exception)) {
             is FireBaseResult.Success -> {
                 if (result.data != null) {
+                    mobiLedgerDatabase.clearAllTables()
                     AppResult.Success(true)
                 } else {
                     AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))

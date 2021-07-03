@@ -16,5 +16,4 @@ class DbProvider(private val daoProvider: DaoProvider, private val firebaseProvi
     fun provideCategoryDb(): CategoriesDb =
         CategoryDbImpl(firebaseProvider.provideFirebaseDatabase(), daoProvider.provideCategoryDao(), daoProvider.provideCategorySummaryDao(), daoProvider.provideCategoryRefDao())
 
-
 }

@@ -6,6 +6,19 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+        <TextView
+            android:id="@+id/textEmptyHome"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/GelionSemiBoldBlue18"
+            android:textAlignment="center"
+            android:text="@string/you_have_not_recorded_any_transaction_this_so_far_this_month"
+            android:layout_marginStart="@dimen/cdp_36"
+            android:layout_marginEnd="@dimen/cdp_36"
+            android:layout_marginTop="@dimen/cdp_36"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
         <com.airbnb.lottie.LottieAnimationView
             android:layout_width="326dp"
             android:layout_height="290dp"
@@ -13,10 +26,10 @@
             app:lottie_rawRes="@raw/home_empty_screen"
             app:lottie_autoPlay="true"
             app:lottie_loop="true"
-            android:layout_marginTop="@dimen/cdp_36"
+            android:layout_marginTop="@dimen/cdp_24"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/textEmptyHome"
             app:layout_constraintBottom_toBottomOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

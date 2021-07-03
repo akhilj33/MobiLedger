@@ -12,6 +12,7 @@ import com.example.mobiledger.presentation.budget.updatebudget.UpdateBudgetDialo
 import com.example.mobiledger.presentation.budgetTemplate.AddBudgetTemplateDialogFragment
 import com.example.mobiledger.presentation.budgetTemplate.EditBudgetTemplateDialogFragment
 import com.example.mobiledger.presentation.categoryFragment.AddCategoryDialogFragment
+import com.example.mobiledger.presentation.onBoarding.TermsAndConditionFragment
 import com.example.mobiledger.presentation.transactiondetail.TransactionDetailDialogFragment
 import java.util.*
 
@@ -123,6 +124,16 @@ fun showForgetPasswordDialog(
     fragmentManager: FragmentManager,
 ) {
     val dialog = ForgetPasswordDialogFragment.newInstance()
+    dialog.show(
+        fragmentManager,
+        dialog.getName()
+    )
+}
+
+fun showTermsAndConditionDialogFragment(
+    fragmentManager: FragmentManager,
+) {
+    val dialog = TermsAndConditionFragment.newInstance()
     dialog.show(
         fragmentManager,
         dialog.getName()

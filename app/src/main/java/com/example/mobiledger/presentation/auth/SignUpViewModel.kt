@@ -61,6 +61,7 @@ class SignUpViewModel(
             when (val result = userUseCase.addUserToFirebaseDb(user)) {
                 is AppResult.Success -> {
                     saveUIDInCache(user.uid)
+                    acceptTermsAndCondition()
                     val a = async { categoryUseCase.addUserExpenseCategories(getDefaultExpenseList()) }
                     val b = async { categoryUseCase.addUserIncomeCategories(getDefaultIncomeList()) }
 
@@ -99,6 +100,13 @@ class SignUpViewModel(
             userSettingsUseCase.saveUID(uid)
         }
     }
+
+    fun acceptTermsAndCondition() {
+        viewModelScope.launch {
+            userSettingsUseCase.acceptTermsAndCondition(true)
+        }
+    }
+
 
     enum class ViewErrorType { NON_BLOCKING }
 

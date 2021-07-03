@@ -29,7 +29,6 @@ class SplashFragment : BaseFragment<FragmentSplashBinding, SplashNavigator>(R.la
         viewModel.isTermsAndConditionAcceptedLiveData.observe(viewLifecycleOwner, OneTimeObserver {
             it.let {
                 if (it) {
-                    viewModel.isUserSignedIn()
                     viewModel.isBiometricEnabled()
                 } else {
                     navigator?.navigateToOnBoarding()
@@ -38,6 +37,7 @@ class SplashFragment : BaseFragment<FragmentSplashBinding, SplashNavigator>(R.la
         })
         viewModel.isBiometricIdEnabled.observe(viewLifecycleOwner, OneTimeObserver { isBiometricEnabled ->
             isBiometricActive = isBiometricEnabled
+            viewModel.isUserSignedIn()
         })
 
         viewModel.isUserSignedInLiveData.observe(viewLifecycleOwner, OneTimeObserver { isSignedIn ->

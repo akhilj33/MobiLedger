@@ -35,9 +35,11 @@ class TransactionViewPagerAdapter(
                     if (incomeList.isNotEmpty()) {
                         holder.transactionAdapter.addList(incomeList)
                         holder.emptyTransactionScreen.gone()
+                        holder.emptyTransactionListText.gone()
                     } else {
                         holder.emptyTransactionScreen.visible()
                         holder.emptyTransactionScreen.playAnimation()
+                        holder.emptyTransactionListText.visible()
                     }
                 }
 
@@ -49,6 +51,7 @@ class TransactionViewPagerAdapter(
                     } else {
                         holder.emptyTransactionScreen.visible()
                         holder.emptyTransactionScreen.playAnimation()
+                        holder.emptyTransactionListText.visible()
                     }
                 }
             }
@@ -60,6 +63,7 @@ class TransactionViewPagerAdapter(
     inner class PageHolder(val viewBinding: TransactionListRecyclerviewLayoutBinding) : RecyclerView.ViewHolder(viewBinding.root) {
         val rv: RecyclerView = viewBinding.rvTransaction
         val emptyTransactionScreen = viewBinding.animationView
+        val emptyTransactionListText = viewBinding.textEmptyList
         val transactionAdapter: TransactionAdapter by lazy { TransactionAdapter() }
 
     }

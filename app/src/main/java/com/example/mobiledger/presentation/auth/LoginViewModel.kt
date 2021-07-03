@@ -35,6 +35,7 @@ class LoginViewModel(
             when (val result = authUseCase.loginViaEmail(email, password)) {
                 is AppResult.Success -> {
                     saveUIDInCache(result.data.uid)
+                    acceptTermsAndCondition()
                     _signInResultLiveData.value = Event(result.data)
                 }
                 is AppResult.Failure -> {
@@ -59,6 +60,7 @@ class LoginViewModel(
                     if (isNewUser) addUserToFirebaseDB(userEntity)
                     else {
                         saveUIDInCache(userEntity.uid)
+                        acceptTermsAndCondition()
                         _signInResultLiveData.value = Event(userEntity)
                     }
                 }
@@ -97,6 +99,12 @@ class LoginViewModel(
     private fun saveUIDInCache(uid: String) {
         viewModelScope.launch {
             userSettingsUseCase.saveUID(uid)
+        }
+    }
+
+    fun acceptTermsAndCondition() {
+        viewModelScope.launch {
+            userSettingsUseCase.acceptTermsAndCondition(true)
         }
     }
 

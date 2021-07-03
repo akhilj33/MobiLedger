@@ -18,7 +18,6 @@ import com.example.mobiledger.presentation.home.HomeNavigator
 import com.example.mobiledger.presentation.home.TransactionData
 import com.example.mobiledger.presentation.onBoarding.OnBoardingFragment
 import com.example.mobiledger.presentation.onBoarding.OnBoardingNavigator
-import com.example.mobiledger.presentation.onBoarding.TermsAndConditionFragment
 import com.example.mobiledger.presentation.profile.EditProfileFragment
 import com.example.mobiledger.presentation.profile.ProfileFragment
 import com.example.mobiledger.presentation.profile.ProfileNavigator
@@ -160,11 +159,11 @@ class MainActivityNavigator constructor(
         )
     }
 
-    override fun navigateToTermsAndCondition() {
-        FragmentTransactionHelper.replaceFragment(
-            fragmentManager,
-            TermsAndConditionFragment.newInstance(),
-            containerId, addToBackStack = true
-        )
-    }
+//    override fun navigateToTermsAndCondition() {
+//        FragmentTransactionHelper.replaceFragment(
+//            fragmentManager,
+//            TermsAndConditionFragment.newInstance(),
+//            containerId, addToBackStack = false
+//        )
+//    }
 }
