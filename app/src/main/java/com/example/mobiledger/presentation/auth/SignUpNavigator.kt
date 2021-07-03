@@ -4,4 +4,5 @@ import com.example.mobiledger.common.base.BaseNavigator
 
 interface SignUpNavigator : BaseNavigator {
     fun launchDashboard()
+//    fun navigateToTermsAndCondition()
 }

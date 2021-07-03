@@ -35,7 +35,7 @@ class OnBoardingFragment : BaseFragment<FragmentOnboardingBinding, OnBoardingNav
 
     private fun setOnClickListener() {
         viewBinding.btnNext.setOnClickListener {
-            navigator?.navigateToTermsAndCondition()
+            navigator?.navigateToAuthScreen()
         }
     }
 

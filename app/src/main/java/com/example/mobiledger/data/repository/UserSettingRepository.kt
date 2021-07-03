@@ -11,7 +11,7 @@ interface UserSettingsRepository {
     suspend fun isNotificationEnable(): Boolean
     suspend fun saveReminderEnable(isEnable: Boolean)
     suspend fun isReminderEnable(): Boolean
-    suspend fun removeUid()
+    suspend fun clearDataOnLogout()
     suspend fun isTermsAndConditionAccepted(): Boolean
     suspend fun acceptTermsAndCondition(isAccepted: Boolean)
 }
@@ -53,8 +53,8 @@ class UserSettingsRepositoryImpl(
         return cacheSource.isReminderEnable()
     }
 
-    override suspend fun removeUid() {
-        cacheSource.removeUid()
+    override suspend fun clearDataOnLogout() {
+        cacheSource.clearSharedPreferenceOnLogout()
     }
 
     override suspend fun isTermsAndConditionAccepted(): Boolean {

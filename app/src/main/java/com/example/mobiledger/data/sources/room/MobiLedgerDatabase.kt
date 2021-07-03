@@ -27,6 +27,4 @@ abstract class MobiLedgerDatabase : RoomDatabase() {
     abstract fun categoryDao(): CategoryDao
     abstract fun monthlyCategorySummaryDao(): MonthlyCategorySummaryDao
     abstract fun categoryTransactionsRefDao(): CategoryTransactionsRefDao
-
-
 }
