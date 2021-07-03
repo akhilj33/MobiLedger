@@ -12,6 +12,7 @@ import com.example.mobiledger.common.extention.disable
 import com.example.mobiledger.common.extention.enable
 import com.example.mobiledger.common.utils.DateUtils.getDateInMMMMyyyyFormat
 import com.example.mobiledger.databinding.FragmentUpdateBudgetDialogBinding
+import com.example.mobiledger.databinding.SnackViewErrorBinding
 import com.example.mobiledger.presentation.OneTimeObserver
 import com.example.mobiledger.presentation.budget.MonthlyBudgetData
 import com.google.android.material.textfield.TextInputLayout
@@ -21,6 +22,8 @@ class UpdateBudgetDialogFragment :
     BaseDialogFragment<FragmentUpdateBudgetDialogBinding, BaseNavigator>(R.layout.fragment_update_budget_dialog) {
 
     private val viewModel: UpdateBudgetViewModel by viewModels { viewModelFactory }
+
+    override fun getSnackBarErrorView(): SnackViewErrorBinding = viewBinding.includeErrorView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,7 +60,7 @@ class UpdateBudgetDialogFragment :
             }
 
             btnUpdate.setOnClickListener {
-                if (it.isEnabled && !getAmount().isNullOrEmpty()) {
+                if (it.isEnabled && getAmount().isNotEmpty()) {
                     val amtChange = getAmount().toLong() - viewModel.amount
                     if (amtChange == 0L) dismiss()
                     else {

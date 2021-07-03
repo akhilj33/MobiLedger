@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.mobiledger.R
 import com.example.mobiledger.common.base.BaseViewModel
 import com.example.mobiledger.common.extention.toAmount
+import com.example.mobiledger.common.utils.DateUtils
 import com.example.mobiledger.common.utils.DateUtils.getCurrentDate
 import com.example.mobiledger.common.utils.DateUtils.getDateInMMMMyyyyFormat
 import com.example.mobiledger.common.utils.DateUtils.getDateInMMyyyyFormat
@@ -14,9 +15,14 @@ import com.example.mobiledger.common.utils.DefaultCategoryUtils.getCategoryIcon
 import com.example.mobiledger.domain.AppResult
 import com.example.mobiledger.domain.entities.MonthlyTransactionSummaryEntity
 import com.example.mobiledger.domain.entities.TransactionEntity
+import com.example.mobiledger.domain.enums.EditCategoryTransactionType
+import com.example.mobiledger.domain.enums.TransactionType
+import com.example.mobiledger.domain.usecases.BudgetUseCase
+import com.example.mobiledger.domain.usecases.CategoryUseCase
 import com.example.mobiledger.domain.usecases.ProfileUseCase
 import com.example.mobiledger.domain.usecases.TransactionUseCase
 import com.example.mobiledger.presentation.Event
+import com.example.mobiledger.presentation.getResultFromJobs
 import com.github.mikephil.charting.data.PieEntry
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -26,7 +32,10 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 class HomeViewModel(
-    private val profileUseCase: ProfileUseCase, private val transactionUseCase: TransactionUseCase
+    private val profileUseCase: ProfileUseCase,
+    private val transactionUseCase: TransactionUseCase,
+    private val budgetUseCase: BudgetUseCase,
+    private val categoryUseCase: CategoryUseCase
 ) : BaseViewModel() {
 
     val userNameLiveData: LiveData<String> get() = _userNameLiveData
@@ -190,14 +199,14 @@ class HomeViewModel(
         }
     }
 
-    fun deleteTransaction(transactionId: String, position: Int) {
+    fun deleteTransaction(transactionEntity: TransactionEntity, position: Int) {
         _isLoading.value = true
+        val oldMonthYear =
+            getDateInMMyyyyFormat(DateUtils.getCalendarFromMillis(transactionEntity.transactionTime.toDate().time))
         viewModelScope.launch {
-            when (val result = transactionUseCase.deleteTransaction(transactionId, getDateInMMyyyyFormat(getCurrentMonth()))) {
-                is AppResult.Success -> {
-                    _deleteTransactionLiveData.value = Event(position)
-                    _isLoading.value = false
-                }
+            when (val result = deleteOldTransaction(transactionEntity, oldMonthYear)) {
+                is AppResult.Success -> _deleteTransactionLiveData.value = Event(position)
+
                 is AppResult.Failure -> {
                     if (needToHandleAppError(result.error)) {
                         _errorLiveData.value = Event(
@@ -207,9 +216,58 @@ class HomeViewModel(
                             )
                         )
                     }
-                    _isLoading.value = false
                 }
             }
+            _isLoading.value = false
+        }
+    }
+
+    /**
+     * Cases
+     * 1-Update Monthly Summary,
+     * 2- Delete Transaction Entity
+     * 3-Update old category summary and transaction
+     * 4-Delete Old category data if it had only 1 transaction
+     * 5-Update category amount in old category Budget, if they exist [Only Expense Case]
+     */
+    private suspend fun deleteOldTransaction(oldTransactionEntity: TransactionEntity, oldMonthYear: String): AppResult<Unit> {
+        return withContext(Dispatchers.IO) {
+            val monthlySummaryUpdateJob =
+                async {
+                    transactionUseCase.updateMonthlySummerData(
+                        oldMonthYear,
+                        oldTransactionEntity.transactionType,
+                        -oldTransactionEntity.amount,
+                        EditCategoryTransactionType.DELETE
+                    )
+                }
+            val transactionDeleteJob =
+                async { transactionUseCase.deleteTransaction(oldTransactionEntity.id, oldMonthYear) }
+            val categorySummaryAmountUpdateJob =
+                async {
+                    categoryUseCase.updateMonthlyCategoryAmount(
+                        oldMonthYear,
+                        oldTransactionEntity,
+                        -oldTransactionEntity.amount,
+                        EditCategoryTransactionType.DELETE
+                    )
+                }
+            val budgetAmountUpdateJob = async {
+                if (oldTransactionEntity.transactionType == TransactionType.Expense)
+                    budgetUseCase.updateMonthlyCategoryBudgetAmounts(
+                        oldMonthYear,
+                        oldTransactionEntity.category,
+                        expenseChange = -oldTransactionEntity.amount
+                    )
+                else AppResult.Success(Unit)
+            }
+
+            getResultFromJobs(
+                listOf(
+                    transactionDeleteJob, monthlySummaryUpdateJob, categorySummaryAmountUpdateJob,
+                    budgetAmountUpdateJob
+                )
+            )
         }
     }
 

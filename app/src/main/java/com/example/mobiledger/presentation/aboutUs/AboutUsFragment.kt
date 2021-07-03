@@ -17,6 +17,8 @@ class AboutUsFragment : BaseFragment<FragmentAboutUsBinding, OnBoardingNavigator
         setOnCLickListener()
     }
 
+    override fun isBottomNavVisible(): Boolean = false
+
     private fun setOnCLickListener() {
 
         viewBinding.btnBack.setOnClickListener {

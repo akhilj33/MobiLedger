@@ -15,6 +15,8 @@ import com.example.mobiledger.domain.usecases.CategoryUseCase
 import com.example.mobiledger.domain.usecases.TransactionUseCase
 import com.example.mobiledger.domain.usecases.UserSettingsUseCase
 import com.example.mobiledger.presentation.Event
+import com.example.mobiledger.presentation.getResultFromJobs
+import com.example.mobiledger.presentation.transactiondetail.TransactionDetailViewModel
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
@@ -106,15 +108,24 @@ class AddTransactionViewModel(
                 else AppResult.Success(Unit)
             }
 
-            if (transactionUpdateJob.await() is AppResult.Success && monthlySummaryUpdateJob.await() is AppResult.Success &&
-                categorySummaryAmountUpdateJob.await() is AppResult.Success && budgetAmountUpdateJob.await() is AppResult.Success
-            ) {
-                _dataUpdatedResult.value = Event(Unit)
-                if (userSettingsUseCase.isNotificationEnabled())
-                _notificationIndicator.value =
-                    NotificationCallerData(monthYear, newTransactionEntity.category, newTransactionEntity.amount)
-            } else {
-                _errorLiveData.value = Event(ViewError(viewErrorType = ViewErrorType.NON_BLOCKING))
+            when(val result = getResultFromJobs(listOf(transactionUpdateJob, monthlySummaryUpdateJob, categorySummaryAmountUpdateJob,
+                budgetAmountUpdateJob))){
+                is AppResult.Success -> {
+                    _dataUpdatedResult.value = Event(Unit)
+                    if (userSettingsUseCase.isNotificationEnabled())
+                        _notificationIndicator.value =
+                            NotificationCallerData(monthYear, newTransactionEntity.category, newTransactionEntity.amount)
+                }
+                is AppResult.Failure -> {
+                    if (needToHandleAppError(result.error)) {
+                        _errorLiveData.value = Event(
+                            ViewError(
+                                viewErrorType = ViewErrorType.NON_BLOCKING,
+                                message = result.error.message
+                            )
+                        )
+                    }
+                }
             }
             _loadingState.value = false
         }

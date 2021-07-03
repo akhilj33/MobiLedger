@@ -84,7 +84,6 @@
 
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-
         <include
             android:id="@+id/includeErrorView"
             layout="@layout/snack_view_error"

@@ -27,6 +27,10 @@ object DependencyProvider {
         AuthSourceProvider(firebaseProvider, provideDatabaseProvider())
     }
 
+    private val internetSourceProvider: InternetSourceProvider by lazy {
+        InternetSourceProvider(provideApplicationContext())
+    }
+
     private val apiSourceProvider: ApiSourceProvider by lazy {
         ApiSourceProvider(retrofitProvider, firebaseProvider, authSourceProvider)
     }
@@ -41,7 +45,10 @@ object DependencyProvider {
     /*-------------------------------Repository------------------------------------------*/
 
     private val repositoryProvider: RepositoryProvider by lazy {
-        RepositoryProvider(authSourceProvider, apiSourceProvider, cacheSourceProvider, dbProvider)
+        RepositoryProvider(
+            authSourceProvider, apiSourceProvider, cacheSourceProvider, dbProvider,
+            internetSourceProvider
+        )
     }
 
     /*-------------------------------Use Case------------------------------------------*/

@@ -5,6 +5,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="bottomSheetDialogTheme">@style/AppBottomSheetDialogTheme</item>
     </style>
 
     <!-- Full Screen Dialogs -->
@@ -17,6 +18,17 @@
         <item name="android:windowBackground">@color/colorWhite</item>
         <item name="android:windowCloseOnTouchOutside">false</item>
         <item name="android:statusBarColor">@color/colorPrimary</item>
+    </style>
+
+    <!-- Bottom Sheet -->
+    <style name="AppBottomSheetDialogTheme"
+        parent="ThemeOverlay.MaterialComponents.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/AppModalStyle</item>
+    </style>
+
+    <style name="AppModalStyle"
+        parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@drawable/round_bottomsheet</item>
     </style>
 
     <!--    SwitchCompat theme-->

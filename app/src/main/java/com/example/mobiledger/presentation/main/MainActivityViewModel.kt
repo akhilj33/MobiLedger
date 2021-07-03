@@ -8,14 +8,18 @@ import com.example.mobiledger.domain.AppResult
 import com.example.mobiledger.domain.enums.TransactionType
 import com.example.mobiledger.domain.usecases.AuthUseCase
 import com.example.mobiledger.domain.usecases.BudgetUseCase
+import com.example.mobiledger.domain.usecases.InternetUseCase
 import com.example.mobiledger.domain.usecases.UserSettingsUseCase
 import com.example.mobiledger.presentation.Event
 import com.example.mobiledger.presentation.addtransaction.AddTransactionViewModel
 import com.example.mobiledger.presentation.budget.MonthlyBudgetData
 import com.example.mobiledger.presentation.budget.MonthlyCategoryBudget
+import kotlinx.coroutines.InternalCoroutinesApi
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class MainActivityViewModel(
+    private val internetUseCase: InternetUseCase,
     private val budgetUseCase: BudgetUseCase,
     private val authUseCase: AuthUseCase,
     private val userSettingsUseCase: UserSettingsUseCase
@@ -23,8 +27,8 @@ class MainActivityViewModel(
 
     /*------------------------------------------------Live Data--------------------------------------------------*/
 
-    private val _isInternetAvailableLiveData: MutableLiveData<Event<Boolean>> = MutableLiveData()
-    val isInternetAvailableLiveData: LiveData<Event<Boolean>> get() = _isInternetAvailableLiveData
+    private val _isInternetAvailableLiveData: MutableLiveData<Event<InternetState>> = MutableLiveData()
+    val isInternetAvailableLiveData: LiveData<Event<InternetState>> get() = _isInternetAvailableLiveData
 
     private val _currentTab: MutableLiveData<Event<NavTab>> = MutableLiveData(Event(NavTab.HOME))
     val currentTab: LiveData<Event<NavTab>> get() = _currentTab
@@ -90,13 +94,15 @@ class MainActivityViewModel(
 
     /*---------------------------------------Internet Error Info -----------------------------------------------*/
 
-//    fun registerInternetStatus() {
-//        viewModelScope.launch {
-//            internetUseCase.receiveInternetStatus().collect {
-//                _isInternetAvailableLiveData.value = Event(it)
-//            }
-//        }
-//    }
+    fun registerInternetStatus() {
+        viewModelScope.launch {
+            internetUseCase.receiveInternetStatus().collect { currState ->
+                val events: List<Boolean> = internetUseCase.receiveInternetStatus().replayCache
+                val prevState: Boolean = if (events.size > 1) events[0] else true
+                _isInternetAvailableLiveData.value = Event(InternetState(prevState, currState))
+            }
+        }
+    }
 
     fun addTransactionResult() {
         _addTransactionResultLiveData.value = Event(Unit)
@@ -195,6 +201,8 @@ class MainActivityViewModel(
         }
     }
 }
+
+data class InternetState(val previous : Boolean, val current: Boolean)
 
 sealed class NavTab {
     object HOME : NavTab()

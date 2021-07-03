@@ -18,6 +18,7 @@ import com.example.mobiledger.common.utils.DateUtils
 import com.example.mobiledger.common.utils.DateUtils.getDateInDDMMMMyyyyFormat
 import com.example.mobiledger.common.utils.JsonUtils.convertJsonStringToObject
 import com.example.mobiledger.common.utils.JsonUtils.convertToJsonString
+import com.example.mobiledger.databinding.SnackViewErrorBinding
 import com.example.mobiledger.databinding.TransactionDetailFragmentBinding
 import com.example.mobiledger.domain.entities.TransactionEntity
 import com.example.mobiledger.domain.enums.TransactionType
@@ -44,6 +45,8 @@ class TransactionDetailDialogFragment :
             }
         }
     }
+
+    override fun getSnackBarErrorView(): SnackViewErrorBinding = viewBinding.includeErrorView
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -73,7 +76,7 @@ class TransactionDetailDialogFragment :
     }
 
     private fun setUpObserver() {
-        viewModel.loadingState.observe(viewLifecycleOwner, Observer {
+        viewModel.loadingState.observe(viewLifecycleOwner, {
             if (it) {
                 viewBinding.transactionProgressBar.visibility = View.VISIBLE
             } else {
@@ -106,7 +109,7 @@ class TransactionDetailDialogFragment :
     private fun setOnClickListeners() {
         viewBinding.apply {
             dateTv.setOnClickListener {
-                datePicker.show(requireActivity().supportFragmentManager, "tag");
+                datePicker.show(requireActivity().supportFragmentManager, "tag")
             }
 
             closeIv.setOnClickListener {

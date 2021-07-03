@@ -29,9 +29,18 @@ class TransactionListFragment :
         }
     }
 
+    override fun isBottomNavVisible(): Boolean = false
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initViewPager()
+        setOnClickListener()
+    }
+
+    private fun setOnClickListener() {
+        viewBinding.btnBack.setOnClickListener {
+            activity?.onBackPressed()
+        }
     }
 
     private fun initViewPager() {

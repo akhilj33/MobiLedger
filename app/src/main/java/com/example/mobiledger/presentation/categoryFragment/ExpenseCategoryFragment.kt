@@ -20,13 +20,13 @@ class ExpenseCategoryFragment : BaseFragment<FragmentExpenseCategoryBinding, Bas
 
     private val viewModel: ExpenseCategoryViewModel by viewModels { viewModelFactory }
 
-    override fun getSnackBarErrorView(): SnackViewErrorBinding = viewBinding.includeExpenseErrorView
-
     private var list: List<String> = emptyList()
 
     private val expenseCategoryAdapter: CategoryAdapter by lazy {
         CategoryAdapter(TransactionType.Income, onCategoryDeleteClick)
     }
+
+    override fun isBottomNavVisible(): Boolean = false
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -44,7 +44,7 @@ class ExpenseCategoryFragment : BaseFragment<FragmentExpenseCategoryBinding, Bas
             expenseCategoryAdapter.addList(list)
         })
 
-        viewModel.loadingState.observe(viewLifecycleOwner, Observer {
+        viewModel.loadingState.observe(viewLifecycleOwner, {
             if (it) {
                 viewBinding.expenseCategoryProgressBar.visibility = View.VISIBLE
             } else {

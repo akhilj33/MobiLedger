@@ -9,6 +9,7 @@ import com.example.mobiledger.R
 import com.example.mobiledger.common.base.BaseDialogFragment
 import com.example.mobiledger.common.base.BaseNavigator
 import com.example.mobiledger.databinding.DialogFragmentAddCategoryBinding
+import com.example.mobiledger.databinding.SnackViewErrorBinding
 import com.example.mobiledger.domain.entities.ExpenseCategoryListEntity
 import com.example.mobiledger.domain.entities.IncomeCategoryListEntity
 import com.example.mobiledger.domain.enums.TransactionType
@@ -23,6 +24,8 @@ class AddCategoryDialogFragment :
 
     private var oldList: ArrayList<String>? = null
     private var isIncomeCategory: Boolean = true
+
+    override fun getSnackBarErrorView(): SnackViewErrorBinding = viewBinding.includeErrorView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

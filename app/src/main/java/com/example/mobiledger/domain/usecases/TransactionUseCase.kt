@@ -1,8 +1,6 @@
 package com.example.mobiledger.domain.usecases
 
-import com.example.mobiledger.common.utils.ErrorCodes
 import com.example.mobiledger.data.repository.TransactionRepository
-import com.example.mobiledger.domain.AppError
 import com.example.mobiledger.domain.AppResult
 import com.example.mobiledger.domain.entities.MonthlyTransactionSummaryEntity
 import com.example.mobiledger.domain.entities.TransactionEntity
@@ -27,7 +25,11 @@ interface TransactionUseCase {
 
     suspend fun updateExpenseInBudget(monthYear: String, monthlyCategorySummary: MonthlyCategorySummary): AppResult<Unit>
     suspend fun updateMonthlyTransaction(monthYear: String, transactionEntity: TransactionEntity): AppResult<Unit>
-    suspend fun updateOrAddTransactionSummary(monthYear: String, newTransactionEntity: TransactionEntity, isPTR: Boolean = false): AppResult<Unit>
+    suspend fun updateOrAddTransactionSummary(
+        monthYear: String,
+        newTransactionEntity: TransactionEntity,
+        isPTR: Boolean = false
+    ): AppResult<Unit>
 }
 
 class TransactionUseCaseImpl(private val transactionRepository: TransactionRepository) : TransactionUseCase {
@@ -80,37 +82,46 @@ class TransactionUseCaseImpl(private val transactionRepository: TransactionRepos
      * 1- If month is already present, It updates monthly summary data
      * 2- If month is not present, It adds monthly category data
      */
-    override suspend fun updateOrAddTransactionSummary(monthYear: String, newTransactionEntity: TransactionEntity, isPTR: Boolean): AppResult<Unit> {
+    override suspend fun updateOrAddTransactionSummary(
+        monthYear: String,
+        newTransactionEntity: TransactionEntity,
+        isPTR: Boolean
+    ): AppResult<Unit> {
         return withContext(Dispatchers.IO) {
             when (val result = getMonthlySummaryEntity(monthYear, isPTR)) {
                 is AppResult.Success -> {
                     if (result.data.isEmpty()) addMonthlySummaryToFirebase(monthYear, getUpdatedMonthlySummary(newTransactionEntity))
-                    else updateMonthlySummerData(monthYear, newTransactionEntity.transactionType, newTransactionEntity.amount, EditCategoryTransactionType.ADD)
+                    else updateMonthlySummerData(
+                        monthYear,
+                        newTransactionEntity.transactionType,
+                        newTransactionEntity.amount,
+                        EditCategoryTransactionType.ADD
+                    )
                 }
-                is AppResult.Failure -> AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
+                is AppResult.Failure -> result
             }
         }
     }
 }
 
-    private suspend fun getUpdatedMonthlySummary(
-        transactionEntity: TransactionEntity
-    ): MonthlyTransactionSummaryEntity {
-        return withContext(Dispatchers.IO) {
+private suspend fun getUpdatedMonthlySummary(
+    transactionEntity: TransactionEntity
+): MonthlyTransactionSummaryEntity {
+    return withContext(Dispatchers.IO) {
 
-            val noOfTransaction = 1L
-            var noOfIncome = 0L
-            var noOfExpense = 0L
-            var totalIncome = 0L
-            var totalExpense = 0L
-            if (transactionEntity.transactionType == TransactionType.Income) {
-                noOfIncome += 1
-                totalIncome = transactionEntity.amount
-            } else if (transactionEntity.transactionType == TransactionType.Expense) {
-                noOfExpense = 1
-                totalExpense = transactionEntity.amount
-            }
-            val totalBalance = totalIncome - totalExpense
-            MonthlyTransactionSummaryEntity(noOfTransaction, noOfIncome, noOfExpense, totalBalance, totalIncome, totalExpense)
+        val noOfTransaction = 1L
+        var noOfIncome = 0L
+        var noOfExpense = 0L
+        var totalIncome = 0L
+        var totalExpense = 0L
+        if (transactionEntity.transactionType == TransactionType.Income) {
+            noOfIncome += 1
+            totalIncome = transactionEntity.amount
+        } else if (transactionEntity.transactionType == TransactionType.Expense) {
+            noOfExpense = 1
+            totalExpense = transactionEntity.amount
         }
+        val totalBalance = totalIncome - totalExpense
+        MonthlyTransactionSummaryEntity(noOfTransaction, noOfIncome, noOfExpense, totalBalance, totalIncome, totalExpense)
     }
+}

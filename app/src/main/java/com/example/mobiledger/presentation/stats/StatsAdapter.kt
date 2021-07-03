@@ -18,7 +18,8 @@ import com.example.mobiledger.databinding.StatsHeaderItemBinding
 import com.example.mobiledger.domain.enums.TransactionType
 import java.util.*
 
-class StatsAdapter(private val onCategoryItemClick:(categoryNameList: List<String>, amount: Long)->Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class StatsAdapter(private val onCategoryItemClick: (categoryNameList: List<String>, amount: Long) -> Unit) :
+    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private lateinit var context: Context
 
@@ -60,7 +61,7 @@ class StatsAdapter(private val onCategoryItemClick:(categoryNameList: List<Strin
             val header = context.resources.getString(headerString)
             viewBinding.tvHeader.text = header
             viewBinding.tvAmount.text = amount
-            val transactionType = TransactionType.getTransactionType(header.toLowerCase(Locale.getDefault()))
+            val transactionType = TransactionType.getTransactionType(header.lowercase())
             if (transactionType == TransactionType.Income) viewBinding.tvAmount.setTextColor(
                 ContextCompat.getColorStateList(context, R.color.colorGreen)
             )
@@ -95,6 +96,7 @@ class StatsAdapter(private val onCategoryItemClick:(categoryNameList: List<Strin
                 linearLayoutManager.initialPrefetchItemCount = 3
                 layoutManager = linearLayoutManager
                 adapter = StatsChildGraphAdapter(data)
+                (adapter as StatsChildGraphAdapter).stateRestorationPolicy = StateRestorationPolicy.PREVENT
                 setRecycledViewPool(viewPool)
                 val snapHelper = PagerSnapHelper()
                 if (this.onFlingListener == null) {

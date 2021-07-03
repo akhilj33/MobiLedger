@@ -8,6 +8,7 @@ import com.example.mobiledger.R
 import com.example.mobiledger.common.base.BaseFragment
 import com.example.mobiledger.common.utils.showAddNewTemplateDialogFragment
 import com.example.mobiledger.databinding.FragmentBudgetTemplateBinding
+import com.example.mobiledger.databinding.SnackViewErrorBinding
 import com.example.mobiledger.presentation.OneTimeObserver
 import com.example.mobiledger.presentation.budgetTemplate.budgetTemplateAdapters.BudgetTemplateFragmentRecyclerAdapter
 
@@ -23,6 +24,7 @@ class BudgetTemplateFragment : BaseFragment<FragmentBudgetTemplateBinding, Budge
         )
     }
 
+    override fun getSnackBarErrorView(): SnackViewErrorBinding = viewBinding.includeErrorView
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

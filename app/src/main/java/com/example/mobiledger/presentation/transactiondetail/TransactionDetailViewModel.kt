@@ -7,8 +7,6 @@ import androidx.lifecycle.viewModelScope
 import com.example.mobiledger.R
 import com.example.mobiledger.common.base.BaseViewModel
 import com.example.mobiledger.common.utils.DateUtils
-import com.example.mobiledger.common.utils.ErrorCodes
-import com.example.mobiledger.domain.AppError
 import com.example.mobiledger.domain.AppResult
 import com.example.mobiledger.domain.entities.TransactionEntity
 import com.example.mobiledger.domain.entities.toMutableList
@@ -18,6 +16,7 @@ import com.example.mobiledger.domain.usecases.BudgetUseCase
 import com.example.mobiledger.domain.usecases.CategoryUseCase
 import com.example.mobiledger.domain.usecases.TransactionUseCase
 import com.example.mobiledger.presentation.Event
+import com.example.mobiledger.presentation.getResultFromJobs
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
@@ -120,12 +119,23 @@ class TransactionDetailViewModel(
                 else AppResult.Success(Unit)
             }
 
-            if (transactionUpdateJob.await() is AppResult.Success && monthlySummaryUpdateJob.await() is AppResult.Success &&
-                categorySummaryAmountUpdateJob.await() is AppResult.Success && budgetAmountUpdateJob.await() is AppResult.Success
-            ) {
-                _updateResultLiveData.value = Event(Unit)
-            } else {
-                _errorLiveData.value = Event(ViewError(viewErrorType = ViewErrorType.NON_BLOCKING))
+            when (val result = getResultFromJobs(
+                listOf(
+                    transactionUpdateJob, monthlySummaryUpdateJob, categorySummaryAmountUpdateJob,
+                    budgetAmountUpdateJob
+                )
+            )) {
+                is AppResult.Success -> _updateResultLiveData.value = Event(Unit)
+                is AppResult.Failure -> {
+                    if (needToHandleAppError(result.error)) {
+                        _errorLiveData.value = Event(
+                            ViewError(
+                                viewErrorType = ViewErrorType.NON_BLOCKING,
+                                message = result.error.message
+                            )
+                        )
+                    }
+                }
             }
             _loadingState.value = false
         }
@@ -169,12 +179,23 @@ class TransactionDetailViewModel(
                 else AppResult.Success(Unit)
             }
 
-            if (transactionUpdateJob.await() is AppResult.Success && monthlySummaryUpdateJob.await() is AppResult.Success &&
-                categorySummaryAmountUpdateJob.await() is AppResult.Success && budgetAmountUpdateJob.await() is AppResult.Success
-            ) {
-                _updateResultLiveData.value = Event(Unit)
-            } else {
-                _errorLiveData.value = Event(ViewError(viewErrorType = ViewErrorType.NON_BLOCKING))
+            when (val result = getResultFromJobs(
+                listOf(
+                    transactionUpdateJob, monthlySummaryUpdateJob, categorySummaryAmountUpdateJob,
+                    budgetAmountUpdateJob
+                )
+            )) {
+                is AppResult.Success -> _updateResultLiveData.value = Event(Unit)
+                is AppResult.Failure -> {
+                    if (needToHandleAppError(result.error)) {
+                        _errorLiveData.value = Event(
+                            ViewError(
+                                viewErrorType = ViewErrorType.NON_BLOCKING,
+                                message = result.error.message
+                            )
+                        )
+                    }
+                }
             }
             _loadingState.value = false
         }
@@ -188,10 +209,18 @@ class TransactionDetailViewModel(
             val deleteOldDataJob = async { deleteOldTransaction(oldMonthYear) }
             val addNewDataJob = async { addTransaction(monthYear, newTransactionEntity) }
 
-            if (deleteOldDataJob.await() is AppResult.Success && addNewDataJob.await() is AppResult.Success) {
-                _updateResultLiveData.value = Event(Unit)
-            } else {
-                _errorLiveData.value = Event(ViewError(viewErrorType = ViewErrorType.NON_BLOCKING))
+            when (val result = getResultFromJobs(listOf(deleteOldDataJob, addNewDataJob))) {
+                is AppResult.Success -> _updateResultLiveData.value = Event(Unit)
+                is AppResult.Failure -> {
+                    if (needToHandleAppError(result.error)) {
+                        _errorLiveData.value = Event(
+                            ViewError(
+                                viewErrorType = ViewErrorType.NON_BLOCKING,
+                                message = result.error.message
+                            )
+                        )
+                    }
+                }
             }
             _loadingState.value = false
         }
@@ -206,7 +235,14 @@ class TransactionDetailViewModel(
             when (val result = transactionUseCase.updateMonthlyTransaction(monthYear, newTransactionEntity)) {
                 is AppResult.Success -> _updateResultLiveData.value = Event(Unit)
                 is AppResult.Failure -> {
-                    _errorLiveData.value = Event(ViewError(viewErrorType = ViewErrorType.NON_BLOCKING))
+                    if (needToHandleAppError(result.error)) {
+                        _errorLiveData.value = Event(
+                            ViewError(
+                                viewErrorType = ViewErrorType.NON_BLOCKING,
+                                message = result.error.message
+                            )
+                        )
+                    }
                 }
             }
         }
@@ -217,10 +253,17 @@ class TransactionDetailViewModel(
         val oldMonthYear =
             DateUtils.getDateInMMyyyyFormat(DateUtils.getCalendarFromMillis(oldTransactionEntity.transactionTime.toDate().time))
         viewModelScope.launch {
-            when (deleteOldTransaction(oldMonthYear)) {
+            when (val result = deleteOldTransaction(oldMonthYear)) {
                 is AppResult.Success -> _updateResultLiveData.value = Event(Unit)
                 is AppResult.Failure -> {
-                    _errorLiveData.value = Event(ViewError(viewErrorType = ViewErrorType.NON_BLOCKING))
+                    if (needToHandleAppError(result.error)) {
+                        _errorLiveData.value = Event(
+                            ViewError(
+                                viewErrorType = ViewErrorType.NON_BLOCKING,
+                                message = result.error.message
+                            )
+                        )
+                    }
                 }
             }
             _loadingState.value = false
@@ -267,11 +310,12 @@ class TransactionDetailViewModel(
                 else AppResult.Success(Unit)
             }
 
-            if (transactionDeleteJob.await() is AppResult.Success && monthlySummaryUpdateJob.await() is AppResult.Success &&
-                categorySummaryAmountUpdateJob.await() is AppResult.Success && budgetAmountUpdateJob.await() is AppResult.Success
-            ) {
-                AppResult.Success(Unit)
-            } else AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
+            getResultFromJobs(
+                listOf(
+                    transactionDeleteJob, monthlySummaryUpdateJob, categorySummaryAmountUpdateJob,
+                    budgetAmountUpdateJob
+                )
+            )
         }
     }
 
@@ -293,13 +337,12 @@ class TransactionDetailViewModel(
                 else AppResult.Success(Unit)
             }
 
-            if (transactionUpdateJob.await() is AppResult.Success && monthlySummaryUpdateJob.await() is AppResult.Success &&
-                categorySummaryAmountUpdateJob.await() is AppResult.Success && budgetAmountUpdateJob.await() is AppResult.Success
-            ) {
-                AppResult.Success(Unit)
-            } else {
-                AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
-            }
+            getResultFromJobs(
+                listOf(
+                    transactionUpdateJob, monthlySummaryUpdateJob, categorySummaryAmountUpdateJob,
+                    budgetAmountUpdateJob
+                )
+            )
         }
     }
 

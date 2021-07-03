@@ -13,6 +13,7 @@ import com.example.mobiledger.common.extention.gone
 import com.example.mobiledger.common.extention.visible
 import com.example.mobiledger.common.utils.AnimationDialogUtils
 import com.example.mobiledger.databinding.DialogFragmentAddBudgetBinding
+import com.example.mobiledger.databinding.SnackViewErrorBinding
 import com.example.mobiledger.presentation.OneTimeObserver
 import com.example.mobiledger.presentation.addtransaction.SpinnerAdapter
 import com.example.mobiledger.presentation.budget.MonthlyBudgetData
@@ -25,6 +26,8 @@ class AddBudgetDialogFragment :
 
     private val viewModel: AddBudgetDialogViewModel by viewModels { viewModelFactory }
     private val spinnerAdapter: SpinnerAdapter by lazy { SpinnerAdapter(requireContext()) }
+
+    override fun getSnackBarErrorView(): SnackViewErrorBinding = viewBinding.includeErrorView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

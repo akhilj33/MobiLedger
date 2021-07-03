@@ -7,6 +7,7 @@ import com.example.mobiledger.R
 import com.example.mobiledger.common.base.BaseDialogFragment
 import com.example.mobiledger.common.base.BaseNavigator
 import com.example.mobiledger.databinding.AddBudgetTemplateDialogFragmentBinding
+import com.example.mobiledger.databinding.SnackViewErrorBinding
 import com.example.mobiledger.presentation.OneTimeObserver
 import com.example.mobiledger.presentation.budgetTemplate.AddBudgetTemplateDialogFragmentViewModel.ViewErrorType
 
@@ -22,8 +23,9 @@ class AddBudgetTemplateDialogFragment :
         setOnClickListeners()
     }
 
-    private fun setUpObserver() {
+    override fun getSnackBarErrorView(): SnackViewErrorBinding = viewBinding.includeErrorView
 
+    private fun setUpObserver() {
         viewModel.loadingState.observe(viewLifecycleOwner, {
             if (it) {
                 viewBinding.addTemplateProgressBar.visibility = View.VISIBLE

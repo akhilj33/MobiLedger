@@ -34,6 +34,7 @@ class ViewModelFactoryProvider(private val useCaseProvider: UseCaseProvider) :
         return when {
             modelClass.isAssignableFrom(MainActivityViewModel::class.java) -> {
                 MainActivityViewModel(
+                    useCaseProvider.provideInternetUseCase(),
                     useCaseProvider.provideBudgetUseCase(),
                     useCaseProvider.provideAuthUseCase(),
                     useCaseProvider.provideUserSettingsUseCase()
@@ -43,7 +44,9 @@ class ViewModelFactoryProvider(private val useCaseProvider: UseCaseProvider) :
             modelClass.isAssignableFrom(HomeViewModel::class.java) -> {
                 HomeViewModel(
                     useCaseProvider.provideProfileUseCase(),
-                    useCaseProvider.provideTransactionUseCase()
+                    useCaseProvider.provideTransactionUseCase(),
+                    useCaseProvider.provideBudgetUseCase(),
+                    useCaseProvider.provideCategoryUseCase()
                 ) as T
             }
 

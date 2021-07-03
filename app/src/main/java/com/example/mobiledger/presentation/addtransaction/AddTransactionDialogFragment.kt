@@ -17,6 +17,7 @@ import com.example.mobiledger.common.utils.AnimationDialogUtils
 import com.example.mobiledger.common.utils.DateUtils
 import com.example.mobiledger.common.utils.DateUtils.getDateInDDMMMMyyyyFormat
 import com.example.mobiledger.databinding.DialogFragmentAddTransactionBinding
+import com.example.mobiledger.databinding.SnackViewErrorBinding
 import com.example.mobiledger.domain.entities.TransactionEntity
 import com.example.mobiledger.domain.enums.TransactionType
 import com.example.mobiledger.presentation.OneTimeObserver
@@ -34,6 +35,8 @@ class AddTransactionDialogFragment :
 
     private val spinnerAdapter: SpinnerAdapter by lazy { SpinnerAdapter(requireContext()) }
     private val viewModel: AddTransactionViewModel by viewModels { viewModelFactory }
+
+    override fun getSnackBarErrorView(): SnackViewErrorBinding = viewBinding.includeErrorView
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -61,7 +64,7 @@ class AddTransactionDialogFragment :
             }
         )
 
-        viewModel.loadingState.observe(viewLifecycleOwner, Observer {
+        viewModel.loadingState.observe(viewLifecycleOwner, {
             if (it) {
                 viewBinding.transactionProgressBar.visibility = View.VISIBLE
                 isCancelable = false
@@ -84,7 +87,7 @@ class AddTransactionDialogFragment :
             spinnerAdapter.addItems(it)
         })
 
-        viewModel.notificationIndicator.observe(viewLifecycleOwner, Observer {
+        viewModel.notificationIndicator.observe(viewLifecycleOwner, {
             it.let {
                 activityViewModel.notificationHandler(it)
             }
@@ -107,7 +110,7 @@ class AddTransactionDialogFragment :
             }
 
             viewBinding.dateTv.setOnClickListener {
-                datePicker.show(requireActivity().supportFragmentManager, "tag");
+                datePicker.show(requireActivity().supportFragmentManager, "tag")
             }
 
             btnSubmitTransaction.setOnClickListener {
