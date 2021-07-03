@@ -15,6 +15,7 @@ import com.example.mobiledger.domain.usecases.CategoryUseCase
 import com.example.mobiledger.domain.usecases.UserSettingsUseCase
 import com.example.mobiledger.domain.usecases.UserUseCase
 import com.example.mobiledger.presentation.Event
+import com.example.mobiledger.presentation.getResultFromJobs
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
@@ -63,24 +64,30 @@ class SignUpViewModel(
                     val a = async { categoryUseCase.addUserExpenseCategories(getDefaultExpenseList()) }
                     val b = async { categoryUseCase.addUserIncomeCategories(getDefaultIncomeList()) }
 
-                    if (a.await() is AppResult.Success && b.await() is AppResult.Success)
-                        _signUpResultLiveData.value = Event(user)
-                    else {
-                        _errorLiveData.value = Event(
-                            ViewError(
-                                viewErrorType = ViewErrorType.NON_BLOCKING
-                            )
-                        )
+                    when (val jobResult = getResultFromJobs(listOf(a, b))) {
+                        is AppResult.Success -> _signUpResultLiveData.value = Event(user)
+                        is AppResult.Failure -> {
+                            if (needToHandleAppError(jobResult.error)) {
+                                _errorLiveData.value = Event(
+                                    ViewError(
+                                        viewErrorType = ViewErrorType.NON_BLOCKING,
+                                        message = jobResult.error.message
+                                    )
+                                )
+                            }
+                        }
                     }
                 }
 
                 is AppResult.Failure -> {
-                    _errorLiveData.value = Event(
-                        ViewError(
-                            viewErrorType = ViewErrorType.NON_BLOCKING,
-                            message = result.error.message
+                    if (needToHandleAppError(result.error)) {
+                        _errorLiveData.value = Event(
+                            ViewError(
+                                viewErrorType = ViewErrorType.NON_BLOCKING,
+                                message = result.error.message
+                            )
                         )
-                    )
+                    }
                 }
             }
             _loadingState.value = false

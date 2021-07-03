@@ -48,6 +48,10 @@ class StatsViewModel(private val categoryUseCase: CategoryUseCase, private val b
 
     private var monthCount = 0
 
+    init {
+        getStatsData()
+    }
+
     fun getStatsData(isPTR: Boolean = false) {
         _isLoading.value = true
         getAllCategoriesMonthlySummary(isPTR)

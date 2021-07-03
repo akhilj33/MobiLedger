@@ -92,10 +92,10 @@ abstract class BaseFragment<B : ViewDataBinding, NV : BaseNavigator>(
     }
 
     private fun observeInternetState() {
-        activityViewModel.isInternetAvailableLiveData.observe(viewLifecycleOwner, NormalObserver {
-            if (it) {
+        activityViewModel.isInternetAvailableLiveData.observe(viewLifecycleOwner, NormalObserver { state ->
+            if (state.current && !state.previous) {
                 hideSnackBarErrorView()
-            } else {
+            } else if (!state.current) {
                 showSnackBarErrorView(getString(R.string.device_offline_error_message), false)
             }
         })
@@ -179,7 +179,7 @@ abstract class BaseFragment<B : ViewDataBinding, NV : BaseNavigator>(
 
     protected fun hideSnackBarErrorView(forceHide: Boolean = false) {
         val isInternetAvailable: Boolean =
-            activityViewModel.isInternetAvailableLiveData.value?.peekContent() ?: true
+            activityViewModel.isInternetAvailableLiveData.value?.peekContent()?.current ?: true
         if (!forceHide && isInternetAvailable) {
             getSnackBarErrorView()?.root?.gone()
         } else if (forceHide) {

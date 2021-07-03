@@ -58,7 +58,7 @@ class TransactionRepositoryImpl(
                                 transactionDb.saveMonthlySummary(monthYear, firebaseResult.data)
                             }
                             is AppResult.Failure -> {
-                                return@withContext AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
+                                return@withContext firebaseResult
                             }
                         }
                     }
@@ -106,7 +106,7 @@ class TransactionRepositoryImpl(
                                 transactionDb.saveTransactionList(monthYear, firebaseResult.data)
                             }
                             is AppResult.Failure -> {
-                                return@withContext AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
+                                return@withContext firebaseResult
                             }
                         }
                     }

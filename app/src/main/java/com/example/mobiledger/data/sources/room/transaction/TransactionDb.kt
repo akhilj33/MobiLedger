@@ -100,7 +100,7 @@ class TransactionDbImpl(private val transactionDao: TransactionDao, private val 
 
 private fun mapToTransactionsEntity(transactionsRoomItem: TransactionRoomItem): TransactionEntity {
     transactionsRoomItem.apply {
-        return TransactionEntity(name, amount, category, description, transactionType, transactionTime)
+        return TransactionEntity(name, amount, category, description, transactionType, transactionTime).apply { id = transactionId }
     }
 }
 

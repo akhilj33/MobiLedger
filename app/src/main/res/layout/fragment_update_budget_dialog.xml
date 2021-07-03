@@ -71,10 +71,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/cdp_24"
-            android:layout_marginBottom="@dimen/cdp_48"
+            android:layout_marginBottom="@dimen/cdp_28"
             android:text="@string/delete"
             android:textSize="@dimen/csp_16"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/includeErrorView"
             app:layout_constraintEnd_toStartOf="@id/btnUpdate"
             app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_10"
             app:layout_constraintTop_toBottomOf="@id/amountLayout"/>
@@ -84,11 +84,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/cdp_24"
-            android:layout_marginBottom="@dimen/cdp_48"
+            android:layout_marginBottom="@dimen/cdp_28"
             android:text="@string/update"
             android:textSize="@dimen/csp_16"
             android:enabled="false"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/includeErrorView"
             app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_90"
             app:layout_constraintStart_toEndOf="@id/btnDelete"
             app:layout_constraintTop_toBottomOf="@id/amountLayout" />
@@ -102,5 +102,16 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <include
+            android:id="@+id/includeErrorView"
+            layout="@layout/snack_view_error"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:visibility="visible" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -32,7 +32,6 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, LoginNavigator>(R.layou
     }
 
     override fun isBottomNavVisible(): Boolean = false
-    override fun getSnackBarErrorView(): SnackViewErrorBinding = viewBinding.includeErrorView
 
     private fun setOnClickListener() {
         viewBinding.apply {
@@ -64,7 +63,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, LoginNavigator>(R.layou
                 navigator?.launchDashboard()
             })
 
-        viewModel.loadingState.observe(viewLifecycleOwner, Observer {
+        viewModel.loadingState.observe(viewLifecycleOwner, {
             if (it) {
                 viewBinding.loginProgressBar.visibility = View.VISIBLE
             } else {
@@ -107,8 +106,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, LoginNavigator>(R.layou
             }
         }
 
-
-    private fun getEmailText(): String = viewBinding.textEmail.text.toString()
+    private fun getEmailText(): String = viewBinding.textEmail.text.toString().trim()
     private fun getPasswordText(): String = viewBinding.textPassword.text.toString()
 
     private fun isValidEmail(): Boolean = (getEmailText().isNotBlank() && Patterns.EMAIL_ADDRESS.matcher(getEmailText()).matches())

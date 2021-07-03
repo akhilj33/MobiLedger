@@ -1,6 +1,8 @@
 package com.example.mobiledger.presentation
 
 import androidx.lifecycle.Observer
+import com.example.mobiledger.domain.AppResult
+import kotlinx.coroutines.Deferred
 
 open class Event<out T>(private val content: T) {
 
@@ -45,5 +47,15 @@ class NormalObserver<T>(private val onEventUnhandledContent: (T) -> Unit) : Obse
         }
     }
 }
+
+suspend fun getResultFromJobs(list: List<Deferred<AppResult<Unit>>>): AppResult<Unit> {
+    list.forEach {
+        val a = it.await()
+        if (a is AppResult.Failure) return a
+    }
+    return AppResult.Success(Unit)
+}
+
+
 
 

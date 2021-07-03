@@ -18,7 +18,7 @@ import com.example.mobiledger.domain.enums.TransactionType
 import com.github.mikephil.charting.data.PieEntry
 
 class HomeAdapter(
-    val onDeleteItemClick: (String, Int) -> Unit,
+    val onDeleteItemClick: (TransactionEntity, Int) -> Unit,
     val onTransactionItemClick: (TransactionEntity) -> Unit,
     val onAllTransactionClicked: () -> Unit
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -103,7 +103,7 @@ class HomeAdapter(
         fun bind(data: TransactionData) {
             val item = data.transactionEntity
             viewBinding.apply {
-                deleteSwipeAction.setOnClickListener { onDeleteItemClick(item.id, adapterPosition) }
+                deleteSwipeAction.setOnClickListener { onDeleteItemClick(item, adapterPosition) }
                 transactionRoot.setOnClickListener {onTransactionItemClick(item)}
                 viewBinderHelper.setOpenOnlyOne(true)
                 viewBinderHelper.bind(swipelayout, item.id)

@@ -10,6 +10,7 @@ import com.example.mobiledger.common.extention.gone
 import com.example.mobiledger.common.extention.visible
 import com.example.mobiledger.common.showAlertDialog
 import com.example.mobiledger.databinding.ApplyTemplateDialogLayoutBinding
+import com.example.mobiledger.databinding.SnackViewErrorBinding
 import com.example.mobiledger.presentation.OneTimeObserver
 import com.example.mobiledger.presentation.budgetTemplate.BudgetTemplateNavigator
 
@@ -23,6 +24,8 @@ class ApplyTemplateDialogFragment :
             onTemplateItemClick
         )
     }
+
+    override fun getSnackBarErrorView(): SnackViewErrorBinding = viewBinding.includeErrorView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

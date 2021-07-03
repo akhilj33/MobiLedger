@@ -29,7 +29,6 @@ class SignUpFragment :
     }
 
     override fun isBottomNavVisible(): Boolean = false
-    override fun getSnackBarErrorView(): SnackViewErrorBinding = viewBinding.includeErrorView
 
     private fun setUpObserver() {
         viewModel.signUpResult.observe(
@@ -46,7 +45,7 @@ class SignUpFragment :
             }
         })
 
-        viewModel.loadingState.observe(viewLifecycleOwner, Observer {
+        viewModel.loadingState.observe(viewLifecycleOwner, {
             if (it) {
                 viewBinding.signUpProgressBar.visibility = View.VISIBLE
             } else {
@@ -80,7 +79,7 @@ class SignUpFragment :
     }
 
     private fun getNameText(): String = viewBinding.nameEditText.text.toString()
-    private fun getEmailText(): String = viewBinding.textEmail.text.toString()
+    private fun getEmailText(): String = viewBinding.textEmail.text.toString().trim()
     private fun getContactText(): String = viewBinding.phoneEditText.text.toString()
     private fun getPasswordText(): String = viewBinding.textPassword.text.toString()
     private fun getConfirmPasswordText(): String = viewBinding.textConfirmPassword.text.toString()

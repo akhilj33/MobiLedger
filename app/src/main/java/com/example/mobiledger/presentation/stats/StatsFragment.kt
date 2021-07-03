@@ -37,7 +37,6 @@ class StatsFragment : BaseFragment<FragmentStatsBinding, StatsNavigator>(R.layou
         initRecyclerView()
         setUpObservers()
         setOnClickListener()
-        viewModel.getStatsData()
     }
 
     private fun resetState() {
@@ -126,7 +125,7 @@ class StatsFragment : BaseFragment<FragmentStatsBinding, StatsNavigator>(R.layou
         }
     }
 
-    private val onCategoryItemClick = fun(categoryNameList: List<String>, amount: Long){
+    private val onCategoryItemClick = fun(categoryNameList: List<String>, amount: Long) {
         navigator?.navigateToStatsDetailScreen(categoryNameList, amount, viewModel.getCurrentMonth())
     }
 

@@ -13,7 +13,6 @@ import com.google.firebase.firestore.DocumentReference
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import timber.log.Timber
 
 interface CategoryRepository {
     suspend fun addUserIncomeCategoryDb(categoryList: List<String>): AppResult<Unit>
@@ -84,7 +83,6 @@ class CategoryRepositoryImpl(
                     incomeCategoryListEntity = firebaseResult.data
                 }
                 is AppResult.Failure -> {
-                    Timber.i(firebaseResult.error.message.toString())
                 }
             }
             when (val firebaseResult = categoryApi.getUserExpenseCategories(uid)) {
@@ -92,7 +90,6 @@ class CategoryRepositoryImpl(
                     expenseCategoryListEntity = firebaseResult.data
                 }
                 is AppResult.Failure -> {
-                    Timber.i(firebaseResult.error.message.toString())
                 }
             }
             if (incomeCategoryListEntity.incomeCategoryList.isNotEmpty() && expenseCategoryListEntity.expenseCategoryList.isNotEmpty()) {
@@ -201,10 +198,13 @@ class CategoryRepositoryImpl(
                     if (!monthlyCategorySummaryExists || isPTR) {
                         when (val firebaseResult = categoryApi.getMonthlyCategorySummary(uId, monthYear, category)) {
                             is AppResult.Success -> {
-                                categoryDb.saveMonthlyCategorySummary(monthYear, firebaseResult.data ?: MonthlyCategorySummary())
+                                categoryDb.saveMonthlyCategorySummary(
+                                    monthYear,
+                                    firebaseResult.data ?: MonthlyCategorySummary(categoryName = category)
+                                )
                             }
                             is AppResult.Failure -> {
-                                return@withContext AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
+                                return@withContext firebaseResult
                             }
                         }
                     }
@@ -263,7 +263,7 @@ class CategoryRepositoryImpl(
                                 categoryDb.saveAllMonthlyCategorySummaries(monthYear, firebaseResult.data)
                             }
                             is AppResult.Failure -> {
-                                return@withContext AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
+                                return@withContext firebaseResult
                             }
                         }
                     }
@@ -290,7 +290,7 @@ class CategoryRepositoryImpl(
                                 categoryDb.addAllMonthlyCategoryTransactions(monthYear, category, firebaseResult.data)
                             }
                             is AppResult.Failure -> {
-                                return@withContext AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
+                                return@withContext firebaseResult
                             }
                         }
                     }

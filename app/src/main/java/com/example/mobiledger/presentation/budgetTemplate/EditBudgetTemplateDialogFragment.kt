@@ -13,6 +13,7 @@ import com.example.mobiledger.common.extention.enable
 import com.example.mobiledger.common.extention.gone
 import com.example.mobiledger.common.extention.visible
 import com.example.mobiledger.databinding.DialogFragmentAddBudgetBinding
+import com.example.mobiledger.databinding.SnackViewErrorBinding
 import com.example.mobiledger.presentation.OneTimeObserver
 import com.example.mobiledger.presentation.addtransaction.SpinnerAdapter
 import com.google.android.material.textfield.TextInputLayout
@@ -25,6 +26,7 @@ class EditBudgetTemplateDialogFragment :
     private val viewModel: EditBudgetTemplateDialogViewModel by viewModels { viewModelFactory }
     private val spinnerAdapter: SpinnerAdapter by lazy { SpinnerAdapter(requireContext()) }
 
+    override fun getSnackBarErrorView(): SnackViewErrorBinding = viewBinding.includeErrorView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

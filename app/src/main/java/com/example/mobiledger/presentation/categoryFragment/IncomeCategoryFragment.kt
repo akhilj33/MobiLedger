@@ -21,8 +21,6 @@ class IncomeCategoryFragment : BaseFragment<FragmentIncomeCategoryBinding, BaseN
 
     private val viewModel: IncomeCategoryViewModel by viewModels { viewModelFactory }
 
-    override fun getSnackBarErrorView(): SnackViewErrorBinding = viewBinding.includeIncomeErrorView
-
     private var list: List<String> = emptyList()
 
     private val incomeCategoryAdapter: CategoryAdapter by lazy {
@@ -37,6 +35,8 @@ class IncomeCategoryFragment : BaseFragment<FragmentIncomeCategoryBinding, BaseN
         viewModel.getIncomeCategoryList()
     }
 
+    override fun isBottomNavVisible(): Boolean = false
+
     private fun setUpObserver() {
         viewModel.incomeCategoryList.observe(viewLifecycleOwner, OneTimeObserver {
             val arrList = it.incomeCategoryList as ArrayList
@@ -45,7 +45,7 @@ class IncomeCategoryFragment : BaseFragment<FragmentIncomeCategoryBinding, BaseN
             incomeCategoryAdapter.addList(list)
         })
 
-        viewModel.loadingState.observe(viewLifecycleOwner, Observer {
+        viewModel.loadingState.observe(viewLifecycleOwner, {
             if (it) {
                 viewBinding.incomeCategoryProgressBar.visibility = View.VISIBLE
             } else {

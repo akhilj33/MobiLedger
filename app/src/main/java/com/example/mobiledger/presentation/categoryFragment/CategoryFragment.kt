@@ -8,6 +8,7 @@ import com.example.mobiledger.common.base.BaseNavigator
 import com.example.mobiledger.common.transformer.ZoomOutPageTransformer
 import com.example.mobiledger.common.utils.ConstantUtils
 import com.example.mobiledger.databinding.FragmentCategoryBinding
+import com.example.mobiledger.databinding.SnackViewErrorBinding
 import com.google.android.material.tabs.TabLayoutMediator
 
 class CategoryFragment : BaseFragment<FragmentCategoryBinding, BaseNavigator>(R.layout.fragment_category) {
@@ -17,6 +18,10 @@ class CategoryFragment : BaseFragment<FragmentCategoryBinding, BaseNavigator>(R.
         initViewPager()
         setOnClickListener()
     }
+
+    override fun getSnackBarErrorView(): SnackViewErrorBinding = viewBinding.includeErrorView
+
+    override fun isBottomNavVisible(): Boolean = false
 
     private fun setOnClickListener() {
         viewBinding.btnBack.setOnClickListener {

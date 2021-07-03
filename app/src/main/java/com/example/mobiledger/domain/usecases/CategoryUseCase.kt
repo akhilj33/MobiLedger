@@ -1,8 +1,6 @@
 package com.example.mobiledger.domain.usecases
 
-import com.example.mobiledger.common.utils.ErrorCodes
 import com.example.mobiledger.data.repository.CategoryRepository
-import com.example.mobiledger.domain.AppError
 import com.example.mobiledger.domain.AppResult
 import com.example.mobiledger.domain.entities.DocumentReferenceEntity
 import com.example.mobiledger.domain.entities.ExpenseCategoryListEntity
@@ -10,11 +8,9 @@ import com.example.mobiledger.domain.entities.IncomeCategoryListEntity
 import com.example.mobiledger.domain.entities.TransactionEntity
 import com.example.mobiledger.domain.enums.EditCategoryTransactionType
 import com.example.mobiledger.presentation.budget.MonthlyCategorySummary
+import com.example.mobiledger.presentation.getResultFromJobs
 import com.google.firebase.firestore.DocumentReference
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 
 interface CategoryUseCase {
     suspend fun addUserIncomeCategories(defaultCategoryList: List<String>): AppResult<Unit>
@@ -71,7 +67,11 @@ interface CategoryUseCase {
         isPTR: Boolean
     ): AppResult<List<DocumentReferenceEntity>>
 
-    suspend fun getMonthlyCategoryTransaction(monthYear: String, category: String, isPTR: Boolean = false): AppResult<List<TransactionEntity>>
+    suspend fun getMonthlyCategoryTransaction(
+        monthYear: String,
+        category: String,
+        isPTR: Boolean = false
+    ): AppResult<List<TransactionEntity>>
 }
 
 class CategoryUseCaseImpl(private val categoryRepository: CategoryRepository) : CategoryUseCase {
@@ -126,11 +126,7 @@ class CategoryUseCaseImpl(private val categoryRepository: CategoryRepository) : 
         return withContext(Dispatchers.IO) {
             val deleteMonthlySummaryJob = async { deleteMonthlyCategorySummary(monthYear, transactionEntity.category) }
             val deleteMonthlyCategoryTransactionJob = async { deleteMonthlyCategoryTransaction(monthYear, transactionEntity) }
-
-            if (deleteMonthlyCategoryTransactionJob.await() is AppResult.Success && deleteMonthlySummaryJob.await() is AppResult.Success)
-                AppResult.Success(Unit)
-            else
-                AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
+            getResultFromJobs(listOf(deleteMonthlyCategoryTransactionJob, deleteMonthlySummaryJob))
         }
     }
 
@@ -162,7 +158,7 @@ class CategoryUseCaseImpl(private val categoryRepository: CategoryRepository) : 
                         )
                     else deleteMonthlyCategory(monthYear, oldTransactionEntity)
                 }
-                is AppResult.Failure -> AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
+                is AppResult.Failure -> result
             }
         }
     }
@@ -207,14 +203,11 @@ class CategoryUseCaseImpl(private val categoryRepository: CategoryRepository) : 
                     val responses = runningTask.awaitAll()
                     responses.forEach {
                         if (it is AppResult.Success) list.add(it.data)
-                        else return@withContext AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
+                        else return@withContext it as AppResult.Failure
                     }
                     AppResult.Success(list)
                 }
-
-                is AppResult.Failure -> {
-                    AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
-                }
+                is AppResult.Failure -> result
             }
         }
 
@@ -241,7 +234,7 @@ class CategoryUseCaseImpl(private val categoryRepository: CategoryRepository) : 
                         newTransactionEntity, EditCategoryTransactionType.ADD
                     )
                 }
-                is AppResult.Failure -> AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
+                is AppResult.Failure -> result
             }
         }
     }
@@ -265,10 +258,7 @@ class CategoryUseCaseImpl(private val categoryRepository: CategoryRepository) : 
                 EditCategoryTransactionType.ADD -> async { addMonthlyCategoryTransaction(monthYear, transactionEntity) }
                 else -> async { AppResult.Success(Unit) }
             }
-
-            if (updateSummaryJob.await() is AppResult.Success && updateTransJob.await() is AppResult.Success)
-                AppResult.Success(Unit)
-            else AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
+            getResultFromJobs(listOf(updateSummaryJob, updateTransJob))
         }
     }
 
@@ -295,10 +285,9 @@ class CategoryUseCaseImpl(private val categoryRepository: CategoryRepository) : 
                     )
                 }
             val updateNewCategoryJob = async { updateOrAddMonthlyCategorySummary(monthYear, newTransactionEntity, isPTR) }
-
-            if (updateNewCategoryJob.await() is AppResult.Success && updateOldCategoryAmountJob.await() is AppResult.Success)
-                AppResult.Success(Unit)
-            else AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
+            getResultFromJobs(listOf(updateNewCategoryJob, updateOldCategoryAmountJob))
         }
     }
 }
+
+

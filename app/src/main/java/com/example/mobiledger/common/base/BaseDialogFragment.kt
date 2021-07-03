@@ -10,12 +10,13 @@ import androidx.annotation.LayoutRes
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
-import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
+import com.example.mobiledger.R
+import com.example.mobiledger.common.di.DependencyProvider
 import com.example.mobiledger.common.extention.gone
 import com.example.mobiledger.common.extention.visible
-import com.example.mobiledger.common.di.DependencyProvider
 import com.example.mobiledger.databinding.SnackViewErrorBinding
+import com.example.mobiledger.presentation.NormalObserver
 import com.example.mobiledger.presentation.main.MainActivityViewModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -66,6 +67,7 @@ abstract class BaseDialogFragment<B : ViewDataBinding, NV : BaseNavigator>(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setStatusBarColor()
+        observeInternetState()
     }
 
     override fun onResume() {
@@ -118,7 +120,7 @@ abstract class BaseDialogFragment<B : ViewDataBinding, NV : BaseNavigator>(
 
     protected fun hideSnackBarErrorView(forceHide: Boolean = false) {
         val isInternetAvailable: Boolean =
-            activityViewModel.isInternetAvailableLiveData.value?.peekContent() ?: true
+            activityViewModel.isInternetAvailableLiveData.value?.peekContent()?.current ?: true
         if (!forceHide && isInternetAvailable) {
             getSnackBarErrorView()?.root?.gone()
         } else if (forceHide) {
@@ -126,4 +128,13 @@ abstract class BaseDialogFragment<B : ViewDataBinding, NV : BaseNavigator>(
         }
     }
 
+    private fun observeInternetState() {
+        activityViewModel.isInternetAvailableLiveData.observe(this, NormalObserver { state ->
+            if (state.current && !state.previous) {
+                hideSnackBarErrorView()
+            } else if (!state.current) {
+                showSnackBarErrorView(getString(R.string.device_offline_error_message), false)
+            }
+        })
+    }
 }

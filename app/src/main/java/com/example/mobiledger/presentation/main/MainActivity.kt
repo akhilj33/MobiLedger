@@ -46,6 +46,7 @@ class MainActivity :
         mainActivityNavigator?.navigateToSplashScreen()
         setNavOnClickListeners()
         setupObservers()
+        viewModel.registerInternetStatus()
 
         notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
 
@@ -235,7 +236,7 @@ class MainActivity :
         viewModel.activateReminder.observe(this@MainActivity, {
             it.let {
                 if (it.peekContent()) {
-                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                         switchOnDailyReminder()
                     }
                 } else {

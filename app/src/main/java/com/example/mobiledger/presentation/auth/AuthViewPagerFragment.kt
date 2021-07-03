@@ -6,6 +6,7 @@ import com.example.mobiledger.R
 import com.example.mobiledger.common.base.BaseFragment
 import com.example.mobiledger.common.transformer.ZoomOutPageTransformer
 import com.example.mobiledger.databinding.FragmentAuthBinding
+import com.example.mobiledger.databinding.SnackViewErrorBinding
 import com.google.android.material.tabs.TabLayoutMediator
 
 class AuthViewPagerFragment : BaseFragment<FragmentAuthBinding, LoginNavigator>(R.layout.fragment_auth) {
@@ -16,6 +17,8 @@ class AuthViewPagerFragment : BaseFragment<FragmentAuthBinding, LoginNavigator>(
         super.onViewCreated(view, savedInstanceState)
         initViewPager()
     }
+
+    override fun getSnackBarErrorView(): SnackViewErrorBinding = viewBinding.includeErrorView
 
     private fun initViewPager() {
         viewBinding.pager.isUserInputEnabled = true

@@ -15,6 +15,7 @@ import com.example.mobiledger.common.utils.showAddBudgetDialogFragment
 import com.example.mobiledger.common.utils.showApplyTemplateDialogFragment
 import com.example.mobiledger.common.utils.showUpdateBudgetDialogFragment
 import com.example.mobiledger.databinding.FragmentBudgetBinding
+import com.example.mobiledger.databinding.SnackViewErrorBinding
 import com.example.mobiledger.presentation.OneTimeObserver
 import com.example.mobiledger.presentation.budget.MonthlyBudgetData
 
@@ -32,7 +33,7 @@ class BudgetFragment : BaseFragment<FragmentBudgetBinding, BudgetNavigator>(R.la
         )
     }
 
-//    override fun getSnackBarErrorView(): SnackViewErrorBinding = viewBinding.includeErrorView
+    override fun getSnackBarErrorView(): SnackViewErrorBinding = viewBinding.includeErrorView
 
     override fun swipeRefreshLayout(): SwipeRefreshLayout {
         return viewBinding.swipeRefreshLayout

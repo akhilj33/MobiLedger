@@ -6,8 +6,13 @@ class RepositoryProvider(
     authSourceProvider: AuthSourceProvider,
     apiSourceProvider: ApiSourceProvider,
     cacheSourceProvider: CacheSourceProvider,
-    dbProvider: DbProvider
+    dbProvider: DbProvider,
+    internetSourceProvider: InternetSourceProvider
 ) {
+
+    private val internetRepository: InternetRepository by lazy {
+        InternetRepositoryImpl(internetSourceProvider.provideInternetSource())
+    }
 
     private val authRepository: AuthRepository by lazy {
         AuthRepositoryImpl(
@@ -67,6 +72,8 @@ class RepositoryProvider(
     }
 
     /*-------------------------------Public -----------------------------*/
+
+    fun provideInternetRepository(): InternetRepository = internetRepository
 
     fun provideAuthRepository(): AuthRepository = authRepository
 

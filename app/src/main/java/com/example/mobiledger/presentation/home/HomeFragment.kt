@@ -61,7 +61,7 @@ class HomeFragment :
         })
 
         viewModel.deleteTransactionLiveData.observe(viewLifecycleOwner, OneTimeObserver {
-            homeAdapter.removeAt(it)
+            refreshView()
         })
 
         viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
@@ -133,23 +133,19 @@ class HomeFragment :
         }
     }
 
-    private val onDeleteItemClick = fun(transactionId: String, position: Int) {
-        viewModel.deleteTransaction(transactionId, position)
+    private val onDeleteItemClick = fun(transactionEntity: TransactionEntity, position: Int) {
+        viewModel.deleteTransaction(transactionEntity, position)
     }
 
     private val onAllTransactionClicked = fun() {
         navigator?.navigateToTransactionFragmentScreen(viewModel.transList)
     }
 
-    private val onTransactionItemClick = fun(transactionEntity: TransactionEntity){
+    private val onTransactionItemClick = fun(transactionEntity: TransactionEntity) {
         showTransactionDetailDialogFragment(transactionEntity, requireActivity().supportFragmentManager)
     }
 
     companion object {
         fun newInstance() = HomeFragment()
-    }
-
-    override fun onBackPressHandled(): Boolean {
-        return super.onBackPressHandled()
     }
 }
