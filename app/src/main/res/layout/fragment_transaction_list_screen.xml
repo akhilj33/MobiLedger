@@ -35,7 +35,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/cdp_16"
                     android:layout_toEndOf="@id/btnBack"
-                    android:text="Transaction List"
+                    android:text="@string/transaction_list"
                     android:textColor="@color/colorWhite"
                     android:textSize="@dimen/csp_20" />
 

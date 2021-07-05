@@ -3,6 +3,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-parcelize'
+apply plugin: 'com.google.firebase.crashlytics'
 
 android {
     compileSdkVersion project.compileSdk
@@ -82,6 +83,7 @@ dependencies {
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.1.1'
     implementation 'com.google.android.gms:play-services-auth:19.0.0'
     implementation 'com.google.firebase:firebase-firestore-ktx'
+    implementation 'com.google.firebase:firebase-crashlytics-ktx'
 
     //Room
     implementation "androidx.room:room-runtime:$roomVersion"
