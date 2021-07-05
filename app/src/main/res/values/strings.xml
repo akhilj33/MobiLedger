@@ -36,11 +36,10 @@
     <string name="home">Home</string>
     <string name="budget">Budget</string>
     <string name="stats">Stats</string>
-    <string name="account">Account</string>
+    <string name="profile">Profile</string>
 
     <!--Profile Screen-->
     <string name="back">Back</string>
-    <string name="profile">Profile</string>
     <string name="user_image">User Image</string>
     <string name="display_name">Display Name</string>
     <string name="email">Email</string>
@@ -154,7 +153,7 @@
 
     <!-- On Boarding -->
 
-    <string name="i_have_read_all_the_terms_and_conditions">I accept all the terms and conditions for signing up and using this app.</string>
+    <string name="i_have_read_all_the_terms_and_conditions">I accept all the Terms and Conditions for signing up and using this app. (Read) </string>
     <string name="accept">Accept</string>
     <string name="terms_and_conditions">Terms And Conditions</string>
 

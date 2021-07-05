@@ -54,10 +54,6 @@ class BudgetFragment : BaseFragment<FragmentBudgetBinding, BudgetNavigator>(R.la
 
     private fun setOnClickListener() {
         viewBinding.apply {
-            ivProfileIcon.setOnClickListener {
-                navigator?.navigateToProfileScreen()
-            }
-
             monthNavigationBar.leftArrow.setOnClickListener { handleLeftClick() }
             monthNavigationBar.rightArrow.setOnClickListener { handleRightClick() }
         }
@@ -73,7 +69,7 @@ class BudgetFragment : BaseFragment<FragmentBudgetBinding, BudgetNavigator>(R.la
             refreshView()
         })
 
-        activityViewModel.templateAppliedReolad.observe(viewLifecycleOwner, OneTimeObserver {
+        activityViewModel.templateAppliedReload.observe(viewLifecycleOwner, OneTimeObserver {
             viewModel.getBudgetData()
         })
 
@@ -86,12 +82,10 @@ class BudgetFragment : BaseFragment<FragmentBudgetBinding, BudgetNavigator>(R.la
         })
 
         viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
-            isLoading.let {
-                if (isLoading) {
-                    showSwipeRefresh()
-                } else {
-                    hideSwipeRefresh()
-                }
+            if (isLoading) {
+                showSwipeRefresh()
+            } else {
+                hideSwipeRefresh()
             }
         }
     }

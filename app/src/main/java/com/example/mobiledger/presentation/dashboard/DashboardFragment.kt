@@ -6,12 +6,12 @@ import com.example.mobiledger.R
 import com.example.mobiledger.common.base.BaseFragment
 import com.example.mobiledger.databinding.FragmentDashboardBinding
 import com.example.mobiledger.presentation.NormalObserver
-import com.example.mobiledger.presentation.SplitFragment
 import com.example.mobiledger.presentation.budget.budgetscreen.BudgetFragment
 import com.example.mobiledger.presentation.home.HomeFragment
-import com.example.mobiledger.presentation.stats.StatsFragment
 import com.example.mobiledger.presentation.main.MainActivityViewModel.*
 import com.example.mobiledger.presentation.main.NavTab
+import com.example.mobiledger.presentation.profile.ProfileFragment
+import com.example.mobiledger.presentation.stats.StatsFragment
 
 class DashboardFragment :
     BaseFragment<FragmentDashboardBinding, DashboardNavigator>(R.layout.fragment_dashboard) {
@@ -34,7 +34,7 @@ class DashboardFragment :
                     0 -> HomeFragment.newInstance()
                     1 -> BudgetFragment.newInstance()
                     2 -> StatsFragment.newInstance()
-                    3 -> SplitFragment.newInstance()
+                    3 -> ProfileFragment.newInstance()
                     else -> HomeFragment.newInstance()
                 }
             }
@@ -58,9 +58,9 @@ class DashboardFragment :
                         TabOrder.Insight.ordinal,
                         false
                     )
-                is NavTab.SPLIT -> {
+                is NavTab.PROFILE -> {
                     viewBinding.viewPager.setCurrentItem(
-                        TabOrder.Split.ordinal,
+                        TabOrder.Profile.ordinal,
                         false
                     )
                 }
@@ -75,6 +75,6 @@ class DashboardFragment :
     }
 
     private enum class TabOrder {
-        Home, Budget, Insight, Split
+        Home, Budget, Insight, Profile
     }
 }

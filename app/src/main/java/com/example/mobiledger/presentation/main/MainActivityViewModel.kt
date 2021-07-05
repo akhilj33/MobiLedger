@@ -14,7 +14,6 @@ import com.example.mobiledger.presentation.Event
 import com.example.mobiledger.presentation.addtransaction.AddTransactionViewModel
 import com.example.mobiledger.presentation.budget.MonthlyBudgetData
 import com.example.mobiledger.presentation.budget.MonthlyCategoryBudget
-import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
@@ -72,8 +71,8 @@ class MainActivityViewModel(
     private val _addNewBudgetTemplate: MutableLiveData<Event<Unit>> = MutableLiveData()
     val addNewBudgetTemplate: LiveData<Event<Unit>> = _addNewBudgetTemplate
 
-    private val _templateAppliedReolad: MutableLiveData<Event<Unit>> = MutableLiveData()
-    val templateAppliedReolad: LiveData<Event<Unit>> = _templateAppliedReolad
+    private val _templateAppliedReload: MutableLiveData<Event<Unit>> = MutableLiveData()
+    val templateAppliedReload: LiveData<Event<Unit>> = _templateAppliedReload
     /*---------------------------------------Bottom Tabs Info -------------------------------------------------*/
 
     fun updateCurrentTab(tab: NavTab) {
@@ -137,7 +136,7 @@ class MainActivityViewModel(
     }
 
     fun templateApplied() {
-        _templateAppliedReolad.value = Event(Unit)
+        _templateAppliedReload.value = Event(Unit)
     }
 
     fun notificationHandler(notificationCallerData: AddTransactionViewModel.NotificationCallerData) {
@@ -208,7 +207,7 @@ sealed class NavTab {
     object HOME : NavTab()
     data class BUDGET(val isFromDashboard: Boolean = false) : NavTab()
     data class STATS(val isFromDashboard: Boolean = false) : NavTab()
-    data class SPLIT(val isFromDashboard: Boolean = false) : NavTab()
+    data class PROFILE(val isFromDashboard: Boolean = false) : NavTab()
     object DeselectAll : NavTab()
 }
 

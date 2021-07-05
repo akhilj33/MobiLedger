@@ -90,13 +90,8 @@ class HomeFragment :
             btnAddTransaction.setOnClickListener {
                 showAddTransactionDialogFragment(requireActivity().supportFragmentManager)
             }
-
             monthNavigationBar.leftArrow.setOnClickListener { handleLeftClick() }
             monthNavigationBar.rightArrow.setOnClickListener { handleRightClick() }
-
-        }
-        viewBinding.ivProfileIcon.setOnClickListener {
-            navigator?.navigateToProfileScreen()
         }
         viewBinding.horizontalGuideline2
     }
