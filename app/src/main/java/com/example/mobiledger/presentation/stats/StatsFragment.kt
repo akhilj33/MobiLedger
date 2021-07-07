@@ -87,9 +87,6 @@ class StatsFragment : BaseFragment<FragmentStatsBinding, StatsNavigator>(R.layou
             monthNavigationBar.leftArrow.setOnClickListener { handleLeftClick() }
             monthNavigationBar.rightArrow.setOnClickListener { handleRightClick() }
         }
-        viewBinding.ivProfileIcon.setOnClickListener {
-            navigator?.navigateToProfileScreen()
-        }
         viewBinding.horizontalGuideline2
     }
 

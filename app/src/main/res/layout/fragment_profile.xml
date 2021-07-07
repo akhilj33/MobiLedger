@@ -9,6 +9,13 @@
         android:layout_height="match_parent">
 
         <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/horizontalGuideline_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.02" />
+
+        <androidx.constraintlayout.widget.Guideline
             android:id="@+id/verticalScreenGuideline_04"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -23,11 +30,11 @@
             app:layout_constraintGuide_percent="0.96" />
 
         <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/horizontalGuideline_10"
+            android:id="@+id/horizontalGuideline_07"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent=".11" />
+            app:layout_constraintGuide_percent=".07" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/horizontalGuideline_34"
@@ -36,81 +43,53 @@
             android:orientation="horizontal"
             app:layout_constraintGuide_percent=".34" />
 
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/profileToolbar"
-            android:layout_width="match_parent"
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tvProfile"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@color/colorPrimaryDark"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            android:ellipsize="end"
+            android:fontFamily="@font/margarine"
+            android:maxLines="1"
+            android:text="@string/profile"
+            android:textColor="@color/colorTextDark"
+            android:textSize="@dimen/csp_28"
+            app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_04"
+            app:layout_constraintTop_toBottomOf="@id/horizontalGuideline_2"
+            android:textStyle="bold" />
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <ImageView
-                    android:id="@+id/btnBack"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentStart="true"
-                    android:layout_centerVertical="true"
-                    android:contentDescription="@string/back"
-                    android:src="@drawable/baseline_arrow_white_24" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/cdp_16"
-                    android:layout_toEndOf="@id/btnBack"
-                    android:text="@string/profile"
-                    android:textColor="@color/colorWhite"
-                    android:textSize="@dimen/csp_20" />
-
-            </RelativeLayout>
-
-        </com.google.android.material.appbar.MaterialToolbar>
-
-        <androidx.cardview.widget.CardView
+        <RelativeLayout
             android:id="@+id/profileCard"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/cdp_10"
-            android:layout_marginEnd="@dimen/cdp_10"
-            android:layout_marginBottom="@dimen/cdp_20"
-            android:background="@color/colorWhite"
+            android:paddingStart="@dimen/cdp_10"
+            android:paddingTop="@dimen/cdp_16"
+            android:paddingEnd="@dimen/cdp_10"
+            android:paddingBottom="@dimen/cdp_16"
             android:padding="@dimen/cdp_12"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/horizontalGuideline_10">
+            app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_96"
+            app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_04"
+            app:layout_constraintTop_toBottomOf="@id/horizontalGuideline_07">
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingBottom="@dimen/cdp_16"
-                android:paddingTop="@dimen/cdp_16"
-                android:paddingStart="@dimen/cdp_10"
-                android:paddingEnd="@dimen/cdp_10">
+            <ImageView
+                android:id="@+id/imgUser"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:background="@drawable/ring_shape"
+                android:contentDescription="@string/user_image"
+                app:srcCompat="@drawable/profile_colorful" />
 
-                <ImageView
-                    android:id="@+id/imgUser"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:layout_alignParentStart="true"
-                    android:layout_centerVertical="true"
-                    android:background="@drawable/ring_shape"
-                    android:contentDescription="@string/user_image"
-                    app:srcCompat="@drawable/profile_colorful" />
-
-                <ImageView
-                    android:id="@+id/imgEdit"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginTop="@dimen/cdp_10"
-                    android:layout_marginEnd="@dimen/cdp_10"
-                    android:contentDescription="@string/edit"
+            <ImageView
+                android:id="@+id/imgEdit"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="@dimen/cdp_10"
+                android:layout_marginEnd="@dimen/cdp_10"
+                android:contentDescription="@string/edit"
                     android:src="@drawable/edit_icon"
                     app:tint="@color/colorGray" />
 
@@ -130,13 +109,13 @@
 
                 <TextView
                     android:id="@+id/emailTv"
+                    style="@style/GelionRegular18"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/displayName"
                     android:layout_marginStart="@dimen/cdp_16"
-                    android:padding="@dimen/cdp_4"
-                    style="@style/GelionRegular18"
                     android:layout_toEndOf="@id/imgUser"
+                    android:padding="@dimen/cdp_4"
                     android:text="@string/email"
                     android:textColor="@color/colorPrimaryDark" />
 
@@ -154,17 +133,14 @@
 
             </RelativeLayout>
 
-        </androidx.cardview.widget.CardView>
-
-
         <TextView
             android:id="@+id/touchIdLabel"
             style="@style/GelionSemiBoldBlue18"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/cdp_16"
             android:lineSpacingExtra="7sp"
             android:padding="@dimen/cdp_10"
-            android:layout_marginTop="@dimen/cdp_16"
             android:text="@string/enable_biometrics"
             app:layout_constraintHorizontal_bias="0"
             app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_04"

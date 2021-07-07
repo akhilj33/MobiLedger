@@ -37,7 +37,6 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding, ProfileNavigator>(R
         viewModel.fetchUserData()
     }
 
-    override fun isBottomNavVisible(): Boolean = false
     override fun getSnackBarErrorView(): SnackViewErrorBinding = viewBinding.includeErrorView
 
     private fun setObserver() {
@@ -70,10 +69,6 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding, ProfileNavigator>(R
 
     private fun setOnClickListener() {
         viewBinding.apply {
-            btnBack.setOnClickListener {
-                activity?.onBackPressed()
-            }
-
             imgEdit.setOnClickListener {
                 navigator?.navigateToEditProfileScreen()
             }

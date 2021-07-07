@@ -17,11 +17,11 @@
             app:layout_constraintGuide_percent="0.45" />
 
         <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/horizontalScreenGuideline_12"
+            android:id="@+id/horizontalScreenGuideline_08"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.12" />
+            app:layout_constraintGuide_percent="0.08" />
 
         <!--          VERTICAL GUIDELINES          -->
 
@@ -51,7 +51,7 @@
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_90"
             app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_10"
-            app:layout_constraintTop_toBottomOf="@id/horizontalScreenGuideline_12" />
+            app:layout_constraintTop_toBottomOf="@id/horizontalScreenGuideline_08" />
 
         <TextView
             android:id="@+id/tvHeading"

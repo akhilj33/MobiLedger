@@ -158,7 +158,7 @@
                 app:autoSizeStepGranularity="1sp"
                 app:autoSizeTextType="uniform"
                 android:layout_marginBottom="@dimen/bottom_nav_text_margin"
-                android:text="@string/account"
+                android:text="@string/profile"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
