@@ -10,6 +10,6 @@ data class UserEntity(
     val phoneNo: String? = null,
     val signInType: SignInType
 ) {
-    constructor():this(uid = "", signInType = SignInType.Email)
+    constructor() : this(uid = "", signInType = SignInType.Email)
 }
 

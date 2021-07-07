@@ -1,5 +1,6 @@
 package com.example.mobiledger.presentation.profile
 
+import android.net.Uri
 import androidx.annotation.StringRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -8,6 +9,7 @@ import com.example.mobiledger.R
 import com.example.mobiledger.common.base.BaseViewModel
 import com.example.mobiledger.domain.AppResult
 import com.example.mobiledger.domain.entities.UserEntity
+import com.example.mobiledger.domain.usecases.AttachmentUseCase
 import com.example.mobiledger.domain.usecases.ProfileUseCase
 import com.example.mobiledger.domain.usecases.UserSettingsUseCase
 import com.example.mobiledger.presentation.Event
@@ -15,7 +17,8 @@ import kotlinx.coroutines.launch
 
 class ProfileViewModel(
     private val profileUseCase: ProfileUseCase,
-    private val userSettingsUseCase: UserSettingsUseCase
+    private val userSettingsUseCase: UserSettingsUseCase,
+    private val attachmentUseCase: AttachmentUseCase
 ) : BaseViewModel() {
 
     val userFromFirestoreResult: LiveData<UserEntity> get() = _userFromFirestoreResult
@@ -36,21 +39,24 @@ class ProfileViewModel(
     private val _isReminderEnabled = MutableLiveData<Event<Boolean>>()
     val isReminderEnabled: LiveData<Event<Boolean>> get() = _isReminderEnabled
 
-
+    lateinit var uId: String
     fun fetchUserData() {
         viewModelScope.launch {
             _loadingState.value = true
             when (val result = profileUseCase.fetchUserFromFirebase()) {
                 is AppResult.Success -> {
+                    uId = result.data.uid
                     _userFromFirestoreResult.value = result.data
                 }
                 is AppResult.Failure -> {
-                    _errorLiveData.value = Event(
-                        ViewError(
-                            viewErrorType = ViewErrorType.NON_BLOCKING,
-                            message = result.error.message
+                    if (needToHandleAppError(result.error)) {
+                        _errorLiveData.value = Event(
+                            ViewError(
+                                viewErrorType = ViewErrorType.NON_BLOCKING,
+                                message = result.error.message
+                            )
                         )
-                    )
+                    }
                 }
             }
             _loadingState.value = false
@@ -98,6 +104,22 @@ class ProfileViewModel(
     fun saveBiometricEnabled(enableBiometric: Boolean) {
         viewModelScope.launch {
             userSettingsUseCase.saveBiometricEnabled(enableBiometric)
+        }
+    }
+
+    fun uploadProfilePic(uri: Uri) {
+        viewModelScope.launch {
+            when (val result = attachmentUseCase.uploadPicture(uri)) {
+                is AppResult.Success -> attachmentUseCase.downloadProfilePicUri()
+                is AppResult.Failure -> if (needToHandleAppError(result.error)) {
+                    _errorLiveData.value = Event(
+                        ViewError(
+                            viewErrorType = ViewErrorType.NON_BLOCKING,
+                            message = result.error.message
+                        )
+                    )
+                }
+            }
         }
     }
 

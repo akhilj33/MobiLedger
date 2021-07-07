@@ -10,22 +10,28 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.result.ActivityResultLauncher
 import androidx.annotation.ColorRes
 import androidx.annotation.LayoutRes
+import androidx.annotation.StringRes
 import androidx.core.app.NotificationCompat
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.mobiledger.R
 import com.example.mobiledger.common.di.DependencyProvider
 import com.example.mobiledger.common.extention.gone
 import com.example.mobiledger.common.extention.visible
 import com.example.mobiledger.common.showToast
+import com.example.mobiledger.common.utils.PermissionUtils
 import com.example.mobiledger.databinding.SnackViewErrorBinding
 import com.example.mobiledger.presentation.NormalObserver
+import com.example.mobiledger.presentation.main.MainActivity
 import com.example.mobiledger.presentation.main.MainActivityViewModel
+import kotlinx.coroutines.launch
 import timber.log.Timber
 
 abstract class BaseFragment<B : ViewDataBinding, NV : BaseNavigator>(
@@ -210,6 +216,7 @@ abstract class BaseFragment<B : ViewDataBinding, NV : BaseNavigator>(
             notificationManager?.createNotificationChannel(channel)
         }
     }
+
 /*-----------------------------------Authentication Error-----------------------------------------*/
 
 //    private var authResultCallback: ((Boolean) -> Unit)? = null
@@ -231,6 +238,44 @@ abstract class BaseFragment<B : ViewDataBinding, NV : BaseNavigator>(
 //        }, delayToStartAuthFlow.toLong())
 //    }
 
+    /*-----------------------------------Permissions-----------------------------------------*/
+
+    protected fun checkAndAskForPermissions(
+        permissions: Array<String>,
+        @StringRes dialogString: Int,
+        requestMultiplePermissions: ActivityResultLauncher<Array<String>>,
+        isPermissionsGranted: (Boolean) -> Unit
+    ) {
+        val permissionsNeededList = PermissionUtils.permissionsNeeded(requireActivity(), permissions.toList())
+
+        lifecycleScope.launch {
+            when {
+                permissionsNeededList.isEmpty() -> {
+                    // All Permissions are granted
+                    isPermissionsGranted(true)
+                }
+
+                (activity as MainActivity).shouldShowRequestPermissionRationale(permissionsNeededList) -> {
+                    // User Denied permission so requesting permission again
+                    requestMultiplePermissions.launch(permissionsNeededList)
+                    isPermissionsGranted(false)
+                }
+
+                else -> {
+                    val isFirstTime = activityViewModel.isPermissionsFirstTime(permissionsNeededList)
+                    if (isFirstTime) {
+                        // First time permission is asked
+                        activityViewModel.setPermissionNotFirstTime(permissionsNeededList)
+                        requestMultiplePermissions.launch(permissionsNeededList)
+                    } else {
+                        // User denied and pressed do not show again
+                        (activity as MainActivity).showGoToSettingsDialog(dialogString)
+                    }
+                    isPermissionsGranted(false)
+                }
+            }
+        }
+    }
 
 /*----------------------------------------Status Bar----------------------------------------*/
 

@@ -169,6 +169,11 @@
         product to manage budget and finances for our customers.</string>
     <string name="akhilj33_email">akhilj33@gmail.com</string>
     <string name="next">Next</string>
+    <string name="go_to_settings">Settings</string>
+    <string name="permission_required_dialog_title">Permission Required</string>
+    <string name="permission_required_dialog_msg">Mobiledger needs Camera and File Storage Permission to upload your profile picture. \n\n
+        Please go to settings and give Camera and Storage permissions for better experience.</string>
+    <string name="required_permission_not_granted">The required permissions are not granted.</string>
 
     <!-- FORGET PASSWORD SCREEN -->
     <string name="send">Send</string>
