@@ -16,6 +16,7 @@
     <string name="forget_password">Forget Password</string>
     <string name="login">Login</string>
     <string name="new_user_sign_up">New user? SIGN UP</string>
+    <string name="google_icon">Google Icon</string>
 
     <!--SignUp Screen-->
     <string name="confirm_password">Confirm Password*</string>
@@ -105,6 +106,7 @@
     <string name="stats_detail_header_income">You earned ₹%1$s from %2$s in %3$s</string>
     <string name="monthly_analysis">Monthly Analysis</string>
     <string name="delete">Delete</string>
+    <string name="no_transactions_added_for_this_month">No transactions added for this month</string>
 
     <!-- Budget Fragment -->
     <string name="make_budget">Make Budget</string>
@@ -113,6 +115,7 @@
     <string name="transactions">transactions</string>
     <string name="update_budget_heading">Update %1$s Budget</string>
     <string name="budget_overflow_error">Monthly total budget exceeded your monthly limit. Enter value below ₹%1$s or increase your monthly limit.</string>
+    <string name="you_have_not_created_the_budget_for_this_month">You have not created the budget for this month</string>
 
 
     <!-- NOTIFICATION -->
@@ -173,8 +176,7 @@
     <string name="send">Send</string>
     <string name="reset_password_msg">Link to reset your password will be sent to your registered email address</string>
     <string name="reset_password">Reset Password</string>
-    <string name="you_have_not_created_the_budget_for_this_month">You have not created the budget for this month</string>
-    <string name="no_transactions_added_for_this_month">No transactions added for this month</string>
+    <string name="transaction_list">Transaction List</string>
 
 
 </resources>

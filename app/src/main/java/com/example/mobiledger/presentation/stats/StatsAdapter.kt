@@ -16,7 +16,6 @@ import com.example.mobiledger.databinding.StatsCategoryItemBinding
 import com.example.mobiledger.databinding.StatsChildRecyclerviewItemBinding
 import com.example.mobiledger.databinding.StatsHeaderItemBinding
 import com.example.mobiledger.domain.enums.TransactionType
-import java.util.*
 
 class StatsAdapter(private val onCategoryItemClick: (categoryNameList: List<String>, amount: Long) -> Unit) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
