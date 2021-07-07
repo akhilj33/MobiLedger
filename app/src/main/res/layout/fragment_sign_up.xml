@@ -43,7 +43,6 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     app:errorEnabled="true"
-                    app:boxBackgroundColor="@color/colorAppLightBlue"
                     app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_90"
                     app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_10"
                     app:layout_constraintTop_toBottomOf="@id/horizontalScreenGuideline_08">
@@ -62,9 +61,8 @@
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/cdp_4"
+                    android:layout_marginTop="@dimen/cdp_12"
                     app:errorEnabled="true"
-                    app:boxBackgroundColor="@color/colorAppLightBlue"
                     app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_90"
                     app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_10"
                     app:layout_constraintTop_toBottomOf="@id/nameInputLayout">
@@ -83,9 +81,8 @@
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/cdp_4"
+                    android:layout_marginTop="@dimen/cdp_12"
                     app:errorEnabled="true"
-                    app:boxBackgroundColor="@color/colorAppLightBlue"
                     app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_90"
                     app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_10"
                     app:layout_constraintTop_toBottomOf="@id/emailLayout">
@@ -104,12 +101,12 @@
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/cdp_4"
+                    android:layout_marginTop="@dimen/cdp_12"
                     app:errorEnabled="true"
-                    app:boxBackgroundColor="@color/colorAppLightBlue"
                     app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_90"
                     app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_10"
-                    app:layout_constraintTop_toBottomOf="@id/phoneInputLayout">
+                    app:layout_constraintTop_toBottomOf="@id/phoneInputLayout"
+                    app:passwordToggleEnabled="true">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/textPassword"
@@ -127,12 +124,13 @@
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/cdp_4"
+                    android:layout_marginTop="@dimen/cdp_12"
                     app:errorEnabled="true"
-                    app:boxBackgroundColor="@color/colorAppLightBlue"
                     app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_90"
+
                     app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_10"
-                    app:layout_constraintTop_toBottomOf="@id/passwordLayout">
+                    app:layout_constraintTop_toBottomOf="@id/passwordLayout"
+                    app:passwordToggleEnabled="true">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/textConfirmPassword"
@@ -150,6 +148,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:visibility="gone"
+                    android:indeterminateTint="@color/colorAppBlue"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -159,17 +158,17 @@
                     android:id="@+id/checkBoxTAndC"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/cdp_16"
+                    android:layout_marginTop="@dimen/cdp_12"
                     app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_10"
                     app:layout_constraintTop_toBottomOf="@id/confirmPasswordLayout" />
 
                 <TextView
                     android:id="@+id/tAndCText"
+                    style="@style/GelionRegularNavyBlue12"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:text="@string/i_have_read_all_the_terms_and_conditions"
                     app:layout_constraintBottom_toBottomOf="@id/checkBoxTAndC"
-                    style="@style/GelionRegularNavyBlue12"
                     app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_90"
                     app:layout_constraintStart_toEndOf="@id/checkBoxTAndC"
                     app:layout_constraintTop_toTopOf="@id/checkBoxTAndC" />
@@ -184,10 +183,10 @@
                     android:text="@string/sign_up"
                     android:textColor="@color/colorWhite"
                     android:textSize="@dimen/csp_20"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_90"
                     app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_10"
-                    app:layout_constraintTop_toBottomOf="@id/confirmPasswordLayout"
-                    app:layout_constraintBottom_toBottomOf="parent" />
+                    app:layout_constraintTop_toBottomOf="@id/tAndCText" />
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>

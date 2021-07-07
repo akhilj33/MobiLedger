@@ -87,7 +87,7 @@ class MainActivity :
         }
         viewBinding.includeNav.accountView.setOnClickListener {
             highlightTab(
-                NavTab.SPLIT()
+                NavTab.PROFILE()
             )
         }
     }
@@ -246,7 +246,7 @@ class MainActivity :
                 is NavTab.HOME -> ColorNav().colorHome(R.color.colorPrimary)
                 is NavTab.BUDGET -> ColorNav().colorBudget(R.color.colorPrimary)
                 is NavTab.STATS -> ColorNav().colorInsight(R.color.colorPrimary)
-                is NavTab.SPLIT -> ColorNav().colorSplit(R.color.colorPrimary)
+                is NavTab.PROFILE -> ColorNav().colorSplit(R.color.colorPrimary)
                 is NavTab.DeselectAll -> {
                 }
             }
