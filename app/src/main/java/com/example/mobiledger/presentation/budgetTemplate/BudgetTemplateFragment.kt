@@ -12,7 +12,7 @@ import com.example.mobiledger.databinding.SnackViewErrorBinding
 import com.example.mobiledger.presentation.OneTimeObserver
 import com.example.mobiledger.presentation.budgetTemplate.budgetTemplateAdapters.BudgetTemplateFragmentRecyclerAdapter
 
-class BudgetTemplateFragment : BaseFragment<FragmentBudgetTemplateBinding, BudgetTemplateNavigator>(R.layout.fragment_budget_template) {
+class BudgetTemplateFragment : BaseFragment<FragmentBudgetTemplateBinding, BudgetTemplateNavigator>(R.layout.fragment_budget_template, StatusBarColor.BLUE) {
 
     private val viewModel: BudgetTemplateViewModel by viewModels { viewModelFactory }
 

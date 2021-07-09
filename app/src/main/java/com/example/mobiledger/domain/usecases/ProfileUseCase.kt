@@ -1,5 +1,6 @@
 package com.example.mobiledger.domain.usecases
 
+import android.net.Uri
 import com.example.mobiledger.data.repository.ProfileRepository
 import com.example.mobiledger.domain.AppResult
 import com.example.mobiledger.domain.entities.UserEntity
@@ -10,6 +11,8 @@ interface ProfileUseCase {
     suspend fun updateEmailInFirebase(email: String): AppResult<Unit>
     suspend fun updatePhoneInFirebase(phoneNo: String): AppResult<Unit>
     suspend fun updatePasswordInFirebase(password: String): AppResult<Unit>
+    suspend fun updatePhotoInAuth(photoUri: Uri): AppResult<Uri>
+
 }
 
 class ProfileUseCaseImpl(private val profileRepository: ProfileRepository) : ProfileUseCase {
@@ -31,5 +34,9 @@ class ProfileUseCaseImpl(private val profileRepository: ProfileRepository) : Pro
 
     override suspend fun updatePasswordInFirebase(password: String): AppResult<Unit> {
         return profileRepository.updatePasswordInFirebase(password)
+    }
+
+    override suspend fun updatePhotoInAuth(photoUri: Uri): AppResult<Uri> {
+        return profileRepository.updatePhotoInAuth(photoUri)
     }
 }

@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mobiledger.R
 import com.example.mobiledger.common.base.BaseFragment
-import com.example.mobiledger.common.extention.changeStatusBarColor
 import com.example.mobiledger.databinding.FragmentOnboardingBinding
 import com.example.mobiledger.domain.entities.OnBoardingCarouselEntity
 
@@ -37,15 +36,6 @@ class OnBoardingFragment : BaseFragment<FragmentOnboardingBinding, OnBoardingNav
         viewBinding.btnNext.setOnClickListener {
             navigator?.navigateToAuthScreen()
         }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        viewBinding.root.changeStatusBarColor(
-            requireActivity(),
-            StatusBarColor.TRANSPARENT,
-            isFullScreen = true
-        )
     }
 
     private fun initCarouselData() {

@@ -14,12 +14,11 @@ interface UserSettingsRepository {
     suspend fun clearDataOnLogout()
     suspend fun isTermsAndConditionAccepted(): Boolean
     suspend fun acceptTermsAndCondition(isAccepted: Boolean)
+    suspend fun setIsFirstTimePermissionAsked(permissions: Array<String>)
+    suspend fun isFirstTimePermissionAsked(permissions: Array<String>): Boolean
 }
 
-class UserSettingsRepositoryImpl(
-    private val cacheSource: CacheSource
-) :
-    UserSettingsRepository {
+class UserSettingsRepositoryImpl(private val cacheSource: CacheSource) : UserSettingsRepository {
 
     override suspend fun getUID(): String? {
         return cacheSource.getUID()
@@ -63,5 +62,13 @@ class UserSettingsRepositoryImpl(
 
     override suspend fun acceptTermsAndCondition(isAccepted: Boolean) {
         cacheSource.acceptTermsAndCondition(isAccepted)
+    }
+
+    override suspend fun setIsFirstTimePermissionAsked(permissions: Array<String>) {
+        cacheSource.setIsFirstTimePermissionAsked(permissions)
+    }
+
+    override suspend fun isFirstTimePermissionAsked(permissions: Array<String>): Boolean {
+        return cacheSource.isFirstTimePermissionAsked(permissions)
     }
 }

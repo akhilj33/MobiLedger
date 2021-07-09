@@ -1,7 +1,10 @@
 package com.example.mobiledger.data.sources.room.profile
 
-import androidx.lifecycle.LiveData
-import androidx.room.*
+import android.net.Uri
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
 
 @Dao
 interface ProfileDao {
@@ -19,12 +22,15 @@ interface ProfileDao {
     suspend fun deleteUserProfile()
 
     @Query("UPDATE profile SET userName=:name WHERE uid=:uId")
-    suspend fun updateUserName(name: String, uId:String)
+    suspend fun updateUserName(name: String, uId: String)
+
+    @Query("UPDATE profile SET photoUrl=:photoUri WHERE uid=:uId")
+    suspend fun updatePhotoUri(photoUri: Uri, uId: String)
 
     @Query("UPDATE profile SET emailId=:email WHERE uid=:uId")
-    suspend fun updateEmail(email: String, uId:String)
+    suspend fun updateEmail(email: String, uId: String)
 
     @Query("UPDATE profile SET phoneNo=:phoneNo WHERE uid=:uId")
-    suspend fun updatePhoneNo(phoneNo: String, uId:String)
+    suspend fun updatePhoneNo(phoneNo: String, uId: String)
 
 }

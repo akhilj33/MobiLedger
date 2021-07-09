@@ -74,7 +74,8 @@ class ViewModelFactoryProvider(private val useCaseProvider: UseCaseProvider) :
             modelClass.isAssignableFrom(ProfileViewModel::class.java) -> {
                 ProfileViewModel(
                     useCaseProvider.provideProfileUseCase(),
-                    useCaseProvider.provideUserSettingsUseCase()
+                    useCaseProvider.provideUserSettingsUseCase(),
+                    useCaseProvider.provideAttachmentUseCase()
                 ) as T
             }
 

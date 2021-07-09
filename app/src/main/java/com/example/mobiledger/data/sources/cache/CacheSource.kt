@@ -2,6 +2,8 @@ package com.example.mobiledger.data.sources.cache
 
 import android.content.Context
 import android.content.SharedPreferences
+import com.example.mobiledger.common.utils.JsonUtils.convertJsonStringToObject
+import com.example.mobiledger.common.utils.JsonUtils.convertToJsonString
 
 interface CacheSource {
     suspend fun saveUid(uid: String)
@@ -15,6 +17,8 @@ interface CacheSource {
     suspend fun clearSharedPreferenceOnLogout()
     suspend fun isTermsAndConditionAccepted(): Boolean
     suspend fun acceptTermsAndCondition(isAccepted: Boolean)
+    suspend fun setIsFirstTimePermissionAsked(permissions: Array<String>)
+    suspend fun isFirstTimePermissionAsked(permissions: Array<String>): Boolean
 }
 
 class SharedPreferenceSource(val context: Context) : CacheSource {
@@ -26,6 +30,7 @@ class SharedPreferenceSource(val context: Context) : CacheSource {
         private const val BIOMETRIC = "biometric"
         private const val REMINDER = "reminder"
         private const val T_AND_C = "tAndC"
+        private const val PERMISSIONS_IS_FIRST_TIME = "permission_is_first_time"
     }
 
     private val sharedPref: SharedPreferences =
@@ -74,6 +79,24 @@ class SharedPreferenceSource(val context: Context) : CacheSource {
 
     override suspend fun acceptTermsAndCondition(isAccepted: Boolean) {
         sharedPref.edit().putBoolean(T_AND_C, isAccepted).apply()
+    }
+
+    override suspend fun setIsFirstTimePermissionAsked(permissions: Array<String>) {
+        val permissionsJson = sharedPref.getString(PERMISSIONS_IS_FIRST_TIME, "")
+        val permissionMap: MutableMap<String, Boolean> = convertJsonStringToObject(permissionsJson) ?: mutableMapOf()
+        permissions.forEach { permissionMap[it] = false }
+        sharedPref.edit().putString(PERMISSIONS_IS_FIRST_TIME, convertToJsonString(permissionMap)).apply()
+    }
+
+    override suspend fun isFirstTimePermissionAsked(permissions: Array<String>): Boolean {
+        val permissionsJson = sharedPref.getString(PERMISSIONS_IS_FIRST_TIME, "")
+        val permissionMap: MutableMap<String, Boolean> = convertJsonStringToObject(permissionsJson) ?: mutableMapOf()
+        permissions.forEach {
+            if (permissionMap.containsKey(it)) {
+                return false
+            }
+        }
+        return true
     }
 
 }

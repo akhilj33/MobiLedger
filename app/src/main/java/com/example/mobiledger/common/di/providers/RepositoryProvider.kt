@@ -7,7 +7,8 @@ class RepositoryProvider(
     apiSourceProvider: ApiSourceProvider,
     cacheSourceProvider: CacheSourceProvider,
     dbProvider: DbProvider,
-    internetSourceProvider: InternetSourceProvider
+    internetSourceProvider: InternetSourceProvider,
+    attachmentSourceProvider: AttachmentSourceProvider
 ) {
 
     private val internetRepository: InternetRepository by lazy {
@@ -71,6 +72,12 @@ class RepositoryProvider(
         )
     }
 
+    private val attachmentRepository: AttachmentRepository by lazy {
+        AttachmentRepositoryImpl(
+            attachmentSourceProvider.provideAttachmentSource(),
+            cacheSourceProvider.provideCacheSource())
+    }
+
     /*-------------------------------Public -----------------------------*/
 
     fun provideInternetRepository(): InternetRepository = internetRepository
@@ -90,4 +97,7 @@ class RepositoryProvider(
     fun provideBudgetRepository(): BudgetRepository = budgetRepository
 
     fun provideBudgetTemplateRepository(): BudgetTemplateRepository = budgetTemplateRepository
+
+    fun provideAttachmentRepository(): AttachmentRepository = attachmentRepository
+
 }
