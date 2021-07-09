@@ -62,11 +62,11 @@
                     app:layout_constraintGuide_percent="0.04" />
 
                 <androidx.constraintlayout.widget.Guideline
-                    android:id="@+id/verticalScreenGuideline_70"
+                    android:id="@+id/verticalScreenGuideline_80"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    app:layout_constraintGuide_begin="288dp" />
+                    app:layout_constraintGuide_percent="0.80" />
 
                 <androidx.constraintlayout.widget.Guideline
                     android:id="@+id/verticalScreenGuideline_96"
@@ -96,7 +96,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/cdp_12"
                     app:boxBackgroundColor="@color/colorAppLightBlue"
-                    app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_70"
+                    app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_80"
                     app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_04"
                     app:layout_constraintTop_toBottomOf="@id/editImage">
 
@@ -110,20 +110,18 @@
 
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <Button
+                <ImageButton
                     android:id="@+id/btnNameUpdate"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:background="@color/colorPrimary"
-                    android:text="@string/update"
-                    android:textAllCaps="false"
-                    android:textColor="@color/colorWhite"
-                    android:textSize="@dimen/csp_14"
+                    android:layout_width="@dimen/cdp_44"
+                    android:layout_height="@dimen/cdp_44"
+                    android:layout_marginStart="@dimen/cdp_8"
                     android:layout_marginTop="@dimen/cdp_2"
+                    android:background="@color/colorWhite"
+                    android:src="@drawable/ic_baseline_arrow_circle_up_24"
+                    android:tint="@color/colorAppBlue"
                     app:layout_constraintBottom_toBottomOf="@id/nameLayout"
-                    app:layout_constraintTop_toTopOf="@+id/transactionNameLayout"
-                    app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_96"
-                    app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_70" />
+                    app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_80"
+                    app:layout_constraintTop_toTopOf="@+id/nameLayout" />
 
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -133,7 +131,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/cdp_8"
                     app:boxBackgroundColor="@color/colorAppLightBlue"
-                    app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_70"
+                    app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_80"
                     app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_04"
                     app:layout_constraintTop_toBottomOf="@id/nameLayout">
 
@@ -147,20 +145,18 @@
 
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <Button
+                <ImageButton
                     android:id="@+id/btnContactUpdate"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@color/colorPrimary"
-                    android:text="@string/update"
-                    android:textAllCaps="false"
-                    android:textColor="@color/colorWhite"
-                    android:textSize="@dimen/csp_14"
+                    android:layout_marginStart="@dimen/cdp_8"
                     android:layout_marginTop="@dimen/cdp_2"
-                    app:layout_constraintTop_toTopOf="@+id/contactNumLayout"
+                    android:background="@color/colorWhite"
+                    android:src="@drawable/ic_baseline_arrow_circle_up_24"
+                    android:tint="@color/colorAppBlue"
                     app:layout_constraintBottom_toBottomOf="@id/contactNumLayout"
-                    app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_96"
-                    app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_70" />
+                    app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_80"
+                    app:layout_constraintTop_toTopOf="@+id/contactNumLayout" />
 
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -170,7 +166,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/cdp_8"
                     app:boxBackgroundColor="@color/colorAppLightBlue"
-                    app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_70"
+                    app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_80"
                     app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_04"
                     app:layout_constraintTop_toBottomOf="@id/contactNumLayout">
 
@@ -184,20 +180,18 @@
 
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <Button
+                <ImageButton
                     android:id="@+id/btnEmailUpdate"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@color/colorPrimary"
-                    android:text="@string/update"
-                    android:textAllCaps="false"
-                    android:textColor="@color/colorWhite"
-                    android:textSize="@dimen/csp_14"
+                    android:layout_marginStart="@dimen/cdp_8"
                     android:layout_marginTop="@dimen/cdp_2"
-                    app:layout_constraintTop_toTopOf="@+id/emailLayout"
+                    android:background="@color/colorWhite"
+                    android:src="@drawable/ic_baseline_arrow_circle_up_24"
+                    android:tint="@color/colorAppBlue"
                     app:layout_constraintBottom_toBottomOf="@id/emailLayout"
-                    app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_96"
-                    app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_70" />
+                    app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_80"
+                    app:layout_constraintTop_toTopOf="@+id/emailLayout" />
 
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -248,8 +242,8 @@
                     android:id="@+id/editProfileProgressBar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:visibility="gone"
                     android:indeterminateTint="@color/colorAppBlue"
+                    android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
