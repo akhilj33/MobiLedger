@@ -152,6 +152,8 @@
     <string name="apply">Apply</string>
     <string name="templates">Templates</string>
     <string name="apply_template_msg">Are you sure you want to apply this template?</string>
+    <string name="budget_template_created_msg">Budget Template created</string>
+    <string name="no_templates_added">No Templates added</string>
 
 
     <!-- On Boarding -->

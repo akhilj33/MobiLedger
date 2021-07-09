@@ -47,6 +47,11 @@ class ApplyTemplateDialogFragment :
         viewModel.budgetTemplateList.observe(viewLifecycleOwner, {
             it.let {
                 applyTemplateRecyclerViewAdapter.addList(it.peekContent())
+                if (it.peekContent().isNotEmpty()) {
+                    viewBinding.tvNoTemplate.gone()
+                } else {
+                    viewBinding.tvNoTemplate.visible()
+                }
             }
         })
 

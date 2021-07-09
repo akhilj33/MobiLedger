@@ -21,6 +21,7 @@ import com.example.mobiledger.presentation.main.MainActivityViewModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.firebase.analytics.FirebaseAnalytics
 import timber.log.Timber
 
 abstract class BaseDialogFragment<B : ViewDataBinding, NV : BaseNavigator>(
@@ -31,6 +32,8 @@ abstract class BaseDialogFragment<B : ViewDataBinding, NV : BaseNavigator>(
 
     protected val viewModelFactory = DependencyProvider.provideViewModelFactory()
     val activityViewModel: MainActivityViewModel by activityViewModels()
+
+    protected var firebaseAnalytics: FirebaseAnalytics? = null
 
     /*This property is only valid between onCreateView and onDestroyView.
       This object returns _binding but thanks to !!(non-null asserted)
@@ -100,6 +103,13 @@ abstract class BaseDialogFragment<B : ViewDataBinding, NV : BaseNavigator>(
         _viewBinding = null
     }
 
+    /*---------------------------------------Analytics--------------------------------------*/
+
+    protected fun logEvent(msg: String) {
+        val bundle = Bundle()
+        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, msg)
+        firebaseAnalytics?.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle)
+    }
     /*------------------------------------Snack Bar error ----------------------------------------*/
 
     protected open fun getSnackBarErrorView(): SnackViewErrorBinding? = null

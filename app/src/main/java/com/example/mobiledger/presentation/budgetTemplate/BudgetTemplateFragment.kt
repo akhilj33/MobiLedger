@@ -6,6 +6,8 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.mobiledger.R
 import com.example.mobiledger.common.base.BaseFragment
+import com.example.mobiledger.common.extention.gone
+import com.example.mobiledger.common.extention.visible
 import com.example.mobiledger.common.utils.showAddNewTemplateDialogFragment
 import com.example.mobiledger.databinding.FragmentBudgetTemplateBinding
 import com.example.mobiledger.databinding.SnackViewErrorBinding
@@ -49,11 +51,17 @@ class BudgetTemplateFragment : BaseFragment<FragmentBudgetTemplateBinding, Budge
         viewModel.budgetTemplateList.observe(viewLifecycleOwner, {
             it.let {
                 budgetTemplateFragmentRecyclerAdapter.addList(it.peekContent())
+                if (it.peekContent().isNotEmpty()) {
+                    viewBinding.tvNoTemplate.gone()
+                } else {
+                    viewBinding.tvNoTemplate.visible()
+                }
             }
         })
         activityViewModel.addNewBudgetTemplate.observe(viewLifecycleOwner, OneTimeObserver {
             it.let {
                 viewModel.refreshData()
+                logEvent(getString(R.string.budget_template_created_msg))
             }
         })
     }

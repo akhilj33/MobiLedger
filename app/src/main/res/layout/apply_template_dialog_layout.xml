@@ -32,6 +32,18 @@
             app:layout_constraintStart_toStartOf="@id/verticalStartGuideline"
             app:layout_constraintEnd_toEndOf="@id/verticalEndGuideline" />
 
+        <TextView
+            android:id="@+id/tvNoTemplate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/no_templates_added"
+            style="@style/GelionSemiBoldBlue18"
+            android:textAlignment="center"
+            android:visibility="gone"
+            android:layout_marginTop="@dimen/cdp_24"
+            app:layout_constraintTop_toBottomOf="@id/textTemplate"
+            app:layout_constraintStart_toStartOf="@id/verticalStartGuideline"
+            app:layout_constraintEnd_toEndOf="@id/verticalEndGuideline" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvBudgetTemplateList"
