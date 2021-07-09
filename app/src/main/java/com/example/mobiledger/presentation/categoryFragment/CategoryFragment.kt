@@ -11,7 +11,7 @@ import com.example.mobiledger.databinding.FragmentCategoryBinding
 import com.example.mobiledger.databinding.SnackViewErrorBinding
 import com.google.android.material.tabs.TabLayoutMediator
 
-class CategoryFragment : BaseFragment<FragmentCategoryBinding, BaseNavigator>(R.layout.fragment_category) {
+class CategoryFragment : BaseFragment<FragmentCategoryBinding, BaseNavigator>(R.layout.fragment_category, StatusBarColor.BLUE) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

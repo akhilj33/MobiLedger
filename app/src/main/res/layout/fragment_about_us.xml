@@ -96,15 +96,13 @@
                 android:paddingStart="@dimen/cdp_10"
                 android:paddingEnd="@dimen/cdp_10">
 
-                <ImageView
+                <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/imgDev1"
                     android:layout_width="@dimen/cdp_64"
                     android:layout_height="@dimen/cdp_64"
                     android:layout_alignParentStart="true"
                     android:layout_centerVertical="true"
-                    android:background="@drawable/ring_shape"
-                    android:contentDescription="@string/user_image"
-                    app:srcCompat="@raw/akj" />
+                    android:contentDescription="@string/user_image"/>
 
 
                 <TextView
@@ -193,16 +191,13 @@
                 android:paddingStart="@dimen/cdp_10"
                 android:paddingEnd="@dimen/cdp_10">
 
-                <ImageView
+                <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/imgDev2"
                     android:layout_width="@dimen/cdp_64"
                     android:layout_height="@dimen/cdp_64"
                     android:layout_alignParentStart="true"
                     android:layout_centerVertical="true"
-                    android:background="@drawable/ring_shape"
-                    android:contentDescription="@string/user_image"
-                    app:srcCompat="@raw/anant" />
-
+                    android:contentDescription="@string/user_image" />
 
                 <TextView
                     android:id="@+id/displayName2"

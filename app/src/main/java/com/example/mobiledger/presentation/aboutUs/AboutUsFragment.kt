@@ -4,17 +4,20 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
+import com.bumptech.glide.Glide
 import com.example.mobiledger.R
 import com.example.mobiledger.common.base.BaseFragment
 import com.example.mobiledger.databinding.FragmentAboutUsBinding
 import com.example.mobiledger.presentation.onBoarding.OnBoardingNavigator
 
 
-class AboutUsFragment : BaseFragment<FragmentAboutUsBinding, OnBoardingNavigator>(R.layout.fragment_about_us) {
+class AboutUsFragment : BaseFragment<FragmentAboutUsBinding, OnBoardingNavigator>(R.layout.fragment_about_us, StatusBarColor.BLUE) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setOnCLickListener()
+        Glide.with(this).load(R.raw.akj).circleCrop().into(viewBinding.imgDev1)
+        Glide.with(this).load(R.raw.anant).circleCrop().into(viewBinding.imgDev2)
     }
 
     override fun isBottomNavVisible(): Boolean = false

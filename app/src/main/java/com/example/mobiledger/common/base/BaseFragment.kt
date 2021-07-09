@@ -23,6 +23,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.mobiledger.R
 import com.example.mobiledger.common.di.DependencyProvider
+import com.example.mobiledger.common.extention.changeStatusBarColor
 import com.example.mobiledger.common.extention.gone
 import com.example.mobiledger.common.extention.visible
 import com.example.mobiledger.common.showToast
@@ -36,7 +37,7 @@ import timber.log.Timber
 
 abstract class BaseFragment<B : ViewDataBinding, NV : BaseNavigator>(
     @LayoutRes private val layoutId: Int,
-    private val statusBarColor: StatusBarColor? = null
+    private val statusBarColor: StatusBarColor? = StatusBarColor.WHITE
 ) : Fragment() {
 
     private var _viewBinding: B? = null
@@ -107,13 +108,13 @@ abstract class BaseFragment<B : ViewDataBinding, NV : BaseNavigator>(
         })
     }
 
-//    override fun onResume() {
-//        super.onResume()
-//        if (statusBarColor != null) {
-//            viewBinding.root.changeStatusBarColor(requireActivity(), statusBarColor)
-//        }
+    override fun onResume() {
+        super.onResume()
+        if (statusBarColor != null) {
+            viewBinding.root.changeStatusBarColor(requireActivity(), statusBarColor)
+        }
 //        registerForAuthResult()
-//    }
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()
