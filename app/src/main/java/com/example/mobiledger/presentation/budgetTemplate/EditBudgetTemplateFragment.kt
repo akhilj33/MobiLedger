@@ -16,7 +16,7 @@ import com.example.mobiledger.presentation.budgetTemplate.budgetTemplateAdapters
 
 
 class EditBudgetTemplateFragment :
-    BaseFragment<FragmentEditBudgetTempleteBinding, BudgetTemplateNavigator>(R.layout.fragment_edit_budget_templete) {
+    BaseFragment<FragmentEditBudgetTempleteBinding, BudgetTemplateNavigator>(R.layout.fragment_edit_budget_templete, StatusBarColor.BLUE) {
 
     private val viewModel: EditBudgetTemplateViewModel by viewModels { viewModelFactory }
 

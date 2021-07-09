@@ -15,7 +15,7 @@ import okhttp3.internal.filterList
 
 
 class TransactionListFragment :
-    BaseFragment<FragmentTransactionListScreenBinding, BaseNavigator>(R.layout.fragment_transaction_list_screen) {
+    BaseFragment<FragmentTransactionListScreenBinding, BaseNavigator>(R.layout.fragment_transaction_list_screen, StatusBarColor.BLUE) {
 
 
     override fun getSnackBarErrorView(): SnackViewErrorBinding = viewBinding.includeErrorView

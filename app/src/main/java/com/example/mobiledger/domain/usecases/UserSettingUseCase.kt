@@ -14,6 +14,8 @@ interface UserSettingsUseCase {
     suspend fun clearDataOnLogout()
     suspend fun isTermsAndConditionAccepted(): Boolean
     suspend fun acceptTermsAndCondition(isAccepted: Boolean)
+    suspend fun setIsFirstTimePermissionAsked(permissions: Array<String>)
+    suspend fun isFirstTimePermissionAsked(permissions: Array<String>): Boolean
 }
 
 class UserSettingsUseCaseImpl(
@@ -44,4 +46,12 @@ class UserSettingsUseCaseImpl(
     override suspend fun isTermsAndConditionAccepted(): Boolean = userSettingsRepository.isTermsAndConditionAccepted()
 
     override suspend fun acceptTermsAndCondition(isAccepted: Boolean) = userSettingsRepository.acceptTermsAndCondition(isAccepted)
+
+    override suspend fun setIsFirstTimePermissionAsked(permissions: Array<String>) {
+        userSettingsRepository.setIsFirstTimePermissionAsked(permissions)
+    }
+
+    override suspend fun isFirstTimePermissionAsked(permissions: Array<String>): Boolean {
+        return userSettingsRepository.isFirstTimePermissionAsked(permissions)
+    }
 }

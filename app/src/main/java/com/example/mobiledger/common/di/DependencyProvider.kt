@@ -39,15 +39,20 @@ object DependencyProvider {
         CacheSourceProvider(provideApplicationContext())
     }
 
+    private val attachmentSourceProvider: AttachmentSourceProvider by lazy {
+        AttachmentSourceProvider(authSourceProvider, firebaseProvider, provideApplicationContext())
+    }
+
     private val mobiLedgerDatabase by lazy {
         Room.databaseBuilder(provideApplicationContext(), MobiLedgerDatabase::class.java, "mobi-ledger-db").build()
     }
+
     /*-------------------------------Repository------------------------------------------*/
 
     private val repositoryProvider: RepositoryProvider by lazy {
         RepositoryProvider(
             authSourceProvider, apiSourceProvider, cacheSourceProvider, dbProvider,
-            internetSourceProvider
+            internetSourceProvider , attachmentSourceProvider
         )
     }
 

@@ -34,4 +34,7 @@ class UseCaseProvider(private val repositoryProvider: RepositoryProvider) {
 
     fun provideInternetUseCase(): InternetUseCase = InternetUseCaseImpl(repositoryProvider.provideInternetRepository())
 
+    fun provideAttachmentUseCase(): AttachmentUseCase = AttachmentUseCaseImpl(repositoryProvider.provideAttachmentRepository(), provideProfileUseCase())
+
+
 }

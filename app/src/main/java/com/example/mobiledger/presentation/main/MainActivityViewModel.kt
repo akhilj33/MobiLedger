@@ -199,6 +199,16 @@ class MainActivityViewModel(
             _notificationIndicatorCategory.value = NotificationCallerPercentData(notificationCallerData, 50)
         }
     }
+
+    /*----------------------------Android Permissions Check---------------------------------*/
+
+    suspend fun setPermissionNotFirstTime(permissions: Array<String>) {
+        userSettingsUseCase.setIsFirstTimePermissionAsked(permissions)
+    }
+
+    suspend fun isPermissionsFirstTime(permissions: Array<String>): Boolean {
+        return userSettingsUseCase.isFirstTimePermissionAsked(permissions)
+    }
 }
 
 data class InternetState(val previous : Boolean, val current: Boolean)
