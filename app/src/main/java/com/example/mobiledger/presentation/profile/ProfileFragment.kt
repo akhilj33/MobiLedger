@@ -69,23 +69,23 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding, ProfileNavigator>(R
 
     private fun setOnClickListener() {
         viewBinding.apply {
-            imgEdit.setOnClickListener {
+            tvEditProfile.setOnClickListener {
                 navigator?.navigateToEditProfileScreen()
             }
 
-            textCategory.setOnClickListener {
+            accountView.imgCategoryNavigate.setOnClickListener {
                 navigator?.navigateToCategoryFragmentScreen()
             }
 
-            textLogout.setOnClickListener {
+            logoutTv.setOnClickListener {
                 logout()
             }
 
-            textBudgetTemplate.setOnClickListener {
+            accountView.imgBudgetTemplatesNavigate.setOnClickListener {
                 navigator?.navigateToBudgetTemplateFragment()
             }
 
-            textAboutUs.setOnClickListener {
+            appView.imgAboutUsNavigate.setOnClickListener {
                 navigator?.navigateToAboutUsFragment()
             }
         }
@@ -112,26 +112,26 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding, ProfileNavigator>(R
         viewModel.isPushNotificationEnabled.observe(
             viewLifecycleOwner,
             NormalObserver { isPushNotificationEnabled ->
-                viewBinding.toggleBtnNotification.isChecked = isPushNotificationEnabled
+                viewBinding.accountView.toggleBtnNotification.isChecked = isPushNotificationEnabled
             })
         viewModel.isPushNotificationEnabled()
 
         viewModel.isReminderEnabled.observe(
             viewLifecycleOwner,
             NormalObserver { isReminderEnabled ->
-                viewBinding.toggleBtnReminder.isChecked = isReminderEnabled
+                viewBinding.accountView.toggleBtnReminder.isChecked = isReminderEnabled
             })
         viewModel.isReminderEnabled()
 
         val biometricManager = BiometricManager.from(requireContext())
         if (canAuthenticateUsingBiometrics(biometricManager) != BiometricDeviceState.BIOMETRIC_AVAILABLE) {
-            viewBinding.toggleBtnBiometric.isChecked = false
+            viewBinding.accountView.toggleBtnBiometric.isChecked = false
             return
         }
         viewModel.isBiometricIdEnabled.observe(
             viewLifecycleOwner,
             NormalObserver { isBiometricEnabled ->
-                viewBinding.toggleBtnBiometric.isChecked = isBiometricEnabled
+                viewBinding.accountView.toggleBtnBiometric.isChecked = isBiometricEnabled
             })
         viewModel.isBiometricEnabled()
 
@@ -139,10 +139,10 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding, ProfileNavigator>(R
 
     private fun enableBiometric() {
         val biometricManager = BiometricManager.from(requireContext())
-        viewBinding.toggleBtnBiometric.setOnClickListener {
+        viewBinding.accountView.toggleBtnBiometric.setOnClickListener {
             when (canAuthenticateUsingBiometrics(biometricManager)) {
                 BiometricDeviceState.BIOMETRIC_AVAILABLE -> {
-                    if (viewBinding.toggleBtnBiometric.isChecked) {
+                    if (viewBinding.accountView.toggleBtnBiometric.isChecked) {
                         enableBiometric = true
                         authenticateWithFingerprint()
                     } else {
@@ -152,15 +152,15 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding, ProfileNavigator>(R
                 }
                 BiometricDeviceState.BIOMETRIC_ERROR_NO_HARDWARE -> {
                     activity?.showToast(getString(R.string.biometric_available))
-                    viewBinding.toggleBtnBiometric.isChecked = false
+                    viewBinding.accountView.toggleBtnBiometric.isChecked = false
                 }
                 BiometricDeviceState.BIOMETRIC_ERROR_HW_UNAVAILABLE -> {
                     activity?.showToast(getString(R.string.biometric_unavailable))
-                    viewBinding.toggleBtnBiometric.isChecked = false
+                    viewBinding.accountView.toggleBtnBiometric.isChecked = false
                 }
                 BiometricDeviceState.BIOMETRIC_ERROR_NONE_ENROLLED -> {
                     activity?.showToast(getString(R.string.biometric_not_associated))
-                    viewBinding.toggleBtnBiometric.isChecked = false
+                    viewBinding.accountView.toggleBtnBiometric.isChecked = false
                 }
             }
         }
@@ -193,12 +193,12 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding, ProfileNavigator>(R
     }
 
     private val onAuthenticationCancelled = {
-        viewBinding.toggleBtnBiometric.isChecked = !enableBiometric
+        viewBinding.accountView.toggleBtnBiometric.isChecked = !enableBiometric
     }
 
     private fun enablePushNotification() {
-        viewBinding.toggleBtnNotification.setOnClickListener {
-            if (viewBinding.toggleBtnNotification.isChecked) {
+        viewBinding.accountView.toggleBtnNotification.setOnClickListener {
+            if (viewBinding.accountView.toggleBtnNotification.isChecked) {
                 viewModel.savePushNotificationEnabled(true)
             } else {
                 viewModel.savePushNotificationEnabled(false)
@@ -207,8 +207,8 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding, ProfileNavigator>(R
     }
 
     private fun enableDailyReminder() {
-        viewBinding.toggleBtnReminder.setOnClickListener {
-            if (viewBinding.toggleBtnReminder.isChecked) {
+        viewBinding.accountView.toggleBtnReminder.setOnClickListener {
+            if (viewBinding.accountView.toggleBtnReminder.isChecked) {
                 activityViewModel.activateDailyReminder(true)
                 viewModel.saveReminderEnabled(true)
             } else {

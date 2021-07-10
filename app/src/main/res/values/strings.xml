@@ -47,7 +47,7 @@
     <string name="contact_number">Contact Number</string>
     <string name="edit">Edit</string>
     <string name="name">Name</string>
-    <string name="edit_profile">Edit Profile</string>
+    <string name="edit_profile">Edit Profile \u0020 </string>
     <string name="save">Save</string>
     <string name="mobile_no">Mobile No</string>
     <string name="update">Update</string>
@@ -62,6 +62,12 @@
     <string name="logout_message">Are you sure?</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
+    <string name="account">ACCOUNT</string>
+    <string name="notifications">Notifications</string>
+    <string name="biometrics">Biometrics</string>
+    <string name="app">APP</string>
+    <string name="rate_us">Rate Us</string>
+    <string name="share_with_friends">Share with Friends</string>
 
     <!--Add Transaction Dialog Fragment-->
     <string name="transaction_added">Transaction Added</string>
@@ -177,6 +183,5 @@
     <string name="reset_password_msg">Link to reset your password will be sent to your registered email address</string>
     <string name="reset_password">Reset Password</string>
     <string name="transaction_list">Transaction List</string>
-
 
 </resources>

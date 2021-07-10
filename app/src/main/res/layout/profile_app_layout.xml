@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/cdp_16"
+        android:background="@drawable/profile_curved_view">
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/appLabel"
+            style="@style/GelionRegularGrey18"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/cdp_16"
+            android:layout_marginTop="@dimen/cdp_10"
+            android:maxLines="1"
+            android:text="@string/app"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/imgAboutUs"
+            android:layout_width="@dimen/cdp_22"
+            android:layout_height="@dimen/cdp_22"
+            android:layout_marginTop="@dimen/cdp_24"
+            app:layout_constraintBottom_toTopOf="@id/aboutUsSeparator"
+            app:layout_constraintEnd_toStartOf="@id/aboutUsLabel"
+            app:layout_constraintStart_toStartOf="@id/appLabel"
+            app:layout_constraintTop_toBottomOf="@id/appLabel"
+            app:srcCompat="@drawable/about_us_blue_22" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/aboutUsLabel"
+            style="@style/GelionRegularBlue18"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/cdp_16"
+            android:maxLines="1"
+            android:text="@string/about_us"
+            app:layout_constraintBottom_toBottomOf="@id/imgAboutUs"
+            app:layout_constraintEnd_toStartOf="@id/imgAboutUsNavigate"
+            app:layout_constraintStart_toEndOf="@id/imgAboutUs"
+            app:layout_constraintTop_toTopOf="@id/imgAboutUs" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/imgAboutUsNavigate"
+            android:layout_width="@dimen/cdp_22"
+            android:layout_height="@dimen/cdp_22"
+            android:layout_marginEnd="@dimen/cdp_16"
+            app:layout_constraintBottom_toBottomOf="@id/imgAboutUs"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/aboutUsLabel"
+            app:layout_constraintTop_toTopOf="@id/imgAboutUs"
+            app:srcCompat="@drawable/arrow_right" />
+
+        <View
+            android:id="@+id/aboutUsSeparator"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/cdp_0.5"
+            android:layout_marginTop="@dimen/cdp_10"
+            android:background="@color/colorGrey"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/imgAboutUs" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/imgRateUs"
+            android:layout_width="@dimen/cdp_22"
+            android:layout_height="@dimen/cdp_22"
+            android:layout_marginTop="@dimen/cdp_10"
+            app:layout_constraintBottom_toTopOf="@id/rateUsSeparator"
+            app:layout_constraintEnd_toStartOf="@id/rateUsLabel"
+            app:layout_constraintStart_toStartOf="@id/appLabel"
+            app:layout_constraintTop_toBottomOf="@id/aboutUsSeparator"
+            app:srcCompat="@drawable/rate_us_blue_22" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/rateUsLabel"
+            style="@style/GelionRegularBlue18"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/cdp_16"
+            android:maxLines="1"
+            android:text="@string/rate_us"
+            app:layout_constraintBottom_toBottomOf="@id/imgRateUs"
+            app:layout_constraintEnd_toStartOf="@id/imgRateUsNavigate"
+            app:layout_constraintStart_toEndOf="@id/imgRateUs"
+            app:layout_constraintTop_toTopOf="@id/imgRateUs" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/imgRateUsNavigate"
+            android:layout_width="@dimen/cdp_22"
+            android:layout_height="@dimen/cdp_22"
+            android:layout_marginEnd="@dimen/cdp_16"
+            app:layout_constraintBottom_toBottomOf="@id/imgRateUs"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/rateUsLabel"
+            app:layout_constraintTop_toTopOf="@id/imgRateUs"
+            app:srcCompat="@drawable/arrow_right" />
+
+        <View
+            android:id="@+id/rateUsSeparator"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/cdp_0.5"
+            android:layout_marginTop="@dimen/cdp_10"
+            android:background="@color/colorGrey"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/imgRateUs" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/imgShareApp"
+            android:layout_width="@dimen/cdp_22"
+            android:layout_height="@dimen/cdp_22"
+            android:layout_marginTop="@dimen/cdp_10"
+            app:layout_constraintEnd_toStartOf="@id/shareAppLabel"
+            app:layout_constraintStart_toStartOf="@id/appLabel"
+            app:layout_constraintTop_toBottomOf="@id/rateUsSeparator"
+            app:srcCompat="@drawable/share_blue_22" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/shareAppLabel"
+            style="@style/GelionRegularBlue18"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/cdp_16"
+            android:maxLines="1"
+            android:text="@string/share_with_friends"
+            app:layout_constraintBottom_toBottomOf="@id/imgShareApp"
+            app:layout_constraintEnd_toStartOf="@id/imgShareAppNavigate"
+            app:layout_constraintStart_toEndOf="@id/imgShareApp"
+            app:layout_constraintTop_toTopOf="@id/imgShareApp" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/imgShareAppNavigate"
+            android:layout_width="@dimen/cdp_22"
+            android:layout_height="@dimen/cdp_22"
+            android:layout_marginEnd="@dimen/cdp_16"
+            app:layout_constraintBottom_toBottomOf="@id/imgShareApp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/shareAppLabel"
+            app:layout_constraintTop_toTopOf="@id/imgShareApp"
+            app:srcCompat="@drawable/arrow_right" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

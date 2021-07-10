@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".presentation.profile.ProfileFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/horizontalGuideline_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.02" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/verticalScreenGuideline_04"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.04" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/verticalScreenGuideline_96"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.96" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/horizontalGuideline_07"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent=".07" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/horizontalGuideline_34"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent=".34" />
+
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tvProfile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:fontFamily="@font/margarine"
+            android:maxLines="1"
+            android:text="@string/profile"
+            android:textColor="@color/colorTextDark"
+            android:textSize="@dimen/csp_28"
+            app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_04"
+            app:layout_constraintTop_toBottomOf="@id/horizontalGuideline_2"
+            android:textStyle="bold" />
+
+        <RelativeLayout
+            android:id="@+id/profileCard"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:paddingStart="@dimen/cdp_10"
+            android:paddingTop="@dimen/cdp_16"
+            android:paddingEnd="@dimen/cdp_10"
+            android:paddingBottom="@dimen/cdp_16"
+            android:padding="@dimen/cdp_12"
+            app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_96"
+            app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_04"
+            app:layout_constraintTop_toBottomOf="@id/horizontalGuideline_07">
+
+            <ImageView
+                android:id="@+id/imgUser"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:background="@drawable/ring_shape"
+                android:contentDescription="@string/user_image"
+                app:srcCompat="@drawable/profile_colorful" />
+
+            <ImageView
+                android:id="@+id/imgEdit"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="@dimen/cdp_10"
+                android:layout_marginEnd="@dimen/cdp_10"
+                android:contentDescription="@string/edit"
+                    android:src="@drawable/edit_icon"
+                    app:tint="@color/colorGray" />
+
+
+                <TextView
+                    android:id="@+id/displayName"
+                    style="@style/GelionSemiBoldBlue18"
+                    android:layout_width="245dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@id/imgUser"
+                    android:layout_marginStart="@dimen/cdp_16"
+                    android:layout_marginTop="10dp"
+                    android:layout_toEndOf="@id/imgUser"
+                    android:padding="@dimen/cdp_4"
+                    android:text="@string/display_name"
+                    android:textColor="@color/colorPrimaryDark" />
+
+                <TextView
+                    android:id="@+id/emailTv"
+                    style="@style/GelionRegular18"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/displayName"
+                    android:layout_marginStart="@dimen/cdp_16"
+                    android:layout_toEndOf="@id/imgUser"
+                    android:padding="@dimen/cdp_4"
+                    android:text="@string/email"
+                    android:textColor="@color/colorPrimaryDark" />
+
+                <TextView
+                    android:id="@+id/contactNumTv"
+                    style="@style/GelionRegular18"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/emailTv"
+                    android:layout_marginStart="@dimen/cdp_16"
+                    android:layout_toEndOf="@id/imgUser"
+                    android:padding="@dimen/cdp_4"
+                    android:text="@string/contact_number"
+                    android:textColor="@color/colorPrimaryDark" />
+
+            </RelativeLayout>
+
+        <TextView
+            android:id="@+id/touchIdLabel"
+            style="@style/GelionSemiBoldBlue18"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/cdp_16"
+            android:lineSpacingExtra="7sp"
+            android:padding="@dimen/cdp_10"
+            android:text="@string/enable_biometrics"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_04"
+            app:layout_constraintTop_toBottomOf="@id/profileCard" />
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/toggleBtnBiometric"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:theme="@style/SCBSwitch"
+            app:layout_constraintBottom_toBottomOf="@id/touchIdLabel"
+            app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_96"
+            app:layout_constraintTop_toTopOf="@id/touchIdLabel" />
+
+        <TextView
+            android:id="@+id/notificationSwitch"
+            style="@style/GelionSemiBoldBlue18"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:lineSpacingExtra="7sp"
+            android:padding="@dimen/cdp_10"
+            android:text="@string/notification"
+            app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_96"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_04"
+            app:layout_constraintTop_toBottomOf="@id/touchIdLabel" />
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/toggleBtnNotification"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:theme="@style/SCBSwitch"
+            app:layout_constraintBottom_toBottomOf="@id/notificationSwitch"
+            app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_96"
+            app:layout_constraintHorizontal_bias="1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/notificationSwitch" />
+
+        <TextView
+            android:id="@+id/reminderSwitch"
+            style="@style/GelionSemiBoldBlue18"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:lineSpacingExtra="7sp"
+            android:padding="@dimen/cdp_10"
+            android:text="@string/daily_reminder"
+            app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_96"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_04"
+            app:layout_constraintTop_toBottomOf="@id/notificationSwitch" />
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/toggleBtnReminder"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:theme="@style/SCBSwitch"
+            app:layout_constraintBottom_toBottomOf="@id/reminderSwitch"
+            app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_96"
+            app:layout_constraintHorizontal_bias="1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/reminderSwitch" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/textCategory"
+            style="@style/GelionSemiBoldBlue18"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:padding="@dimen/cdp_10"
+            android:text="@string/category"
+            app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_96"
+            app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_04"
+            app:layout_constraintTop_toBottomOf="@id/reminderSwitch" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/textBudgetTemplate"
+            style="@style/GelionSemiBoldBlue18"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:padding="@dimen/cdp_10"
+            android:text="@string/budget_templates"
+            app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_96"
+            app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_04"
+            app:layout_constraintTop_toBottomOf="@id/textCategory" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/textContactUs"
+            style="@style/GelionSemiBoldBlue18"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:padding="@dimen/cdp_10"
+            android:text="@string/contact_us"
+            app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_96"
+            app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_04"
+            app:layout_constraintTop_toBottomOf="@id/textBudgetTemplate" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/textAboutUs"
+            style="@style/GelionSemiBoldBlue18"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:padding="@dimen/cdp_10"
+            android:text="@string/about_us"
+            app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_96"
+            app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_04"
+            app:layout_constraintTop_toBottomOf="@id/textContactUs" />
+
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/textLogout"
+            style="@style/GelionSemiBoldBlue16"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:padding="@dimen/cdp_10"
+            android:text="@string/logout"
+            android:textSize="@dimen/csp_18"
+            app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_96"
+            app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_04"
+            app:layout_constraintTop_toBottomOf="@id/textAboutUs" />
+
+
+        <ProgressBar
+            android:id="@+id/profileProgressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:indeterminateTint="@color/colorAppBlue"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <include
+            android:id="@+id/includeErrorView"
+            layout="@layout/snack_view_error"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:visibility="visible" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>
