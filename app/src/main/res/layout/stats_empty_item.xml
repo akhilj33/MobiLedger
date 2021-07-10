@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/headingEmptyStats"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/GelionSemiBoldBlue18"
+            android:textAlignment="center"
+            android:text="@string/stats_empty_heading"
+            android:layout_marginStart="@dimen/cdp_36"
+            android:layout_marginEnd="@dimen/cdp_36"
+            android:layout_marginTop="@dimen/cdp_48"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/animation_view"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:layout_width="326dp"
+            android:layout_height="290dp"
+            android:id="@+id/animation_view"
+            app:lottie_rawRes="@raw/stats_empty_lottie"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            android:layout_marginTop="@dimen/cdp_24"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/headingEmptyStats"
+            app:layout_constraintBottom_toTopOf="@id/subHeadingEmptyStats" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/subHeadingEmptyStats"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/GelionSemiBoldBlue18"
+            android:textAlignment="center"
+            android:text="@string/stats_empty_screen_msg"
+            android:layout_marginStart="@dimen/cdp_36"
+            android:layout_marginEnd="@dimen/cdp_36"
+            android:layout_marginTop="@dimen/cdp_24"
+            app:layout_constraintTop_toBottomOf="@id/animation_view"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

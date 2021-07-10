@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -19,7 +20,7 @@
             style="@style/GelionSemiBoldBlue18"
             android:textAlignment="center"
             android:visibility="gone"
-            android:text="@string/no_transactions_added_for_this_month"
+            tools:text="@string/no_transactions_added_for_this_month"
             android:layout_marginStart="@dimen/cdp_36"
             android:layout_marginEnd="@dimen/cdp_36"
             android:layout_marginTop="@dimen/cdp_36"

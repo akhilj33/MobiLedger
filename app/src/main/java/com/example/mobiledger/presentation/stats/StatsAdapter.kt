@@ -14,6 +14,7 @@ import com.example.mobiledger.R
 import com.example.mobiledger.common.extention.toAmount
 import com.example.mobiledger.databinding.StatsCategoryItemBinding
 import com.example.mobiledger.databinding.StatsChildRecyclerviewItemBinding
+import com.example.mobiledger.databinding.StatsEmptyItemBinding
 import com.example.mobiledger.databinding.StatsHeaderItemBinding
 import com.example.mobiledger.domain.enums.TransactionType
 
@@ -42,6 +43,7 @@ class StatsAdapter(private val onCategoryItemClick: (categoryNameList: List<Stri
             StatsViewType.Header -> HeaderViewHolder(StatsHeaderItemBinding.inflate(layoutInflater, parent, false))
             StatsViewType.GraphData -> GraphsViewHolder(StatsChildRecyclerviewItemBinding.inflate(layoutInflater, parent, false))
             StatsViewType.CategoryData -> CategoryDataViewHolder(StatsCategoryItemBinding.inflate(layoutInflater, parent, false))
+            StatsViewType.EmptyScreen -> EmptyDataViewHolder(StatsEmptyItemBinding.inflate(layoutInflater, parent, false))
         }
     }
 
@@ -50,6 +52,7 @@ class StatsAdapter(private val onCategoryItemClick: (categoryNameList: List<Stri
             is StatsViewItem.HeaderDataRow -> (holder as StatsAdapter.HeaderViewHolder).bind(item.data, item.amount)
             is StatsViewItem.GraphDataRow -> (holder as StatsAdapter.GraphsViewHolder).bind(item.data)
             is StatsViewItem.CategoryDataRow -> (holder as StatsAdapter.CategoryDataViewHolder).bind(item.data)
+            is StatsViewItem.EmptyDataRow -> (holder as StatsAdapter.EmptyDataViewHolder).bind()
         }
     }
 
@@ -102,6 +105,14 @@ class StatsAdapter(private val onCategoryItemClick: (categoryNameList: List<Stri
                     snapHelper.attachToRecyclerView(this)
                     addItemDecoration(CirclePagerIndicatorDecoration())
                 }
+            }
+        }
+    }
+
+    inner class EmptyDataViewHolder(private val viewBinding: StatsEmptyItemBinding) : RecyclerView.ViewHolder(viewBinding.root) {
+        fun bind() {
+            viewBinding.apply {
+                animationView.playAnimation()
             }
         }
     }

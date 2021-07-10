@@ -14,7 +14,7 @@ import com.example.mobiledger.common.utils.DateUtils.getDateInMMyyyyFormat
 import com.example.mobiledger.common.utils.DefaultCategoryUtils.getCategoryIcon
 import com.example.mobiledger.common.utils.DefaultCategoryUtils.getOtherCategoryName
 import com.example.mobiledger.common.utils.GraphUtils
-import com.example.mobiledger.common.utils.GraphUtils.getGraphColorList
+import com.example.mobiledger.common.utils.GraphUtils.getPieGraphColorList
 import com.example.mobiledger.domain.AppResult
 import com.example.mobiledger.domain.enums.TransactionType
 import com.example.mobiledger.domain.usecases.BudgetUseCase
@@ -97,6 +97,11 @@ class StatsViewModel(private val categoryUseCase: CategoryUseCase, private val b
             val barEntryList = mutableListOf<BarEntry>()
             val barChartLabelList = mutableListOf<Int>()
             var barEntryCount = 0f
+
+            if (monthlyCategorySummaryList.isEmpty()){
+                statsViewItemList.add(StatsViewItem.EmptyDataRow)
+                return@withContext statsViewItemList
+            }
 
             if (monthlyBudget != null) {
                 barEntryList.add(BarEntry(barEntryCount++, monthlyBudget.maxBudget.toFloat()))
@@ -201,7 +206,7 @@ class StatsViewModel(private val categoryUseCase: CategoryUseCase, private val b
                     getCategoryIcon(summary.categoryName, transactionType),
                     transactionType,
                     percentageValue.toString(),
-                    "#" + getGraphColorList()[i].toHexString(), summary.categoryAmount,
+                    "#" + getPieGraphColorList()[i].toHexString(), summary.categoryAmount,
                     listOf(summary.categoryName)
                 )
                 resultList.add(Pair(PieEntry(percentageValue.toFloat()), categoryData))

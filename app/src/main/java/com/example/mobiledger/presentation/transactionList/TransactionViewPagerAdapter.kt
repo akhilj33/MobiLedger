@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.mobiledger.R
 import com.example.mobiledger.common.extention.gone
 import com.example.mobiledger.common.extention.visible
 import com.example.mobiledger.databinding.TransactionListRecyclerviewLayoutBinding
@@ -40,9 +41,9 @@ class TransactionViewPagerAdapter(
                         holder.emptyTransactionScreen.visible()
                         holder.emptyTransactionScreen.playAnimation()
                         holder.emptyTransactionListText.visible()
+                        holder.emptyTransactionListText.text = context.getString(R.string.no_income_for_this_month)
                     }
                 }
-
             }
             1 -> {
                 if (expenseList != null) {
@@ -52,6 +53,7 @@ class TransactionViewPagerAdapter(
                         holder.emptyTransactionScreen.visible()
                         holder.emptyTransactionScreen.playAnimation()
                         holder.emptyTransactionListText.visible()
+                        holder.emptyTransactionListText.text = context.getString(R.string.no_expense_for_this_month)
                     }
                 }
             }

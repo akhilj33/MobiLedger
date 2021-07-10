@@ -200,7 +200,7 @@ class CategoryRepositoryImpl(
                             is AppResult.Success -> {
                                 categoryDb.saveMonthlyCategorySummary(
                                     monthYear,
-                                    firebaseResult.data ?: MonthlyCategorySummary(categoryName = category)
+                                    firebaseResult.data ?: return@withContext firebaseResult
                                 )
                             }
                             is AppResult.Failure -> {
