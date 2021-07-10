@@ -38,14 +38,12 @@ class BudgetViewModel(
     private val _errorLiveData: MutableLiveData<Event<ViewError>> = MutableLiveData()
     val errorLiveData: LiveData<Event<ViewError>> = _errorLiveData
 
-
     var expenseCatList: ArrayList<String> = arrayListOf()
     var existingBudgetCatList: ArrayList<String> = arrayListOf()
 
     var budgetTotal: Long = 0
     var monthlyLimit: Long = 0
     private var monthCount = 0
-
 
     fun getBudgetData() {
         _isLoading.value = true
@@ -56,7 +54,6 @@ class BudgetViewModel(
 
     //-------------------- GET BUDGET DATA --------------------
     fun getExpenseCategoryList() {
-        _isLoading.value = true
         viewModelScope.launch {
             when (val result = categoryUseCase.getUserExpenseCategories()) {
                 is AppResult.Success -> {
@@ -73,7 +70,6 @@ class BudgetViewModel(
                 }
             }
         }
-        _isLoading.value = false
     }
 
     fun giveFinalExpenseList(): ArrayList<String> {
@@ -84,7 +80,6 @@ class BudgetViewModel(
     //-------------------- GET BUDGET DATA --------------------
 
     private fun getMonthlyBudgetSummary() {
-        _isLoading.value = true
         viewModelScope.launch {
             val monthlyBudgetCategoryList =
                 async { budgetUseCase.getCategoryBudgetListByMonth(getDateInMMyyyyFormat(getCurrentMonth())) }
@@ -103,6 +98,7 @@ class BudgetViewModel(
                             )
                         )
                     }
+                    _isLoading.value = false
                 }
             }
         }
@@ -127,9 +123,9 @@ class BudgetViewModel(
                             )
                         )
                     }
-                    _isLoading.value = false
                 }
             }
+            _isLoading.value = false
         }
     }
 
@@ -202,7 +198,6 @@ class BudgetViewModel(
         var message: String? = null,
         @StringRes val resID: Int = R.string.generic_error_message
     )
-
 }
 
 private fun mapToCategoryBudgetData(budgetCategoryData: MonthlyCategoryBudget): BudgetCategoryData {

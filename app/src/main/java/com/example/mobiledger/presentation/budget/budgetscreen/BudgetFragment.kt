@@ -16,8 +16,10 @@ import com.example.mobiledger.common.utils.showApplyTemplateDialogFragment
 import com.example.mobiledger.common.utils.showUpdateBudgetDialogFragment
 import com.example.mobiledger.databinding.FragmentBudgetBinding
 import com.example.mobiledger.databinding.SnackViewErrorBinding
+import com.example.mobiledger.presentation.ConditionalOneTimeObserver
 import com.example.mobiledger.presentation.OneTimeObserver
 import com.example.mobiledger.presentation.budget.MonthlyBudgetData
+import com.example.mobiledger.presentation.main.NavTab
 
 class BudgetFragment : BaseFragment<FragmentBudgetBinding, BudgetNavigator>(R.layout.fragment_budget) {
 
@@ -52,6 +54,13 @@ class BudgetFragment : BaseFragment<FragmentBudgetBinding, BudgetNavigator>(R.la
         viewModel.getBudgetData()
     }
 
+    private fun resetState() {
+        viewBinding.apply {
+            rvBudget.scrollToPosition(0)
+        }
+        viewModel.getBudgetData()
+    }
+
     private fun setOnClickListener() {
         viewBinding.apply {
             monthNavigationBar.leftArrow.setOnClickListener { handleLeftClick() }
@@ -60,6 +69,16 @@ class BudgetFragment : BaseFragment<FragmentBudgetBinding, BudgetNavigator>(R.la
     }
 
     private fun setUpObserver() {
+
+        activityViewModel.currentTab.observe(viewLifecycleOwner, ConditionalOneTimeObserver { tab ->
+            return@ConditionalOneTimeObserver when (tab) {
+                is NavTab.BUDGET -> {
+                    resetState()
+                    true
+                }
+                else -> false
+            }
+        })
 
         activityViewModel.updateBudgetResultLiveData.observe(viewLifecycleOwner, OneTimeObserver {
             refreshView()
@@ -81,13 +100,13 @@ class BudgetFragment : BaseFragment<FragmentBudgetBinding, BudgetNavigator>(R.la
             viewBinding.monthNavigationBar.tvMonth.text = it
         })
 
-        viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
+        viewModel.isLoading.observe(viewLifecycleOwner, { isLoading ->
             if (isLoading) {
                 showSwipeRefresh()
             } else {
                 hideSwipeRefresh()
             }
-        }
+        })
     }
 
     private fun initRecyclerView() {

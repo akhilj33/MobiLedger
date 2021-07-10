@@ -1,6 +1,5 @@
 package com.example.mobiledger.presentation.profile
 
-
 import android.app.Activity
 import android.net.Uri
 import android.os.Bundle
@@ -28,12 +27,10 @@ import com.example.mobiledger.domain.entities.UserEntity
 import com.example.mobiledger.presentation.NormalObserver
 import com.example.mobiledger.presentation.OneTimeObserver
 
-
-class ProfileFragment : BaseFragment<FragmentProfileBinding, ProfileNavigator>(R.layout.fragment_profile) {
+class ProfileFragment : BaseFragment<FragmentProfileBinding, ProfileNavigator>(R.layout.fragment_profile, StatusBarColor.BLUE) {
 
     private val viewModel: ProfileViewModel by viewModels { viewModelFactory }
     private var cameraFileUri: Uri? = null
-
     private var enableBiometric = false
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -83,7 +80,7 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding, ProfileNavigator>(R
                 navigator?.navigateToEditProfileScreen()
             }
 
-            accountView.imgCategoryNavigate.setOnClickListener {
+            accountView.categoryLabel.setOnClickListener {
                 navigator?.navigateToCategoryFragmentScreen()
             }
 
@@ -91,11 +88,11 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding, ProfileNavigator>(R
                 logout()
             }
 
-            accountView.imgBudgetTemplatesNavigate.setOnClickListener {
+            accountView.budgetTemplatesLabel.setOnClickListener {
                 navigator?.navigateToBudgetTemplateFragment()
             }
 
-            appView.imgAboutUsNavigate.setOnClickListener {
+            appView.aboutUsLabel.setOnClickListener {
                 navigator?.navigateToAboutUsFragment()
             }
 
@@ -126,7 +123,7 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding, ProfileNavigator>(R
         viewBinding.emailTv.text = user.emailId ?: ""
         viewBinding.contactNumTv.text = user.phoneNo ?: ""
         if (user.photoUrl!=null) Glide.with(this).load(user.photoUrl).circleCrop().into(viewBinding.imgUser)
-
+        else Glide.with(this).load(R.drawable.profile_colorful).circleCrop().into(viewBinding.imgUser)
     }
 
     private fun initSwitchCompact() {

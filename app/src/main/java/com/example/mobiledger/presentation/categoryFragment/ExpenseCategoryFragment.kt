@@ -3,20 +3,18 @@ package com.example.mobiledger.presentation.categoryFragment
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.mobiledger.R
 import com.example.mobiledger.common.base.BaseFragment
 import com.example.mobiledger.common.base.BaseNavigator
 import com.example.mobiledger.common.utils.showAddCategoryDialogFragment
 import com.example.mobiledger.databinding.FragmentExpenseCategoryBinding
-import com.example.mobiledger.databinding.SnackViewErrorBinding
 import com.example.mobiledger.domain.enums.TransactionType
 import com.example.mobiledger.presentation.OneTimeObserver
 import com.example.mobiledger.presentation.categoryFragment.adapter.CategoryAdapter
-import com.example.mobiledger.presentation.addtransaction.AddTransactionViewModel
 
-class ExpenseCategoryFragment : BaseFragment<FragmentExpenseCategoryBinding, BaseNavigator>(R.layout.fragment_expense_category) {
+class ExpenseCategoryFragment :
+    BaseFragment<FragmentExpenseCategoryBinding, BaseNavigator>(R.layout.fragment_expense_category, StatusBarColor.BLUE) {
 
     private val viewModel: ExpenseCategoryViewModel by viewModels { viewModelFactory }
 
@@ -60,7 +58,7 @@ class ExpenseCategoryFragment : BaseFragment<FragmentExpenseCategoryBinding, Bas
             }
         })
 
-        activityViewModel.addCategoryResultLiveData.observe(viewLifecycleOwner, OneTimeObserver{
+        activityViewModel.addCategoryResultLiveData.observe(viewLifecycleOwner, OneTimeObserver {
             viewModel.getExpenseCategoryList()
         })
     }

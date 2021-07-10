@@ -17,7 +17,7 @@ import com.example.mobiledger.presentation.OneTimeObserver
 import com.example.mobiledger.presentation.categoryFragment.adapter.CategoryAdapter
 import com.example.mobiledger.presentation.addtransaction.AddTransactionViewModel
 
-class IncomeCategoryFragment : BaseFragment<FragmentIncomeCategoryBinding, BaseNavigator>(R.layout.fragment_income_category) {
+class IncomeCategoryFragment : BaseFragment<FragmentIncomeCategoryBinding, BaseNavigator>(R.layout.fragment_income_category, StatusBarColor.BLUE) {
 
     private val viewModel: IncomeCategoryViewModel by viewModels { viewModelFactory }
 

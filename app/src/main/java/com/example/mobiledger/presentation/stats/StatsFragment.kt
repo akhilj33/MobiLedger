@@ -48,7 +48,7 @@ class StatsFragment : BaseFragment<FragmentStatsBinding, StatsNavigator>(R.layou
 
     private fun setUpObservers() {
         activityViewModel.currentTab.observe(viewLifecycleOwner, ConditionalOneTimeObserver { tab ->
-            when (tab) {
+           return@ConditionalOneTimeObserver when (tab) {
                 is NavTab.STATS -> {
                     resetState()
                     true

@@ -11,15 +11,15 @@
     <string name="device_offline_error_message">You are not connected to the internet.</string>
 
     <!--Login Screen-->
-    <string name="email_id">Email Id*</string>
-    <string name="password">Password*</string>
+    <string name="email_id">Email Id</string>
+    <string name="password">Password</string>
     <string name="forget_password">Forget Password</string>
     <string name="login">Login</string>
     <string name="new_user_sign_up">New user? SIGN UP</string>
     <string name="google_icon">Google Icon</string>
 
     <!--SignUp Screen-->
-    <string name="confirm_password">Confirm Password*</string>
+    <string name="confirm_password">Confirm Password</string>
     <string name="sign_up">Sign Up</string>
     <string name="signup_failed">Sign up Failed</string>
     <string name="empty_field_msg">Any field cannot be empty</string>
@@ -81,7 +81,7 @@
     <string name="add_transaction">Add transaction</string>
     <string name="latest_transaction">Latest Transactions</string>
     <string name="hello_name">Hello, %1$s</string>
-    <string name="you_have_not_recorded_any_transaction_this_so_far_this_month">You have not recorded any transaction this so far this month</string>
+    <string name="you_have_not_recorded_any_transaction_this_so_far_this_month">You have not recorded any transaction in this month so far</string>
 
     <!-- Add Category Dialog Fragment -->
     <string name="add_new_income_category">Add new income category</string>
@@ -113,6 +113,8 @@
     <string name="monthly_analysis">Monthly Analysis</string>
     <string name="delete">Delete</string>
     <string name="no_transactions_added_for_this_month">No transactions added for this month</string>
+    <string name="no_income_for_this_month">Ooops!! No Income in this month</string>
+    <string name="no_expense_for_this_month">Wow!! No Expense in this month</string>
 
     <!-- Budget Fragment -->
     <string name="make_budget">Make Budget</string>
@@ -188,5 +190,7 @@
     <string name="reset_password_msg">Link to reset your password will be sent to your registered email address</string>
     <string name="reset_password">Reset Password</string>
     <string name="transaction_list">Transaction List</string>
+    <string name="stats_empty_screen_msg">Add few transactions to analyze your spending and earnings using graphs</string>
+    <string name="stats_empty_heading">Oops!! No Stats Found</string>
 
 </resources>
