@@ -7,6 +7,7 @@ object ConstantUtils {
     const val EMAIL_ID = "emailId"
     const val USER_NAME = "userName"
     const val PHONE_NUMBER = "phoneNo"
+    const val PHOTO_URI = "photoUrl"
     const val MONTH = "Months"
     const val TRANSACTION = "Transaction"
     const val NO_OF_EXPENSE_TRANSACTION = "noOfExpenseTransaction"

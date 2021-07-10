@@ -17,7 +17,7 @@ import com.example.mobiledger.databinding.SnackViewErrorBinding
 import com.example.mobiledger.presentation.OneTimeObserver
 import java.util.*
 
-class StatsDetailFragment : BaseFragment<FragmentStatsDetailBinding, BaseNavigator>(R.layout.fragment_stats_detail) {
+class StatsDetailFragment : BaseFragment<FragmentStatsDetailBinding, BaseNavigator>(R.layout.fragment_stats_detail, StatusBarColor.BLUE) {
 
     private val viewModel: StatsDetailViewModel by viewModels { viewModelFactory }
     private val statsDetailAdapter: StatsDetailAdapter by lazy { StatsDetailAdapter() }

@@ -1,5 +1,6 @@
 package com.example.mobiledger.common.utils
 
+import android.net.Uri
 import androidx.room.TypeConverter
 import com.example.mobiledger.common.utils.JsonUtils.convertJsonStringToObject
 import com.example.mobiledger.data.sources.room.categories.DocumentReferenceRoomItem
@@ -59,5 +60,17 @@ object RoomConverters {
     @JvmStatic
     fun toDocRefEntityList(value: String?): MutableList<DocumentReferenceRoomItem>? {
         return convertJsonStringToObject<MutableList<DocumentReferenceRoomItem>>(value)
+    }
+
+    @TypeConverter
+    @JvmStatic
+    fun fromUri(value: Uri?): String? {
+        return JsonUtils.convertToJsonString(value)
+    }
+
+    @TypeConverter
+    @JvmStatic
+    fun toUri(value: String?): Uri? {
+        return convertJsonStringToObject<Uri>(value)
     }
 }

@@ -1,19 +1,26 @@
 package com.example.mobiledger.presentation.main
 
 import android.app.NotificationManager
+import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.annotation.ColorRes
 import androidx.annotation.RequiresApi
+import androidx.annotation.StringRes
 import androidx.appcompat.widget.AppCompatImageView
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.work.*
 import com.example.mobiledger.R
 import com.example.mobiledger.common.base.BaseActivity
+import com.example.mobiledger.common.showAlertDialog
+import com.example.mobiledger.common.showToast
 import com.example.mobiledger.common.utils.ConstantUtils
 import com.example.mobiledger.common.utils.DailyReminderWorker
 import com.example.mobiledger.databinding.ActivityMainBinding
@@ -189,6 +196,35 @@ class MainActivity :
         }
     }
 
+    fun shouldShowRequestPermissionRationale(permissions: Array<String>): Boolean = permissions.all {
+        ActivityCompat.shouldShowRequestPermissionRationale(this, it)
+    }
+
+    fun showGoToSettingsDialog(@StringRes dialogString: Int) {
+        this.let {
+            val dialogTitle = getString(R.string.permission_required_dialog_title)
+            val dialogMessage = getString(dialogString)
+            it.showAlertDialog(
+                dialogTitle,
+                dialogMessage,
+                getString(R.string.go_to_settings),
+                getString(R.string.cancel),
+                onDenyClick,
+                onGoToSettingsClick
+            )
+        }
+    }
+
+    private val onDenyClick = {
+        showToast(getString(R.string.required_permission_not_granted))
+    }
+
+    private val onGoToSettingsClick = {
+        val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+        val uri = Uri.fromParts("package", packageName, null)
+        intent.data = uri
+        startActivity(Intent.createChooser(intent, null))
+    }
 
     /*------------------------------------------------Live Data Observers----------------------------------------------------*/
 

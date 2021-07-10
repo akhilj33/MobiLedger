@@ -1,5 +1,6 @@
 package com.example.mobiledger.data.sources.room.profile
 
+import android.net.Uri
 import com.example.mobiledger.common.utils.ErrorCodes
 import com.example.mobiledger.domain.AppError
 import com.example.mobiledger.domain.AppResult
@@ -10,6 +11,7 @@ interface ProfileDb {
     suspend fun saveUser(userInfo: UserEntity)
     suspend fun hasUser(): Boolean
     suspend fun updateUserName(username: String, uId: String)
+    suspend fun updatePhoto(photoUri: Uri, uId: String)
     suspend fun updateEmailId(emailId: String, uId: String)
     suspend fun updatePhoneNo(phoneNo: String, uId: String)
 
@@ -37,6 +39,10 @@ class ProfileDbImpl(private val dao: ProfileDao) : ProfileDb {
 
     override suspend fun updateUserName(username: String, uId: String) {
         dao.updateUserName(username, uId)
+    }
+
+    override suspend fun updatePhoto(photoUri: Uri, uId: String) {
+        dao.updatePhotoUri(photoUri, uId)
     }
 
     override suspend fun updateEmailId(emailId: String, uId: String) {
