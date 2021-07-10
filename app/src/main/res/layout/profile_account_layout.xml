@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/profile_curved_view"
+        android:paddingBottom="@dimen/cdp_16">
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/accountLabel"
+            style="@style/GelionRegularGrey18"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/cdp_16"
+            android:layout_marginTop="@dimen/cdp_10"
+            android:maxLines="1"
+            android:text="@string/account"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/imgNotifications"
+            android:layout_width="@dimen/cdp_22"
+            android:layout_height="@dimen/cdp_22"
+            android:layout_marginTop="@dimen/cdp_24"
+            app:layout_constraintBottom_toTopOf="@id/notificationSeparator"
+            app:layout_constraintEnd_toStartOf="@id/notificationsLabel"
+            app:layout_constraintStart_toStartOf="@id/accountLabel"
+            app:layout_constraintTop_toBottomOf="@id/accountLabel"
+            app:srcCompat="@drawable/ic_notifications_blue_24" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/notificationsLabel"
+            style="@style/GelionRegularBlue18"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/cdp_16"
+            android:maxLines="1"
+            android:text="@string/notifications"
+            app:layout_constraintBottom_toBottomOf="@id/imgNotifications"
+            app:layout_constraintEnd_toStartOf="@id/toggleBtnNotification"
+            app:layout_constraintStart_toEndOf="@id/imgNotifications"
+            app:layout_constraintTop_toTopOf="@id/imgNotifications" />
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/toggleBtnNotification"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/cdp_16"
+            android:theme="@style/SCBSwitch"
+            app:layout_constraintBottom_toBottomOf="@id/imgNotifications"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/notificationsLabel"
+            app:layout_constraintTop_toTopOf="@id/imgNotifications" />
+
+        <View
+            android:id="@+id/notificationSeparator"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/cdp_0.5"
+            android:layout_marginTop="@dimen/cdp_10"
+            android:background="@color/colorGrey"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/imgNotifications" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/imgBiometrics"
+            android:layout_width="@dimen/cdp_22"
+            android:layout_height="@dimen/cdp_22"
+            android:layout_marginTop="@dimen/cdp_10"
+            app:layout_constraintBottom_toTopOf="@id/biometricsSeparator"
+            app:layout_constraintEnd_toStartOf="@id/biometricsLabel"
+            app:layout_constraintStart_toStartOf="@id/accountLabel"
+            app:layout_constraintTop_toBottomOf="@id/notificationSeparator"
+            app:srcCompat="@drawable/secure_blue_22" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/biometricsLabel"
+            style="@style/GelionRegularBlue18"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/cdp_16"
+            android:maxLines="1"
+            android:text="@string/biometrics"
+            app:layout_constraintBottom_toBottomOf="@id/imgBiometrics"
+            app:layout_constraintEnd_toStartOf="@id/toggleBtnBiometric"
+            app:layout_constraintStart_toEndOf="@id/imgBiometrics"
+            app:layout_constraintTop_toTopOf="@id/imgBiometrics" />
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/toggleBtnBiometric"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/cdp_16"
+            android:theme="@style/SCBSwitch"
+            app:layout_constraintBottom_toBottomOf="@id/imgBiometrics"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/biometricsLabel"
+            app:layout_constraintTop_toTopOf="@id/imgBiometrics" />
+
+        <View
+            android:id="@+id/biometricsSeparator"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/cdp_0.5"
+            android:layout_marginTop="@dimen/cdp_10"
+            android:background="@color/colorGrey"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/imgBiometrics" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/imgDailyReminder"
+            android:layout_width="@dimen/cdp_22"
+            android:layout_height="@dimen/cdp_22"
+            android:layout_marginTop="@dimen/cdp_10"
+            app:layout_constraintBottom_toTopOf="@id/dailyReminderSeparator"
+            app:layout_constraintEnd_toStartOf="@id/dailyReminderLabel"
+            app:layout_constraintStart_toStartOf="@id/accountLabel"
+            app:layout_constraintTop_toBottomOf="@id/biometricsSeparator"
+            app:srcCompat="@drawable/reminder_blue_22" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/dailyReminderLabel"
+            style="@style/GelionRegularBlue18"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/cdp_16"
+            android:maxLines="1"
+            android:text="@string/daily_reminder"
+            app:layout_constraintBottom_toBottomOf="@id/imgDailyReminder"
+            app:layout_constraintEnd_toStartOf="@id/toggleBtnReminder"
+            app:layout_constraintStart_toEndOf="@id/imgDailyReminder"
+            app:layout_constraintTop_toTopOf="@id/imgDailyReminder" />
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/toggleBtnReminder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/cdp_16"
+            android:theme="@style/SCBSwitch"
+            app:layout_constraintBottom_toBottomOf="@id/imgDailyReminder"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/dailyReminderLabel"
+            app:layout_constraintTop_toTopOf="@id/imgDailyReminder" />
+
+        <View
+            android:id="@+id/dailyReminderSeparator"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/cdp_0.5"
+            android:layout_marginTop="@dimen/cdp_10"
+            android:background="@color/colorGrey"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/imgDailyReminder" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/imgCategory"
+            android:layout_width="@dimen/cdp_22"
+            android:layout_height="@dimen/cdp_22"
+            android:layout_marginTop="@dimen/cdp_10"
+            app:layout_constraintBottom_toTopOf="@id/categorySeparator"
+            app:layout_constraintEnd_toStartOf="@id/categoryLabel"
+            app:layout_constraintStart_toStartOf="@id/accountLabel"
+            app:layout_constraintTop_toBottomOf="@id/dailyReminderSeparator"
+            app:srcCompat="@drawable/category_blue_22" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/categoryLabel"
+            style="@style/GelionRegularBlue18"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/cdp_16"
+            android:maxLines="1"
+            android:text="@string/category"
+            app:layout_constraintBottom_toBottomOf="@id/imgCategory"
+            app:layout_constraintEnd_toStartOf="@id/imgCategoryNavigate"
+            app:layout_constraintStart_toEndOf="@id/imgCategory"
+            app:layout_constraintTop_toTopOf="@id/imgCategory" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/imgCategoryNavigate"
+            android:layout_width="@dimen/cdp_22"
+            android:layout_height="@dimen/cdp_22"
+            android:layout_marginEnd="@dimen/cdp_16"
+            app:layout_constraintBottom_toBottomOf="@id/imgCategory"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/categoryLabel"
+            app:layout_constraintTop_toTopOf="@id/imgCategory"
+            app:srcCompat="@drawable/arrow_right" />
+
+        <View
+            android:id="@+id/categorySeparator"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/cdp_0.5"
+            android:layout_marginTop="@dimen/cdp_10"
+            android:background="@color/colorGrey"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/imgCategory" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/imgBudgetTemplates"
+            android:layout_width="@dimen/cdp_22"
+            android:layout_height="@dimen/cdp_22"
+            android:layout_marginTop="@dimen/cdp_10"
+            app:layout_constraintEnd_toStartOf="@id/budgetTemplatesLabel"
+            app:layout_constraintStart_toStartOf="@id/accountLabel"
+            app:layout_constraintTop_toBottomOf="@id/categorySeparator"
+            app:srcCompat="@drawable/budget_template_22" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/budgetTemplatesLabel"
+            style="@style/GelionRegularBlue18"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/cdp_16"
+            android:maxLines="1"
+            android:text="@string/budget_templates"
+            app:layout_constraintBottom_toBottomOf="@id/imgBudgetTemplates"
+            app:layout_constraintEnd_toStartOf="@id/imgBudgetTemplatesNavigate"
+            app:layout_constraintStart_toEndOf="@id/imgBudgetTemplates"
+            app:layout_constraintTop_toTopOf="@id/imgBudgetTemplates" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/imgBudgetTemplatesNavigate"
+            android:layout_width="@dimen/cdp_22"
+            android:layout_height="@dimen/cdp_22"
+            android:layout_marginEnd="@dimen/cdp_16"
+            app:layout_constraintBottom_toBottomOf="@id/imgBudgetTemplates"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/budgetTemplatesLabel"
+            app:layout_constraintTop_toTopOf="@id/imgBudgetTemplates"
+            app:srcCompat="@drawable/arrow_right" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

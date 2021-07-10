@@ -34,7 +34,7 @@
     <!--    SwitchCompat theme-->
     <style name="SCBSwitch" parent="Theme.AppCompat.Light">
         <!-- active thumb color-->
-        <item name="colorControlActivated">#0046fe</item>
+        <item name="colorControlActivated">@color/colorAppBlue</item>
     </style>
 
     <style name="FullScreenDialogStatusBarGrey" parent="FullScreenDialog">
@@ -146,6 +146,10 @@
 
     <style name="GelionRegularWhite20" parent="GelionRegular20">
         <item name="android:textColor">@color/colorWhite</item>
+    </style>
+
+    <style name="GelionRegularGrey18" parent="GelionRegular18">
+        <item name="android:textColor">@color/colorGrey</item>
     </style>
 
     <style name="GelionSemiBoldBlue18" parent="GelionSemiBold18">

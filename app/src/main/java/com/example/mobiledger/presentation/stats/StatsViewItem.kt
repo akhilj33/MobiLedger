@@ -7,12 +7,16 @@ import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.data.PieEntry
 
 sealed class StatsViewItem(val viewType: StatsViewType) {
-    data class HeaderDataRow(@StringRes val data: Int, val amount: String, val type: StatsViewType = StatsViewType.Header) : StatsViewItem(type)
+    data class HeaderDataRow(@StringRes val data: Int, val amount: String, val type: StatsViewType = StatsViewType.Header) :
+        StatsViewItem(type)
+
     data class GraphDataRow(val data: MutableList<StatsGraphViewItem>, val type: StatsViewType = StatsViewType.GraphData) :
         StatsViewItem(type)
 
     data class CategoryDataRow(val data: CategoryData, val type: StatsViewType = StatsViewType.CategoryData) :
         StatsViewItem(type)
+
+    object EmptyDataRow : StatsViewItem(StatsViewType.EmptyScreen)
 }
 
 data class CategoryData(
@@ -26,14 +30,23 @@ data class CategoryData(
 )
 
 sealed class StatsGraphViewItem(val viewType: StatsGraphViewType) {
-    data class PieGraphRow(val pieEntryList: List<PieEntry>,@StringRes val header: Int, val type: StatsGraphViewType = StatsGraphViewType.PieChartView) :
+    data class PieGraphRow(
+        val pieEntryList: List<PieEntry>,
+        @StringRes val header: Int,
+        val type: StatsGraphViewType = StatsGraphViewType.PieChartView
+    ) :
         StatsGraphViewItem(type)
 
-    data class BarGraphRow(val barEntryList: List<BarEntry>,val labelList: List<Int>, @StringRes val header: Int, val type: StatsGraphViewType = StatsGraphViewType.BarChartView) :
+    data class BarGraphRow(
+        val barEntryList: List<BarEntry>,
+        val labelList: List<Int>,
+        @StringRes val header: Int,
+        val type: StatsGraphViewType = StatsGraphViewType.BarChartView
+    ) :
         StatsGraphViewItem(type)
 }
 
-enum class StatsViewType { Header, GraphData, CategoryData }
+enum class StatsViewType { Header, GraphData, CategoryData, EmptyScreen }
 enum class StatsGraphViewType { PieChartView, BarChartView }
 
 

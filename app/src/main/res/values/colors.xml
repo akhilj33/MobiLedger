@@ -25,5 +25,6 @@
     <color name="colorPurple">#6200EE</color>
     <color name="inactiveDotGrey">#b2bfca</color>
     <color name="transparent">#00000000</color>
+    <color name="colorLightBlue">#985EFF</color>
 
 </resources>

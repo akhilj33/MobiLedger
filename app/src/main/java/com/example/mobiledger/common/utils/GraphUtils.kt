@@ -36,7 +36,7 @@ object GraphUtils {
         pieDataSet.yValuePosition = PieDataSet.ValuePosition.OUTSIDE_SLICE
         pieDataSet.sliceSpace = 1f
         pieDataSet.selectionShift = 5f
-        pieDataSet.colors = getGraphColorList()
+        pieDataSet.colors = getPieGraphColorList()
         val pieData = PieData(pieDataSet)
         pieData.setValueTextSize(18f)
         pieData.setValueTextColor(Color.BLACK)
@@ -57,7 +57,7 @@ object GraphUtils {
 
         barChart.setDrawGridBackground(false)
         val barDataSet = BarDataSet(arrayList, "")
-        barDataSet.colors = getGraphColorList()
+        barDataSet.colors = getBarGraphColorList()
         val barData = BarData(barDataSet)
         barData.barWidth = 0.2f
         barChart.data = barData
@@ -149,10 +149,15 @@ object GraphUtils {
 
     }
 
-    fun getGraphColorList() = listOf(
+    fun getPieGraphColorList() = listOf(
         rgb(124, 179, 66), rgb(255, 82, 82),
         rgb(130, 177, 255), rgb(255, 196, 0),
         rgb(141, 110, 99), rgb(77, 182, 172)
+    )
+
+    fun getBarGraphColorList() = listOf(
+        rgb(176,0,32), rgb(48,0,156), rgb(244,67,54), rgb(0,196,180),
+        rgb(240,98,146)
     )
 
     val otherColor = rgb(141, 110, 99)
