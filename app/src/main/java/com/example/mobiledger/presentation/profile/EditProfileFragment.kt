@@ -4,10 +4,10 @@ import android.os.Bundle
 import android.util.Patterns
 import android.view.View
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import com.example.mobiledger.R
 import com.example.mobiledger.common.base.BaseFragment
 import com.example.mobiledger.common.base.BaseNavigator
+import com.example.mobiledger.common.showAlertDialog
 import com.example.mobiledger.common.showToast
 import com.example.mobiledger.common.utils.ValidationUtils
 import com.example.mobiledger.databinding.FragmentEditProfileBinding
@@ -15,7 +15,7 @@ import com.example.mobiledger.databinding.SnackViewErrorBinding
 import com.example.mobiledger.presentation.OneTimeObserver
 
 
-class EditProfileFragment : BaseFragment<FragmentEditProfileBinding, BaseNavigator>(R.layout.fragment_edit_profile) {
+class EditProfileFragment : BaseFragment<FragmentEditProfileBinding, BaseNavigator>(R.layout.fragment_edit_profile, StatusBarColor.BLUE) {
 
     override fun isBottomNavVisible(): Boolean = false
     override fun getSnackBarErrorView(): SnackViewErrorBinding = viewBinding.includeErrorView
@@ -39,7 +39,7 @@ class EditProfileFragment : BaseFragment<FragmentEditProfileBinding, BaseNavigat
             }
         )
 
-        viewModel.loadingState.observe(viewLifecycleOwner, Observer {
+        viewModel.loadingState.observe(viewLifecycleOwner, {
             if (it) {
                 viewBinding.editProfileProgressBar.visibility = View.VISIBLE
             } else {
@@ -93,21 +93,32 @@ class EditProfileFragment : BaseFragment<FragmentEditProfileBinding, BaseNavigat
             }
         }
 
-        viewBinding.btnPasswordUpdate.setOnClickListener {
-            val password = viewBinding.textPassword.text.toString()
-            val confirmPassword = viewBinding.textConfirmPassword.text.toString()
-            if (password.isEmpty() || confirmPassword.isEmpty()) {
-                activity?.showToast(getString(R.string.single_empty_field_msg))
-            } else if (password != confirmPassword) {
-                activity?.showToast(getString(R.string.confirm_password_mismatched_msg))
-            } else if (!ValidationUtils.passwordValidator(password)) {
-                activity?.showToast(getString(R.string.password_requirement))
-            } else {
-                viewModel.updatePassword(viewBinding.textPassword.text.toString())
-            }
+        viewBinding.changePassword.setOnClickListener {
+            sendPasswordResetEmail()
+        }
+        viewBinding.imgChangePassword.setOnClickListener {
+            sendPasswordResetEmail()
         }
     }
 
+    private fun sendPasswordResetEmail() {
+        activity?.showAlertDialog(
+            getString(R.string.change_password),
+            getString(R.string.change_password_message),
+            getString(R.string.yes),
+            getString(R.string.no),
+            onCancelButtonClick,
+            onContinueClick
+        )
+    }
+
+    private val onCancelButtonClick = {
+
+    }
+
+    private val onContinueClick = {
+        viewModel.sendEmailToResetPassword()
+    }
 
     companion object {
         fun newInstance() = EditProfileFragment()

@@ -62,12 +62,14 @@
     <string name="logout_message">Are you sure?</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
-    <string name="account">ACCOUNT</string>
+    <string name="settings_cap">SETTINGS</string>
     <string name="notifications">Notifications</string>
     <string name="biometrics">Biometrics</string>
     <string name="app">APP</string>
     <string name="rate_us">Rate Us</string>
     <string name="share_with_friends">Share with Friends</string>
+    <string name="change_password">Change Password</string>
+    <string name="change_password_message">Send the link to change password on your email?</string>
 
     <!--Add Transaction Dialog Fragment-->
     <string name="transaction_added">Transaction Added</string>
@@ -194,5 +196,6 @@
     <string name="transaction_list">Transaction List</string>
     <string name="stats_empty_screen_msg">Add few transactions to analyze your spending and earnings using graphs</string>
     <string name="stats_empty_heading">Oops!! No Stats Found</string>
+
 
 </resources>
