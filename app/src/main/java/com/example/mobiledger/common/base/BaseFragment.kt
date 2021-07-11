@@ -1,5 +1,6 @@
 package com.example.mobiledger.common.base
 
+import android.annotation.SuppressLint
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.os.Build
@@ -32,6 +33,7 @@ import com.example.mobiledger.databinding.SnackViewErrorBinding
 import com.example.mobiledger.presentation.NormalObserver
 import com.example.mobiledger.presentation.main.MainActivity
 import com.example.mobiledger.presentation.main.MainActivityViewModel
+import com.google.firebase.analytics.FirebaseAnalytics
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
@@ -46,10 +48,13 @@ abstract class BaseFragment<B : ViewDataBinding, NV : BaseNavigator>(
     protected val viewModelFactory = DependencyProvider.provideViewModelFactory()
     protected val activityViewModel: MainActivityViewModel by activityViewModels()
 
+    protected var firebaseAnalytics: FirebaseAnalytics? = null
+
     val viewBinding get() = _viewBinding!!
 
     private val errorTimeOut: Long = 5000
 
+    @SuppressLint("MissingPermission")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         activity?.onBackPressedDispatcher?.addCallback(this, backPressCallback)
@@ -63,6 +68,7 @@ abstract class BaseFragment<B : ViewDataBinding, NV : BaseNavigator>(
                 Timber.e("Activity Navigator should implement Fragment navigator")
             }
         }
+        firebaseAnalytics = FirebaseAnalytics.getInstance(requireActivity())
     }
 
     override fun onCreateView(
@@ -164,6 +170,14 @@ abstract class BaseFragment<B : ViewDataBinding, NV : BaseNavigator>(
     protected fun handleNativeToast(toast: NativeToastData) {
         toast.msg?.let { requireActivity().showToast(it) }
             ?: toast.msgRes?.let { requireActivity().showToast(getString(it)) }
+    }
+
+    /*---------------------------------------Analytics--------------------------------------*/
+
+    protected fun logEvent(msg: String) {
+        val bundle = Bundle()
+        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, msg)
+        firebaseAnalytics?.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle)
     }
 
     /*------------------------------------Snack Bar error ----------------------------------------*/

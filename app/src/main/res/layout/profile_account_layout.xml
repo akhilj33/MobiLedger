@@ -16,7 +16,7 @@
             android:layout_marginStart="@dimen/cdp_16"
             android:layout_marginTop="@dimen/cdp_10"
             android:maxLines="1"
-            android:text="@string/account"
+            android:text="@string/settings_cap"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

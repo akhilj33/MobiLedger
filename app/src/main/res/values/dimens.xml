@@ -20,12 +20,14 @@
     <dimen name="cdp_30">30dp</dimen>
     <dimen name="cdp_32">32dp</dimen>
     <dimen name="cdp_36">36dp</dimen>
+    <dimen name="cdp_44">44dp</dimen>
     <dimen name="cdp_48">48dp</dimen>
     <dimen name="cdp_50">50dp</dimen>
     <dimen name="cdp_56">56dp</dimen>
     <dimen name="cdp_64">64dp</dimen>
     <dimen name="cdp_70">70dp</dimen>
     <dimen name="cdp_100">100dp</dimen>
+    <dimen name="cdp_160">160dp</dimen>
     <dimen name="cdp_180">180dp</dimen>
     <dimen name="cdp_200">200dp</dimen>
     <dimen name="cdp_320">320dp</dimen>

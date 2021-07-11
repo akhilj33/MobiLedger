@@ -62,12 +62,14 @@
     <string name="logout_message">Are you sure?</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
-    <string name="account">ACCOUNT</string>
+    <string name="settings_cap">SETTINGS</string>
     <string name="notifications">Notifications</string>
     <string name="biometrics">Biometrics</string>
     <string name="app">APP</string>
     <string name="rate_us">Rate Us</string>
     <string name="share_with_friends">Share with Friends</string>
+    <string name="change_password">Change Password</string>
+    <string name="change_password_message">Send the link to change password on your email?</string>
 
     <!--Add Transaction Dialog Fragment-->
     <string name="transaction_added">Transaction Added</string>
@@ -97,7 +99,7 @@
     <string name="category_already_exist">Category Already Exist</string>
     <string name="date">Date</string>
     <string name="add_category_budget">Add category budget</string>
-    <string name="login_with">Login with</string>
+    <string name="login_with">Or</string>
     <string name="income_vs_expense">Income Vs Expense</string>
     <string name="add_monthly_budget">Add Monthly Budget</string>
     <string name="monthly_statistics">Monthly Statistics</string>
@@ -160,6 +162,8 @@
     <string name="apply">Apply</string>
     <string name="templates">Templates</string>
     <string name="apply_template_msg">Are you sure you want to apply this template?</string>
+    <string name="budget_template_created_msg">Budget Template created</string>
+    <string name="no_templates_added">No Templates added</string>
 
 
     <!-- On Boarding -->
@@ -192,5 +196,7 @@
     <string name="transaction_list">Transaction List</string>
     <string name="stats_empty_screen_msg">Add few transactions to analyze your spending and earnings using graphs</string>
     <string name="stats_empty_heading">Oops!! No Stats Found</string>
+    <string name="get_started_with_google">Get started with Google</string>
+
 
 </resources>

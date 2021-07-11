@@ -45,6 +45,7 @@ class HomeFragment :
 
     private fun setUpObservers() {
         activityViewModel.updateTransactionResultLiveData.observe(viewLifecycleOwner, OneTimeObserver {
+            logEvent(getString(R.string.transaction_added))
             refreshView()
         })
 

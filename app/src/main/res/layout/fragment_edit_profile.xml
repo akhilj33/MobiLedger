@@ -4,272 +4,271 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".presentation.profile.EditProfileFragment">
 
-    <RelativeLayout
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ScrollView
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/editProfileToolbar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:background="@color/colorAppBlue"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <com.google.android.material.appbar.MaterialToolbar
-                    android:id="@+id/editProfileToolbar"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/colorPrimaryDark"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-
-                        <ImageView
-                            android:id="@+id/btnBack"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentStart="true"
-                            android:layout_centerVertical="true"
-                            android:contentDescription="@string/back"
-                            android:src="@drawable/baseline_arrow_white_24" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerVertical="true"
-                            android:layout_marginStart="@dimen/cdp_16"
-                            android:layout_toEndOf="@id/btnBack"
-                            android:text="@string/edit_profile"
-                            android:textColor="@color/colorWhite"
-                            android:textSize="@dimen/csp_20" />
-
-                    </RelativeLayout>
-
-                </com.google.android.material.appbar.MaterialToolbar>
-
-                <!--          VERTICAL GUIDELINES          -->
-
-                <androidx.constraintlayout.widget.Guideline
-                    android:id="@+id/verticalScreenGuideline_04"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    app:layout_constraintGuide_percent="0.04" />
-
-                <androidx.constraintlayout.widget.Guideline
-                    android:id="@+id/verticalScreenGuideline_70"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    app:layout_constraintGuide_begin="288dp" />
-
-                <androidx.constraintlayout.widget.Guideline
-                    android:id="@+id/verticalScreenGuideline_96"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    app:layout_constraintGuide_percent="0.96" />
-
-
                 <ImageView
-                    android:id="@+id/editImage"
-                    android:layout_width="@dimen/cdp_180"
-                    android:layout_height="@dimen/cdp_180"
-                    android:layout_marginTop="@dimen/cdp_28"
-                    android:background="@drawable/ring_shape"
-                    android:contentDescription="@string/profile_image"
-                    android:src="@drawable/profile_colorful"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/editProfileToolbar" />
-
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/nameLayout"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/cdp_12"
-                    app:boxBackgroundColor="@color/colorAppLightBlue"
-                    app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_70"
-                    app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_04"
-                    app:layout_constraintTop_toBottomOf="@id/editImage">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/nameTv"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/name"
-                        android:textColorHint="@color/colorPrimary"
-                        android:textSize="@dimen/csp_16" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <Button
-                    android:id="@+id/btnNameUpdate"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:background="@color/colorPrimary"
-                    android:text="@string/update"
-                    android:textAllCaps="false"
-                    android:textColor="@color/colorWhite"
-                    android:textSize="@dimen/csp_14"
-                    android:layout_marginTop="@dimen/cdp_2"
-                    app:layout_constraintBottom_toBottomOf="@id/nameLayout"
-                    app:layout_constraintTop_toTopOf="@+id/transactionNameLayout"
-                    app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_96"
-                    app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_70" />
-
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/contactNumLayout"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/cdp_8"
-                    app:boxBackgroundColor="@color/colorAppLightBlue"
-                    app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_70"
-                    app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_04"
-                    app:layout_constraintTop_toBottomOf="@id/nameLayout">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/textContactNum"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/contact_number"
-                        android:textColorHint="@color/colorPrimary"
-                        android:textSize="@dimen/csp_16" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <Button
-                    android:id="@+id/btnContactUpdate"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:background="@color/colorPrimary"
-                    android:text="@string/update"
-                    android:textAllCaps="false"
-                    android:textColor="@color/colorWhite"
-                    android:textSize="@dimen/csp_14"
-                    android:layout_marginTop="@dimen/cdp_2"
-                    app:layout_constraintTop_toTopOf="@+id/contactNumLayout"
-                    app:layout_constraintBottom_toBottomOf="@id/contactNumLayout"
-                    app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_96"
-                    app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_70" />
-
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/emailLayout"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/cdp_8"
-                    app:boxBackgroundColor="@color/colorAppLightBlue"
-                    app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_70"
-                    app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_04"
-                    app:layout_constraintTop_toBottomOf="@id/contactNumLayout">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/textEmail"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/email"
-                        android:textColorHint="@color/colorPrimary"
-                        android:textSize="@dimen/csp_16" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <Button
-                    android:id="@+id/btnEmailUpdate"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:background="@color/colorPrimary"
-                    android:text="@string/update"
-                    android:textAllCaps="false"
-                    android:textColor="@color/colorWhite"
-                    android:textSize="@dimen/csp_14"
-                    android:layout_marginTop="@dimen/cdp_2"
-                    app:layout_constraintTop_toTopOf="@+id/emailLayout"
-                    app:layout_constraintBottom_toBottomOf="@id/emailLayout"
-                    app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_96"
-                    app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_70" />
-
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/passwordLayout"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/cdp_12"
-                    app:boxBackgroundColor="@color/colorAppLightBlue"
-                    app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_96"
-                    app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_04"
-                    app:layout_constraintTop_toBottomOf="@id/emailLayout">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/textPassword"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/password"
-                        android:inputType="textPassword"
-                        android:textColorHint="@color/colorPrimary"
-                        android:textSize="@dimen/csp_16" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/confirmPasswordLayout"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/cdp_8"
-                    app:boxBackgroundColor="@color/colorAppLightBlue"
-                    app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_96"
-                    app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_04"
-                    app:layout_constraintTop_toBottomOf="@id/passwordLayout">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/textConfirmPassword"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/confirm_password"
-                        android:inputType="textPassword"
-                        android:textColorHint="@color/colorPrimary"
-                        android:textSize="@dimen/csp_16" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <ProgressBar
-                    android:id="@+id/editProfileProgressBar"
+                    android:id="@+id/btnBack"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:visibility="gone"
-                    android:indeterminateTint="@color/colorAppBlue"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:contentDescription="@string/back"
+                    android:src="@drawable/baseline_arrow_white_24" />
 
-                <Button
-                    android:id="@+id/btnPasswordUpdate"
-                    android:layout_width="0dp"
+                <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/cdp_12"
-                    android:background="@color/colorPrimary"
-                    android:text="@string/update"
-                    android:textAllCaps="false"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="@dimen/cdp_16"
+                    android:layout_toEndOf="@id/btnBack"
+                    android:text="@string/edit_profile"
                     android:textColor="@color/colorWhite"
-                    android:textSize="@dimen/csp_14"
-                    app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_96"
-                    app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_04"
-                    app:layout_constraintTop_toBottomOf="@id/confirmPasswordLayout" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
-        </ScrollView>
+                    android:textSize="@dimen/csp_20" />
+
+            </RelativeLayout>
+
+        </com.google.android.material.appbar.MaterialToolbar>
+
+        <!--          VERTICAL GUIDELINES          -->
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/verticalScreenGuideline_04"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.04" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/verticalScreenGuideline_80"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.76" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/verticalScreenGuideline_96"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.96" />
+
+        <!--          HORIZONTAL GUIDELINES          -->
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/horizontalGuideLine23"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.23" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/horizontalGuideLine25"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.25" />
+
+        <View
+            android:id="@+id/topView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@color/colorAppBlue"
+            app:layout_constraintBottom_toTopOf="@id/horizontalGuideLine25"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/editProfileToolbar" />
+
+        <View
+            android:id="@+id/editCardView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@drawable/profile_curved_view"
+            app:layout_constraintBottom_toBottomOf="@id/emptyView"
+            app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_96"
+            app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_04"
+            app:layout_constraintTop_toBottomOf="@id/horizontalGuideLine23" />
+
+
+        <ImageView
+            android:id="@+id/editImage"
+            android:layout_width="@dimen/cdp_160"
+            android:layout_height="@dimen/cdp_160"
+            android:layout_marginTop="@dimen/cdp_28"
+            android:background="@drawable/ring_shape"
+            android:contentDescription="@string/profile_image"
+            android:src="@drawable/profile_colorful"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/editProfileToolbar" />
+
+        <androidx.constraintlayout.utils.widget.ImageFilterButton
+            android:layout_width="@dimen/cdp_24"
+            android:layout_height="@dimen/cdp_24"
+            android:src="@drawable/ic_baseline_add_a_photo_24"
+            android:layout_marginBottom="@dimen/cdp_8"
+            android:layout_marginEnd="@dimen/cdp_8"
+            app:layout_constraintBottom_toBottomOf="@id/editImage"
+            app:layout_constraintEnd_toEndOf="@id/editImage" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/nameLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/cdp_12"
+            android:layout_marginTop="@dimen/cdp_12"
+            app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_80"
+            app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_04"
+            app:layout_constraintTop_toBottomOf="@id/editImage">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/nameTv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/name"
+                android:textColorHint="@color/colorPrimary"
+                android:textSize="@dimen/csp_16" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/btnNameUpdate"
+            style="@style/GelionRegularBlue16"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/cdp_2"
+            android:text="@string/update"
+            app:layout_constraintBottom_toBottomOf="@id/nameLayout"
+            app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_96"
+            app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_80"
+            app:layout_constraintTop_toTopOf="@+id/nameLayout" />
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/contactNumLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/cdp_12"
+            android:layout_marginTop="@dimen/cdp_8"
+            app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_80"
+            app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_04"
+            app:layout_constraintTop_toBottomOf="@id/nameLayout">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/textContactNum"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/contact_number"
+                android:textColorHint="@color/colorPrimary"
+                android:textSize="@dimen/csp_16" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/btnContactUpdate"
+            style="@style/GelionRegularBlue16"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/cdp_2"
+            android:text="@string/update"
+            app:layout_constraintBottom_toBottomOf="@id/contactNumLayout"
+            app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_96"
+            app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_80"
+            app:layout_constraintTop_toTopOf="@+id/contactNumLayout" />
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/emailLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/cdp_12"
+            android:layout_marginTop="@dimen/cdp_8"
+            app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_80"
+            app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_04"
+            app:layout_constraintTop_toBottomOf="@id/contactNumLayout">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/textEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/email"
+                android:textColorHint="@color/colorPrimary"
+                android:textSize="@dimen/csp_16" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/btnEmailUpdate"
+            style="@style/GelionRegularBlue16"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/cdp_2"
+            android:text="@string/update"
+            app:layout_constraintBottom_toBottomOf="@id/emailLayout"
+            app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_96"
+            app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_80"
+            app:layout_constraintTop_toTopOf="@+id/emailLayout" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/changePassword"
+            style="@style/GelionRegularBlue18"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/cdp_16"
+            android:layout_marginBottom="@dimen/cdp_32"
+            android:maxLines="1"
+            android:layout_marginTop="@dimen/cdp_24"
+            android:text="@string/change_password"
+            app:layout_constraintEnd_toStartOf="@id/verticalScreenGuideline_80"
+            app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_04"
+            app:layout_constraintTop_toBottomOf="@id/emailLayout" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/imgChangePassword"
+            android:layout_width="@dimen/cdp_24"
+            android:layout_height="@dimen/cdp_24"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/changePassword"
+            app:layout_constraintTop_toTopOf="@id/changePassword"
+            app:srcCompat="@drawable/arrow_right" />
+
+        <View
+            android:id="@+id/emptyView"
+            android:layout_width="0dp"
+            android:layout_height="24dp"
+            app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_96"
+            app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_04"
+            app:layout_constraintTop_toBottomOf="@id/changePassword" />
+
+
+        <ProgressBar
+            android:id="@+id/editProfileProgressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:indeterminateTint="@color/colorAppBlue"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <include
             android:id="@+id/includeErrorView"
@@ -277,9 +276,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:visibility="gone"
-            android:layout_alignParentBottom="true"
+            app:layout_constraintTop_toBottomOf="parent"
             tools:visibility="visible" />
 
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </RelativeLayout>
+
 </layout>

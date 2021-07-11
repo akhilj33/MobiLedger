@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -82,8 +83,9 @@
             android:layout_marginTop="@dimen/cdp_16"
             android:background="@color/colorPrimary"
             android:text="@string/login"
+            android:textAllCaps="false"
             android:textColor="@color/colorWhite"
-            android:textSize="@dimen/csp_20"
+            android:textSize="@dimen/csp_18"
             app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_90"
             app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_10"
             app:layout_constraintTop_toBottomOf="@id/passwordLayout" />
@@ -113,13 +115,36 @@
             app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_10"
             app:layout_constraintTop_toBottomOf="@id/tvForgetPassword" />
 
-        <ImageView
-            android:id="@+id/btnGoogleSignIn"
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@color/colorAppBlue"
+            app:layout_constraintTop_toTopOf="@id/btnGoogleSignIn"
+            app:layout_constraintBottom_toBottomOf="@id/btnGoogleSignIn"
+            app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_10"
+            app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_90" />
+
+        <TextView
+            android:id="@+id/textGoogleSignInMsg"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/cdp_10"
+            android:text="@string/get_started_with_google"
+            style="@style/GelionRegularBlue18"
+            android:textColor="@color/colorWhite"
+            app:layout_constraintStart_toEndOf="@id/btnGoogleSignIn"
+            app:layout_constraintTop_toTopOf="@id/btnGoogleSignIn"
+            app:layout_constraintBottom_toBottomOf="@id/btnGoogleSignIn"
+            app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_90" />
+
+
+        <ImageView
+            android:id="@+id/btnGoogleSignIn"
+            android:layout_width="@dimen/cdp_48"
+            android:layout_height="@dimen/cdp_48"
+            android:layout_marginTop="@dimen/cdp_16"
+            android:padding="@dimen/cdp_2"
+            android:layout_marginStart="@dimen/cdp_2"
             android:src="@drawable/common_google_signin_btn_icon_dark"
-            app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_90"
             app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_10"
             app:layout_constraintTop_toBottomOf="@id/tvLoginUsingThirdParty"
             android:contentDescription="@string/google_icon" />
@@ -134,6 +159,16 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <include
+            android:id="@+id/includeErrorView"
+            layout="@layout/snack_view_error"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:visibility="visible" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

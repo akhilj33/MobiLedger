@@ -8,11 +8,15 @@ import com.example.mobiledger.R
 import com.example.mobiledger.common.base.BaseViewModel
 import com.example.mobiledger.domain.AppResult
 import com.example.mobiledger.domain.entities.UserEntity
+import com.example.mobiledger.domain.usecases.AuthUseCase
 import com.example.mobiledger.domain.usecases.ProfileUseCase
 import com.example.mobiledger.presentation.Event
 import kotlinx.coroutines.launch
 
-class EditProfileViewModel(private val profileUseCase: ProfileUseCase) : BaseViewModel() {
+class EditProfileViewModel(
+    private val profileUseCase: ProfileUseCase,
+    private val authUseCase: AuthUseCase
+) : BaseViewModel() {
 
     val userFromFirebaseResult: LiveData<Event<UserEntity>> get() = _userFromFirebaseResult
     private val _userFromFirebaseResult: MutableLiveData<Event<UserEntity>> = MutableLiveData()
@@ -25,6 +29,11 @@ class EditProfileViewModel(private val profileUseCase: ProfileUseCase) : BaseVie
 
     private val _loadingState = MutableLiveData(false)
     val loadingState: LiveData<Boolean> get() = _loadingState
+
+    private val _emailSent = MutableLiveData<Unit>()
+    val emailSent: LiveData<Unit> get() = _emailSent
+
+    lateinit var uId: String
 
 
     fun fetchUserData() {
@@ -108,13 +117,14 @@ class EditProfileViewModel(private val profileUseCase: ProfileUseCase) : BaseVie
         }
     }
 
-    fun updatePassword(password: String) {
+    fun sendEmailToResetPassword() {
+        _loadingState.value = true
         viewModelScope.launch {
-            _loadingState.value = true
-            when (val result = profileUseCase.updatePasswordInFirebase(password)) {
+            when (val result = authUseCase.sendPasswordResetEmail(userFromFirebaseResult.value?.peekContent()?.emailId.toString())) {
                 is AppResult.Success -> {
-                    _dataUpdatedResult.value = Event(result.data)
+                    _emailSent.value = Unit
                 }
+
                 is AppResult.Failure -> {
                     _errorLiveData.value = Event(
                         ViewError(
@@ -124,9 +134,29 @@ class EditProfileViewModel(private val profileUseCase: ProfileUseCase) : BaseVie
                     )
                 }
             }
-            _loadingState.value = false
         }
+        _loadingState.value = false
     }
+
+//    fun updatePassword(password: String) {
+//        viewModelScope.launch {
+//            _loadingState.value = true
+//            when (val result = profileUseCase.updatePasswordInFirebase(password)) {
+//                is AppResult.Success -> {
+//                    _dataUpdatedResult.value = Event(result.data)
+//                }
+//                is AppResult.Failure -> {
+//                    _errorLiveData.value = Event(
+//                        ViewError(
+//                            viewErrorType = ViewErrorType.NON_BLOCKING,
+//                            message = result.error.message
+//                        )
+//                    )
+//                }
+//            }
+//            _loadingState.value = false
+//        }
+//    }
 
     enum class ViewErrorType { NON_BLOCKING }
 

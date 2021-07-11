@@ -6,7 +6,6 @@ import android.text.TextWatcher
 import android.util.Patterns
 import android.view.View
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import com.example.mobiledger.R
 import com.example.mobiledger.common.base.BaseFragment
 import com.example.mobiledger.common.extention.disable
@@ -21,9 +20,11 @@ import com.google.android.material.textfield.TextInputLayout
 
 
 class SignUpFragment :
-    BaseFragment<FragmentSignUpBinding, SignUpNavigator>(R.layout.fragment_sign_up) {
+    BaseFragment<FragmentSignUpBinding, SignUpNavigator>(R.layout.fragment_sign_up, StatusBarColor.BLUE) {
 
     private val viewModel: SignUpViewModel by viewModels { viewModelFactory }
+
+    override fun getSnackBarErrorView(): SnackViewErrorBinding = viewBinding.includeErrorView
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

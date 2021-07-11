@@ -17,7 +17,6 @@ interface ProfileRepository {
     suspend fun updateUserNameInFirebase(username: String): AppResult<Unit>
     suspend fun updateEmailInFirebase(email: String): AppResult<Unit>
     suspend fun updatePhoneNoInFirebase(phoneNo: String): AppResult<Unit>
-    suspend fun updatePasswordInFirebase(password: String): AppResult<Unit>
     suspend fun updatePhotoInAuth(photoUri: Uri): AppResult<Uri>
 }
 
@@ -75,12 +74,6 @@ class ProfileRepositoryImpl(
                 if (it is AppResult.Success) profileDb.updatePhoneNo(phoneNo, uId)
             }
             else AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
-        }
-    }
-
-    override suspend fun updatePasswordInFirebase(password: String): AppResult<Unit> {
-        return withContext(dispatcher) {
-            userApi.updatePasswordInAuth(password)
         }
     }
 

@@ -10,7 +10,6 @@ interface ProfileUseCase {
     suspend fun updateUserNameInFirebase(username: String): AppResult<Unit>
     suspend fun updateEmailInFirebase(email: String): AppResult<Unit>
     suspend fun updatePhoneInFirebase(phoneNo: String): AppResult<Unit>
-    suspend fun updatePasswordInFirebase(password: String): AppResult<Unit>
     suspend fun updatePhotoInAuth(photoUri: Uri): AppResult<Uri>
 
 }
@@ -30,10 +29,6 @@ class ProfileUseCaseImpl(private val profileRepository: ProfileRepository) : Pro
 
     override suspend fun updatePhoneInFirebase(phoneNo: String): AppResult<Unit> {
         return profileRepository.updatePhoneNoInFirebase(phoneNo)
-    }
-
-    override suspend fun updatePasswordInFirebase(password: String): AppResult<Unit> {
-        return profileRepository.updatePasswordInFirebase(password)
     }
 
     override suspend fun updatePhotoInAuth(photoUri: Uri): AppResult<Uri> {
