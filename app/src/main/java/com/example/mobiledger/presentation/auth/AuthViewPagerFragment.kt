@@ -9,7 +9,7 @@ import com.example.mobiledger.databinding.FragmentAuthBinding
 import com.example.mobiledger.databinding.SnackViewErrorBinding
 import com.google.android.material.tabs.TabLayoutMediator
 
-class AuthViewPagerFragment : BaseFragment<FragmentAuthBinding, LoginNavigator>(R.layout.fragment_auth) {
+class AuthViewPagerFragment : BaseFragment<FragmentAuthBinding, LoginNavigator>(R.layout.fragment_auth, StatusBarColor.BLUE) {
 
     override fun isBottomNavVisible(): Boolean = false
 
