@@ -179,7 +179,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/cdp_16"
                     android:layout_marginBottom="@dimen/cdp_24"
-                    android:background="@color/colorPrimary"
+                    android:background="@drawable/curved_background_blue"
                     android:text="@string/sign_up"
                     android:textAllCaps="false"
                     android:textColor="@color/colorWhite"

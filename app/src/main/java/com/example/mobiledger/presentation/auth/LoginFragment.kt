@@ -40,7 +40,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, LoginNavigator>(R.layou
                 loginWithEmail()
             }
 
-            btnGoogleSignIn.setOnClickListener {
+            btnGoogleSignInView.setOnClickListener {
                 initSignInWithGoogle()
             }
 

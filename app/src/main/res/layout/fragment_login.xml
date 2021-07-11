@@ -81,7 +81,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/cdp_16"
-            android:background="@color/colorPrimary"
+            android:background="@drawable/curved_background_blue"
             android:text="@string/login"
             android:textAllCaps="false"
             android:textColor="@color/colorWhite"
@@ -116,9 +116,10 @@
             app:layout_constraintTop_toBottomOf="@id/tvForgetPassword" />
 
         <View
+            android:id="@+id/btnGoogleSignInView"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:background="@color/colorAppBlue"
+            android:background="@drawable/curved_background_blue"
             app:layout_constraintTop_toTopOf="@id/btnGoogleSignIn"
             app:layout_constraintBottom_toBottomOf="@id/btnGoogleSignIn"
             app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_10"
