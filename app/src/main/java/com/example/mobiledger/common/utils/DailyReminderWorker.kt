@@ -7,7 +7,6 @@ import android.app.TaskStackBuilder
 import android.content.Context
 import android.content.Intent
 import android.os.Build
-import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
@@ -26,16 +25,10 @@ class DailyReminderWorker(val context: Context, params: WorkerParameters) : Work
 
         val currentDate = Calendar.getInstance()
         val dueDate = Calendar.getInstance()
-        // Set Execution around 08:00:00 PM
-        dueDate.set(Calendar.HOUR_OF_DAY, 20)
-        dueDate.set(Calendar.MINUTE, 0)
-        dueDate.set(Calendar.SECOND, 0)
 
-        dueDate.add(Calendar.HOUR_OF_DAY, 24)
+        dueDate.add(Calendar.HOUR, 24)
 
         val timeDiff = dueDate.timeInMillis.minus(currentDate.timeInMillis)
-
-        Log.i("Anant", timeDiff.toString())
 
         val dailyWorkRequest = OneTimeWorkRequestBuilder<DailyReminderWorker>()
             .setInitialDelay(timeDiff, TimeUnit.MILLISECONDS)

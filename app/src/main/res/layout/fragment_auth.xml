@@ -87,8 +87,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/cdp_10"
             android:background="@drawable/top_curved_white_background"
-            app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_04"
-            app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_96"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvHeading"
             app:tabTextColor="@color/colorPrimary" />
 
@@ -99,8 +99,8 @@
             android:layout_weight="1"
             android:background="@color/colorWhite"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_04"
-            app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_96"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tab_layout" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

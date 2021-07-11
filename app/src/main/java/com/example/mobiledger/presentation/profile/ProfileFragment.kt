@@ -3,6 +3,7 @@ package com.example.mobiledger.presentation.profile
 import android.app.Activity
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.biometric.BiometricManager
@@ -131,6 +132,8 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding, ProfileNavigator>(R
             viewLifecycleOwner,
             NormalObserver { isPushNotificationEnabled ->
                 viewBinding.accountView.toggleBtnNotification.isChecked = isPushNotificationEnabled
+                viewModel.isPushNotificationEnabledVal = isPushNotificationEnabled
+                Log.i("Anant", "Push notification : " + isPushNotificationEnabled)
             })
         viewModel.isPushNotificationEnabled()
 
@@ -138,6 +141,7 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding, ProfileNavigator>(R
             viewLifecycleOwner,
             NormalObserver { isReminderEnabled ->
                 viewBinding.accountView.toggleBtnReminder.isChecked = isReminderEnabled
+                Log.i("Anant", "Remainder : " + isReminderEnabled)
             })
         viewModel.isReminderEnabled()
 
@@ -220,6 +224,8 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding, ProfileNavigator>(R
                 viewModel.savePushNotificationEnabled(true)
             } else {
                 viewModel.savePushNotificationEnabled(false)
+                viewModel.saveReminderEnabled(false)
+                viewBinding.accountView.toggleBtnReminder.isChecked = false
             }
         }
     }
@@ -229,6 +235,8 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding, ProfileNavigator>(R
             if (viewBinding.accountView.toggleBtnReminder.isChecked) {
                 activityViewModel.activateDailyReminder(true)
                 viewModel.saveReminderEnabled(true)
+                viewModel.savePushNotificationEnabled(true)
+                viewBinding.accountView.toggleBtnNotification.isChecked = true
             } else {
                 activityViewModel.activateDailyReminder(false)
                 viewModel.saveReminderEnabled(false)

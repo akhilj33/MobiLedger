@@ -39,6 +39,9 @@ class ProfileViewModel(
     private val _isReminderEnabled = MutableLiveData<Event<Boolean>>()
     val isReminderEnabled: LiveData<Event<Boolean>> get() = _isReminderEnabled
 
+    var isPushNotificationEnabledVal = true
+    var isDailyReminderEnabledVal = true
+
     lateinit var uId: String
     fun fetchUserData() {
         viewModelScope.launch {

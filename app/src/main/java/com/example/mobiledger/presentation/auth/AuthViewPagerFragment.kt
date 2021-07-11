@@ -15,6 +15,7 @@ class AuthViewPagerFragment : BaseFragment<FragmentAuthBinding, LoginNavigator>(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initViewPager()
+
     }
 
     private fun initViewPager() {
