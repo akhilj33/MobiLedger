@@ -5,7 +5,8 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/colorAppBlue">
 
         <!--          HORIZONTAL GUIDELINES          -->
 
@@ -26,6 +27,13 @@
         <!--          VERTICAL GUIDELINES          -->
 
         <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/verticalScreenGuideline_04"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.04" />
+
+        <androidx.constraintlayout.widget.Guideline
             android:id="@+id/verticalScreenGuideline_10"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -39,6 +47,13 @@
             android:orientation="vertical"
             app:layout_constraintGuide_percent="0.90" />
 
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/verticalScreenGuideline_96"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.96" />
+
 
         <TextView
             android:id="@+id/tvTitle"
@@ -46,7 +61,7 @@
             android:layout_height="wrap_content"
             android:text="@string/mobi_ledger"
             android:textAlignment="center"
-            android:textColor="@color/colorPrimaryDark"
+            android:textColor="@color/colorWhite"
             android:textSize="@dimen/csp_36"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_90"
@@ -60,7 +75,7 @@
             android:layout_marginTop="@dimen/cdp_16"
             android:text="@string/join_a_creative_solution_for_a_better_tomorrow"
             android:textAlignment="center"
-            android:textColor="@color/colorPrimaryDark"
+            android:textColor="@color/colorWhite"
             android:textSize="@dimen/csp_20"
             app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_90"
             app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_10"
@@ -69,10 +84,12 @@
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tab_layout"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/cdp_10"
-            app:layout_constraintStart_toStartOf="parent"
+            android:background="@drawable/top_curved_white_background"
+            app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_04"
+            app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_96"
             app:layout_constraintTop_toBottomOf="@+id/tvHeading"
             app:tabTextColor="@color/colorPrimary" />
 
@@ -81,9 +98,10 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_weight="1"
+            android:background="@color/colorWhite"
             app:layout_constraintBottom_toTopOf="@id/includeErrorView"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_04"
+            app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_96"
             app:layout_constraintTop_toBottomOf="@id/tab_layout" />
 
         <include
