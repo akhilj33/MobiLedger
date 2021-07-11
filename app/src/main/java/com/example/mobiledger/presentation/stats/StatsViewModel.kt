@@ -105,7 +105,7 @@ class StatsViewModel(private val categoryUseCase: CategoryUseCase, private val b
 
             if (monthlyBudget != null) {
                 barEntryList.add(BarEntry(barEntryCount++, monthlyBudget.maxBudget.toFloat()))
-                barChartLabelList.add(R.string.monthly_limit)
+                barChartLabelList.add(R.string.limit)
                 barEntryList.add(BarEntry(barEntryCount++, monthlyBudget.totalBudget.toFloat()))
                 barChartLabelList.add(R.string.budget)
             }

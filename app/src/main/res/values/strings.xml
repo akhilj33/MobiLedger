@@ -107,7 +107,7 @@
     <string name="others">Others</string>
     <string name="expenses_breakup">Expenses BreakUp</string>
     <string name="income_breakup">Income BreakUp</string>
-    <string name="monthly_limit">Limit</string>
+    <string name="limit">Limit</string>
     <string name="stats_detail_header">%1$s - %2$s</string>
     <string name="expense_vs_budget">Budget vs Expense</string>
     <string name="stats_detail_header_expense">You spent ₹%1$s on %2$s in %3$s</string>
@@ -126,7 +126,7 @@
     <string name="update_budget_heading">Update %1$s Budget</string>
     <string name="budget_overflow_error">Monthly total budget exceeded your monthly limit. Enter value below ₹%1$s or increase your monthly limit.</string>
     <string name="you_have_not_created_the_budget_for_this_month">You have not created the budget for this month</string>
-
+    <string name="categories_budget">Categories Budget</string>
 
     <!-- NOTIFICATION -->
     <string name="channel_transaction">Transaction channel</string>
@@ -196,6 +196,12 @@
     <string name="transaction_list">Transaction List</string>
     <string name="stats_empty_screen_msg">Add few transactions to analyze your spending and earnings using graphs</string>
     <string name="stats_empty_heading">Oops!! No Stats Found</string>
+    <string name="add_budget">\u0020 Add Budget</string>
+    <string name="monthly_limit">Monthly Limit</string>
+    <string name="monthly_limit_amount">%1$s \u0020 </string>
+    <string name="percent_spent">You have already spent %1$s of your monthly limit </string>
+    <string name="set_monthly_limit">Set Monthly Limit</string>
+    <string name="category_budget_empty_msg">Please Add Category wise Budget by clicking below. \n\nYou can also create a new budget template from profile section for future references</string>
     <string name="get_started_with_google">Get started with Google</string>
 
 

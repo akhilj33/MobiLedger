@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/textEmptyBudget"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/GelionSemiBoldBlue18"
+            android:textAlignment="center"
+            android:text="@string/category_budget_empty_msg"
+            android:layout_marginStart="@dimen/cdp_36"
+            android:layout_marginEnd="@dimen/cdp_36"
+            android:layout_marginTop="@dimen/cdp_36"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/btnAddCategoryBudget"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnAddCategoryBudget"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/add_budget"
+            app:layout_constraintTop_toBottomOf="@id/textEmptyBudget"
+            android:layout_marginTop="@dimen/cdp_36"
+            android:drawableStart="@drawable/add_white_22"
+            android:layout_marginBottom="@dimen/cdp_36"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -7,18 +7,20 @@ import com.example.mobiledger.common.utils.ConstantUtils.TOTAL_BUDGET
 import com.example.mobiledger.domain.enums.TransactionType
 
 sealed class BudgetViewItem(val viewType: BudgetViewType) {
-    data class BudgetHeaderData(@StringRes val data: Int, val type: BudgetViewType = BudgetViewType.Header) : BudgetViewItem(type)
+    data class BudgetHeaderData(val headerData: HeaderData, val type: BudgetViewType = BudgetViewType.Header) : BudgetViewItem(type)
 
     data class BudgetOverviewData(val data: MonthlyBudgetOverviewData, val type: BudgetViewType = BudgetViewType.MonthlyBudgetOverview) :
         BudgetViewItem(type)
 
     data class BudgetCategory(val data: BudgetCategoryData, val type: BudgetViewType = BudgetViewType.BudgetData) : BudgetViewItem(type)
 
-    object BtnAddCategory : BudgetViewItem(BudgetViewType.BtnAddCategory)
-
     object BudgetEmpty : BudgetViewItem(BudgetViewType.EmptyBudget)
+
+    object BudgetCategoryEmpty : BudgetViewItem(BudgetViewType.CategoryBudgetEmpty)
 }
 //            -------------------- Helper Data classes ----------------------------
+
+data class HeaderData(@StringRes val headerString: Int, val isSecondaryHeaderVisible: Boolean = false)
 
 data class MonthlyBudgetData(val maxBudget: Long = 0, val totalBudget: Long = 0)
 
@@ -44,8 +46,7 @@ data class BudgetCategoryData(
     @DrawableRes val categoryIcon: Int
 )
 
-data class MonthlyBudgetOverviewData(val maxBudget: Long, val totalBudget: Long)
+data class MonthlyBudgetOverviewData(val maxBudget: Long, val totalBudget: Long, val totalMonthlyExpense: Long)
 
-
-enum class BudgetViewType { Header, MonthlyBudgetOverview, BtnAddCategory, BudgetData, EmptyBudget }
+enum class BudgetViewType { Header, MonthlyBudgetOverview, BudgetData, EmptyBudget, CategoryBudgetEmpty }
 

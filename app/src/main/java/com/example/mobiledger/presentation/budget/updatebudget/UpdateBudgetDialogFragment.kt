@@ -110,7 +110,7 @@ class UpdateBudgetDialogFragment :
 
     private fun getAmount(): String = viewBinding.amountTv.text.toString().trim()
     private fun isValidAmount(): Boolean = getAmount().isNotBlank() && getAmount().toLong() > 0L
-    private fun isBudgetOverflow(): Boolean = viewModel.monthlyTotalBudget + getAmount().toLong() > viewModel.monthlyLimit
+    private fun isBudgetOverflow(): Boolean = viewModel.monthlyTotalBudget - viewModel.amount + getAmount().toLong() > viewModel.monthlyLimit
 
 
     private val amountTextWatcher = object : TextWatcher {

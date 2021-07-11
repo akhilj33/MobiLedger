@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tool="http://schemas.android.com/tools">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/rootBudgetOverview"
@@ -51,7 +52,7 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content">
 
                 <androidx.constraintlayout.widget.Guideline
                     android:id="@+id/verticalGuidelineBudget"
@@ -60,92 +61,81 @@
                     android:orientation="vertical"
                     app:layout_constraintGuide_percent="0.5" />
 
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    app:layout_constraintEnd_toEndOf="@id/verticalGuidelineBudget"
-                    app:layout_constraintStart_toStartOf="parent" />
-
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="@id/verticalGuidelineBudget" />
-
-
-                <ImageView
-                    android:id="@+id/imgEditBudget"
-                    android:layout_width="@dimen/cdp_14"
-                    android:layout_height="@dimen/cdp_14"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginStart="@dimen/cdp_14"
-                    android:contentDescription="@string/edit"
-                    android:src="@drawable/edit_icon"
-                    app:layout_constraintBottom_toBottomOf="@id/budgetAmountSeekBarID"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:tint="@color/colorGray" />
-
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/textMaxBudget"
-                    style="@style/GelionSemiBoldBlue16"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/cdp_8"
-                    android:text="@string/maximum_budget"
-                    android:textAlignment="center"
-                    android:textSize="@dimen/csp_22"
-                    app:layout_constraintEnd_toStartOf="@id/verticalGuidelineBudget"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/tvMaxBudgetAmount"
-                    style="@style/GelionRegularGreen18"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/cdp_8"
-                    android:textAlignment="center"
-                    app:autoSizeMaxTextSize="@dimen/csp_18"
-                    app:autoSizeMinTextSize="@dimen/csp_12"
-                    app:autoSizeStepGranularity="2sp"
-                    app:autoSizeTextType="uniform"
-                    app:layout_constraintEnd_toEndOf="@id/verticalGuidelineBudget"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/textMaxBudget" />
-
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/textTotalBudget"
-                    style="@style/GelionSemiBoldBlue16"
+                    style="@style/GelionSemiBoldBlue22"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:text="@string/total_budget"
                     android:textAlignment="center"
-                    android:textSize="@dimen/csp_22"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="@+id/verticalGuidelineBudget"
-                    app:layout_constraintTop_toTopOf="@id/textMaxBudget" />
+                    android:layout_marginTop="@dimen/cdp_8"
+                    app:autoSizeMaxTextSize="@dimen/csp_20"
+                    app:autoSizeMinTextSize="@dimen/csp_16"
+                    app:autoSizeStepGranularity="2sp"
+                    app:autoSizeTextType="uniform"
+                    android:maxLines="1"
+                    app:layout_constraintEnd_toStartOf="@id/verticalGuidelineBudget"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toTopOf="@id/tvTotalBudgetAmount"/>
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/tvTotalBudgetAmount"
                     style="@style/GelionRegularGreen18"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/cdp_6"
                     android:textAlignment="center"
                     app:autoSizeMaxTextSize="@dimen/csp_18"
                     app:autoSizeMinTextSize="@dimen/csp_12"
                     app:autoSizeStepGranularity="2sp"
                     app:autoSizeTextType="uniform"
+                    android:maxLines="1"
+                    app:layout_constraintEnd_toEndOf="@id/verticalGuidelineBudget"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/textTotalBudget"
+                    app:layout_constraintBottom_toTopOf="@id/budgetAmountSeekBarID"
+                    tool:text = "54555654546654665632"/>
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/textMonthlyLimit"
+                    style="@style/GelionSemiBoldBlue22"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/monthly_limit"
+                    android:textAlignment="center"
+                    app:autoSizeMaxTextSize="@dimen/csp_20"
+                    app:autoSizeMinTextSize="@dimen/csp_16"
+                    app:autoSizeStepGranularity="2sp"
+                    app:autoSizeTextType="uniform"
+                    android:maxLines="1"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="@+id/verticalGuidelineBudget"
-                    app:layout_constraintTop_toTopOf="@id/tvMaxBudgetAmount" />
+                    app:layout_constraintTop_toTopOf="@id/textTotalBudget"
+                    app:layout_constraintBottom_toBottomOf="@id/textTotalBudget"/>
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tvMaxBudgetAmount"
+                    style="@style/GelionRegularGreen18"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="center"
+                    app:autoSizeMaxTextSize="@dimen/csp_18"
+                    app:autoSizeMinTextSize="@dimen/csp_12"
+                    app:autoSizeStepGranularity="2sp"
+                    app:autoSizeTextType="uniform"
+                    android:maxLines="1"
+                    android:drawableEnd="@drawable/edit_grey_18"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/verticalGuidelineBudget"
+                    app:layout_constraintTop_toTopOf="@id/tvTotalBudgetAmount"
+                    app:layout_constraintBottom_toBottomOf="@id/tvTotalBudgetAmount"
+                    tool:text = "123456 "/>
 
                 <com.google.android.material.slider.Slider
                     android:id="@+id/budgetAmountSeekBarID"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginBottom="-7dp"
+                    android:layout_height="wrap_content"
                     android:enabled="false"
                     android:valueFrom="0.0"
                     android:valueTo="100.0"
@@ -154,8 +144,44 @@
                     app:layout_constraintTop_toBottomOf="@id/tvMaxBudgetAmount"
                     app:thumbRadius="0dp"
                     app:trackColorActive="@color/colorAppBlue"
-                    app:trackHeight="@dimen/cdp_8" />
+                    app:trackHeight="@dimen/cdp_6" />
 
+                <View
+                    android:id="@+id/budgetSeparator"
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:background="@drawable/dashed_divider"
+                    android:layerType="software"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/budgetAmountSeekBarID"
+                    app:layout_constraintBottom_toTopOf="@id/tvPercentSpent"/>
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tvPercentSpent"
+                    style="@style/GelionRegularGreen12"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="center"
+                    app:autoSizeMaxTextSize="@dimen/csp_18"
+                    app:autoSizeMinTextSize="@dimen/csp_12"
+                    app:autoSizeStepGranularity="2sp"
+                    app:autoSizeTextType="uniform"
+                    android:maxLines="2"
+                    android:layout_marginVertical="@dimen/cdp_10"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/budgetSeparator"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    tool:text = "You have already spent 4% of your monthly limit "/>
+
+                <androidx.constraintlayout.widget.Group
+                    android:id="@+id/percentSpentGroup"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    app:constraint_referenced_ids="budgetSeparator,tvPercentSpent"
+                    tool:visibility="visible"/>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.card.MaterialCardView>

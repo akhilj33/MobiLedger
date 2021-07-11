@@ -44,12 +44,10 @@
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tvEditProfile"
-            style="@style/GelionSemiBoldAccent12"
-            android:textColor="@color/colorWhite"
-            android:textSize="@dimen/csp_14"
+            style="@style/GelionSemiBoldWhite14"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/curved_bar_blue"
+            android:background="@drawable/curved_bar_light_blue"
             android:paddingVertical="@dimen/cdp_4"
             android:paddingHorizontal="@dimen/cdp_10"
             android:drawableEnd="@drawable/edit_white_14"

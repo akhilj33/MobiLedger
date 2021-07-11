@@ -47,7 +47,7 @@ class TransactionAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 tvTransactionName.text = item.name
                 tvAmount.text = item.amount
                 tvCategory.text = item.category
-                tvTime.text = DateUtils.getDateInDDMMMMyyyyFormat(item.transactionEntity.transactionTime)
+                tvTime.text = DateUtils.getDateInDDMMMyyyyFormat(item.transactionEntity.transactionTime)
                 ivCategoryIcon.background = ContextCompat.getDrawable(context, item.categoryIcon)
                 if (item.transactionType == TransactionType.Income) tvAmount.setTextColor(
                     ContextCompat.getColorStateList(context, R.color.colorGreen)

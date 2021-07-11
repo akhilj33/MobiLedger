@@ -29,8 +29,8 @@
             app:layout_constraintGuide_percent="0.96" />
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/tvHello"
-            android:layout_width="0dp"
+            android:id="@+id/tvBudgetTitle"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:fontFamily="@font/margarine"
@@ -39,7 +39,6 @@
             android:textColor="@color/colorTextDark"
             android:textSize="@dimen/csp_28"
             android:textStyle="bold"
-            app:layout_constraintEnd_toStartOf="@id/verticalEndGuideline"
             app:layout_constraintStart_toStartOf="@id/verticalStartGuideline"
             app:layout_constraintTop_toBottomOf="@id/horizontalGuideline_2" />
 
@@ -53,7 +52,7 @@
             app:layout_constraintBottom_toTopOf="@id/swipeRefreshLayout"
             app:layout_constraintEnd_toEndOf="@id/verticalEndGuideline"
             app:layout_constraintStart_toStartOf="@id/verticalStartGuideline"
-            app:layout_constraintTop_toBottomOf="@id/tvHello" />
+            app:layout_constraintTop_toBottomOf="@id/tvBudgetTitle" />
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/swipeRefreshLayout"

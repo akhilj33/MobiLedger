@@ -18,6 +18,9 @@
     <color name="colorGray">#AAAAAA</color>
     <color name="colorDarkRed">#b00020</color>
     <color name="colorGreen">#3CB371</color>
+    <color name="colorYellow">#FFD600</color>
+    <color name="colorOrange">#FF8F00</color>
+    <color name="colorRed">#FF3D00</color>
     <color name="colorGrey">#a9a9a9</color>
     <color name="prussianBlue">#002C52</color>
     <color name="googleLightBlue">#4286F5</color>
