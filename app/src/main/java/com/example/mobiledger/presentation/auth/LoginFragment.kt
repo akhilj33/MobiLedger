@@ -20,7 +20,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.material.textfield.TextInputLayout
 
-class LoginFragment : BaseFragment<FragmentLoginBinding, LoginNavigator>(R.layout.fragment_login) {
+class LoginFragment : BaseFragment<FragmentLoginBinding, LoginNavigator>(R.layout.fragment_login, StatusBarColor.BLUE) {
 
     private val viewModel: LoginViewModel by viewModels { viewModelFactory }
 

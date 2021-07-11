@@ -99,7 +99,7 @@
     <string name="category_already_exist">Category Already Exist</string>
     <string name="date">Date</string>
     <string name="add_category_budget">Add category budget</string>
-    <string name="login_with">Login with</string>
+    <string name="login_with">Or</string>
     <string name="income_vs_expense">Income Vs Expense</string>
     <string name="add_monthly_budget">Add Monthly Budget</string>
     <string name="monthly_statistics">Monthly Statistics</string>
@@ -196,6 +196,7 @@
     <string name="transaction_list">Transaction List</string>
     <string name="stats_empty_screen_msg">Add few transactions to analyze your spending and earnings using graphs</string>
     <string name="stats_empty_heading">Oops!! No Stats Found</string>
+    <string name="get_started_with_google">Get started with Google</string>
 
 
 </resources>

@@ -117,6 +117,14 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/editProfileToolbar" />
 
+        <androidx.constraintlayout.utils.widget.ImageFilterButton
+            android:layout_width="@dimen/cdp_24"
+            android:layout_height="@dimen/cdp_24"
+            android:src="@drawable/ic_baseline_add_a_photo_24"
+            android:layout_marginBottom="@dimen/cdp_8"
+            android:layout_marginEnd="@dimen/cdp_8"
+            app:layout_constraintBottom_toBottomOf="@id/editImage"
+            app:layout_constraintEnd_toEndOf="@id/editImage" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/nameLayout"

@@ -20,7 +20,7 @@ import com.google.android.material.textfield.TextInputLayout
 
 
 class SignUpFragment :
-    BaseFragment<FragmentSignUpBinding, SignUpNavigator>(R.layout.fragment_sign_up) {
+    BaseFragment<FragmentSignUpBinding, SignUpNavigator>(R.layout.fragment_sign_up, StatusBarColor.BLUE) {
 
     private val viewModel: SignUpViewModel by viewModels { viewModelFactory }
 
