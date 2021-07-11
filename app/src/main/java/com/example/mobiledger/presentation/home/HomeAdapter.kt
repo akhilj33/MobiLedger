@@ -112,7 +112,7 @@ class HomeAdapter(
                 tvAmount.text = item.amount.toAmount()
                 tvCategory.text = item.category
                 ivCategoryIcon.background = ContextCompat.getDrawable(context, data.categoryIcon)
-                tvTime.text = DateUtils.getDateInDDMMMMyyyyFormat(item.transactionTime)
+                tvTime.text = DateUtils.getDateInDDMMMyyyyFormat(item.transactionTime)
 
                 if (item.transactionType == TransactionType.Income) tvAmount.setTextColor(
                     ContextCompat.getColorStateList(context, R.color.colorGreen)

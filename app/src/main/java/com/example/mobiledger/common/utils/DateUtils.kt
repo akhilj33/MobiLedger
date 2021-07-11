@@ -7,13 +7,15 @@ import java.util.*
 object DateUtils {
 
     private const val DATE_FORMAT_DD__MMMM_yyyy = "dd MMMM yyyy"
+    private const val DATE_FORMAT_DD__MMM_yyyy = "dd MMM yyyy"
     private const val DATE_FORMAT_MMMM_yyyy = "MMMM yyyy"
     private const val DATE_FORMAT_MM_yyyy = "MM-yyyy"
     private const val DATE_FORMAT_DD = "DD"
 
+    private val simpleDateFormat_DD_MMM_yyyy = SimpleDateFormat(DATE_FORMAT_DD__MMM_yyyy, Locale.ENGLISH)
     private val simpleDateFormat_MMMM_yyyy = SimpleDateFormat(DATE_FORMAT_MMMM_yyyy, Locale.ENGLISH)
     private val simpleDateFormat_MM_yyyy = SimpleDateFormat(DATE_FORMAT_MM_yyyy, Locale.ENGLISH)
-    private val simpleDateFormat_DD_MM_yyyy = SimpleDateFormat(DATE_FORMAT_DD__MMMM_yyyy, Locale.ENGLISH)
+    private val simpleDateFormat_DD_MMMM_yyyy = SimpleDateFormat(DATE_FORMAT_DD__MMMM_yyyy, Locale.ENGLISH)
     private val simpleDateFormat_DD = SimpleDateFormat(DATE_FORMAT_DD, Locale.ENGLISH)
 
 
@@ -36,7 +38,11 @@ object DateUtils {
     }
 
     fun getDateInDDMMMMyyyyFormat(timestamp: Timestamp): String {
-       return simpleDateFormat_DD_MM_yyyy.format(timestamp.toDate())
+       return simpleDateFormat_DD_MMMM_yyyy.format(timestamp.toDate())
+    }
+
+    fun getDateInDDMMMyyyyFormat(timestamp: Timestamp): String {
+        return simpleDateFormat_DD_MMM_yyyy.format(timestamp.toDate())
     }
 
     fun getCurrentDate(): Calendar = Calendar.getInstance().apply {

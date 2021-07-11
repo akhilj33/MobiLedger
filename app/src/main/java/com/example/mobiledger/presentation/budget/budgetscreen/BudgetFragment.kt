@@ -27,11 +27,11 @@ class BudgetFragment : BaseFragment<FragmentBudgetBinding, BudgetNavigator>(R.la
 
     private val budgetAdapter: BudgetAdapter by lazy {
         BudgetAdapter(
-            onMakeBudgetClick,
+            onSetMonthlyLimitBtnClick,
             onApplyTemplateClick,
-            onBudgetOverviewClick,
+            onUpdateMonthlyLimitClick,
             onAddBudgetCategoryClick,
-            onBudgetCategoryClick
+            onUpdateBudgetCategoryClick
         )
     }
 
@@ -117,7 +117,7 @@ class BudgetFragment : BaseFragment<FragmentBudgetBinding, BudgetNavigator>(R.la
         }
     }
 
-    private val onMakeBudgetClick = fun() {
+    private val onSetMonthlyLimitBtnClick = fun() {
         showAddBudgetDialogFragment(
             requireActivity().supportFragmentManager,
             viewModel.monthlyLimit,
@@ -134,13 +134,23 @@ class BudgetFragment : BaseFragment<FragmentBudgetBinding, BudgetNavigator>(R.la
         )
     }
 
-    private val onBudgetOverviewClick = fun() {
+    private val onUpdateMonthlyLimitClick = fun() {
         showAddBudgetDialogFragment(
             requireActivity().supportFragmentManager,
             viewModel.monthlyLimit,
             viewModel.giveFinalExpenseList(),
             DateUtils.getDateInMMyyyyFormat(viewModel.getCurrentMonth()),
             viewModel.budgetTotal, false
+        )
+    }
+
+    private val onUpdateBudgetCategoryClick = fun(category: String, categoryBudget: Long) {
+        showUpdateBudgetDialogFragment(
+            requireActivity().supportFragmentManager,
+            viewModel.getCurrentMonth(),
+            category,
+            categoryBudget,
+            MonthlyBudgetData(viewModel.monthlyLimit, viewModel.budgetTotal)
         )
     }
 
@@ -151,16 +161,6 @@ class BudgetFragment : BaseFragment<FragmentBudgetBinding, BudgetNavigator>(R.la
             viewModel.giveFinalExpenseList(),
             DateUtils.getDateInMMyyyyFormat(viewModel.getCurrentMonth()),
             viewModel.budgetTotal, true
-        )
-    }
-
-    private val onBudgetCategoryClick = fun(category: String, categoryBudget: Long) {
-        showUpdateBudgetDialogFragment(
-            requireActivity().supportFragmentManager,
-            viewModel.getCurrentMonth(),
-            category,
-            categoryBudget,
-            MonthlyBudgetData(viewModel.monthlyLimit, viewModel.budgetTotal)
         )
     }
 

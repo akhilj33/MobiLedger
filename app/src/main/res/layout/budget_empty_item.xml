@@ -6,27 +6,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <Button
-            android:id="@+id/btnMakeBudget"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/make_budget"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="@dimen/cdp_36"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
-
-        <Button
-            android:id="@+id/btnApplyTemplate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/apply_template"
-            app:layout_constraintTop_toBottomOf="@id/btnMakeBudget"
-            android:layout_marginTop="@dimen/cdp_24"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
-
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/textEmptyBudget"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -35,9 +15,10 @@
             android:text="@string/you_have_not_created_the_budget_for_this_month"
             android:layout_marginStart="@dimen/cdp_36"
             android:layout_marginEnd="@dimen/cdp_36"
-            android:layout_marginTop="@dimen/cdp_24"
-            app:layout_constraintTop_toBottomOf="@id/btnApplyTemplate"
-            app:layout_constraintStart_toStartOf="parent" />
+            android:layout_marginTop="@dimen/cdp_36"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
 
         <com.airbnb.lottie.LottieAnimationView
             android:layout_width="326dp"
@@ -50,7 +31,27 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/textEmptyBudget"
-            app:layout_constraintBottom_toBottomOf="parent" />
+            app:layout_constraintBottom_toTopOf="@id/btnMakeBudget"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnMakeBudget"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/set_monthly_limit"
+            app:layout_constraintTop_toBottomOf="@id/animation_view"
+            android:layout_marginTop="@dimen/cdp_36"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnApplyTemplate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/apply_template"
+            app:layout_constraintTop_toBottomOf="@id/btnMakeBudget"
+            android:layout_marginTop="@dimen/cdp_24"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -105,7 +105,8 @@ class ViewModelFactoryProvider(private val useCaseProvider: UseCaseProvider) :
             modelClass.isAssignableFrom(BudgetViewModel::class.java) -> {
                 BudgetViewModel(
                     useCaseProvider.provideBudgetUseCase(),
-                    useCaseProvider.provideCategoryUseCase()
+                    useCaseProvider.provideCategoryUseCase(),
+                    useCaseProvider.provideTransactionUseCase()
                 ) as T
             }
             modelClass.isAssignableFrom(AddBudgetDialogViewModel::class.java) -> {

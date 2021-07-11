@@ -6,5 +6,6 @@
         android:bottomRightRadius="@dimen/cdp_48"
         android:topLeftRadius="@dimen/cdp_48"
         android:topRightRadius="@dimen/cdp_48" />
-    <solid android:color="@color/colorAppBlue" />
+    <solid android:color="#626ab2" />
+    <stroke android:width="0.5dp" android:color="@color/colorWhite"/>
 </shape>

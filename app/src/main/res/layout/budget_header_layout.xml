@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -26,9 +27,24 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/cdp_32"
-            android:text="@string/set_your_monthly_budget"
+            tools:text="@string/set_your_monthly_budget"
             app:layout_constraintStart_toStartOf="@id/verticalStartGuideline"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tvAddCategoryBudget"
+            style="@style/GelionSemiBoldAccent12"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/curved_bar"
+            android:paddingVertical="@dimen/cdp_4"
+            android:paddingHorizontal="@dimen/cdp_10"
+            android:drawableStart="@drawable/add_green_14"
+            android:text="@string/add_budget"
+            android:visibility="visible"
+            app:layout_constraintTop_toTopOf="@id/tvHeader"
+            app:layout_constraintBottom_toBottomOf="@id/tvHeader"
+            app:layout_constraintEnd_toEndOf="@id/verticalEndGuideline"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

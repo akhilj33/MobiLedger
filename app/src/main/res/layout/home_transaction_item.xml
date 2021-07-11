@@ -95,46 +95,68 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/cdp_16"
                 android:ellipsize="end"
+                app:autoSizeMaxTextSize="@dimen/csp_16"
+                app:autoSizeMinTextSize="@dimen/csp_12"
+                app:autoSizeStepGranularity="2sp"
+                app:autoSizeTextType="uniform"
                 android:maxLines="1"
-                app:layout_constraintBottom_toTopOf="@id/tvAmount"
-                app:layout_constraintEnd_toEndOf="@id/verticalStartGuideline70"
-                app:layout_constraintStart_toEndOf="@id/thumbnail"
-                app:layout_constraintTop_toTopOf="@id/horizontalStartGuideline_20dp" />
-
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/tvAmount"
-                style="@style/GelionRegularNavyBlue16"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/cdp_16"
-                app:layout_constraintEnd_toEndOf="@id/verticalStartGuideline70"
-                app:layout_constraintStart_toEndOf="@id/thumbnail"
-                app:layout_constraintTop_toBottomOf="@id/tvTransactionName" />
-
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/tvTime"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:maxLines="1"
-                app:layout_constraintBottom_toBottomOf="@id/horizontalEndGuideline_16dp"
+                tools:text ="Electircity"
                 app:layout_constraintBottom_toTopOf="@id/tvCategory"
-                app:layout_constraintEnd_toEndOf="@id/verticalEndGuideline"
-                app:layout_constraintStart_toStartOf="@id/verticalStartGuideline70"
-                tools:text="Investment" />
+                app:layout_constraintEnd_toEndOf="@id/verticalStartGuideline70"
+                app:layout_constraintStart_toEndOf="@id/thumbnail"
+                app:layout_constraintTop_toTopOf="@id/thumbnail" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tvCategory"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
-                style="@style/GelionRegularBlue16"
+                style="@style/GelionRegularNavyBlue12"
+                android:textSize="@dimen/csp_14"
+                app:autoSizeMaxTextSize="@dimen/csp_14"
+                app:autoSizeMinTextSize="@dimen/csp_12"
+                app:autoSizeStepGranularity="2sp"
+                app:autoSizeTextType="uniform"
                 android:maxLines="1"
-                app:layout_constraintBottom_toBottomOf="@id/horizontalEndGuideline_16dp"
+                app:layout_constraintEnd_toEndOf="@id/verticalStartGuideline70"
+                app:layout_constraintStart_toStartOf="@id/tvTransactionName"
+                app:layout_constraintTop_toBottomOf="@id/tvTransactionName"
+                app:layout_constraintBottom_toBottomOf="@id/thumbnail"
+                tools:text="Investment"/>
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tvAmount"
+                style="@style/GelionRegularNavyBlue16"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                tools:text ="65967867868"
+                app:autoSizeMaxTextSize="@dimen/csp_16"
+                app:autoSizeMinTextSize="@dimen/csp_12"
+                app:autoSizeStepGranularity="2sp"
+                app:autoSizeTextType="uniform"
+                android:maxLines="1"
+                app:layout_constraintTop_toTopOf="@id/tvTransactionName"
+                app:layout_constraintBottom_toBottomOf="@id/tvTransactionName"
+                app:layout_constraintEnd_toEndOf="@id/verticalEndGuideline"
+                app:layout_constraintStart_toStartOf="@id/verticalStartGuideline70" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tvTime"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                style="@style/GelionRegularNavyBlue12"
+                app:autoSizeMaxTextSize="@dimen/csp_14"
+                app:autoSizeMinTextSize="@dimen/csp_12"
+                app:autoSizeStepGranularity="2sp"
+                app:autoSizeTextType="uniform"
+                android:maxLines="1"
+                android:textSize="@dimen/csp_14"
+                app:layout_constraintBottom_toBottomOf="@id/tvCategory"
                 app:layout_constraintEnd_toEndOf="@id/verticalEndGuideline"
                 app:layout_constraintStart_toStartOf="@id/verticalStartGuideline70"
-                app:layout_constraintTop_toBottomOf="@id/tvTransactionName"
-                tools:text="Investment" />
+                app:layout_constraintTop_toTopOf="@id/tvCategory"
+                tools:text = "5 jan 2020"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.chauthai.swipereveallayout.SwipeRevealLayout>

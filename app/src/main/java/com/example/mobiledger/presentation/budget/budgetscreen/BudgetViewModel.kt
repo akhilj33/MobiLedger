@@ -13,6 +13,7 @@ import com.example.mobiledger.domain.AppResult
 import com.example.mobiledger.domain.enums.TransactionType
 import com.example.mobiledger.domain.usecases.BudgetUseCase
 import com.example.mobiledger.domain.usecases.CategoryUseCase
+import com.example.mobiledger.domain.usecases.TransactionUseCase
 import com.example.mobiledger.presentation.Event
 import com.example.mobiledger.presentation.budget.*
 import kotlinx.coroutines.Dispatchers
@@ -24,6 +25,7 @@ import java.util.*
 class BudgetViewModel(
     private val budgetUseCase: BudgetUseCase,
     private val categoryUseCase: CategoryUseCase,
+    private val transactionUseCase: TransactionUseCase
 ) : BaseViewModel() {
 
     val budgetViewItemListLiveData: LiveData<Event<MutableList<BudgetViewItem>>> get() = _budgetViewItemListLiveData
@@ -57,6 +59,7 @@ class BudgetViewModel(
         viewModelScope.launch {
             when (val result = categoryUseCase.getUserExpenseCategories()) {
                 is AppResult.Success -> {
+                    expenseCatList.clear()
                     expenseCatList.addAll(result.data.expenseCategoryList)
                 }
 
@@ -84,10 +87,14 @@ class BudgetViewModel(
             val monthlyBudgetCategoryList =
                 async { budgetUseCase.getCategoryBudgetListByMonth(getDateInMMyyyyFormat(getCurrentMonth())) }
             val monthlyBudgetData = async { budgetUseCase.getMonthlyBudgetOverView(getDateInMMyyyyFormat(getCurrentMonth())) }
+            val monthlySummaryData = async { transactionUseCase.getMonthlySummaryEntity(getDateInMMyyyyFormat(getCurrentMonth())) }
             when (val monthlyBudgetDataResult = monthlyBudgetData.await()) {
                 is AppResult.Success -> {
                     val monthlyBudgetCategoryListResult = monthlyBudgetCategoryList.await()
-                    handleTransactionResult(monthlyBudgetDataResult.data, monthlyBudgetCategoryListResult)
+                    val monthlySummaryResult = monthlySummaryData.await()
+
+                    val totalMonthlyExpense = if (monthlySummaryResult is AppResult.Success) monthlySummaryResult.data.totalExpense else 0
+                    handleTransactionResult(monthlyBudgetDataResult.data, monthlyBudgetCategoryListResult, totalMonthlyExpense)
                 }
                 is AppResult.Failure -> {
                     if (needToHandleAppError(monthlyBudgetDataResult.error)) {
@@ -104,23 +111,20 @@ class BudgetViewModel(
         }
     }
 
-
     private suspend fun handleTransactionResult(
         monthlyBudgetData: MonthlyBudgetData?,
-        monthlyBudgetCategoryList: AppResult<List<MonthlyCategoryBudget>>
+        monthlyBudgetCategoryList: AppResult<List<MonthlyCategoryBudget>>,
+        totalMonthlyExpense: Long
     ) {
         viewModelScope.launch {
             when (monthlyBudgetCategoryList) {
                 is AppResult.Success -> {
-                    _budgetViewItemListLiveData.value = Event(renderBudgetViewList(monthlyBudgetCategoryList.data, monthlyBudgetData))
+                    _budgetViewItemListLiveData.value = Event(renderBudgetViewList(monthlyBudgetCategoryList.data, monthlyBudgetData, totalMonthlyExpense))
                 }
                 is AppResult.Failure -> {
                     if (needToHandleAppError(monthlyBudgetCategoryList.error)) {
                         _errorLiveData.value = Event(
-                            ViewError(
-                                viewErrorType = ViewErrorType.NON_BLOCKING,
-                                message = monthlyBudgetCategoryList.error.message
-                            )
+                            ViewError(viewErrorType = ViewErrorType.NON_BLOCKING, message = monthlyBudgetCategoryList.error.message)
                         )
                     }
                 }
@@ -131,33 +135,36 @@ class BudgetViewModel(
 
     private suspend fun renderBudgetViewList(
         budgetCategoryList: List<MonthlyCategoryBudget>,
-        monthlyResult: MonthlyBudgetData?
+        monthlyResult: MonthlyBudgetData?,
+        totalMonthlyExpense: Long
     ): MutableList<BudgetViewItem> {
 
         return withContext(Dispatchers.IO) {
             val budgetViewItemList = mutableListOf<BudgetViewItem>()
             if (monthlyResult != null) {
-                budgetViewItemList.add(BudgetViewItem.BudgetHeaderData(R.string.overview_report))
+                budgetViewItemList.add(BudgetViewItem.BudgetHeaderData(HeaderData(R.string.overview_report)))
                 budgetViewItemList.add(
                     BudgetViewItem.BudgetOverviewData(
                         MonthlyBudgetOverviewData(
                             monthlyResult.maxBudget,
-                            monthlyResult.totalBudget
+                            monthlyResult.totalBudget,
+                            totalMonthlyExpense
                         )
                     )
                 )
                 budgetTotal = monthlyResult.totalBudget
                 monthlyLimit = monthlyResult.maxBudget
 
-                budgetViewItemList.add(BudgetViewItem.BtnAddCategory)
 
                 if (budgetCategoryList.isNotEmpty()) {
+                    budgetViewItemList.add(BudgetViewItem.BudgetHeaderData(HeaderData(R.string.categories_budget, true)))
                     budgetCategoryList.forEach {
 
                         budgetViewItemList.add(BudgetViewItem.BudgetCategory(mapToCategoryBudgetData(it)))
                         existingBudgetCatList.add(it.categoryName)
                     }
                 }
+                else budgetViewItemList.add(BudgetViewItem.BudgetCategoryEmpty)
             } else {
                 budgetViewItemList.add(BudgetViewItem.BudgetEmpty)
             }
