@@ -28,6 +28,7 @@ import java.io.File
 interface AttachmentSource {
     suspend fun uploadPicture(uid: String, uri: Uri): AppResult<Unit>
     suspend fun downloadProfilePicUri(uid: String): AppResult<Uri>
+    suspend fun deletePicture(uid: String): AppResult<Unit>
 }
 
 class AttachmentSourceImpl(
@@ -83,6 +84,28 @@ class AttachmentSourceImpl(
                 if (result.data?.result!=null)
                     AppResult.Success(result.data.result!!)
                 else AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
+            }
+            is FireBaseResult.Failure -> {
+                AppResult.Failure(result.error)
+            }
+        }
+    }
+
+    override suspend fun deletePicture(uid: String): AppResult<Unit> {
+        var response: Task<Void>? = null
+        var exception: Exception? = null
+        try {
+            if (!authSource.isUserAuthorized()) throw FirebaseAuthException(ErrorCodes.FIREBASE_UNAUTHORIZED, ConstantUtils.UNAUTHORIZED_ERROR_MSG)
+            val profilePicRef = storage.child(FIREBASE_STORAGE_IMAGE_PATH + uid)
+            response = profilePicRef.delete()
+            response.await()
+        } catch (e: Exception) {
+            exception = e
+        }
+
+        return when (val result = ErrorMapper.checkAndMapFirebaseApiError(response, exception)) {
+            is FireBaseResult.Success -> {
+                AppResult.Success(Unit)
             }
             is FireBaseResult.Failure -> {
                 AppResult.Failure(result.error)

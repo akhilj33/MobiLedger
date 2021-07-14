@@ -5,6 +5,7 @@
     <string name="app_name">MobiLedger</string>
     <string name="mobi_ledger">Mobi Ledger</string>
     <string name="join_a_creative_solution_for_a_better_tomorrow">Join a creative solution for a better tomorrow</string>
+    <string name="send_mail">Send mail</string>
 
     <!--Error messages-->
     <string name="generic_error_message">Something went wrong</string>
@@ -96,6 +97,8 @@
     <string name="set_budget">Set Budget</string>
     <string name="field_required">Field Required</string>
     <string name="field_invalid">This field is not valid</string>
+    <string name="contact_no_invalid">Invalid Contact No</string>
+    <string name="email_invalid">Invalid Email</string>
     <string name="category_already_exist">Category Already Exist</string>
     <string name="date">Date</string>
     <string name="add_category_budget">Add category budget</string>
@@ -194,7 +197,7 @@
     <string name="reset_password_msg">Link to reset your password will be sent to your registered email address</string>
     <string name="reset_password">Reset Password</string>
     <string name="transaction_list">Transaction List</string>
-    <string name="stats_empty_screen_msg">Add few transactions to analyze your spending and earnings using graphs</string>
+    <string name="stats_empty_screen_msg">Add few transactions to analyze your spending and earnings</string>
     <string name="stats_empty_heading">Oops!! No Stats Found</string>
     <string name="add_budget">\u0020 Add Budget</string>
     <string name="monthly_limit">Monthly Limit</string>
@@ -203,6 +206,10 @@
     <string name="set_monthly_limit">Set Monthly Limit</string>
     <string name="category_budget_empty_msg">Please Add Category wise Budget by clicking below. \n\nYou can also create a new budget template from profile section for future references</string>
     <string name="get_started_with_google">Get started with Google</string>
+    <string name="delete_photo">Delete \nPhoto</string>
+    <string name="change_photo">Change \nPhoto</string>
+    <string name="something_went_wrong">Something went wrong</string>
+    <string name="profile_photo">Profile Photo</string>
 
 
 </resources>

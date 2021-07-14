@@ -18,6 +18,7 @@ interface ProfileRepository {
     suspend fun updateEmailInFirebase(email: String): AppResult<Unit>
     suspend fun updatePhoneNoInFirebase(phoneNo: String): AppResult<Unit>
     suspend fun updatePhotoInAuth(photoUri: Uri): AppResult<Uri>
+    suspend fun deletePhotoInAuth(): AppResult<Unit>
 }
 
 class ProfileRepositoryImpl(
@@ -82,6 +83,16 @@ class ProfileRepositoryImpl(
             val uId = cacheSource.getUID()
             if (uId != null) userApi.updatePhotoInAuth(photoUri, uId).also {
                 if (it is AppResult.Success) profileDb.updatePhoto(photoUri, uId)
+            }
+            else AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
+        }
+    }
+
+    override suspend fun deletePhotoInAuth(): AppResult<Unit> {
+        return withContext(dispatcher) {
+            val uId = cacheSource.getUID()
+            if (uId != null) userApi.deletePhotoInAuth(uId).also {
+                if (it is AppResult.Success) profileDb.updatePhoto(null, uId)
             }
             else AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
         }

@@ -66,7 +66,7 @@ class HomeViewModel(
         updateMonthLiveData()
     }
 
-    private fun getUserName(isPTR: Boolean) {
+    internal fun getUserName(isPTR: Boolean) {
         viewModelScope.launch {
             when (val result = profileUseCase.fetchUserFromFirebase(isPTR)) {
                 is AppResult.Success -> {
@@ -88,7 +88,7 @@ class HomeViewModel(
         }
     }
 
-    private fun extractFirstName(userName: String): String {
+    internal fun extractFirstName(userName: String): String {
         val regex = Regex("[A-Z][a-zA-Z]*")
         return regex.find(userName.capitalize(Locale.getDefault()))?.value ?: ""
     }

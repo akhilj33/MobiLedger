@@ -7,7 +7,8 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/colorLightGrey">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/editProfileToolbar"
@@ -147,13 +148,14 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <TextView
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btnNameUpdate"
-            style="@style/GelionRegularBlue16"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/cdp_2"
             android:text="@string/update"
+            android:enabled="false"
             app:layout_constraintBottom_toBottomOf="@id/nameLayout"
             app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_96"
             app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_80"
@@ -181,13 +183,14 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <TextView
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btnContactUpdate"
-            style="@style/GelionRegularBlue16"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/cdp_2"
             android:text="@string/update"
+            android:enabled="false"
             app:layout_constraintBottom_toBottomOf="@id/contactNumLayout"
             app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_96"
             app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_80"
@@ -215,13 +218,14 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <TextView
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btnEmailUpdate"
-            style="@style/GelionRegularBlue16"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/cdp_2"
             android:text="@string/update"
+            android:enabled="false"
             app:layout_constraintBottom_toBottomOf="@id/emailLayout"
             app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_96"
             app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_80"
@@ -239,7 +243,7 @@
             android:text="@string/change_password"
             app:layout_constraintEnd_toStartOf="@id/verticalScreenGuideline_80"
             app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_04"
-            app:layout_constraintTop_toBottomOf="@id/emailLayout" />
+            app:layout_constraintTop_toBottomOf="@id/emailLayout"/>
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/imgChangePassword"

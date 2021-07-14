@@ -7,6 +7,7 @@ import com.example.mobiledger.domain.AppResult
 interface AttachmentUseCase {
     suspend fun uploadPicture(uri: Uri): AppResult<Unit>
     suspend fun downloadProfilePicUri(): AppResult<Uri>
+    suspend fun deletePicture(): AppResult<Unit>
 }
 
 class AttachmentUseCaseImpl(private val attachmentRepository: AttachmentRepository,
@@ -19,6 +20,13 @@ class AttachmentUseCaseImpl(private val attachmentRepository: AttachmentReposito
     override suspend fun downloadProfilePicUri(): AppResult<Uri> {
         return when(val result = attachmentRepository.downloadProfilePicUri()){
             is AppResult.Success -> profileUseCase.updatePhotoInAuth(result.data)
+            is AppResult.Failure -> result
+        }
+    }
+
+    override suspend fun deletePicture(): AppResult<Unit> {
+        return when(val result = attachmentRepository.deletePicture()){
+            is AppResult.Success -> profileUseCase.deletePhotoInAuth()
             is AppResult.Failure -> result
         }
     }

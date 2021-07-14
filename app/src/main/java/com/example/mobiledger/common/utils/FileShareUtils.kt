@@ -65,7 +65,7 @@ object FileShareUtils {
     }
 
     fun getCaptureImageOutputUri(context: Context, uid: String): Uri? {
-        val file = getFile(getCacheDirPath(context, FileUtils.Temp_Cache_FolderName), "$uid _profile.jpg")
+        val file = getFile(getCacheDirPath(context, FileUtils.Temp_Cache_FolderName), "profile_pic.jpg")
         return FileProvider.getUriForFile(context, BuildConfig.FILE_PROVIDER_AUTHORITY, file)
     }
 

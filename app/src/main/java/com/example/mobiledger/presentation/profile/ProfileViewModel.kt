@@ -21,8 +21,8 @@ class ProfileViewModel(
     private val attachmentUseCase: AttachmentUseCase
 ) : BaseViewModel() {
 
-    val userFromFirestoreResult: LiveData<UserEntity> get() = _userFromFirestoreResult
-    private val _userFromFirestoreResult: MutableLiveData<UserEntity> = MutableLiveData()
+    val userFromFirestoreResult: LiveData<Event<UserEntity>> get() = _userFromFirestoreResult
+    private val _userFromFirestoreResult: MutableLiveData<Event<UserEntity>> = MutableLiveData()
 
     private val _errorLiveData: MutableLiveData<Event<ViewError>> = MutableLiveData()
     val errorLiveData: LiveData<Event<ViewError>> = _errorLiveData
@@ -42,14 +42,12 @@ class ProfileViewModel(
     var isPushNotificationEnabledVal = true
     var isDailyReminderEnabledVal = true
 
-    lateinit var uId: String
     fun fetchUserData() {
         viewModelScope.launch {
             _loadingState.value = true
             when (val result = profileUseCase.fetchUserFromFirebase()) {
                 is AppResult.Success -> {
-                    uId = result.data.uid
-                    _userFromFirestoreResult.value = result.data
+                    _userFromFirestoreResult.value = Event(result.data)
                 }
                 is AppResult.Failure -> {
                     if (needToHandleAppError(result.error)) {
@@ -107,22 +105,6 @@ class ProfileViewModel(
     fun saveBiometricEnabled(enableBiometric: Boolean) {
         viewModelScope.launch {
             userSettingsUseCase.saveBiometricEnabled(enableBiometric)
-        }
-    }
-
-    fun uploadProfilePic(uri: Uri) {
-        viewModelScope.launch {
-            when (val result = attachmentUseCase.uploadPicture(uri)) {
-                is AppResult.Success -> attachmentUseCase.downloadProfilePicUri()
-                is AppResult.Failure -> if (needToHandleAppError(result.error)) {
-                    _errorLiveData.value = Event(
-                        ViewError(
-                            viewErrorType = ViewErrorType.NON_BLOCKING,
-                            message = result.error.message
-                        )
-                    )
-                }
-            }
         }
     }
 

@@ -13,6 +13,7 @@ import com.example.mobiledger.presentation.budgetTemplate.AddBudgetTemplateDialo
 import com.example.mobiledger.presentation.budgetTemplate.EditBudgetTemplateDialogFragment
 import com.example.mobiledger.presentation.categoryFragment.AddCategoryDialogFragment
 import com.example.mobiledger.presentation.onBoarding.TermsAndConditionFragment
+import com.example.mobiledger.presentation.profile.profilePicUpdateDialog.ProfilePicUpdateDialogFragment
 import com.example.mobiledger.presentation.transactiondetail.TransactionDetailDialogFragment
 import java.util.*
 
@@ -134,6 +135,16 @@ fun showTermsAndConditionDialogFragment(
     fragmentManager: FragmentManager,
 ) {
     val dialog = TermsAndConditionFragment.newInstance()
+    dialog.show(
+        fragmentManager,
+        dialog.getName()
+    )
+}
+
+fun showUpdateProfilePicDialogFragment(
+    fragmentManager: FragmentManager,
+) {
+    val dialog = ProfilePicUpdateDialogFragment.newInstance()
     dialog.show(
         fragmentManager,
         dialog.getName()

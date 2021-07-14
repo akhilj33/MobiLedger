@@ -11,13 +11,22 @@ import com.example.mobiledger.databinding.FragmentAboutUsBinding
 import com.example.mobiledger.presentation.onBoarding.OnBoardingNavigator
 
 
-class AboutUsFragment : BaseFragment<FragmentAboutUsBinding, OnBoardingNavigator>(R.layout.fragment_about_us, StatusBarColor.BLUE) {
+class AboutUsFragment : BaseFragment<FragmentAboutUsBinding, AboutUsNavigator>(R.layout.fragment_about_us, StatusBarColor.BLUE) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setOnCLickListener()
         Glide.with(this).load(R.raw.akj).circleCrop().into(viewBinding.imgDev1)
         Glide.with(this).load(R.raw.anant).circleCrop().into(viewBinding.imgDev2)
+
+//        navigator?.sendEmail(
+//            EmailEntity(
+//                email = emailItem.emailId,
+//                subject = emailSubject,
+//                bodyText = emailExtraText,
+//                attachmentPath = emailItem.documentUri
+//            )
+//        )
     }
 
     override fun isBottomNavVisible(): Boolean = false

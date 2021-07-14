@@ -27,6 +27,7 @@ interface UserApi {
     suspend fun fetchUserDataFromFirebaseDb(uid: String): AppResult<UserEntity>
     suspend fun updateUserNameInAuth(userName: String, uid: String): AppResult<Unit>
     suspend fun updatePhotoInAuth(photoUri: Uri, uid: String): AppResult<Uri>
+    suspend fun deletePhotoInAuth(uid: String): AppResult<Unit>
     suspend fun updateEmailInAuth(email: String, uid: String): AppResult<Unit>
     suspend fun updateContactInFirebaseDB(contact: String, uid: String): AppResult<Unit>
     suspend fun updatePasswordInAuth(password: String): AppResult<Unit>
@@ -147,11 +148,40 @@ class UserApiImpl(private val firebaseDb: FirebaseFirestore, private val authSou
         }
     }
 
+    override suspend fun deletePhotoInAuth(uid: String): AppResult<Unit> {
+        var response: Task<Void>? = null
+        var exception: Exception? = null
+        try {
+            if (!authSource.isUserAuthorized()) throw FirebaseAuthException(ErrorCodes.FIREBASE_UNAUTHORIZED, UNAUTHORIZED_ERROR_MSG)
+            val user = authSource.getCurrentUser()
+            val userProfileChangeRequest = UserProfileChangeRequest.Builder()
+            userProfileChangeRequest.photoUri = null
+            response = user?.updateProfile(userProfileChangeRequest.build())
+            response?.await()
+        } catch (e: Exception) {
+            exception = e
+        }
 
-    private suspend fun updateUserPhotoInDB(photoUri: Uri, uid: String): Boolean {
+        return when (val result = ErrorMapper.checkAndMapFirebaseApiError(response, exception)) {
+            is FireBaseResult.Success -> {
+                val isUpdated = updateUserPhotoInDB(null, uid)
+                if (isUpdated) AppResult.Success(Unit)
+                else AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
+            }
+            is FireBaseResult.Failure -> {
+                AppResult.Failure(result.error)
+            }
+        }
+    }
+
+
+    private suspend fun updateUserPhotoInDB(photoUri: Uri?, uid: String): Boolean {
         return try {
             val docRef = firebaseDb.collection(USERS).document(uid)
+            if (photoUri!=null)
             docRef.update(PHOTO_URI, photoUri.toString()).await()
+            else
+                docRef.update(PHOTO_URI, null).await()
             true
         } catch (e: Exception) {
             false

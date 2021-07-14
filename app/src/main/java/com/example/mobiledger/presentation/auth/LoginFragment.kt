@@ -102,9 +102,10 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, LoginNavigator>(R.layou
                 try {
                     viewModel.signInUserViaGoogle(task.result?.idToken)
                 } catch (e: ApiException) {
-                    //todo decide what to do when google sign in fails
+                    showSnackBarErrorView(getString(R.string.something_went_wrong), false)
                 }
             }
+            else showSnackBarErrorView(getString(R.string.something_went_wrong), false)
         }
 
     private fun getEmailText(): String = viewBinding.textEmail.text.toString().trim()

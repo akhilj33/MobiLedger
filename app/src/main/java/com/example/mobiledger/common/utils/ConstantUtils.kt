@@ -2,6 +2,12 @@ package com.example.mobiledger.common.utils
 
 object ConstantUtils {
 
+    // Request Key
+    const val PROFILE_PIC_REQUEST_KEY = "PROFILE_PIC_REQUEST_KEY"
+
+    // Bundle Key
+    const val PROFILE_PIC_BUNDLE_KEY = "PROFILE_PIC_BUNDLE_KEY"
+
     const val APP_NAME = "MobiLedger"
     const val USERS = "Users"
     const val EMAIL_ID = "emailId"

@@ -95,7 +95,7 @@ class BudgetAdapter(
                 val percentSpent = (item.totalMonthlyExpense.toFloat() / item.maxBudget.toFloat() * 100)
                 if (percentSpent > 0.0){
                     percentSpentGroup.visible()
-                    tvPercentSpent.text = context.getString(R.string.percent_spent, percentSpent.toString().toPercent())
+                    tvPercentSpent.text = context.getString(R.string.percent_spent, percentSpent.roundToOneDecimal().toPercent())
                 }
                 else percentSpentGroup.gone()
                 tvMaxBudgetAmount.text = context.getString(R.string.monthly_limit_amount, item.maxBudget.toAmount())
@@ -126,7 +126,7 @@ class BudgetAdapter(
                 ivCategoryIcon.background = ContextCompat.getDrawable(context, item.categoryIcon)
                 val percent = (item.totalCategoryExpense.toFloat() / item.totalCategoryBudget.toFloat() * 100)
                 budgetCatAmountSeekBarID.value = (kotlin.math.min(percent, 100f))
-                tvSpentPercent.text = percent.toString().roundToOneDecimal(percent).toPercent()
+                tvSpentPercent.text = percent.roundToOneDecimal().toPercent()
             }
         }
     }
