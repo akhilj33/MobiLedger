@@ -75,6 +75,6 @@ fun Long.toAmount(): String {
 }
 
 fun String.toPercent() = "$this \u0025"
-fun String.roundToOneDecimal(num: Float) = " %.1f".format(num)
+fun Float.roundToOneDecimal(): String = " %.1f".format(this).toString()
 
 fun Long.toPercent(total: Long) = ((this.toFloat() / total) * 100).roundToInt()

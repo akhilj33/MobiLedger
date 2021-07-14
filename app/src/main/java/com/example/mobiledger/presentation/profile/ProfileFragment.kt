@@ -1,26 +1,18 @@
 package com.example.mobiledger.presentation.profile
 
-import android.app.Activity
-import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.View
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.biometric.BiometricManager
-import androidx.core.net.toUri
 import androidx.fragment.app.viewModels
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.mobiledger.R
 import com.example.mobiledger.common.base.BaseFragment
-import com.example.mobiledger.common.extention.getFile
 import com.example.mobiledger.common.showAlertDialog
 import com.example.mobiledger.common.showBiometricSystemPrompt
 import com.example.mobiledger.common.showToast
 import com.example.mobiledger.common.utils.AnimationDialogUtils
 import com.example.mobiledger.common.utils.BiometricDeviceState
-import com.example.mobiledger.common.utils.FileShareUtils.getCaptureImageOutputUri
-import com.example.mobiledger.common.utils.FileShareUtils.getFileChooserIntent
-import com.example.mobiledger.common.utils.PermissionUtils.uploadPermissions
 import com.example.mobiledger.common.utils.canAuthenticateUsingBiometrics
 import com.example.mobiledger.databinding.FragmentProfileBinding
 import com.example.mobiledger.databinding.SnackViewErrorBinding
@@ -31,7 +23,6 @@ import com.example.mobiledger.presentation.OneTimeObserver
 class ProfileFragment : BaseFragment<FragmentProfileBinding, ProfileNavigator>(R.layout.fragment_profile, StatusBarColor.BLUE) {
 
     private val viewModel: ProfileViewModel by viewModels { viewModelFactory }
-    private var cameraFileUri: Uri? = null
     private var enableBiometric = false
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -48,7 +39,7 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding, ProfileNavigator>(R
     override fun getSnackBarErrorView(): SnackViewErrorBinding = viewBinding.includeErrorView
 
     private fun setObserver() {
-        viewModel.userFromFirestoreResult.observe(viewLifecycleOwner, {
+        viewModel.userFromFirestoreResult.observe(viewLifecycleOwner, OneTimeObserver {
             updateProfileUI(it)
         })
 
@@ -96,15 +87,6 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding, ProfileNavigator>(R
             appView.aboutUsLabel.setOnClickListener {
                 navigator?.navigateToAboutUsFragment()
             }
-
-            imgUser.setOnClickListener {
-                checkAndAskForPermissions(
-                    uploadPermissions,
-                    R.string.permission_required_dialog_msg,
-                    requestMultiplePermissions, isPermissionsGranted
-                )
-            }
-
         }
     }
 
@@ -123,8 +105,10 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding, ProfileNavigator>(R
         viewBinding.displayName.text = user.userName ?: ""
         viewBinding.emailTv.text = user.emailId ?: ""
         viewBinding.contactNumTv.text = user.phoneNo ?: ""
-        if (user.photoUrl!=null) Glide.with(this).load(user.photoUrl).circleCrop().into(viewBinding.imgUser)
-        else Glide.with(this).load(R.drawable.profile_colorful).circleCrop().into(viewBinding.imgUser)
+        if (!user.photoUrl.isNullOrEmpty()) Glide.with(this).load(user.photoUrl).circleCrop().diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+            .into(viewBinding.imgUser)
+        else Glide.with(this).load(R.drawable.profile_colorful).circleCrop().diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+            .into(viewBinding.imgUser)
     }
 
     private fun initSwitchCompact() {
@@ -133,7 +117,6 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding, ProfileNavigator>(R
             NormalObserver { isPushNotificationEnabled ->
                 viewBinding.accountView.toggleBtnNotification.isChecked = isPushNotificationEnabled
                 viewModel.isPushNotificationEnabledVal = isPushNotificationEnabled
-                Log.i("Anant", "Push notification : " + isPushNotificationEnabled)
             })
         viewModel.isPushNotificationEnabled()
 
@@ -141,7 +124,6 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding, ProfileNavigator>(R
             viewLifecycleOwner,
             NormalObserver { isReminderEnabled ->
                 viewBinding.accountView.toggleBtnReminder.isChecked = isReminderEnabled
-                Log.i("Anant", "Remainder : " + isReminderEnabled)
             })
         viewModel.isReminderEnabled()
 
@@ -189,7 +171,6 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding, ProfileNavigator>(R
     }
 
     private val onCancelButtonClick = {
-
     }
 
     private val onContinueClick = {
@@ -242,53 +223,6 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding, ProfileNavigator>(R
                 viewModel.saveReminderEnabled(false)
             }
             viewModel.isReminderEnabled()
-        }
-    }
-
-    /*-------------------------Permission handling------------------------------------------------*/
-
-    private fun startChooser() {
-        cameraFileUri = getCaptureImageOutputUri(requireContext(), viewModel.uId)
-        cameraFileUri?.let {
-            activityResultLauncher.launch(getFileChooserIntent(requireContext(), it))
-        }
-    }
-
-    private val activityResultLauncher =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-            if (it.resultCode == Activity.RESULT_OK) {
-                when {
-                    it.data?.data != null -> {
-                        handleFileUri(
-                            it.data?.data?.getFile(requireContext(), "${viewModel.uId} _profile.jpg")?.toUri()
-                        )
-                    }
-                    else -> handleFileUri(cameraFileUri)
-                }
-            }
-        }
-
-
-    private fun handleFileUri(imageURi: Uri?) {
-        if (imageURi == null) {
-            activity?.showToast(getString(R.string.generic_error_message))
-            return
-        }
-        viewModel.uploadProfilePic(imageURi)
-        Glide.with(this).load(imageURi).circleCrop().into(viewBinding.imgUser)
-    }
-
-    private val isPermissionsGranted = fun(isGranted: Boolean) {
-        if (isGranted) startChooser()
-    }
-
-    private val requestMultiplePermissions = registerForActivityResult(
-        ActivityResultContracts.RequestMultiplePermissions()
-    ) { permissions ->
-        if (permissions.values.contains(false)) {
-            requireActivity().showToast(getString(R.string.required_permission_not_granted))
-        } else {
-            startChooser()
         }
     }
 

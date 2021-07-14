@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/cdp_36"
+        android:paddingTop="@dimen/cdp_24"
+        app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/verticalScreenGuideline_10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.10" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/verticalScreenGuideline_90"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.90" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tvProfilePic"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            style="@style/GelionSemiBoldBlue24"
+            android:text="@string/profile_photo"
+            android:maxLines="1"
+            app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_10"
+            app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_90"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/ivRemoveProfilePic"/>
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/ivRemoveProfilePic"
+            android:layout_width="@dimen/cdp_48"
+            android:layout_height="@dimen/cdp_48"
+            android:layout_marginTop="@dimen/cdp_24"
+            app:layout_constraintBottom_toTopOf="@id/tvDeletePic"
+            app:layout_constraintEnd_toStartOf="@id/ivChangeProfilePic"
+            app:layout_constraintHorizontal_chainStyle="spread"
+            app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_10"
+            app:layout_constraintTop_toBottomOf="@id/tvProfilePic"
+            app:srcCompat="@drawable/delete_red_24" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tvDeletePic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/GelionRegularNavyBlue16"
+            android:text="@string/delete_photo"
+            android:layout_marginTop="@dimen/cdp_8"
+            android:gravity="center"
+            app:layout_constraintStart_toStartOf="@id/ivRemoveProfilePic"
+            app:layout_constraintEnd_toEndOf="@id/ivRemoveProfilePic"
+            app:layout_constraintTop_toBottomOf="@id/ivRemoveProfilePic"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/ivChangeProfilePic"
+            android:layout_width="@dimen/cdp_48"
+            android:layout_height="@dimen/cdp_48"
+            app:srcCompat="@drawable/profile_blue_24"
+            app:layout_constraintHorizontal_chainStyle="spread"
+            app:layout_constraintStart_toEndOf="@id/ivRemoveProfilePic"
+            app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_90"
+            app:layout_constraintTop_toTopOf="@id/ivRemoveProfilePic"
+            app:layout_constraintBottom_toTopOf="@id/tvChangePic"/>
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tvChangePic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/GelionRegularNavyBlue16"
+            android:text="@string/change_photo"
+            android:layout_marginTop="@dimen/cdp_8"
+            android:gravity="center"
+            app:layout_constraintStart_toStartOf="@id/ivChangeProfilePic"
+            app:layout_constraintEnd_toEndOf="@id/ivChangeProfilePic"
+            app:layout_constraintTop_toBottomOf="@id/ivChangeProfilePic"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

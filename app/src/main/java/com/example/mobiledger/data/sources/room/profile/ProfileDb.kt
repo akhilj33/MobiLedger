@@ -11,7 +11,7 @@ interface ProfileDb {
     suspend fun saveUser(userInfo: UserEntity)
     suspend fun hasUser(): Boolean
     suspend fun updateUserName(username: String, uId: String)
-    suspend fun updatePhoto(photoUri: Uri, uId: String)
+    suspend fun updatePhoto(photoUri: Uri?, uId: String)
     suspend fun updateEmailId(emailId: String, uId: String)
     suspend fun updatePhoneNo(phoneNo: String, uId: String)
 
@@ -41,8 +41,8 @@ class ProfileDbImpl(private val dao: ProfileDao) : ProfileDb {
         dao.updateUserName(username, uId)
     }
 
-    override suspend fun updatePhoto(photoUri: Uri, uId: String) {
-        dao.updatePhotoUri(photoUri, uId)
+    override suspend fun updatePhoto(photoUri: Uri?, uId: String) {
+        dao.updatePhotoUri(photoUri?.toString(), uId)
     }
 
     override suspend fun updateEmailId(emailId: String, uId: String) {

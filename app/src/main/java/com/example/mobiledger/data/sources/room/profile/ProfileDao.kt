@@ -25,7 +25,7 @@ interface ProfileDao {
     suspend fun updateUserName(name: String, uId: String)
 
     @Query("UPDATE profile SET photoUrl=:photoUri WHERE uid=:uId")
-    suspend fun updatePhotoUri(photoUri: Uri, uId: String)
+    suspend fun updatePhotoUri(photoUri: String?, uId: String)
 
     @Query("UPDATE profile SET emailId=:email WHERE uid=:uId")
     suspend fun updateEmail(email: String, uId: String)

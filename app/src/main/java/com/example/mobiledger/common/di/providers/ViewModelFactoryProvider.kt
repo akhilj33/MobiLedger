@@ -82,7 +82,8 @@ class ViewModelFactoryProvider(private val useCaseProvider: UseCaseProvider) :
             modelClass.isAssignableFrom(EditProfileViewModel::class.java) -> {
                 EditProfileViewModel(
                     useCaseProvider.provideProfileUseCase(),
-                    useCaseProvider.provideAuthUseCase()
+                    useCaseProvider.provideAuthUseCase(),
+                    useCaseProvider.provideAttachmentUseCase()
                 ) as T
             }
             modelClass.isAssignableFrom(AddTransactionViewModel::class.java) -> {

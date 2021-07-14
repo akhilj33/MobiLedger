@@ -23,7 +23,9 @@ import com.example.mobiledger.common.showAlertDialog
 import com.example.mobiledger.common.showToast
 import com.example.mobiledger.common.utils.ConstantUtils
 import com.example.mobiledger.common.utils.DailyReminderWorker
+import com.example.mobiledger.common.utils.EmailUtils
 import com.example.mobiledger.databinding.ActivityMainBinding
+import com.example.mobiledger.domain.entities.EmailEntity
 import com.example.mobiledger.presentation.NormalObserver
 import com.example.mobiledger.presentation.OneTimeObserver
 import com.example.mobiledger.presentation.main.MainActivityViewModel.*
@@ -47,7 +49,8 @@ class MainActivity :
         mainActivityNavigator =
             MainActivityNavigator(
                 getFragmentContainerID(),
-                supportFragmentManager
+                supportFragmentManager,
+                openEmailClient = { openEmailClient(it) }
             )
 
         mainActivityNavigator?.navigateToSplashScreen()
@@ -224,6 +227,10 @@ class MainActivity :
         val uri = Uri.fromParts("package", packageName, null)
         intent.data = uri
         startActivity(Intent.createChooser(intent, null))
+    }
+
+    private fun openEmailClient(it: EmailEntity) {
+        startActivity(Intent.createChooser(EmailUtils.getIntent(it), getString(R.string.send_mail)))
     }
 
     /*------------------------------------------------Live Data Observers----------------------------------------------------*/

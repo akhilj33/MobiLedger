@@ -11,7 +11,7 @@ interface ProfileUseCase {
     suspend fun updateEmailInFirebase(email: String): AppResult<Unit>
     suspend fun updatePhoneInFirebase(phoneNo: String): AppResult<Unit>
     suspend fun updatePhotoInAuth(photoUri: Uri): AppResult<Uri>
-
+    suspend fun deletePhotoInAuth(): AppResult<Unit>
 }
 
 class ProfileUseCaseImpl(private val profileRepository: ProfileRepository) : ProfileUseCase {
@@ -33,5 +33,9 @@ class ProfileUseCaseImpl(private val profileRepository: ProfileRepository) : Pro
 
     override suspend fun updatePhotoInAuth(photoUri: Uri): AppResult<Uri> {
         return profileRepository.updatePhotoInAuth(photoUri)
+    }
+
+    override suspend fun deletePhotoInAuth(): AppResult<Unit> {
+        return profileRepository.deletePhotoInAuth()
     }
 }

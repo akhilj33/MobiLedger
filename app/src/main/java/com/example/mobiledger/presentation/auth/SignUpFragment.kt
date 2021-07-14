@@ -116,7 +116,7 @@ class SignUpFragment :
 
         override fun afterTextChanged(editable: Editable?) {
             if (isValidName()) {
-                updateViewBasedOnValidation(viewBinding.emailLayout, isValid = true)
+                updateViewBasedOnValidation(viewBinding.nameInputLayout, isValid = true)
             }
         }
     }
@@ -128,7 +128,7 @@ class SignUpFragment :
 
         override fun afterTextChanged(editable: Editable?) {
             if (isValidPhone()) {
-                updateViewBasedOnValidation(viewBinding.emailLayout, isValid = true)
+                updateViewBasedOnValidation(viewBinding.phoneInputLayout, isValid = true)
             }
         }
     }
@@ -164,7 +164,7 @@ class SignUpFragment :
 
         override fun afterTextChanged(editable: Editable?) {
             if (isValidConfirmPassword()) {
-                updateViewBasedOnValidation(viewBinding.emailLayout, isValid = true)
+                updateViewBasedOnValidation(viewBinding.confirmPasswordLayout, isValid = true)
             }
         }
     }

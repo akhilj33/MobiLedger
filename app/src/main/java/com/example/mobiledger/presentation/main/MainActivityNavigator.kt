@@ -4,7 +4,9 @@ import androidx.annotation.IdRes
 import androidx.fragment.app.FragmentManager
 import com.example.mobiledger.common.utils.FragmentTagUtil
 import com.example.mobiledger.common.utils.FragmentTransactionHelper
+import com.example.mobiledger.domain.entities.EmailEntity
 import com.example.mobiledger.presentation.aboutUs.AboutUsFragment
+import com.example.mobiledger.presentation.aboutUs.AboutUsNavigator
 import com.example.mobiledger.presentation.auth.AuthViewPagerFragment
 import com.example.mobiledger.presentation.auth.LoginNavigator
 import com.example.mobiledger.presentation.auth.SignUpNavigator
@@ -30,9 +32,9 @@ import java.util.*
 
 class MainActivityNavigator constructor(
     @IdRes private val containerId: Int,
-    private val fragmentManager: FragmentManager
+    private val fragmentManager: FragmentManager, private val openEmailClient: ((EmailEntity) -> Unit)
 ) : HomeNavigator, LoginNavigator, SignUpNavigator, SplashNavigator, ProfileNavigator, BudgetNavigator, StatsNavigator,
-    BudgetTemplateNavigator, OnBoardingNavigator {
+    BudgetTemplateNavigator, OnBoardingNavigator, AboutUsNavigator {
 
 
     /*---------------------------------Main Activity-------------------------------------*/
@@ -54,6 +56,10 @@ class MainActivityNavigator constructor(
             fragmentManager,
             FragmentTagUtil.DASHBOARD_FRAGMENT_TAG, isExclusive = !removeDashboard
         )
+    }
+
+    override fun sendEmail(emailEntity: EmailEntity) {
+        openEmailClient(emailEntity)
     }
 
     /*---------------------------------In App Navigation-------------------------------------*/

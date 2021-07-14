@@ -13,6 +13,7 @@ import kotlinx.coroutines.withContext
 interface AttachmentRepository {
     suspend fun uploadPicture(uri: Uri): AppResult<Unit>
     suspend fun downloadProfilePicUri(): AppResult<Uri>
+    suspend fun deletePicture(): AppResult<Unit>
 }
 
 class AttachmentRepositoryImpl(
@@ -37,6 +38,17 @@ class AttachmentRepositoryImpl(
             val uId = cacheSource.getUID()
             if (uId != null) {
                 attachmentSource.downloadProfilePicUri(uId)
+            } else {
+                AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
+            }
+        }
+    }
+
+    override suspend fun deletePicture(): AppResult<Unit> {
+        return withContext(dispatcher) {
+            val uId = cacheSource.getUID()
+            if (uId != null) {
+                attachmentSource.deletePicture(uId)
             } else {
                 AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
             }
