@@ -8,7 +8,7 @@ import com.example.mobiledger.R
 import com.example.mobiledger.common.base.BaseDialogFragment
 import com.example.mobiledger.common.extention.gone
 import com.example.mobiledger.common.extention.visible
-import com.example.mobiledger.common.showAlertDialog
+import com.example.mobiledger.common.extention.showAlertDialog
 import com.example.mobiledger.databinding.ApplyTemplateDialogLayoutBinding
 import com.example.mobiledger.databinding.SnackViewErrorBinding
 import com.example.mobiledger.presentation.OneTimeObserver

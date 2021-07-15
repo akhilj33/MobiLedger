@@ -10,7 +10,7 @@ import com.example.mobiledger.R
 import com.example.mobiledger.common.base.BaseFragment
 import com.example.mobiledger.common.extention.disable
 import com.example.mobiledger.common.extention.enable
-import com.example.mobiledger.common.showToast
+import com.example.mobiledger.common.extention.showToast
 import com.example.mobiledger.common.utils.ValidationUtils
 import com.example.mobiledger.common.utils.showTermsAndConditionDialogFragment
 import com.example.mobiledger.databinding.FragmentSignUpBinding

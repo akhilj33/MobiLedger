@@ -25,9 +25,12 @@ class BudgetTemplateViewModel(
     private val _budgetTemplateList: MutableLiveData<Event<List<NewBudgetTemplateEntity>>> = MutableLiveData()
     val budgetTemplateList: MutableLiveData<Event<List<NewBudgetTemplateEntity>>> = _budgetTemplateList
 
-    init {
-        getBudgetTemplateList()
-    }
+    private val _dataDeleted = MutableLiveData<Event<Boolean>>()
+    val dataDeleted: LiveData<Event<Boolean>> get() = _dataDeleted
+
+    val templateList: MutableList<NewBudgetTemplateEntity> = mutableListOf()
+
+    lateinit var id: String
 
     fun refreshData() {
         getBudgetTemplateList()
@@ -38,6 +41,8 @@ class BudgetTemplateViewModel(
         viewModelScope.launch {
             when (val result = budgetTemplateUseCase.getBudgetTemplateList()) {
                 is AppResult.Success -> {
+                    templateList.clear()
+                    templateList.addAll(result.data)
                     _budgetTemplateList.value = Event(result.data)
                 }
 
@@ -50,8 +55,28 @@ class BudgetTemplateViewModel(
                     )
                 }
             }
+            _loadingState.value = false
         }
-        _loadingState.value = false
+    }
+
+    fun deleteBudgetTemplate() {
+        _loadingState.value = true
+        viewModelScope.launch {
+            when (val result = budgetTemplateUseCase.deleteBudgetTemplate(id)) {
+                is AppResult.Success -> {
+                    _dataDeleted.value = Event(true)
+                }
+                is AppResult.Failure -> {
+                    _errorLiveData.value = Event(
+                        ViewError(
+                            viewErrorType = ViewErrorType.NON_BLOCKING,
+                            message = result.error.message
+                        )
+                    )
+                    _loadingState.value = false
+                }
+            }
+        }
     }
 
     enum class ViewErrorType { NON_BLOCKING }
@@ -59,6 +84,6 @@ class BudgetTemplateViewModel(
     data class ViewError(
         val viewErrorType: ViewErrorType,
         var message: String? = null,
-        @StringRes val resID: Int = R.string.generic_error_message
+        @StringRes val resID: Int = R.string.something_went_wrong
     )
 }

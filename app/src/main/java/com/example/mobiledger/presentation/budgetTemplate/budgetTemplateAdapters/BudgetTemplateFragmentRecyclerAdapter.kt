@@ -4,12 +4,13 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.mobiledger.R
 import com.example.mobiledger.common.utils.DateUtils
 import com.example.mobiledger.databinding.ItemBudgetTemplateListBinding
 import com.example.mobiledger.domain.entities.NewBudgetTemplateEntity
 
 class BudgetTemplateFragmentRecyclerAdapter(
-    val onTemplateItemClick: (String) -> Unit,
+    val onTemplateItemClick: (String) -> Unit, val onDeleteItemClick: (String) -> Unit
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private lateinit var context: Context
@@ -37,9 +38,10 @@ class BudgetTemplateFragmentRecyclerAdapter(
         fun bind(newBudgetTemplateEntity: NewBudgetTemplateEntity) {
 
             viewBinding.apply {
+                ivDeleteIcon.setOnClickListener {  onDeleteItemClick(newBudgetTemplateEntity.id)}
                 tvTemplateName.text = newBudgetTemplateEntity.name
-                tvTemplateAmount.text = newBudgetTemplateEntity.maxBudgetLimit.toString()
-                tvTemplateDate.text = DateUtils.getDateInDDMMMMyyyyFormat(newBudgetTemplateEntity.transactionTime)
+                tvTemplateAmount.text = context.getString(R.string.monthly_limit_money,newBudgetTemplateEntity.maxBudgetLimit.toString())
+                tvTemplateDate.text = context.getString(R.string.date_created, DateUtils.getDateInDDMMMyyyyFormat(newBudgetTemplateEntity.transactionTime))
                 root.setOnClickListener {
                     onTemplateItemClick(newBudgetTemplateEntity.id)
                 }

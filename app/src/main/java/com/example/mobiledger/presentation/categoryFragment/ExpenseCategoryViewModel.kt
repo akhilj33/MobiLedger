@@ -10,7 +10,6 @@ import com.example.mobiledger.domain.AppResult
 import com.example.mobiledger.domain.entities.ExpenseCategoryListEntity
 import com.example.mobiledger.domain.usecases.CategoryUseCase
 import com.example.mobiledger.presentation.Event
-import com.example.mobiledger.presentation.addtransaction.AddTransactionViewModel
 import kotlinx.coroutines.launch
 
 class ExpenseCategoryViewModel(
@@ -72,7 +71,7 @@ class ExpenseCategoryViewModel(
     data class ViewError(
         val viewErrorType: ViewErrorType,
         var message: String? = null,
-        @StringRes val resID: Int = R.string.generic_error_message
+        @StringRes val resID: Int = R.string.something_went_wrong
     )
 }
 

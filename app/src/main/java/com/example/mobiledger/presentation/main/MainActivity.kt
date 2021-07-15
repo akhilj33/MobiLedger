@@ -19,8 +19,8 @@ import androidx.core.content.ContextCompat
 import androidx.work.*
 import com.example.mobiledger.R
 import com.example.mobiledger.common.base.BaseActivity
-import com.example.mobiledger.common.showAlertDialog
-import com.example.mobiledger.common.showToast
+import com.example.mobiledger.common.extention.showAlertDialog
+import com.example.mobiledger.common.extention.showToast
 import com.example.mobiledger.common.utils.ConstantUtils
 import com.example.mobiledger.common.utils.DailyReminderWorker
 import com.example.mobiledger.common.utils.EmailUtils
