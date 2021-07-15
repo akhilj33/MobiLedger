@@ -4,7 +4,6 @@
     <!--General-->
     <string name="app_name">MobiLedger</string>
     <string name="mobi_ledger">Mobi Ledger</string>
-    <string name="join_a_creative_solution_for_a_better_tomorrow">Join a creative solution for a better tomorrow</string>
     <string name="send_mail">Send mail</string>
 
     <!--Error messages-->
@@ -18,6 +17,7 @@
     <string name="login">Login</string>
     <string name="new_user_sign_up">New user? SIGN UP</string>
     <string name="google_icon">Google Icon</string>
+    <string name="join_a_creative_solution_for_a_better_tomorrow">Join a creative solution for better tomorrow</string>
 
     <!--SignUp Screen-->
     <string name="confirm_password">Confirm Password</string>
@@ -154,6 +154,7 @@
     <string name="login_using_credentials">Login using credentials</string>
     <string name="retry">Retry</string>
     <string name="view_all">VIEW ALL</string>
+    <string name="a_creative_solution_for_a_better_tomorrow">A creative solution for better tomorrow</string>
 
     <!-- Budget Template -->
     <string name="budget_template">Budget Template</string>

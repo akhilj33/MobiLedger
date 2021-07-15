@@ -111,7 +111,7 @@ class AddTransactionViewModel(
                 budgetAmountUpdateJob))){
                 is AppResult.Success -> {
                     _dataUpdatedResult.value = Event(Unit)
-                    if (userSettingsUseCase.isNotificationEnabled())
+                    if (userSettingsUseCase.isNotificationEnabled() && newTransactionEntity.transactionType == TransactionType.Expense)
                         _notificationIndicator.value =
                             NotificationCallerData(monthYear, newTransactionEntity.category, newTransactionEntity.amount)
                 }

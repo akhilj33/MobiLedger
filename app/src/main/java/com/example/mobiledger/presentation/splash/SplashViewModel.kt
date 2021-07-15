@@ -20,7 +20,7 @@ class SplashViewModel(private val userSettingsUseCase: UserSettingsUseCase) : Ba
     private val _isTermsAndConditionAcceptedLiveData = MutableLiveData<Event<Boolean>>()
     val isTermsAndConditionAcceptedLiveData: LiveData<Event<Boolean>> get() = _isTermsAndConditionAcceptedLiveData
 
-    private val splashTimeOut: Long = 2500
+    private val splashTimeOut: Long = 3000
 
     init {
         isTermsAncConditionAccepted()
