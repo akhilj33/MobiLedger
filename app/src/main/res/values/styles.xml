@@ -102,6 +102,10 @@
         <item name="android:textSize">@dimen/csp_24</item>
     </style>
 
+    <style name="GelionSemiBold36" parent="GelionSemiBoldFont">
+        <item name="android:textSize">@dimen/csp_36</item>
+    </style>
+
     <style name="GelionRegular18" parent="GelionRegularFont">
         <item name="android:textSize">@dimen/csp_18</item>
     </style>
@@ -188,6 +192,10 @@
     </style>
 
     <style name="GelionSemiBoldBlue24" parent="GelionSemiBold24">
+        <item name="android:textColor">@color/colorTextDark</item>
+    </style>
+
+    <style name="GelionSemiBoldBlue36" parent="GelionSemiBold36">
         <item name="android:textColor">@color/colorTextDark</item>
     </style>
 

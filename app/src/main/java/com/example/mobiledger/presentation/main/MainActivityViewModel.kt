@@ -5,11 +5,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.mobiledger.common.base.BaseViewModel
 import com.example.mobiledger.domain.AppResult
+import com.example.mobiledger.domain.entities.MonthlyTransactionSummaryEntity
 import com.example.mobiledger.domain.enums.TransactionType
-import com.example.mobiledger.domain.usecases.AuthUseCase
-import com.example.mobiledger.domain.usecases.BudgetUseCase
-import com.example.mobiledger.domain.usecases.InternetUseCase
-import com.example.mobiledger.domain.usecases.UserSettingsUseCase
+import com.example.mobiledger.domain.usecases.*
 import com.example.mobiledger.presentation.Event
 import com.example.mobiledger.presentation.addtransaction.AddTransactionViewModel
 import com.example.mobiledger.presentation.budget.MonthlyBudgetData
@@ -21,6 +19,7 @@ class MainActivityViewModel(
     private val internetUseCase: InternetUseCase,
     private val budgetUseCase: BudgetUseCase,
     private val authUseCase: AuthUseCase,
+    private val transactionUseCase: TransactionUseCase,
     private val userSettingsUseCase: UserSettingsUseCase
 ) : BaseViewModel() {
 
@@ -141,8 +140,10 @@ class MainActivityViewModel(
 
     fun notificationHandler(notificationCallerData: AddTransactionViewModel.NotificationCallerData) {
         viewModelScope.launch {
+            var maxBudget = 0L
             when (val result = budgetUseCase.getMonthlyBudgetOverView(notificationCallerData.monthYear)) {
                 is AppResult.Success -> {
+                    maxBudget = result.data?.maxBudget ?: 0
                     shouldTriggerTotalNotification(result.data, notificationCallerData)
                 }
                 is AppResult.Failure -> {
@@ -152,6 +153,14 @@ class MainActivityViewModel(
                 budgetUseCase.getMonthlyCategoryBudget(notificationCallerData.monthYear, notificationCallerData.expenseCategory)) {
                 is AppResult.Success -> {
                     shouldTriggerCategoryNotification(result.data, notificationCallerData)
+                }
+                is AppResult.Failure -> {
+                }
+            }
+            when (val result =
+                transactionUseCase.getMonthlySummaryEntity(notificationCallerData.monthYear, false)) {
+                is AppResult.Success -> {
+                    shouldTriggerTotalExpenseNotification(result.data, notificationCallerData, maxBudget)
                 }
                 is AppResult.Failure -> {
                 }
@@ -197,6 +206,20 @@ class MainActivityViewModel(
             _notificationIndicatorCategory.value = NotificationCallerPercentData(notificationCallerData, 90)
         } else if (monthlyCategoryBudget?.categoryBudget != null && (monthlyCategoryBudget.categoryExpense.toFloat() / monthlyCategoryBudget.categoryBudget.toFloat()) >= .5 && ((monthlyCategoryBudget.categoryExpense.toFloat() - notificationCallerData.expenseTransaction.toFloat()) / monthlyCategoryBudget.categoryBudget.toFloat()) < .5) {
             _notificationIndicatorCategory.value = NotificationCallerPercentData(notificationCallerData, 50)
+        }
+    }
+
+    private fun shouldTriggerTotalExpenseNotification(
+        monthlySummaryData: MonthlyTransactionSummaryEntity,
+        notificationCallerData: AddTransactionViewModel.NotificationCallerData,
+        maxBudget: Long
+    ) {
+        if (monthlySummaryData.totalExpense.toFloat() / maxBudget.toFloat() >= 1 && ((monthlySummaryData.totalExpense.toFloat() - notificationCallerData.expenseTransaction.toFloat()) / maxBudget.toFloat()) < 1) {
+            _notificationIndicatorTotal.value = NotificationCallerPercentData(notificationCallerData, 100)
+        } else if (monthlySummaryData.totalExpense.toFloat() / maxBudget.toFloat() >= .9 && ((monthlySummaryData.totalExpense.toFloat() - notificationCallerData.expenseTransaction.toFloat()) / maxBudget.toFloat()) < .9) {
+            _notificationIndicatorTotal.value = NotificationCallerPercentData(notificationCallerData, 90)
+        } else if (monthlySummaryData.totalExpense.toFloat() / maxBudget.toFloat() >= .5 && ((monthlySummaryData.totalExpense.toFloat() - notificationCallerData.expenseTransaction.toFloat()) / maxBudget.toFloat()) < .5) {
+            _notificationIndicatorTotal.value = NotificationCallerPercentData(notificationCallerData, 50)
         }
     }
 

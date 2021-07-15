@@ -37,6 +37,7 @@ class ViewModelFactoryProvider(private val useCaseProvider: UseCaseProvider) :
                     useCaseProvider.provideInternetUseCase(),
                     useCaseProvider.provideBudgetUseCase(),
                     useCaseProvider.provideAuthUseCase(),
+                    useCaseProvider.provideTransactionUseCase(),
                     useCaseProvider.provideUserSettingsUseCase()
                 ) as T
             }
