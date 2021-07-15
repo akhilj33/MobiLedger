@@ -53,123 +53,122 @@
                     android:textColor="@color/colorWhite"
                     android:textSize="@dimen/csp_20" />
 
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:id="@+id/btnDelete"
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tvEditBudgetMonthlyLimit"
+                    style="@style/GelionSemiBoldWhite14"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:background="@drawable/curved_bar_light_blue"
+                    android:paddingVertical="@dimen/cdp_4"
+                    android:paddingHorizontal="@dimen/cdp_10"
+                    android:drawableEnd="@drawable/edit_white_14"
+                    android:text="@string/edit"
                     android:layout_alignParentEnd="true"
-                    android:layout_marginEnd="@dimen/cdp_16"
-                    android:src="@drawable/delete_white" />
+                    android:layout_marginEnd="@dimen/cdp_16"/>
 
             </RelativeLayout>
         </com.google.android.material.appbar.MaterialToolbar>
 
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/statsDetailCardView"
-            android:layout_width="match_parent"
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/bottomGuideline"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:cardBackgroundColor="@color/colorWhite"
-            app:cardCornerRadius="@dimen/cdp_8"
-            app:cardElevation="@dimen/cdp_4"
-            app:cardPreventCornerOverlap="true"
-            app:cardUseCompatPadding="true"
-            app:layout_constraintTop_toBottomOf="@id/budgetTemplateToolbar">
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.90" />
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/budgetCardLayout"
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/bottomGuideline85"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.86" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tvNoTemplate"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/no_templates_categories_added"
+            style="@style/GelionSemiBoldBlue18"
+            android:textAlignment="center"
+            android:visibility="visible"
+            android:layout_marginTop="@dimen/cdp_32"
+            app:layout_constraintVertical_chainStyle="packed"
+            android:layout_marginBottom="@dimen/cdp_48"
+            app:layout_constraintTop_toBottomOf="@id/budgetTemplateToolbar"
+            app:layout_constraintBottom_toTopOf="@id/bottomGuideline85"
+            app:layout_constraintStart_toStartOf="@id/verticalStartGuideline"
+            app:layout_constraintEnd_toEndOf="@id/verticalEndGuideline" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="@dimen/cdp_0"
+            android:layout_height="@dimen/cdp_0"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            app:layout_constraintTop_toBottomOf="@id/budgetTemplateToolbar"
+            app:layout_constraintBottom_toTopOf="@id/bottomGuideline85"
+            app:layout_constraintStart_toStartOf="@id/verticalStartGuideline"
+            app:layout_constraintEnd_toEndOf="@id/verticalEndGuideline">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvBudgetTemplatesCategory"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:padding="@dimen/cdp_16">
+                android:layout_height="match_parent"
+                android:layout_marginTop="@dimen/cdp_16"
+                android:overScrollMode="never"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
 
-                <TextView
-                    android:id="@+id/tv_maxBudget"
-                    style="@style/GelionSemiBoldBlue18"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/maximum_budget_limit"
-                    android:textAlignment="center"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <TextView
-                    android:id="@+id/tv_maxBudgetAmt"
-                    style="@style/GelionSemiBoldBlue20"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textAlignment="center"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tv_maxBudget" />
+        <View
+            android:id="@+id/bottomView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintTop_toBottomOf="@id/bottomGuideline"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
-                <Button
-                    android:id="@+id/btnApply"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/apply"
-                    android:visibility="gone"
-                    android:layout_marginTop="@dimen/cdp_8"
-                    app:layout_constraintTop_toBottomOf="@id/tv_maxBudgetAmt"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent" />
+        <View
+            android:id="@+id/budgetDetailView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@color/colorLightGrey"
+            app:layout_constraintTop_toBottomOf="@id/bottomGuideline85"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/bottomGuideline"/>
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-        </com.google.android.material.card.MaterialCardView>
-
-        <TextView
-            android:id="@+id/templateDetail"
-            style="@style/GelionRegularBlue18"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAlignment="center"
-            android:layout_marginTop="@dimen/cdp_16"
-            app:layout_constraintEnd_toStartOf="@id/tv_totalBudgetAmt"
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tvBudgetAmount"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            tools:text="Total Budget set: 5000 / 50000 (10%)"
+            style="@style/GelionSemiBoldAccent12"
+            android:gravity="center"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:textSize="@dimen/csp_14"
+            app:autoSizeMaxTextSize="@dimen/csp_14"
+            app:autoSizeMinTextSize="@dimen/csp_10"
+            app:autoSizeStepGranularity="2sp"
+            app:autoSizeTextType="uniform"
+            app:layout_constraintTop_toTopOf="@id/budgetDetailView"
+            app:layout_constraintBottom_toBottomOf="@id/budgetDetailView"
             app:layout_constraintStart_toStartOf="@id/verticalStartGuideline"
-            app:layout_constraintTop_toBottomOf="@id/statsDetailCardView" />
+            app:layout_constraintEnd_toEndOf="@id/verticalEndGuideline" />
 
-        <TextView
-            android:id="@+id/tv_totalBudget"
-            style="@style/GelionRegularBlue18"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/total_budget"
-            android:textAlignment="center"
-            app:layout_constraintHorizontal_chainStyle="spread_inside"
-            android:layout_marginTop="@dimen/cdp_16"
-            app:layout_constraintEnd_toStartOf="@id/tv_totalBudgetAmt"
-            app:layout_constraintStart_toStartOf="@id/verticalStartGuideline"
-            app:layout_constraintTop_toBottomOf="@id/templateDetail" />
 
-        <TextView
-            android:id="@+id/tv_totalBudgetAmt"
-            style="@style/GelionSemiBoldBlue20"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAlignment="center"
-            app:layout_constraintStart_toEndOf="@id/tv_totalBudget"
-            app:layout_constraintEnd_toEndOf="@id/verticalEndGuideline"
-            app:layout_constraintTop_toTopOf="@id/tv_totalBudget" />
-
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btnAddCategoryBudget"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/cdp_16"
+            android:layout_margin="@dimen/cdp_16"
             android:text="@string/add_category_budget"
-            app:layout_constraintEnd_toEndOf="@id/verticalEndGuideline"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/bottomGuideline"
             app:layout_constraintStart_toStartOf="@id/verticalStartGuideline"
-            app:layout_constraintTop_toBottomOf="@id/tv_totalBudgetAmt" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvBudgetTemplatesCategory"
-            android:layout_width="0dp"
-            android:layout_marginTop="@dimen/cdp_8"
-            android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="@id/verticalEndGuideline"
-            app:layout_constraintStart_toStartOf="@id/verticalStartGuideline"
-            app:layout_constraintTop_toBottomOf="@id/btnAddCategoryBudget" />
+            app:layout_constraintEnd_toEndOf="@id/verticalEndGuideline"  />
 
         <include
             android:id="@+id/includeErrorView"
@@ -177,7 +176,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toBottomOf="@id/bottomGuideline85"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             tools:visibility="visible" />

@@ -1,4 +1,4 @@
-package com.example.mobiledger.common
+package com.example.mobiledger.common.extention
 
 import android.app.Activity
 import android.app.AlertDialog

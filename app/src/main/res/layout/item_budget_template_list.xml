@@ -1,79 +1,129 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tool="http://schemas.android.com/tools">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/horizontalGuidelineTop16"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_begin="@dimen/cdp_16" />
-
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/verticalStartGuideline04"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.04" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/verticalStartGuideline60"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.60" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/verticalEndGuideline96"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.96" />
-
-
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/tvTemplateName"
-            style="@style/GelionSemiBoldBlue18"
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/budgetCardView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:maxLines="2"
-            app:layout_constraintEnd_toEndOf="@id/verticalStartGuideline60"
-            app:layout_constraintStart_toEndOf="@id/verticalStartGuideline04"
-            app:layout_constraintTop_toBottomOf="@id/horizontalGuidelineTop16" />
+            app:cardBackgroundColor="@color/colorWhite"
+            app:cardCornerRadius="@dimen/cdp_8"
+            app:cardElevation="@dimen/cdp_4"
+            android:layout_margin="@dimen/cdp_4"
+            app:cardPreventCornerOverlap="true"
+            app:cardUseCompatPadding="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/tvTemplateAmount"
-            style="@style/GelionSemiBoldBlue18"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:maxLines="1"
-            android:layout_marginTop="@dimen/cdp_8"
-            app:layout_constraintEnd_toEndOf="@id/verticalEndGuideline96"
-            app:layout_constraintStart_toEndOf="@id/verticalStartGuideline60"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/tvTemplateDate"
-            style="@style/GelionSemiBoldBlue16"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/verticalStartGuideline60"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_percent="0.80" />
 
-            android:ellipsize="end"
-            android:maxLines="1"
-            android:layout_marginTop="@dimen/cdp_8"
-            android:layout_marginBottom="@dimen/cdp_16"
-            app:layout_constraintEnd_toEndOf="@id/verticalStartGuideline60"
-            app:layout_constraintStart_toEndOf="@id/verticalStartGuideline04"
-            app:layout_constraintTop_toBottomOf="@id/tvTemplateName"
-            app:layout_constraintBottom_toBottomOf="parent" />
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/horizontalGuidelineTop16"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_constraintGuide_begin="@dimen/cdp_8" />
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/horizontalGuidelineBottom8"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_constraintGuide_end="@dimen/cdp_8" />
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/verticalStartGuideline04"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_percent="0.04" />
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/verticalStartGuideline96"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_percent="0.96" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tvTemplateName"
+                    style="@style/GelionSemiBoldBlue18"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    app:autoSizeMaxTextSize="@dimen/csp_20"
+                    app:autoSizeMinTextSize="@dimen/csp_16"
+                    app:autoSizeStepGranularity="2sp"
+                    app:autoSizeTextType="uniform"
+                    app:layout_constraintBottom_toTopOf="@id/tvTemplateAmount"
+                    app:layout_constraintEnd_toEndOf="@id/verticalStartGuideline60"
+                    app:layout_constraintStart_toEndOf="@id/verticalStartGuideline04"
+                    app:layout_constraintTop_toBottomOf="@id/horizontalGuidelineTop16"
+                    tool:text="Template 1" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tvTemplateAmount"
+                    style="@style/GelionRegularNavyBlue12"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:layout_marginTop="@dimen/cdp_4"
+                    app:autoSizeMaxTextSize="@dimen/csp_12"
+                    app:autoSizeMinTextSize="@dimen/csp_8"
+                    app:autoSizeStepGranularity="2sp"
+                    app:autoSizeTextType="uniform"
+                    app:layout_constraintBottom_toTopOf="@id/tvTemplateDate"
+                    app:layout_constraintEnd_toEndOf="@id/verticalStartGuideline60"
+                    app:layout_constraintStart_toEndOf="@id/verticalStartGuideline04"
+                    app:layout_constraintTop_toBottomOf="@id/tvTemplateName"
+                    tool:text="Monthly Limit: 50000" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tvTemplateDate"
+                    style="@style/GelionRegularNavyBlue12"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    app:autoSizeMaxTextSize="@dimen/csp_12"
+                    app:autoSizeMinTextSize="@dimen/csp_8"
+                    app:autoSizeStepGranularity="2sp"
+                    app:autoSizeTextType="uniform"
+                    app:layout_constraintBottom_toTopOf="@id/horizontalGuidelineBottom8"
+                    app:layout_constraintEnd_toEndOf="@id/verticalStartGuideline60"
+                    app:layout_constraintStart_toEndOf="@id/verticalStartGuideline04"
+                    app:layout_constraintTop_toBottomOf="@id/tvTemplateAmount"
+                    tool:text="Date Created: 4th Nov 2019" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/ivDeleteIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toTopOf="@id/horizontalGuidelineBottom8"
+                    app:layout_constraintEnd_toEndOf="@id/verticalStartGuideline96"
+                    app:layout_constraintStart_toStartOf="@id/verticalStartGuideline60"
+                    app:layout_constraintTop_toBottomOf="@id/horizontalGuidelineTop16"
+                    app:srcCompat="@drawable/delete_red_24" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </com.google.android.material.card.MaterialCardView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

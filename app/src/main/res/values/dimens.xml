@@ -47,6 +47,8 @@
     <dimen name="bottom_nav_image_margin">@dimen/cdp_12</dimen>
     <dimen name="bottom_nav_text_margin">@dimen/cdp_10</dimen>
     <dimen name="seek_bar_thickness">4dp</dimen>
+    <dimen name="csp_8">8sp</dimen>
+    <dimen name="csp_10">10sp</dimen>
 
 
 </resources>

@@ -6,7 +6,10 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.mobiledger.R
 import com.example.mobiledger.common.base.BaseFragment
-import com.example.mobiledger.common.showAlertDialog
+import com.example.mobiledger.common.extention.gone
+import com.example.mobiledger.common.extention.roundToOneDecimal
+import com.example.mobiledger.common.extention.toPercent
+import com.example.mobiledger.common.extention.visible
 import com.example.mobiledger.common.utils.showEditBudgetTemplateDialogFragment
 import com.example.mobiledger.databinding.FragmentEditBudgetTempleteBinding
 import com.example.mobiledger.databinding.SnackViewErrorBinding
@@ -69,18 +72,7 @@ class EditBudgetTemplateFragment :
                 activity?.onBackPressed()
             }
 
-            btnDelete.setOnClickListener {
-                activity?.showAlertDialog(
-                    getString(R.string.delete_budget_templates),
-                    getString(R.string.delete_budget_templates_msg),
-                    getString(R.string.yes),
-                    getString(R.string.no),
-                    onCancelButtonClick,
-                    onContinueClick
-                )
-            }
-
-            budgetCardLayout.setOnClickListener {
+            tvEditBudgetMonthlyLimit.setOnClickListener {
                 showEditBudgetTemplateDialogFragment(
                     requireActivity().supportFragmentManager,
                     viewModel.id,
@@ -96,14 +88,6 @@ class EditBudgetTemplateFragment :
         }
     }
 
-    private val onCancelButtonClick = {
-
-    }
-
-    private val onContinueClick = {
-        viewModel.deleteBudgetTemplate()
-    }
-
     private fun initRecyclerView() {
         val linearLayoutManager = LinearLayoutManager(activity)
         viewBinding.rvBudgetTemplatesCategory
@@ -113,33 +97,24 @@ class EditBudgetTemplateFragment :
             }
     }
 
-
     private fun setUpObserver() {
-        viewModel.budgetTemplateCategoryList.observe(viewLifecycleOwner, {
+        viewModel.budgetTemplateCategoryList.observe(viewLifecycleOwner, OneTimeObserver{
             it.let {
-                budgetTemplateCategoryRecyclerAdapter.addList(it.peekContent())
-            }
-        })
-
-        viewModel.budgetTemplateSummary.observe(viewLifecycleOwner, {
-            it.let {
-                viewBinding.tvMaxBudgetAmt.text = it.peekContent().maxBudgetLimit.toString()
-                if (!it.peekContent().description.isNullOrEmpty())
-                    viewBinding.templateDetail.text = it.peekContent().description
-            }
-        })
-
-        viewModel.totalSum.observe(viewLifecycleOwner, {
-            it.let {
-                viewBinding.tvTotalBudgetAmt.text = it.toString()
-            }
-        })
-
-        viewModel.dataDeleted.observe(viewLifecycleOwner, {
-            it.let {
-                if (it) {
-                    activity?.onBackPressed()
+                budgetTemplateCategoryRecyclerAdapter.addList(it)
+                if (it.isNotEmpty()) {
+                    viewBinding.tvNoTemplate.gone()
+                } else {
+                    viewBinding.tvNoTemplate.visible()
                 }
+            }
+        })
+
+        viewModel.budgetTemplateSummary.observe(viewLifecycleOwner, OneTimeObserver{
+            it.let {
+                val totalBudget = viewModel.totalSumVal
+                val monthlyLimit = it.maxBudgetLimit
+                val percent = ((totalBudget.toFloat() / monthlyLimit.toFloat())*100).roundToOneDecimal().toPercent().trim()
+                viewBinding.tvBudgetAmount.text = getString(R.string.total_budget_set, totalBudget.toString(), monthlyLimit.toString(), percent)
             }
         })
 

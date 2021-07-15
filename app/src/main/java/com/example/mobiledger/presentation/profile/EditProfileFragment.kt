@@ -18,8 +18,8 @@ import com.example.mobiledger.R
 import com.example.mobiledger.common.base.BaseFragment
 import com.example.mobiledger.common.base.BaseNavigator
 import com.example.mobiledger.common.extention.*
-import com.example.mobiledger.common.showAlertDialog
-import com.example.mobiledger.common.showToast
+import com.example.mobiledger.common.extention.showAlertDialog
+import com.example.mobiledger.common.extention.showToast
 import com.example.mobiledger.common.utils.*
 import com.example.mobiledger.common.utils.ConstantUtils.PROFILE_PIC_BUNDLE_KEY
 import com.example.mobiledger.common.utils.ConstantUtils.PROFILE_PIC_REQUEST_KEY
@@ -35,7 +35,6 @@ import com.example.mobiledger.domain.enums.ProfilePicUpdateType
 import com.example.mobiledger.domain.enums.ProfilePicUpdateType.Companion.getProfilePicUpdateType
 import com.example.mobiledger.presentation.OneTimeObserver
 import com.google.android.material.textfield.TextInputLayout
-import java.io.File
 
 
 class EditProfileFragment : BaseFragment<FragmentEditProfileBinding, BaseNavigator>(R.layout.fragment_edit_profile, StatusBarColor.BLUE) {
@@ -316,7 +315,7 @@ class EditProfileFragment : BaseFragment<FragmentEditProfileBinding, BaseNavigat
 
     private fun handleFileUri(imageURi: Uri?) {
         if (imageURi == null) {
-            activity?.showToast(getString(R.string.generic_error_message))
+            activity?.showToast(getString(R.string.something_went_wrong))
             return
         }
         viewModel.oldPhoto = imageURi.toString()

@@ -2,6 +2,7 @@ package com.example.mobiledger.common.utils
 
 import androidx.fragment.app.FragmentManager
 import com.example.mobiledger.common.extention.getName
+import com.example.mobiledger.domain.entities.NewBudgetTemplateEntity
 import com.example.mobiledger.domain.entities.TransactionEntity
 import com.example.mobiledger.presentation.addtransaction.AddTransactionDialogFragment
 import com.example.mobiledger.presentation.auth.ForgetPasswordDialogFragment
@@ -75,8 +76,9 @@ fun showUpdateBudgetDialogFragment(
 
 fun showAddNewTemplateDialogFragment(
     fragmentManager: FragmentManager,
+    templateList: MutableList<NewBudgetTemplateEntity>,
 ) {
-    val dialog = AddBudgetTemplateDialogFragment.newInstance()
+    val dialog = AddBudgetTemplateDialogFragment.newInstance(templateList)
     dialog.show(
         fragmentManager,
         dialog.getName()

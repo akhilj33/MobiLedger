@@ -16,7 +16,6 @@ import com.example.mobiledger.domain.usecases.TransactionUseCase
 import com.example.mobiledger.domain.usecases.UserSettingsUseCase
 import com.example.mobiledger.presentation.Event
 import com.example.mobiledger.presentation.getResultFromJobs
-import com.example.mobiledger.presentation.transactiondetail.TransactionDetailViewModel
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
@@ -136,7 +135,7 @@ class AddTransactionViewModel(
     data class ViewError(
         val viewErrorType: ViewErrorType,
         var message: String? = null,
-        @StringRes val resID: Int = R.string.generic_error_message
+        @StringRes val resID: Int = R.string.something_went_wrong
     )
 
     data class NotificationCallerData(
