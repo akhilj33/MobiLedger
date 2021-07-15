@@ -7,7 +7,7 @@ import com.example.mobiledger.R
 import com.example.mobiledger.common.base.BaseFragment
 import com.example.mobiledger.common.extention.gone
 import com.example.mobiledger.common.extention.visible
-import com.example.mobiledger.common.showBiometricSystemPrompt
+import com.example.mobiledger.common.extention.showBiometricSystemPrompt
 import com.example.mobiledger.databinding.FragmentSplashBinding
 import com.example.mobiledger.presentation.OneTimeObserver
 

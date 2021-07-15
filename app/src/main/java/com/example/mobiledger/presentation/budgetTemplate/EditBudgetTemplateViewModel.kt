@@ -32,9 +32,6 @@ class EditBudgetTemplateViewModel(
     private val _budgetTemplateSummary: MutableLiveData<Event<NewBudgetTemplateEntity>> = MutableLiveData()
     val budgetTemplateSummary: MutableLiveData<Event<NewBudgetTemplateEntity>> = _budgetTemplateSummary
 
-    private val _dataDeleted = MutableLiveData<Boolean>(false)
-    val dataDeleted: LiveData<Boolean> get() = _dataDeleted
-
     private val _totalSum = MutableLiveData<Long>(0)
     val totalSum: LiveData<Long> get() = _totalSum
 
@@ -118,6 +115,7 @@ class EditBudgetTemplateViewModel(
         viewModelScope.launch {
             when (val result = categoryUseCase.getUserExpenseCategories()) {
                 is AppResult.Success -> {
+                    expenseCatList.clear()
                     expenseCatList.addAll(result.data.expenseCategoryList)
                 }
 
@@ -134,27 +132,6 @@ class EditBudgetTemplateViewModel(
         _loadingState.value = false
     }
 
-    fun deleteBudgetTemplate() {
-        _loadingState.value = true
-        viewModelScope.launch {
-            when (val result = budgetTemplateUseCase.deleteBudgetTemplate(id)) {
-                is AppResult.Success -> {
-                    _dataDeleted.value = true
-                }
-                is AppResult.Failure -> {
-                    _errorLiveData.value = Event(
-                        ViewError(
-                            viewErrorType = ViewErrorType.NON_BLOCKING,
-                            message = result.error.message
-                        )
-                    )
-                    _loadingState.value = false
-                }
-            }
-        }
-    }
-
-
     fun giveFinalExpenseList(): ArrayList<String> {
         expenseCatList.removeAll(existingBudgetCatList)
         return expenseCatList
@@ -166,6 +143,6 @@ class EditBudgetTemplateViewModel(
     data class ViewError(
         val viewErrorType: ViewErrorType,
         var message: String? = null,
-        @StringRes val resID: Int = R.string.generic_error_message
+        @StringRes val resID: Int = R.string.something_went_wrong
     )
 }

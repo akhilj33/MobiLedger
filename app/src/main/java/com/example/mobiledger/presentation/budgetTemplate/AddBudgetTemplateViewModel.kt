@@ -13,7 +13,7 @@ import com.example.mobiledger.presentation.Event
 import com.google.firebase.Timestamp
 import kotlinx.coroutines.launch
 
-class AddBudgetTemplateDialogFragmentViewModel(
+class AddBudgetTemplateViewModel(
     private val budgetTemplateUseCase: BudgetTemplateUseCase
 ) : BaseViewModel() {
 
@@ -24,7 +24,9 @@ class AddBudgetTemplateDialogFragmentViewModel(
     val dataAdded: LiveData<Boolean> get() = _dataAdded
 
     private val _errorLiveData: MutableLiveData<Event<ViewError>> = MutableLiveData()
-    val errorLiveData: LiveData<Event<ViewError>> = _errorLiveData
+    val errorLiveData: LiveData<Event<ViewError>> =_errorLiveData
+
+    var templateList: MutableList<NewBudgetTemplateEntity> = mutableListOf()
 
     fun addNewBudgetTemplate(name: String, maxLimitAmount: Long, description: String) {
         viewModelScope.launch {
@@ -55,7 +57,7 @@ class AddBudgetTemplateDialogFragmentViewModel(
     data class ViewError(
         val viewErrorType: ViewErrorType,
         var message: String? = null,
-        @StringRes val resID: Int = R.string.generic_error_message
+        @StringRes val resID: Int = R.string.something_went_wrong
     )
 }
 

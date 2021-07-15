@@ -27,7 +27,7 @@ import com.example.mobiledger.common.di.DependencyProvider
 import com.example.mobiledger.common.extention.changeStatusBarColor
 import com.example.mobiledger.common.extention.gone
 import com.example.mobiledger.common.extention.visible
-import com.example.mobiledger.common.showToast
+import com.example.mobiledger.common.extention.showToast
 import com.example.mobiledger.common.utils.PermissionUtils
 import com.example.mobiledger.databinding.SnackViewErrorBinding
 import com.example.mobiledger.presentation.NormalObserver

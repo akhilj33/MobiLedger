@@ -8,6 +8,7 @@ import com.example.mobiledger.R
 import com.example.mobiledger.common.base.BaseFragment
 import com.example.mobiledger.common.extention.gone
 import com.example.mobiledger.common.extention.visible
+import com.example.mobiledger.common.extention.showAlertDialog
 import com.example.mobiledger.common.utils.showAddNewTemplateDialogFragment
 import com.example.mobiledger.databinding.FragmentBudgetTemplateBinding
 import com.example.mobiledger.databinding.SnackViewErrorBinding
@@ -22,7 +23,7 @@ class BudgetTemplateFragment : BaseFragment<FragmentBudgetTemplateBinding, Budge
 
     private val budgetTemplateFragmentRecyclerAdapter: BudgetTemplateFragmentRecyclerAdapter by lazy {
         BudgetTemplateFragmentRecyclerAdapter(
-            onTemplateItemClick
+            onTemplateItemClick, onDeleteItemClick
         )
     }
 
@@ -41,35 +42,49 @@ class BudgetTemplateFragment : BaseFragment<FragmentBudgetTemplateBinding, Budge
             btnBack.setOnClickListener {
                 activity?.onBackPressed()
             }
+            btnNewTemplateEmpty.setOnClickListener {
+                showAddNewTemplateDialogFragment(requireActivity().supportFragmentManager, viewModel.templateList)
+            }
+
             btnNewTemplate.setOnClickListener {
-                showAddNewTemplateDialogFragment(requireActivity().supportFragmentManager)
+                showAddNewTemplateDialogFragment(requireActivity().supportFragmentManager, viewModel.templateList)
             }
         }
     }
 
     private fun setUpObserver() {
-        viewModel.budgetTemplateList.observe(viewLifecycleOwner, {
+        viewModel.budgetTemplateList.observe(viewLifecycleOwner, OneTimeObserver{
             it.let {
-                budgetTemplateFragmentRecyclerAdapter.addList(it.peekContent())
-                if (it.peekContent().isNotEmpty()) {
-                    viewBinding.tvNoTemplate.gone()
+                budgetTemplateFragmentRecyclerAdapter.addList(it)
+                if (it.isNotEmpty()) {
+                    viewBinding.emptyScreenGroup.gone()
+                    viewBinding.nonEmptyScreenGroup.visible()
                 } else {
-                    viewBinding.tvNoTemplate.visible()
+                    viewBinding.emptyScreenGroup.visible()
+                    viewBinding.nonEmptyScreenGroup.gone()
                 }
             }
         })
+
         activityViewModel.addNewBudgetTemplate.observe(viewLifecycleOwner, OneTimeObserver {
             it.let {
                 viewModel.refreshData()
                 logEvent(getString(R.string.budget_template_created_msg))
             }
         })
+
+        viewModel.dataDeleted.observe(viewLifecycleOwner, OneTimeObserver{
+            it.let {
+                if (it) {
+                    viewModel.refreshData()
+                }
+            }
+        })
     }
 
     private fun initRecyclerView() {
         val linearLayoutManager = LinearLayoutManager(activity)
-        viewBinding.rvBudgetTemplates
-            .apply {
+        viewBinding.rvBudgetTemplates.apply {
                 layoutManager = linearLayoutManager
                 adapter = budgetTemplateFragmentRecyclerAdapter
             }
@@ -77,6 +92,25 @@ class BudgetTemplateFragment : BaseFragment<FragmentBudgetTemplateBinding, Budge
 
     private val onTemplateItemClick = fun(id: String) {
         navigator?.navigateToEditBudgetTemplateScreen(id)
+    }
+
+    private val onDeleteItemClick = fun(id: String) {
+        viewModel.id = id
+        activity?.showAlertDialog(
+                    getString(R.string.delete_budget_templates),
+                    getString(R.string.delete_budget_templates_msg),
+                    getString(R.string.yes),
+                    getString(R.string.no),
+                    onCancelButtonClick,
+                    onContinueClick
+                )
+    }
+
+    private val onCancelButtonClick = {
+    }
+
+    private val onContinueClick = {
+        viewModel.deleteBudgetTemplate()
     }
 
     companion object {

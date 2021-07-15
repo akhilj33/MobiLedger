@@ -8,7 +8,7 @@
     <string name="send_mail">Send mail</string>
 
     <!--Error messages-->
-    <string name="generic_error_message">Something went wrong</string>
+    <string name="something_went_wrong">Something went wrong</string>
     <string name="device_offline_error_message">You are not connected to the internet.</string>
 
     <!--Login Screen-->
@@ -46,7 +46,7 @@
     <string name="display_name">Display Name</string>
     <string name="email">Email</string>
     <string name="contact_number">Contact Number</string>
-    <string name="edit">Edit</string>
+    <string name="edit">Edit \u0020 </string>
     <string name="name">Name</string>
     <string name="edit_profile">Edit Profile \u0020 </string>
     <string name="save">Save</string>
@@ -71,6 +71,9 @@
     <string name="share_with_friends">Share with Friends</string>
     <string name="change_password">Change Password</string>
     <string name="change_password_message">Send the link to change password on your email?</string>
+    <string name="delete_photo">Delete \nPhoto</string>
+    <string name="change_photo">Change \nPhoto</string>
+    <string name="profile_photo">Profile Photo</string>
 
     <!--Add Transaction Dialog Fragment-->
     <string name="transaction_added">Transaction Added</string>
@@ -99,6 +102,7 @@
     <string name="field_invalid">This field is not valid</string>
     <string name="contact_no_invalid">Invalid Contact No</string>
     <string name="email_invalid">Invalid Email</string>
+    <string name="amount_invalid">Invalid Amount</string>
     <string name="category_already_exist">Category Already Exist</string>
     <string name="date">Date</string>
     <string name="add_category_budget">Add category budget</string>
@@ -130,6 +134,9 @@
     <string name="budget_overflow_error">Monthly total budget exceeded your monthly limit. Enter value below ₹%1$s or increase your monthly limit.</string>
     <string name="you_have_not_created_the_budget_for_this_month">You have not created the budget for this month</string>
     <string name="categories_budget">Categories Budget</string>
+    <string name="monthly_limit_money">Monthly Limit: ₹%1$s</string>
+    <string name="date_created">Date Created: %1$s</string>
+    <string name="template_already_exist">Template name already exists</string>
 
     <!-- NOTIFICATION -->
     <string name="channel_transaction">Transaction channel</string>
@@ -166,8 +173,8 @@
     <string name="templates">Templates</string>
     <string name="apply_template_msg">Are you sure you want to apply this template?</string>
     <string name="budget_template_created_msg">Budget Template created</string>
-    <string name="no_templates_added">No Templates added</string>
-
+    <string name="no_templates_added">No Templates added \n\nAdd few templates by clicking below.</string>
+    <string name="no_templates_categories_added">No Categories added \n\nAdd few category templates by clicking below.</string>
 
     <!-- On Boarding -->
 
@@ -206,10 +213,7 @@
     <string name="set_monthly_limit">Set Monthly Limit</string>
     <string name="category_budget_empty_msg">Please Add Category wise Budget by clicking below. \n\nYou can also create a new budget template from profile section for future references</string>
     <string name="get_started_with_google">Get started with Google</string>
-    <string name="delete_photo">Delete \nPhoto</string>
-    <string name="change_photo">Change \nPhoto</string>
-    <string name="something_went_wrong">Something went wrong</string>
-    <string name="profile_photo">Profile Photo</string>
+    <string name="total_budget_set">Total Budget set: %1$s / %2$s (%3$s)</string>
 
 
 </resources>

@@ -171,6 +171,10 @@
         <item name="android:textColor">@color/colorTextDark</item>
     </style>
 
+    <style name="GelionSemiBoldBlue12" parent="GelionSemiBold12">
+        <item name="android:textColor">@color/colorTextDark</item>
+    </style>
+
     <style name="GelionSemiBoldBlue16" parent="GelionSemiBold16">
         <item name="android:textColor">@color/colorTextDark</item>
     </style>

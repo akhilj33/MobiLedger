@@ -10,7 +10,7 @@ import com.example.mobiledger.presentation.budget.addbudget.AddBudgetDialogViewM
 import com.example.mobiledger.presentation.budget.addbudget.applyTemplate.ApplyTemplateViewModel
 import com.example.mobiledger.presentation.budget.budgetscreen.BudgetViewModel
 import com.example.mobiledger.presentation.budget.updatebudget.UpdateBudgetViewModel
-import com.example.mobiledger.presentation.budgetTemplate.AddBudgetTemplateDialogFragmentViewModel
+import com.example.mobiledger.presentation.budgetTemplate.AddBudgetTemplateViewModel
 import com.example.mobiledger.presentation.budgetTemplate.BudgetTemplateViewModel
 import com.example.mobiledger.presentation.budgetTemplate.EditBudgetTemplateDialogViewModel
 import com.example.mobiledger.presentation.budgetTemplate.EditBudgetTemplateViewModel
@@ -137,8 +137,8 @@ class ViewModelFactoryProvider(private val useCaseProvider: UseCaseProvider) :
                 UpdateBudgetViewModel(useCaseProvider.provideBudgetUseCase()) as T
             }
 
-            modelClass.isAssignableFrom(AddBudgetTemplateDialogFragmentViewModel::class.java) -> {
-                AddBudgetTemplateDialogFragmentViewModel(useCaseProvider.provideBudgetTemplateUseCase()) as T
+            modelClass.isAssignableFrom(AddBudgetTemplateViewModel::class.java) -> {
+                AddBudgetTemplateViewModel(useCaseProvider.provideBudgetTemplateUseCase()) as T
             }
 
             modelClass.isAssignableFrom(BudgetTemplateViewModel::class.java) -> {

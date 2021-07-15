@@ -167,7 +167,7 @@ class StatsDetailViewModel(private val categoryUseCase: CategoryUseCase, private
     data class ViewError(
         val viewErrorType: ViewErrorType,
         var message: String? = null,
-        @StringRes val resID: Int = R.string.generic_error_message
+        @StringRes val resID: Int = R.string.something_went_wrong
     )
 
 }

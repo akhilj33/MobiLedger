@@ -8,9 +8,9 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.mobiledger.R
 import com.example.mobiledger.common.base.BaseFragment
-import com.example.mobiledger.common.showAlertDialog
-import com.example.mobiledger.common.showBiometricSystemPrompt
-import com.example.mobiledger.common.showToast
+import com.example.mobiledger.common.extention.showAlertDialog
+import com.example.mobiledger.common.extention.showBiometricSystemPrompt
+import com.example.mobiledger.common.extention.showToast
 import com.example.mobiledger.common.utils.AnimationDialogUtils
 import com.example.mobiledger.common.utils.BiometricDeviceState
 import com.example.mobiledger.common.utils.canAuthenticateUsingBiometrics

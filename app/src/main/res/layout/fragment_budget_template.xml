@@ -5,8 +5,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".presentation.categoryFragment.CategoryFragment">
+        android:layout_height="match_parent">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/budgetTemplateToolbar"
@@ -56,35 +55,80 @@
             android:orientation="vertical"
             app:layout_constraintGuide_percent="0.96" />
 
-        <Button
-            android:id="@+id/btnNewTemplate"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/budgetTemplateToolbar"
-            android:text="@string/new_template"
-            app:layout_constraintStart_toStartOf="@id/verticalStartGuideline"
-            app:layout_constraintEnd_toEndOf="@id/verticalEndGuideline" />
-
-        <TextView
-            android:id="@+id/tvNoTemplate"
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/bottomGuideline"
             android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.90" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tvNoTemplate"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/no_templates_added"
             style="@style/GelionSemiBoldBlue18"
             android:textAlignment="center"
-            android:visibility="gone"
+            android:visibility="visible"
             android:layout_marginTop="@dimen/cdp_32"
-            app:layout_constraintTop_toBottomOf="@id/btnNewTemplate"
+            app:layout_constraintVertical_chainStyle="packed"
+            android:layout_marginBottom="@dimen/cdp_48"
+            app:layout_constraintTop_toBottomOf="@id/budgetTemplateToolbar"
+            app:layout_constraintBottom_toTopOf="@id/btnNewTemplateEmpty"
             app:layout_constraintStart_toStartOf="@id/verticalStartGuideline"
             app:layout_constraintEnd_toEndOf="@id/verticalEndGuideline" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvBudgetTemplates"
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnNewTemplateEmpty"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_margin="@dimen/cdp_16"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvNoTemplate"
+            android:text="@string/new_template"
             app:layout_constraintStart_toStartOf="@id/verticalStartGuideline"
-            app:layout_constraintEnd_toEndOf="@id/verticalEndGuideline"
-            app:layout_constraintTop_toBottomOf="@id/btnNewTemplate" />
+            app:layout_constraintEnd_toEndOf="@id/verticalEndGuideline" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="@dimen/cdp_0"
+            android:layout_height="@dimen/cdp_0"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            app:layout_constraintTop_toBottomOf="@id/budgetTemplateToolbar"
+            app:layout_constraintBottom_toTopOf="@id/bottomView"
+            app:layout_constraintStart_toStartOf="@id/verticalStartGuideline"
+            app:layout_constraintEnd_toEndOf="@id/verticalEndGuideline">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvBudgetTemplates"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="@dimen/cdp_16"
+                android:overScrollMode="never"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <View
+            android:id="@+id/bottomView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintTop_toBottomOf="@id/bottomGuideline"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnNewTemplate"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/cdp_16"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/bottomGuideline"
+            android:text="@string/new_template"
+            app:layout_constraintStart_toStartOf="@id/verticalStartGuideline"
+            app:layout_constraintEnd_toEndOf="@id/verticalEndGuideline" />
 
         <include
             android:id="@+id/includeErrorView"
@@ -92,10 +136,26 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/bottomView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             tools:visibility="visible" />
+
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/emptyScreenGroup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:constraint_referenced_ids="tvNoTemplate, btnNewTemplateEmpty"
+            tools:visibility="visible"/>
+
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/nonEmptyScreenGroup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:constraint_referenced_ids="bottomView, btnNewTemplate"
+            tools:visibility="visible"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
