@@ -72,6 +72,10 @@ class MainActivityViewModel(
 
     private val _templateAppliedReload: MutableLiveData<Event<Unit>> = MutableLiveData()
     val templateAppliedReload: LiveData<Event<Unit>> = _templateAppliedReload
+
+    private val _isReminderOn: MutableLiveData<Event<Boolean>> = MutableLiveData(Event(false))
+    val isReminderOn: LiveData<Event<Boolean>> get() = _isReminderOn
+
     /*---------------------------------------Bottom Tabs Info -------------------------------------------------*/
 
     fun updateCurrentTab(tab: NavTab) {
@@ -223,7 +227,16 @@ class MainActivityViewModel(
         }
     }
 
-    /*----------------------------Android Permissions Check---------------------------------*/
+    fun checkIfDailyReminderIsOn() {
+        viewModelScope.launch {
+            if (userSettingsUseCase.isReminderEnabled()) {
+                _isReminderOn.value = Event(true)
+            } else {
+                _isReminderOn.value = Event(false)
+            }
+        }
+    }
+/*----------------------------Android Permissions Check---------------------------------*/
 
     suspend fun setPermissionNotFirstTime(permissions: Array<String>) {
         userSettingsUseCase.setIsFirstTimePermissionAsked(permissions)
@@ -234,7 +247,7 @@ class MainActivityViewModel(
     }
 }
 
-data class InternetState(val previous : Boolean, val current: Boolean)
+data class InternetState(val previous: Boolean, val current: Boolean)
 
 sealed class NavTab {
     object HOME : NavTab()

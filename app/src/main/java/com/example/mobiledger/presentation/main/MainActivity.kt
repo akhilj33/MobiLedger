@@ -43,6 +43,7 @@ class MainActivity :
     private var currentSelectedTab: NavTab = NavTab.HOME
     private var notificationManager: NotificationManager? = null
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -57,14 +58,22 @@ class MainActivity :
         setNavOnClickListeners()
         setupObservers()
         viewModel.registerInternetStatus()
+        setUpNavigationChannel()
+        handleDailyReminderWork()
+    }
 
+    private fun setUpNavigationChannel() {
         notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-
         createNotificationChannel(
             notificationManager,
             getString(R.string.channel_transaction_description),
             ConstantUtils.CHANNEL_ID_TRANSACTION
         )
+    }
+
+    private fun handleDailyReminderWork() {
+        cancelReminder()
+        viewModel.checkIfDailyReminderIsOn()
     }
 
     override fun getFragmentNavigator(): MainActivityNavigator? = mainActivityNavigator
@@ -101,7 +110,6 @@ class MainActivity :
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun switchOnDailyReminder() {
-
         val lastUsageTime = LocalDateTime
             .now()
             .format(DateTimeFormatter.ISO_DATE_TIME)
@@ -235,6 +243,7 @@ class MainActivity :
 
     /*------------------------------------------------Live Data Observers----------------------------------------------------*/
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun setupObservers() {
 
         viewModel.nativeToast.observe(this, OneTimeObserver {
@@ -284,6 +293,14 @@ class MainActivity :
                     }
                 } else {
                     cancelReminder()
+                }
+            }
+        })
+
+        viewModel.isReminderOn.observe(this@MainActivity, {
+            it.let {
+                if (it.peekContent()) {
+                    switchOnDailyReminder()
                 }
             }
         })
