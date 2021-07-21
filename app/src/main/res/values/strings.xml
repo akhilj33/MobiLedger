@@ -137,6 +137,7 @@
     <string name="monthly_limit_money">Monthly Limit: ₹%1$s</string>
     <string name="date_created">Date Created: %1$s</string>
     <string name="template_already_exist">Template name already exists</string>
+    <string name="reset_budget">Reset \u0020 </string>
 
     <!-- NOTIFICATION -->
     <string name="channel_transaction">Transaction channel</string>

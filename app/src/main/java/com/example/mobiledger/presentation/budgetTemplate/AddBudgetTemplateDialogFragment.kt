@@ -69,7 +69,7 @@ class AddBudgetTemplateDialogFragment :
         viewBinding.apply {
             btnSubmitTemplate.setOnClickListener {
                 if (doValidations()){
-                    viewModel.addNewBudgetTemplate(getName(), getAmount().toLong(), getDescription())
+                    viewModel.addNewBudgetTemplate(getName(), getAmount().toLong())
                 }
             }
 
@@ -89,7 +89,6 @@ class AddBudgetTemplateDialogFragment :
 
     private fun getName(): String = viewBinding.templateNameTv.text.toString().trim()
     private fun getAmount(): String = viewBinding.amountTv.text.toString().trim()
-    private fun getDescription(): String = viewBinding.descriptionTv.text.toString().trim()
 
     private fun isValidName(): Boolean = getName().isNotBlank()
     private fun isValidAmount(): Boolean = getAmount().isNotBlank() && getAmount().toLong() > 0L

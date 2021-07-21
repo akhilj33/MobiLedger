@@ -27,11 +27,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             style="@style/GelionSemiBoldBlue24"
-            android:layout_marginTop="@dimen/cdp_24"
+            android:layout_marginVertical="@dimen/cdp_24"
             android:text="@string/add_budget_template"
             app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_90"
             app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_10"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/templateNameLayout"/>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/templateNameLayout"
@@ -40,6 +41,7 @@
             android:layout_height="wrap_content"
             android:hint="@string/name"
             app:errorEnabled="true"
+            android:layout_marginTop="@dimen/cdp_24"
             app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_90"
             app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_10"
             app:layout_constraintTop_toBottomOf="@id/textAddTemplate">
@@ -75,26 +77,6 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/descriptionLayout"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/cdp_10"
-            android:hint="@string/description"
-            app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_90"
-            app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_10"
-            app:layout_constraintTop_toBottomOf="@id/maxLimitLayout">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/descriptionTv"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColorHint="@color/colorGrey"
-                android:textSize="@dimen/csp_16" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
         <ProgressBar
             android:id="@+id/addTemplateProgressBar"
             android:layout_width="wrap_content"
@@ -118,7 +100,7 @@
             app:layout_constraintBottom_toTopOf="@id/includeErrorView"
             app:layout_constraintEnd_toEndOf="@id/verticalScreenGuideline_90"
             app:layout_constraintStart_toStartOf="@id/verticalScreenGuideline_10"
-            app:layout_constraintTop_toBottomOf="@id/descriptionLayout" />
+            app:layout_constraintTop_toBottomOf="@id/maxLimitLayout" />
 
         <include
             android:id="@+id/includeErrorView"

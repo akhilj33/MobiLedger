@@ -33,7 +33,7 @@ interface BudgetTemplateApi {
     suspend fun getBudgetTemplateSummary(uid: String, id: String): AppResult<NewBudgetTemplateEntity>
     suspend fun updateBudgetCategoryAmount(uid: String, id: String, category: String, value: Long): AppResult<Unit>
     suspend fun deleteCategoryFromBudgetTemplate(uid: String, id: String, category: String): AppResult<Unit>
-    suspend fun deleteBudgetTemplate(uid: String, id: String): AppResult<Unit>
+    suspend fun deleteBudgetTemplateSummary(uid: String, id: String): AppResult<Unit>
     suspend fun updateBudgetTemplateMaxLimit(uid: String, id: String, value: Long): AppResult<Unit>
 }
 
@@ -245,7 +245,7 @@ class BudgetTemplateApiImpl(private val firebaseDb: FirebaseFirestore, private v
         }
     }
 
-    override suspend fun deleteBudgetTemplate(uid: String, id: String): AppResult<Unit> {
+    override suspend fun deleteBudgetTemplateSummary(uid: String, id: String): AppResult<Unit> {
         var response: Task<Void>? = null
         var exception: Exception? = null
 
