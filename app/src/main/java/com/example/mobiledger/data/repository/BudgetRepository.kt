@@ -22,7 +22,7 @@ interface BudgetRepository {
     suspend fun getMonthlyCategoryBudget(monthYear: String, category: String): AppResult<MonthlyCategoryBudget>
     suspend fun updateMonthlyCategoryBudgetAmounts(monthYear: String, category: String, budgetChange: Long, expenseChange: Long): AppResult<Unit>
     suspend fun deleteBudgetCategory(monthYear: String, category: String): AppResult<Unit>
-
+    suspend fun deleteMonthlyBudgetSummary(monthYear: String): AppResult<Unit>
 }
 
 class BudgetRepositoryImpl(
@@ -112,6 +112,16 @@ class BudgetRepositoryImpl(
             val uId = cacheSource.getUID()
             if (uId != null) {
                 budgetApi.deleteBudgetCategory(uId, monthYear, category)
+            } else
+                AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
+        }
+    }
+
+    override suspend fun deleteMonthlyBudgetSummary(monthYear: String): AppResult<Unit> {
+        return withContext(dispatcher) {
+            val uId = cacheSource.getUID()
+            if (uId != null) {
+                budgetApi.deleteMonthlyBudgetSummary(uId, monthYear)
             } else
                 AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
         }

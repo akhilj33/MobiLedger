@@ -7,6 +7,7 @@ import com.example.mobiledger.presentation.budget.MonthlyCategoryBudget
 import com.example.mobiledger.presentation.getResultFromJobs
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.withContext
 
 interface BudgetUseCase {
@@ -36,6 +37,10 @@ interface BudgetUseCase {
     ): AppResult<Unit>
 
     suspend fun deleteBudgetCategoryAndUpdateSummary(monthYear: String, category: String, budgetChange: Long): AppResult<Unit>
+    suspend fun deleteMonthlyBudgetSummary(monthYear: String): AppResult<Unit>
+    suspend fun deleteBudgetCategory(monthYear: String, category: String): AppResult<Unit>
+    suspend fun deleteAllBudgetCategories(monthYear: String): AppResult<Unit>
+    suspend fun deleteMonthlyBudget(monthYear: String): AppResult<Unit>
 }
 
 class BudgetUseCaseImpl(private val budgetRepository: BudgetRepository) : BudgetUseCase {
@@ -112,9 +117,42 @@ class BudgetUseCaseImpl(private val budgetRepository: BudgetRepository) : Budget
     override suspend fun deleteBudgetCategoryAndUpdateSummary(monthYear: String, category: String, budgetChange: Long): AppResult<Unit> {
         return withContext(Dispatchers.IO) {
             val updateMonthlyBudgetSummaryJob = async { updateMonthlyBudgetSummary(monthYear, totalBudgetChange = budgetChange) }
-            val deleteCategoryJob = async { budgetRepository.deleteBudgetCategory(monthYear, category) }
+            val deleteCategoryJob = async { deleteBudgetCategory(monthYear, category) }
             getResultFromJobs(listOf(deleteCategoryJob, updateMonthlyBudgetSummaryJob))
         }
     }
 
+    override suspend fun deleteMonthlyBudgetSummary(monthYear: String): AppResult<Unit> {
+        return budgetRepository.deleteMonthlyBudgetSummary(monthYear)
+    }
+
+    override suspend fun deleteBudgetCategory(monthYear: String, category: String): AppResult<Unit> {
+        return budgetRepository.deleteBudgetCategory(monthYear, category)
+    }
+
+    override suspend fun deleteAllBudgetCategories(monthYear: String): AppResult<Unit> {
+        return withContext(Dispatchers.IO) {
+            when (val result = getCategoryBudgetListByMonth(monthYear)) {
+                is AppResult.Success -> {
+                    val runningTask = result.data.map {
+                        async { deleteBudgetCategory(monthYear, it.categoryName) }
+                    }
+                    val responses = runningTask.awaitAll()
+                    responses.forEach {
+                        if (it is AppResult.Failure) return@withContext it
+                    }
+                    AppResult.Success(Unit)
+                }
+                is AppResult.Failure -> result
+            }
+        }
+    }
+
+    override suspend fun deleteMonthlyBudget(monthYear: String): AppResult<Unit> {
+        return withContext(Dispatchers.IO) {
+            val budgetCategoriesDeletionJob = async { deleteAllBudgetCategories(monthYear) }
+            val budgetSummaryDeletionJob = async { deleteMonthlyBudgetSummary(monthYear) }
+            getResultFromJobs(listOf(budgetCategoriesDeletionJob, budgetSummaryDeletionJob))
+        }
+    }
 }

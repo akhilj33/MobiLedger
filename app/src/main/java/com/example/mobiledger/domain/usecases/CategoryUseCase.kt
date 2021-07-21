@@ -210,7 +210,6 @@ class CategoryUseCaseImpl(private val categoryRepository: CategoryRepository) : 
                 is AppResult.Failure -> result
             }
         }
-
     }
 
     /**

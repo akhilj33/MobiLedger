@@ -10,6 +10,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.mobiledger.R
 import com.example.mobiledger.common.base.BaseFragment
+import com.example.mobiledger.common.extention.gone
+import com.example.mobiledger.common.extention.visible
 import com.example.mobiledger.common.utils.DateUtils
 import com.example.mobiledger.common.utils.showAddBudgetDialogFragment
 import com.example.mobiledger.common.utils.showApplyTemplateDialogFragment
@@ -18,6 +20,7 @@ import com.example.mobiledger.databinding.FragmentBudgetBinding
 import com.example.mobiledger.databinding.SnackViewErrorBinding
 import com.example.mobiledger.presentation.ConditionalOneTimeObserver
 import com.example.mobiledger.presentation.OneTimeObserver
+import com.example.mobiledger.presentation.budget.BudgetViewItem
 import com.example.mobiledger.presentation.budget.MonthlyBudgetData
 import com.example.mobiledger.presentation.main.NavTab
 
@@ -65,6 +68,10 @@ class BudgetFragment : BaseFragment<FragmentBudgetBinding, BudgetNavigator>(R.la
         viewBinding.apply {
             monthNavigationBar.leftArrow.setOnClickListener { handleLeftClick() }
             monthNavigationBar.rightArrow.setOnClickListener { handleRightClick() }
+
+            tvResetBudget.setOnClickListener {
+                viewModel.resetBudget()
+            }
         }
     }
 
@@ -94,6 +101,9 @@ class BudgetFragment : BaseFragment<FragmentBudgetBinding, BudgetNavigator>(R.la
 
         viewModel.budgetViewItemListLiveData.observe(viewLifecycleOwner, OneTimeObserver {
             budgetAdapter.addItemList(it)
+            if (it.size==1 && it[0] is BudgetViewItem.BudgetEmpty)
+                viewBinding.tvResetBudget.gone()
+            else viewBinding.tvResetBudget.visible()
         })
 
         viewModel.monthNameLiveData.observe(viewLifecycleOwner, {
@@ -106,6 +116,10 @@ class BudgetFragment : BaseFragment<FragmentBudgetBinding, BudgetNavigator>(R.la
             } else {
                 hideSwipeRefresh()
             }
+        })
+
+        viewModel.resetBudgetLiveData.observe(viewLifecycleOwner, OneTimeObserver{
+            refreshView()
         })
     }
 
