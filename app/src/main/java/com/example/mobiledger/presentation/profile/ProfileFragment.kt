@@ -8,6 +8,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.mobiledger.R
 import com.example.mobiledger.common.base.BaseFragment
+import com.example.mobiledger.common.extention.setOnSafeClickListener
 import com.example.mobiledger.common.extention.showAlertDialog
 import com.example.mobiledger.common.extention.showBiometricSystemPrompt
 import com.example.mobiledger.common.extention.showToast
@@ -68,23 +69,23 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding, ProfileNavigator>(R
 
     private fun setOnClickListener() {
         viewBinding.apply {
-            tvEditProfile.setOnClickListener {
+            tvEditProfile.setOnSafeClickListener {
                 navigator?.navigateToEditProfileScreen()
             }
 
-            accountView.categoryLabel.setOnClickListener {
+            accountView.categoryLabel.setOnSafeClickListener {
                 navigator?.navigateToCategoryFragmentScreen()
             }
 
-            logoutTv.setOnClickListener {
+            logoutTv.setOnSafeClickListener {
                 logout()
             }
 
-            accountView.budgetTemplatesLabel.setOnClickListener {
+            accountView.budgetTemplatesLabel.setOnSafeClickListener {
                 navigator?.navigateToBudgetTemplateFragment()
             }
 
-            appView.aboutUsLabel.setOnClickListener {
+            appView.aboutUsLabel.setOnSafeClickListener {
                 navigator?.navigateToAboutUsFragment()
             }
         }
@@ -143,7 +144,7 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding, ProfileNavigator>(R
 
     private fun enableBiometric() {
         val biometricManager = BiometricManager.from(requireContext())
-        viewBinding.accountView.toggleBtnBiometric.setOnClickListener {
+        viewBinding.accountView.toggleBtnBiometric.setOnSafeClickListener {
             when (canAuthenticateUsingBiometrics(biometricManager)) {
                 BiometricDeviceState.BIOMETRIC_AVAILABLE -> {
                     if (viewBinding.accountView.toggleBtnBiometric.isChecked) {
@@ -200,7 +201,7 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding, ProfileNavigator>(R
     }
 
     private fun enablePushNotification() {
-        viewBinding.accountView.toggleBtnNotification.setOnClickListener {
+        viewBinding.accountView.toggleBtnNotification.setOnSafeClickListener {
             if (viewBinding.accountView.toggleBtnNotification.isChecked) {
                 viewModel.savePushNotificationEnabled(true)
             } else {
@@ -212,7 +213,7 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding, ProfileNavigator>(R
     }
 
     private fun enableDailyReminder() {
-        viewBinding.accountView.toggleBtnReminder.setOnClickListener {
+        viewBinding.accountView.toggleBtnReminder.setOnSafeClickListener {
             if (viewBinding.accountView.toggleBtnReminder.isChecked) {
                 activityViewModel.activateDailyReminder(true)
                 viewModel.saveReminderEnabled(true)

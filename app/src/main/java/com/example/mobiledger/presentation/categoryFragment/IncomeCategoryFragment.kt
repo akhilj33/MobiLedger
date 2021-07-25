@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.mobiledger.R
 import com.example.mobiledger.common.base.BaseFragment
 import com.example.mobiledger.common.base.BaseNavigator
+import com.example.mobiledger.common.extention.setOnSafeClickListener
 import com.example.mobiledger.common.utils.showAddCategoryDialogFragment
 import com.example.mobiledger.databinding.FragmentIncomeCategoryBinding
 import com.example.mobiledger.databinding.SnackViewErrorBinding
@@ -80,7 +81,7 @@ class IncomeCategoryFragment : BaseFragment<FragmentIncomeCategoryBinding, BaseN
     }
 
     private fun setOnCLickListener() {
-        viewBinding.btnAddCategory.setOnClickListener {
+        viewBinding.btnAddCategory.setOnSafeClickListener {
             showAddCategoryDialogFragment(requireActivity().supportFragmentManager, list, true)
         }
     }

@@ -10,12 +10,14 @@ import com.example.mobiledger.R
 import com.example.mobiledger.common.base.BaseFragment
 import com.example.mobiledger.common.extention.disable
 import com.example.mobiledger.common.extention.enable
+import com.example.mobiledger.common.extention.setOnSafeClickListener
 import com.example.mobiledger.common.extention.showToast
 import com.example.mobiledger.common.utils.ValidationUtils
 import com.example.mobiledger.common.utils.showTermsAndConditionDialogFragment
 import com.example.mobiledger.databinding.FragmentSignUpBinding
 import com.example.mobiledger.databinding.SnackViewErrorBinding
 import com.example.mobiledger.presentation.OneTimeObserver
+import com.example.mobiledger.presentation.main.NavTab
 import com.google.android.material.textfield.TextInputLayout
 
 
@@ -39,6 +41,7 @@ class SignUpFragment :
         viewModel.signUpResult.observe(
             viewLifecycleOwner,
             OneTimeObserver {
+                activityViewModel.updateCurrentTab(NavTab.HOME)
                 navigator?.launchDashboard()
             })
 
@@ -62,7 +65,7 @@ class SignUpFragment :
     private fun setOnClick() {
 
         viewBinding.apply {
-            btnSignup.setOnClickListener {
+            btnSignup.setOnSafeClickListener {
                 signUp(getNameText(), getEmailText(), getPasswordText(), getConfirmPasswordText(), getContactText())
             }
 
@@ -73,7 +76,7 @@ class SignUpFragment :
                     viewBinding.btnSignup.disable()
             }
 
-            tAndCText.setOnClickListener {
+            tAndCText.setOnSafeClickListener {
                 showTermsAndConditionDialogFragment(requireActivity().supportFragmentManager)
             }
 

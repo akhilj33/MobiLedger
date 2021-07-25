@@ -7,6 +7,7 @@ import androidx.fragment.app.setFragmentResult
 import com.example.mobiledger.R
 import com.example.mobiledger.common.base.BaseDialogFragment
 import com.example.mobiledger.common.base.BaseNavigator
+import com.example.mobiledger.common.extention.setOnSafeClickListener
 import com.example.mobiledger.common.utils.ConstantUtils.PROFILE_PIC_BUNDLE_KEY
 import com.example.mobiledger.common.utils.ConstantUtils.PROFILE_PIC_REQUEST_KEY
 import com.example.mobiledger.databinding.FragmentProfilePicUpdateDialogBinding
@@ -22,19 +23,19 @@ class ProfilePicUpdateDialogFragment :
 
     private fun setOnClickListeners() {
         viewBinding.apply {
-            ivRemoveProfilePic.setOnClickListener {
+            ivRemoveProfilePic.setOnSafeClickListener {
                 onRemovePhotoIconClick.invoke()
             }
 
-            tvDeletePic.setOnClickListener {
+            tvDeletePic.setOnSafeClickListener {
                 onRemovePhotoIconClick.invoke()
             }
 
-            ivChangeProfilePic.setOnClickListener {
+            ivChangeProfilePic.setOnSafeClickListener {
                 onChangePhotoIconClick.invoke()
             }
 
-            tvChangePic.setOnClickListener {
+            tvChangePic.setOnSafeClickListener {
                 onChangePhotoIconClick.invoke()
             }
         }

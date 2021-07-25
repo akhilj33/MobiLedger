@@ -10,11 +10,13 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.viewModels
 import com.example.mobiledger.R
 import com.example.mobiledger.common.base.BaseFragment
+import com.example.mobiledger.common.extention.setOnSafeClickListener
 import com.example.mobiledger.common.utils.ValidationUtils
 import com.example.mobiledger.common.utils.showForgetPasswordDialog
 import com.example.mobiledger.databinding.FragmentLoginBinding
 import com.example.mobiledger.databinding.SnackViewErrorBinding
 import com.example.mobiledger.presentation.OneTimeObserver
+import com.example.mobiledger.presentation.main.NavTab
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
@@ -36,15 +38,15 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, LoginNavigator>(R.layou
 
     private fun setOnClickListener() {
         viewBinding.apply {
-            btnLogin.setOnClickListener {
+            btnLogin.setOnSafeClickListener {
                 loginWithEmail()
             }
 
-            btnGoogleSignInView.setOnClickListener {
+            btnGoogleSignInView.setOnSafeClickListener {
                 initSignInWithGoogle()
             }
 
-            tvForgetPassword.setOnClickListener {
+            tvForgetPassword.setOnSafeClickListener {
                 sendResetPasswordEmail()
             }
 
@@ -61,6 +63,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, LoginNavigator>(R.layou
         viewModel.signInResult.observe(
             viewLifecycleOwner,
             OneTimeObserver {
+                activityViewModel.updateCurrentTab(NavTab.HOME)
                 navigator?.launchDashboard()
             })
 

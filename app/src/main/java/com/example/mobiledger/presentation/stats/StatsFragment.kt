@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.mobiledger.R
 import com.example.mobiledger.common.base.BaseFragment
+import com.example.mobiledger.common.extention.setOnSafeClickListener
 import com.example.mobiledger.databinding.FragmentStatsBinding
 import com.example.mobiledger.databinding.SnackViewErrorBinding
 import com.example.mobiledger.presentation.ConditionalOneTimeObserver
@@ -84,8 +85,8 @@ class StatsFragment : BaseFragment<FragmentStatsBinding, StatsNavigator>(R.layou
 
     private fun setOnClickListener() {
         viewBinding.apply {
-            monthNavigationBar.leftArrow.setOnClickListener { handleLeftClick() }
-            monthNavigationBar.rightArrow.setOnClickListener { handleRightClick() }
+            monthNavigationBar.leftArrow.setOnSafeClickListener { handleLeftClick() }
+            monthNavigationBar.rightArrow.setOnSafeClickListener { handleRightClick() }
         }
         viewBinding.horizontalGuideline2
     }

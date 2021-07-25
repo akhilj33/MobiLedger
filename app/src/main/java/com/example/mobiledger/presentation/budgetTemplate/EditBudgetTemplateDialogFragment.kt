@@ -9,9 +9,7 @@ import androidx.fragment.app.viewModels
 import com.example.mobiledger.R
 import com.example.mobiledger.common.base.BaseDialogFragment
 import com.example.mobiledger.common.base.BaseNavigator
-import com.example.mobiledger.common.extention.enable
-import com.example.mobiledger.common.extention.gone
-import com.example.mobiledger.common.extention.visible
+import com.example.mobiledger.common.extention.*
 import com.example.mobiledger.databinding.DialogFragmentAddBudgetBinding
 import com.example.mobiledger.databinding.SnackViewErrorBinding
 import com.example.mobiledger.presentation.OneTimeObserver
@@ -47,9 +45,15 @@ class EditBudgetTemplateDialogFragment :
         setUpObserver()
         handleUI()
         setOnClickListener()
-        (viewBinding.categorySpinnerTv as? AutoCompleteTextView)?.setAdapter(spinnerAdapter)
-        val spinnerExpenseList = viewModel.expenseCategoryList.sorted()
-        spinnerAdapter.addItems(spinnerExpenseList)
+        if (viewModel.isUpdateMaxLimit) {
+            viewBinding.amountTv.setText(viewModel.maxLimit.toString())
+            viewBinding.btnUpdate.disable()
+        }
+        else {
+            (viewBinding.categorySpinnerTv as? AutoCompleteTextView)?.setAdapter(spinnerAdapter)
+            val spinnerExpenseList = viewModel.expenseCategoryList.sorted()
+            spinnerAdapter.addItems(spinnerExpenseList)
+        }
     }
 
     private fun handleUI() {
@@ -107,34 +111,36 @@ class EditBudgetTemplateDialogFragment :
         viewBinding.categorySpinnerTv.addTextChangedListener(categoryTextWatcher)
         viewBinding.amountTv.addTextChangedListener(amountTextWatcher)
 
-        viewBinding.btnDelete.setOnClickListener {
+        viewBinding.btnDelete.setOnSafeClickListener {
             viewModel.deleteBudgetTemplateCategory()
         }
 
 
-        viewBinding.btnUpdate.setOnClickListener {
-            if (viewModel.isUpdateMaxLimit) {
-                if (!viewModel.isAddCategory && it.isEnabled) {
-                    if (doValidations()) {
-                        viewModel.updateBudgetTemplateMaxLimit(getAmountText().toLong())
-                    }
-                }
-            } else {
-                if (!viewModel.isAddCategory && it.isEnabled && getAmountText().isNotEmpty()) {
-                    val amtChange = getAmountText().toLong() - viewModel.oldBudget
-                    if (amtChange == 0L)
-                        dismiss()
-                    else {
+        viewBinding.btnUpdate.setOnSafeClickListener {
+            if (it.isEnabled){
+                if (viewModel.isUpdateMaxLimit) {
+                    if (!viewModel.isAddCategory) {
                         if (doValidations()) {
-                            updateCategory(amtChange)
+                            viewModel.updateBudgetTemplateMaxLimit(getAmountText().toLong())
+                        }
+                    }
+                } else {
+                    if (!viewModel.isAddCategory && getAmountText().isNotEmpty()) {
+                        val amtChange = getAmountText().toLong() - viewModel.oldBudget
+                        if (amtChange == 0L)
+                            dismiss()
+                        else {
+                            if (doValidations()) {
+                                updateCategory(amtChange)
+                            }
                         }
                     }
                 }
+                doValidations()
             }
-            doValidations()
         }
 
-        viewBinding.btnSeBudget.setOnClickListener {
+        viewBinding.btnSeBudget.setOnSafeClickListener {
             if (it.isEnabled && viewModel.isAddCategory) {
                 if (doValidations()) {
                     addCategoryBudget()
@@ -157,6 +163,7 @@ class EditBudgetTemplateDialogFragment :
     private fun isValidAmount(): Boolean = (getAmountText().isNotBlank() && getAmountText().toLong() >= 0)
     private fun isValidCategory(): Boolean = getCategoryText().isNotBlank()
     private fun isBudgetOverflow(): Boolean = viewModel.budgetTotal + getAmountText().toLong() > viewModel.maxLimit
+    private fun isMaxLimitChanged(): Boolean = viewModel.maxLimit!=getAmountText().toLong()
 
 /*---------------------------------------Text Watchers-----------------------------------------*/
 
@@ -167,8 +174,11 @@ class EditBudgetTemplateDialogFragment :
 
         override fun afterTextChanged(editable: Editable?) {
             if (isValidAmount()) {
-                viewBinding.btnUpdate.enable()
-                updateAmountViewBasedOnValidation(viewBinding.amountLayout, isValid = true)
+                if (viewModel.isUpdateMaxLimit && !isMaxLimitChanged()) viewBinding.btnUpdate.disable()
+                else{
+                    viewBinding.btnUpdate.enable()
+                    updateAmountViewBasedOnValidation(viewBinding.amountLayout, isValid = true)
+                }
             }
         }
     }

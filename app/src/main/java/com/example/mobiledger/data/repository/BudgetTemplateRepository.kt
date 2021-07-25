@@ -22,7 +22,7 @@ interface BudgetTemplateRepository {
     suspend fun getBudgetTemplateSummary(id: String): AppResult<NewBudgetTemplateEntity>
     suspend fun updateBudgetCategoryAmount(id: String, category: String, value: Long): AppResult<Unit>
     suspend fun deleteCategoryFromBudgetTemplate(id: String, category: String): AppResult<Unit>
-    suspend fun deleteBudgetTemplate(id: String): AppResult<Unit>
+    suspend fun deleteBudgetTemplateSummary(id: String): AppResult<Unit>
     suspend fun updateBudgetTemplateMaxLimit(id: String, value: Long): AppResult<Unit>
 }
 
@@ -96,11 +96,11 @@ class BudgetTemplateRepositoryImpl(
         }
     }
 
-    override suspend fun deleteBudgetTemplate(id: String): AppResult<Unit> {
+    override suspend fun deleteBudgetTemplateSummary(id: String): AppResult<Unit> {
         return withContext(dispatcher) {
             val uId = cacheSource.getUID()
             if (uId != null) {
-                budgetTemplateApi.deleteBudgetTemplate(uId, id)
+                budgetTemplateApi.deleteBudgetTemplateSummary(uId, id)
             } else AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
         }
     }

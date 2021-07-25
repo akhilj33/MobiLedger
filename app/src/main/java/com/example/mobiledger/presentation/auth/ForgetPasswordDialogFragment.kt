@@ -9,6 +9,7 @@ import androidx.fragment.app.viewModels
 import com.example.mobiledger.R
 import com.example.mobiledger.common.base.BaseDialogFragment
 import com.example.mobiledger.common.base.BaseNavigator
+import com.example.mobiledger.common.extention.setOnSafeClickListener
 import com.example.mobiledger.databinding.DialogFragmentForgetPasswordBinding
 import com.example.mobiledger.databinding.SnackViewErrorBinding
 import com.example.mobiledger.presentation.OneTimeObserver
@@ -48,7 +49,7 @@ class ForgetPasswordDialogFragment : BaseDialogFragment<DialogFragmentForgetPass
 
     private fun setOnClickListeners() {
         viewBinding.apply {
-            btnSend.setOnClickListener {
+            btnSend.setOnSafeClickListener {
                 if (doValidations()) {
                     sendPasswordResetEmail()
                 }

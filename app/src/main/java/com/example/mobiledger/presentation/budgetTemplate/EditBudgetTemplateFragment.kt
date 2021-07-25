@@ -6,10 +6,7 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.mobiledger.R
 import com.example.mobiledger.common.base.BaseFragment
-import com.example.mobiledger.common.extention.gone
-import com.example.mobiledger.common.extention.roundToOneDecimal
-import com.example.mobiledger.common.extention.toPercent
-import com.example.mobiledger.common.extention.visible
+import com.example.mobiledger.common.extention.*
 import com.example.mobiledger.common.utils.showEditBudgetTemplateDialogFragment
 import com.example.mobiledger.databinding.FragmentEditBudgetTempleteBinding
 import com.example.mobiledger.databinding.SnackViewErrorBinding
@@ -55,7 +52,7 @@ class EditBudgetTemplateFragment :
     private fun setOnClickListener() {
         viewBinding.apply {
 
-            btnAddCategoryBudget.setOnClickListener {
+            btnAddCategoryBudget.setOnSafeClickListener {
                 showEditBudgetTemplateDialogFragment(
                     requireActivity().supportFragmentManager,
                     viewModel.id,
@@ -68,11 +65,11 @@ class EditBudgetTemplateFragment :
                     isUpdateMaxLimit = false
                 )
             }
-            btnBack.setOnClickListener {
+            btnBack.setOnSafeClickListener {
                 activity?.onBackPressed()
             }
 
-            tvEditBudgetMonthlyLimit.setOnClickListener {
+            tvEditBudgetMonthlyLimit.setOnSafeClickListener {
                 showEditBudgetTemplateDialogFragment(
                     requireActivity().supportFragmentManager,
                     viewModel.id,

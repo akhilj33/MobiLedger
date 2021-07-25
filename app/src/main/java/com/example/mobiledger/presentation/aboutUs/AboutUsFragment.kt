@@ -7,6 +7,7 @@ import android.view.View
 import com.bumptech.glide.Glide
 import com.example.mobiledger.R
 import com.example.mobiledger.common.base.BaseFragment
+import com.example.mobiledger.common.extention.setOnSafeClickListener
 import com.example.mobiledger.databinding.FragmentAboutUsBinding
 import com.example.mobiledger.domain.entities.EmailEntity
 
@@ -25,7 +26,7 @@ class AboutUsFragment : BaseFragment<FragmentAboutUsBinding, AboutUsNavigator>(R
 
     private fun setOnCLickListener() {
 
-        viewBinding.btnBack.setOnClickListener {
+        viewBinding.btnBack.setOnSafeClickListener {
             activity?.onBackPressed()
         }
 
@@ -40,31 +41,33 @@ class AboutUsFragment : BaseFragment<FragmentAboutUsBinding, AboutUsNavigator>(R
         }
 
         viewBinding.logoFb1.setOnClickListener {
+        viewBinding.logoFb1.setOnSafeClickListener {
             val webIntent: Intent = Uri.parse("https://www.facebook.com/akj.iet.33").let { webpage ->
                 Intent(Intent.ACTION_VIEW, webpage)
             }
             startActivity(webIntent)
         }
 
-        viewBinding.logoLinkedin1.setOnClickListener {
+        viewBinding.logoLinkedin1.setOnSafeClickListener {
             val webIntent: Intent = Uri.parse("https://www.linkedin.com/in/akhil-jain-279382121/").let { webpage ->
                 Intent(Intent.ACTION_VIEW, webpage)
             }
             startActivity(webIntent)
         }
-        viewBinding.logoGithub1.setOnClickListener {
+        viewBinding.logoGithub1.setOnSafeClickListener {
             val webIntent: Intent = Uri.parse("https://github.com/akhilj33").let { webpage ->
                 Intent(Intent.ACTION_VIEW, webpage)
             }
             startActivity(webIntent)
         }
-        viewBinding.logoinsta1.setOnClickListener {
+        viewBinding.logoinsta1.setOnSafeClickListener {
             val webIntent: Intent = Uri.parse("https://www.instagram.com/akhilj333/").let { webpage ->
                 Intent(Intent.ACTION_VIEW, webpage)
             }
             startActivity(webIntent)
         }
 
+        viewBinding.logoFb2.setOnSafeClickListener {
         viewBinding.email2.setOnClickListener {
             navigator?.sendEmail(
                 EmailEntity(
@@ -82,19 +85,19 @@ class AboutUsFragment : BaseFragment<FragmentAboutUsBinding, AboutUsNavigator>(R
             startActivity(webIntent)
         }
 
-        viewBinding.logoLinkedin2.setOnClickListener {
+        viewBinding.logoLinkedin2.setOnSafeClickListener {
             val webIntent: Intent = Uri.parse("https://www.linkedin.com/in/anantramanindia/").let { webpage ->
                 Intent(Intent.ACTION_VIEW, webpage)
             }
             startActivity(webIntent)
         }
-        viewBinding.logoGithub2.setOnClickListener {
+        viewBinding.logoGithub2.setOnSafeClickListener {
             val webIntent: Intent = Uri.parse("https://github.com/Anant-Raman").let { webpage ->
                 Intent(Intent.ACTION_VIEW, webpage)
             }
             startActivity(webIntent)
         }
-        viewBinding.logoinsta2.setOnClickListener {
+        viewBinding.logoinsta2.setOnSafeClickListener {
             val webIntent: Intent = Uri.parse("https://www.instagram.com/anantraman/").let { webpage ->
                 Intent(Intent.ACTION_VIEW, webpage)
             }

@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mobiledger.common.extention.gone
+import com.example.mobiledger.common.extention.setOnSafeClickListener
 import com.example.mobiledger.common.extention.visible
 import com.example.mobiledger.common.utils.DefaultCategoryUtils
 import com.example.mobiledger.databinding.ItemCategoryBinding
@@ -51,7 +52,7 @@ class CategoryAdapter(
             else if (transactionType == TransactionType.Expense)
                 viewBinding.ivCategoryIcon.background =
                     ContextCompat.getDrawable(context, DefaultCategoryUtils.getCategoryIcon(category, TransactionType.Expense))
-            viewBinding.deleteCategory.setOnClickListener {
+            viewBinding.deleteCategory.setOnSafeClickListener {
                 onCategoryDeleteClicked(category, categoryList)
             }
         }

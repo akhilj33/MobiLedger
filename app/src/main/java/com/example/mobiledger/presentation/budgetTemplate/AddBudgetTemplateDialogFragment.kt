@@ -8,6 +8,7 @@ import androidx.fragment.app.viewModels
 import com.example.mobiledger.R
 import com.example.mobiledger.common.base.BaseDialogFragment
 import com.example.mobiledger.common.base.BaseNavigator
+import com.example.mobiledger.common.extention.setOnSafeClickListener
 import com.example.mobiledger.common.utils.JsonUtils
 import com.example.mobiledger.databinding.AddBudgetTemplateDialogFragmentBinding
 import com.example.mobiledger.databinding.SnackViewErrorBinding
@@ -67,9 +68,9 @@ class AddBudgetTemplateDialogFragment :
 
     private fun setOnClickListeners() {
         viewBinding.apply {
-            btnSubmitTemplate.setOnClickListener {
+            btnSubmitTemplate.setOnSafeClickListener {
                 if (doValidations()){
-                    viewModel.addNewBudgetTemplate(getName(), getAmount().toLong(), getDescription())
+                    viewModel.addNewBudgetTemplate(getName(), getAmount().toLong())
                 }
             }
 
@@ -89,7 +90,6 @@ class AddBudgetTemplateDialogFragment :
 
     private fun getName(): String = viewBinding.templateNameTv.text.toString().trim()
     private fun getAmount(): String = viewBinding.amountTv.text.toString().trim()
-    private fun getDescription(): String = viewBinding.descriptionTv.text.toString().trim()
 
     private fun isValidName(): Boolean = getName().isNotBlank()
     private fun isValidAmount(): Boolean = getAmount().isNotBlank() && getAmount().toLong() > 0L

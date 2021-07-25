@@ -13,6 +13,7 @@ import com.example.mobiledger.R
 import com.example.mobiledger.common.base.BaseDialogFragment
 import com.example.mobiledger.common.base.BaseNavigator
 import com.example.mobiledger.common.extention.hideKeyboard
+import com.example.mobiledger.common.extention.setOnSafeClickListener
 import com.example.mobiledger.common.utils.AnimationDialogUtils
 import com.example.mobiledger.common.utils.DateUtils
 import com.example.mobiledger.common.utils.DateUtils.getDateInDDMMMMyyyyFormat
@@ -100,23 +101,23 @@ class AddTransactionDialogFragment :
 
     private fun setOnClickListeners() {
         viewBinding.apply {
-            toggleIncome.setOnClickListener {
+            toggleIncome.setOnSafeClickListener {
                 viewModel.transactionType = TransactionType.Income
                 handleIncomeClick()
             }
-            toggleExpense.setOnClickListener {
+            toggleExpense.setOnSafeClickListener {
                 viewModel.transactionType = TransactionType.Expense
                 handleExpenseClick()
             }
 
-            viewBinding.dateTv.setOnClickListener {
+            viewBinding.dateTv.setOnSafeClickListener {
                 datePicker.show(requireActivity().supportFragmentManager, "tag")
             }
 
-            btnSubmitTransaction.setOnClickListener {
+            btnSubmitTransaction.setOnSafeClickListener {
                 addTransaction()
             }
-            closeIv.setOnClickListener {
+            closeIv.setOnSafeClickListener {
                 dismiss()
             }
         }

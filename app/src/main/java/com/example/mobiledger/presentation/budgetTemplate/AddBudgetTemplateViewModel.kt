@@ -28,11 +28,11 @@ class AddBudgetTemplateViewModel(
 
     var templateList: MutableList<NewBudgetTemplateEntity> = mutableListOf()
 
-    fun addNewBudgetTemplate(name: String, maxLimitAmount: Long, description: String) {
+    fun addNewBudgetTemplate(name: String, maxLimitAmount: Long) {
         viewModelScope.launch {
             _loadingState.value = true
             when (val result = budgetTemplateUseCase.addNewBudgetTemplate(
-                NewBudgetTemplateEntity(name, maxLimitAmount, description, Timestamp.now())
+                NewBudgetTemplateEntity(name, maxLimitAmount, Timestamp.now())
             )) {
                 is AppResult.Success -> {
                     _loadingState.value = false

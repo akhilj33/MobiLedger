@@ -5,7 +5,6 @@ import com.google.firebase.Timestamp
 data class NewBudgetTemplateEntity(
     val name: String,
     val maxBudgetLimit: Long = 0,
-    val description: String? = null,
     val transactionTime: Timestamp
 ) {
     constructor() : this(

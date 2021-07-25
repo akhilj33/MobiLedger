@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.example.mobiledger.common.extention.setOnSafeClickListener
 import com.example.mobiledger.common.utils.DefaultCategoryUtils
 import com.example.mobiledger.databinding.BudgetTemplateCategoryItemBinding
 import com.example.mobiledger.domain.entities.BudgetTemplateCategoryEntity
@@ -45,7 +46,7 @@ class EditBudgetTemplateRecyclerViewAdapter(
                         context,
                         DefaultCategoryUtils.getCategoryIcon(budgetTemplateCategoryEntity.category, TransactionType.Expense)
                     )
-                root.setOnClickListener {
+                root.setOnSafeClickListener {
                     onTemplateItemClick(budgetTemplateCategoryEntity)
                 }
             }

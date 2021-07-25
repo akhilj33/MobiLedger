@@ -60,7 +60,7 @@
     <string name="settings">Settings</string>
     <string name="contact_us">Contact Us</string>
     <string name="logout">Logout</string>
-    <string name="logout_message">Are you sure?</string>
+    <string name="logout_message">Are you sure, that you want to logout from the application?</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="settings_cap">SETTINGS</string>
@@ -137,6 +137,7 @@
     <string name="monthly_limit_money">Monthly Limit: ₹%1$s</string>
     <string name="date_created">Date Created: %1$s</string>
     <string name="template_already_exist">Template name already exists</string>
+    <string name="reset_budget">Reset \u0020 </string>
 
     <!-- NOTIFICATION -->
     <string name="channel_transaction">Transaction channel</string>

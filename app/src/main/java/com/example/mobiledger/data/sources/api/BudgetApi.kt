@@ -38,6 +38,7 @@ interface BudgetApi {
     ): AppResult<Unit>
 
     suspend fun deleteBudgetCategory(uid: String, monthYear: String, category: String): AppResult<Unit>
+    suspend fun deleteMonthlyBudgetSummary(uid: String, monthYear: String): AppResult<Unit>
 }
 
 class BudgetApiImpl(private val firebaseDb: FirebaseFirestore, private val authSource: AuthSource) : BudgetApi {
@@ -316,7 +317,11 @@ class BudgetApiImpl(private val firebaseDb: FirebaseFirestore, private val authS
         }
     }
 
-    override suspend fun deleteBudgetCategory(uid: String, monthYear: String, category: String): AppResult<Unit> {
+    override suspend fun deleteBudgetCategory(
+        uid: String,
+        monthYear: String,
+        category: String
+    ): AppResult<Unit> {
         var response: Task<Void>? = null
         var exception: Exception? = null
 
@@ -334,6 +339,43 @@ class BudgetApiImpl(private val firebaseDb: FirebaseFirestore, private val authS
                 .document(BUDGET_DETAILS)
                 .collection(CATEGORY_BUDGET)
                 .document(category)
+                .delete()
+
+            response.await()
+        } catch (e: Exception) {
+            exception = e
+        }
+
+        return when (val result = ErrorMapper.checkAndMapFirebaseApiError(response, exception)) {
+            is FireBaseResult.Success -> {
+                if (result.data != null) AppResult.Success(Unit)
+                else AppResult.Failure(AppError(ErrorCodes.GENERIC_ERROR))
+            }
+            is FireBaseResult.Failure -> {
+                AppResult.Failure(result.error)
+            }
+        }
+    }
+
+    override suspend fun deleteMonthlyBudgetSummary(
+        uid: String,
+        monthYear: String
+    ): AppResult<Unit> {
+        var response: Task<Void>? = null
+        var exception: Exception? = null
+
+        try {
+            if (!authSource.isUserAuthorized()) throw FirebaseAuthException(
+                ErrorCodes.FIREBASE_UNAUTHORIZED,
+                UNAUTHORIZED_ERROR_MSG
+            )
+
+            response = firebaseDb.collection(USERS)
+                .document(uid)
+                .collection(MONTH)
+                .document(monthYear)
+                .collection(BUDGET)
+                .document(BUDGET_DETAILS)
                 .delete()
 
             response.await()

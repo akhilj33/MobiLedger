@@ -31,6 +31,9 @@ class BudgetViewModel(
     val budgetViewItemListLiveData: LiveData<Event<MutableList<BudgetViewItem>>> get() = _budgetViewItemListLiveData
     private val _budgetViewItemListLiveData: MutableLiveData<Event<MutableList<BudgetViewItem>>> = MutableLiveData()
 
+    val resetBudgetLiveData: LiveData<Event<Unit>> get() = _resetBudgetLiveData
+    private val _resetBudgetLiveData: MutableLiveData<Event<Unit>> = MutableLiveData()
+
     private val _isLoading: MutableLiveData<Boolean> = MutableLiveData(false)
     val isLoading: LiveData<Boolean> get() = _isLoading
 
@@ -169,6 +172,24 @@ class BudgetViewModel(
                 budgetViewItemList.add(BudgetViewItem.BudgetEmpty)
             }
             budgetViewItemList
+        }
+    }
+
+    fun resetBudget(){
+        _isLoading.value = true
+        viewModelScope.launch {
+            val currentMonth = getDateInMMyyyyFormat(getCurrentMonth())
+            when(val result = budgetUseCase.deleteMonthlyBudget(currentMonth)){
+                is AppResult.Success -> _resetBudgetLiveData.value = Event(Unit)
+                is AppResult.Failure -> {
+                    if (needToHandleAppError(result.error)) {
+                        _errorLiveData.value = Event(
+                            ViewError(viewErrorType = ViewErrorType.NON_BLOCKING, message = result.error.message)
+                        )
+                    }
+                }
+            }
+            _isLoading.value = false
         }
     }
 

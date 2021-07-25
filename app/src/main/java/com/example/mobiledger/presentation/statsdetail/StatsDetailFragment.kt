@@ -9,6 +9,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.mobiledger.R
 import com.example.mobiledger.common.base.BaseFragment
 import com.example.mobiledger.common.base.BaseNavigator
+import com.example.mobiledger.common.extention.setOnSafeClickListener
 import com.example.mobiledger.common.utils.DateUtils.getDateInMMMMyyyyFormat
 import com.example.mobiledger.common.utils.JsonUtils.convertJsonStringToObject
 import com.example.mobiledger.common.utils.JsonUtils.convertToJsonString
@@ -49,7 +50,7 @@ class StatsDetailFragment : BaseFragment<FragmentStatsDetailBinding, BaseNavigat
     }
 
     private fun setOnClickListeners() {
-        viewBinding.btnBack.setOnClickListener {
+        viewBinding.btnBack.setOnSafeClickListener {
             activity?.onBackPressed()
         }
     }
