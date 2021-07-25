@@ -174,7 +174,7 @@
     <string name="templates">Templates</string>
     <string name="apply_template_msg">Are you sure you want to apply this template?</string>
     <string name="budget_template_created_msg">Budget Template created</string>
-    <string name="no_templates_added">No Templates added \n\nAdd few templates by clicking below.</string>
+    <string name="no_templates_added">No Templates added</string>
     <string name="no_templates_categories_added">No Categories added \n\nAdd few category templates by clicking below.</string>
 
     <!-- On Boarding -->
@@ -182,6 +182,18 @@
     <string name="i_have_read_all_the_terms_and_conditions">I accept all the Terms and Conditions for signing up and using this app. (Read) </string>
     <string name="accept">Accept</string>
     <string name="terms_and_conditions">Terms And Conditions</string>
+    <string name="home_carousel_title">Monthly Dashboard</string>
+    <string name="home_carousel_sub_title">Keep the track of your monthly finances</string>
+    <string name="budget_carousel_title">Plan your budget</string>
+    <string name="budget_carousel_sub_title">Don\'t let your expanses go out of hand</string>
+    <string name="stats_carousel_title">Interactive Insights</string>
+    <string name="stats_carousel_sub_title">Your monthly financial insight is now on your finger tips</string>
+    <string name="profile_carousel_title">Your profile</string>
+    <string name="profile_carousel_sub_title">You have the power to control your Ledger</string>
+    <string name="budget_templates_carousel_title">Budget Templates</string>
+    <string name="budget_templates_carousel_sub_title">Create once, use every month!!</string>
+    <string name="category_carousel_title">Add your own categories</string>
+    <string name="category_carousel_sub_title">Its your ledger, you own it</string>
 
     <!-- About Us -->
     <string name="about_us">About Us</string>
@@ -193,10 +205,12 @@
         We have good experience in mobile android application development and this is our attempt to come up with a fine
         product to manage budget and finances for our customers.</string>
     <string name="akhilj33_email">akhilj33@gmail.com</string>
+    <string name="email_subject">Regarding MobiLedger</string>
+    <string name="email_body">Hello, I am a user of the MobiLedger App. I would like to bring your attention towards ...</string>
     <string name="next">Next</string>
     <string name="go_to_settings">Settings</string>
     <string name="permission_required_dialog_title">Permission Required</string>
-    <string name="permission_required_dialog_msg">Mobiledger needs Camera and File Storage Permission to upload your profile picture. \n\n
+    <string name="permission_required_dialog_msg">MobiLedger needs Camera and File Storage Permission to upload your profile picture. \n\n
         Please go to settings and give Camera and Storage permissions for better experience.</string>
     <string name="required_permission_not_granted">The required permissions are not granted.</string>
 

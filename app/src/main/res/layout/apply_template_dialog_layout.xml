@@ -41,9 +41,11 @@
             android:textAlignment="center"
             android:visibility="gone"
             android:layout_marginTop="@dimen/cdp_24"
+            android:layout_marginBottom="@dimen/cdp_24"
             app:layout_constraintTop_toBottomOf="@id/textTemplate"
             app:layout_constraintStart_toStartOf="@id/verticalStartGuideline"
-            app:layout_constraintEnd_toEndOf="@id/verticalEndGuideline" />
+            app:layout_constraintEnd_toEndOf="@id/verticalEndGuideline"
+            app:layout_constraintBottom_toBottomOf="parent" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvBudgetTemplateList"

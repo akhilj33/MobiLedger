@@ -8,7 +8,7 @@ import com.bumptech.glide.Glide
 import com.example.mobiledger.R
 import com.example.mobiledger.common.base.BaseFragment
 import com.example.mobiledger.databinding.FragmentAboutUsBinding
-import com.example.mobiledger.presentation.onBoarding.OnBoardingNavigator
+import com.example.mobiledger.domain.entities.EmailEntity
 
 
 class AboutUsFragment : BaseFragment<FragmentAboutUsBinding, AboutUsNavigator>(R.layout.fragment_about_us, StatusBarColor.BLUE) {
@@ -19,14 +19,6 @@ class AboutUsFragment : BaseFragment<FragmentAboutUsBinding, AboutUsNavigator>(R
         Glide.with(this).load(R.raw.akj).circleCrop().into(viewBinding.imgDev1)
         Glide.with(this).load(R.raw.anant).circleCrop().into(viewBinding.imgDev2)
 
-//        navigator?.sendEmail(
-//            EmailEntity(
-//                email = emailItem.emailId,
-//                subject = emailSubject,
-//                bodyText = emailExtraText,
-//                attachmentPath = emailItem.documentUri
-//            )
-//        )
     }
 
     override fun isBottomNavVisible(): Boolean = false
@@ -35,6 +27,16 @@ class AboutUsFragment : BaseFragment<FragmentAboutUsBinding, AboutUsNavigator>(R
 
         viewBinding.btnBack.setOnClickListener {
             activity?.onBackPressed()
+        }
+
+        viewBinding.email1.setOnClickListener {
+            navigator?.sendEmail(
+                EmailEntity(
+                    email = getString(R.string.akhilj33_email),
+                    subject = getString(R.string.email_subject),
+                    bodyText = getString(R.string.email_body)
+                )
+            )
         }
 
         viewBinding.logoFb1.setOnClickListener {
@@ -61,6 +63,16 @@ class AboutUsFragment : BaseFragment<FragmentAboutUsBinding, AboutUsNavigator>(R
                 Intent(Intent.ACTION_VIEW, webpage)
             }
             startActivity(webIntent)
+        }
+
+        viewBinding.email2.setOnClickListener {
+            navigator?.sendEmail(
+                EmailEntity(
+                    email = getString(R.string.anantraman_email),
+                    subject = getString(R.string.email_subject),
+                    bodyText = getString(R.string.email_body)
+                )
+            )
         }
 
         viewBinding.logoFb2.setOnClickListener {

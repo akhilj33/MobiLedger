@@ -150,7 +150,7 @@ object GraphUtils {
     }
 
     fun getPieGraphColorList() = listOf(
-        rgb(124, 179, 66), rgb(255, 82, 82),
+        rgb(51, 204, 102), rgb(255, 82, 82),
         rgb(130, 177, 255), rgb(255, 196, 0),
         rgb(141, 110, 99), rgb(77, 182, 172)
     )
