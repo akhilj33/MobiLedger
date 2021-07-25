@@ -30,7 +30,7 @@ class AboutUsFragment : BaseFragment<FragmentAboutUsBinding, AboutUsNavigator>(R
             activity?.onBackPressed()
         }
 
-        viewBinding.email1.setOnClickListener {
+        viewBinding.email1.setOnSafeClickListener {
             navigator?.sendEmail(
                 EmailEntity(
                     email = getString(R.string.akhilj33_email),
@@ -40,7 +40,6 @@ class AboutUsFragment : BaseFragment<FragmentAboutUsBinding, AboutUsNavigator>(R
             )
         }
 
-        viewBinding.logoFb1.setOnClickListener {
         viewBinding.logoFb1.setOnSafeClickListener {
             val webIntent: Intent = Uri.parse("https://www.facebook.com/akj.iet.33").let { webpage ->
                 Intent(Intent.ACTION_VIEW, webpage)
@@ -67,8 +66,8 @@ class AboutUsFragment : BaseFragment<FragmentAboutUsBinding, AboutUsNavigator>(R
             startActivity(webIntent)
         }
 
-        viewBinding.logoFb2.setOnSafeClickListener {
-        viewBinding.email2.setOnClickListener {
+
+        viewBinding.email2.setOnSafeClickListener {
             navigator?.sendEmail(
                 EmailEntity(
                     email = getString(R.string.anantraman_email),
@@ -78,7 +77,7 @@ class AboutUsFragment : BaseFragment<FragmentAboutUsBinding, AboutUsNavigator>(R
             )
         }
 
-        viewBinding.logoFb2.setOnClickListener {
+        viewBinding.logoFb2.setOnSafeClickListener {
             val webIntent: Intent = Uri.parse("https://www.facebook.com/anantramanindia").let { webpage ->
                 Intent(Intent.ACTION_VIEW, webpage)
             }
