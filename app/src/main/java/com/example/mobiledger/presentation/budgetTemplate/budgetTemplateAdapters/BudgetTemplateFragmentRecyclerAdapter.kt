@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mobiledger.R
+import com.example.mobiledger.common.extention.setOnSafeClickListener
 import com.example.mobiledger.common.utils.DateUtils
 import com.example.mobiledger.databinding.ItemBudgetTemplateListBinding
 import com.example.mobiledger.domain.entities.NewBudgetTemplateEntity
@@ -38,11 +39,11 @@ class BudgetTemplateFragmentRecyclerAdapter(
         fun bind(newBudgetTemplateEntity: NewBudgetTemplateEntity) {
 
             viewBinding.apply {
-                ivDeleteIcon.setOnClickListener {  onDeleteItemClick(newBudgetTemplateEntity.id)}
+                ivDeleteIcon.setOnSafeClickListener {  onDeleteItemClick(newBudgetTemplateEntity.id)}
                 tvTemplateName.text = newBudgetTemplateEntity.name
                 tvTemplateAmount.text = context.getString(R.string.monthly_limit_money,newBudgetTemplateEntity.maxBudgetLimit.toString())
                 tvTemplateDate.text = context.getString(R.string.date_created, DateUtils.getDateInDDMMMyyyyFormat(newBudgetTemplateEntity.transactionTime))
-                root.setOnClickListener {
+                root.setOnSafeClickListener {
                     onTemplateItemClick(newBudgetTemplateEntity.id)
                 }
             }

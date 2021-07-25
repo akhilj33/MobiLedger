@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.chauthai.swipereveallayout.ViewBinderHelper
 import com.example.mobiledger.R
 import com.example.mobiledger.common.extention.gone
+import com.example.mobiledger.common.extention.setOnSafeClickListener
 import com.example.mobiledger.common.extention.toAmount
 import com.example.mobiledger.common.extention.visible
 import com.example.mobiledger.common.utils.DateUtils
@@ -65,7 +66,7 @@ class HomeAdapter(
     inner class HeaderViewHolder(private val viewBinding: HomeHeaderItemBinding) : RecyclerView.ViewHolder(viewBinding.root) {
         fun bind(headerData: HeaderData) {
             viewBinding.apply {
-                tvViewAll.setOnClickListener { onAllTransactionClicked() }
+                tvViewAll.setOnSafeClickListener { onAllTransactionClicked() }
                 tvHeader.text = context.resources.getString(headerData.headerString)
                 if (headerData.isSecondaryHeaderVisible) tvViewAll.visible()
                 else tvViewAll.gone()
@@ -103,8 +104,8 @@ class HomeAdapter(
         fun bind(data: TransactionData) {
             val item = data.transactionEntity
             viewBinding.apply {
-                deleteSwipeAction.setOnClickListener { onDeleteItemClick(item, adapterPosition) }
-                transactionRoot.setOnClickListener {onTransactionItemClick(item)}
+                deleteSwipeAction.setOnSafeClickListener { onDeleteItemClick(item, adapterPosition) }
+                transactionRoot.setOnSafeClickListener {onTransactionItemClick(item)}
                 viewBinderHelper.setOpenOnlyOne(true)
                 viewBinderHelper.bind(swipelayout, item.id)
                 viewBinderHelper.closeLayout(item.id)

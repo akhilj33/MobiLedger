@@ -10,6 +10,7 @@ import com.example.mobiledger.R
 import com.example.mobiledger.common.base.BaseDialogFragment
 import com.example.mobiledger.common.base.BaseNavigator
 import com.example.mobiledger.common.extention.gone
+import com.example.mobiledger.common.extention.setOnSafeClickListener
 import com.example.mobiledger.common.extention.visible
 import com.example.mobiledger.common.utils.AnimationDialogUtils
 import com.example.mobiledger.databinding.DialogFragmentAddBudgetBinding
@@ -82,7 +83,7 @@ class AddBudgetDialogFragment :
         viewBinding.categorySpinnerTv.addTextChangedListener(categoryTextWatcher)
         viewBinding.amountTv.addTextChangedListener(amountTextWatcher)
 
-        viewBinding.btnSeBudget.setOnClickListener {
+        viewBinding.btnSeBudget.setOnSafeClickListener {
 
             when {
                 !viewModel.isCategoryBudget -> {

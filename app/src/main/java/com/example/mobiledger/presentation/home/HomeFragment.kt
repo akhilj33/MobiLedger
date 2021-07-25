@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.mobiledger.R
 import com.example.mobiledger.common.base.BaseFragment
+import com.example.mobiledger.common.extention.setOnSafeClickListener
 import com.example.mobiledger.common.utils.showAddTransactionDialogFragment
 import com.example.mobiledger.common.utils.showTransactionDetailDialogFragment
 import com.example.mobiledger.databinding.FragmentHomeBinding
@@ -88,11 +89,11 @@ class HomeFragment :
 
     private fun setOnClickListener() {
         viewBinding.apply {
-            btnAddTransaction.setOnClickListener {
+            btnAddTransaction.setOnSafeClickListener {
                 showAddTransactionDialogFragment(requireActivity().supportFragmentManager)
             }
-            monthNavigationBar.leftArrow.setOnClickListener { handleLeftClick() }
-            monthNavigationBar.rightArrow.setOnClickListener { handleRightClick() }
+            monthNavigationBar.leftArrow.setOnSafeClickListener { handleLeftClick() }
+            monthNavigationBar.rightArrow.setOnSafeClickListener { handleRightClick() }
         }
         viewBinding.horizontalGuideline2
     }

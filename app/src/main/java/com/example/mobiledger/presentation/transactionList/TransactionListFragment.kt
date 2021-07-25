@@ -5,6 +5,7 @@ import android.view.View
 import com.example.mobiledger.R
 import com.example.mobiledger.common.base.BaseFragment
 import com.example.mobiledger.common.base.BaseNavigator
+import com.example.mobiledger.common.extention.setOnSafeClickListener
 import com.example.mobiledger.common.transformer.ZoomOutPageTransformer
 import com.example.mobiledger.databinding.FragmentTransactionListScreenBinding
 import com.example.mobiledger.databinding.SnackViewErrorBinding
@@ -38,7 +39,7 @@ class TransactionListFragment :
     }
 
     private fun setOnClickListener() {
-        viewBinding.btnBack.setOnClickListener {
+        viewBinding.btnBack.setOnSafeClickListener {
             activity?.onBackPressed()
         }
     }

@@ -6,10 +6,12 @@ import androidx.fragment.app.viewModels
 import com.example.mobiledger.R
 import com.example.mobiledger.common.base.BaseFragment
 import com.example.mobiledger.common.extention.gone
+import com.example.mobiledger.common.extention.setOnSafeClickListener
 import com.example.mobiledger.common.extention.visible
 import com.example.mobiledger.common.extention.showBiometricSystemPrompt
 import com.example.mobiledger.databinding.FragmentSplashBinding
 import com.example.mobiledger.presentation.OneTimeObserver
+import com.example.mobiledger.presentation.main.NavTab
 
 class SplashFragment : BaseFragment<FragmentSplashBinding, SplashNavigator>(R.layout.fragment_splash) {
 
@@ -58,18 +60,18 @@ class SplashFragment : BaseFragment<FragmentSplashBinding, SplashNavigator>(R.la
     }
 
     private fun setOnClickListener() {
-        viewBinding.btnLoginUsingCred.setOnClickListener {
+        viewBinding.btnLoginUsingCred.setOnSafeClickListener {
             //todo: Logout
             navigator?.navigateToAuthScreen()
         }
 
-        viewBinding.btnRetry.setOnClickListener {
+        viewBinding.btnRetry.setOnSafeClickListener {
             authenticateWithFingerprint()
             viewBinding.btnRetry.gone()
             viewBinding.btnLoginUsingCred.gone()
         }
 
-        viewBinding.btnLogout.setOnClickListener {
+        viewBinding.btnLogout.setOnSafeClickListener {
             activityViewModel.logout()
         }
     }
@@ -96,6 +98,7 @@ class SplashFragment : BaseFragment<FragmentSplashBinding, SplashNavigator>(R.la
     }
 
     private fun moveToHome() {
+        activityViewModel.updateCurrentTab(NavTab.HOME)
         navigator?.launchDashboard()
     }
 

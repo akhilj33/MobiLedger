@@ -8,6 +8,7 @@ import androidx.fragment.app.viewModels
 import com.example.mobiledger.R
 import com.example.mobiledger.common.base.BaseDialogFragment
 import com.example.mobiledger.common.base.BaseNavigator
+import com.example.mobiledger.common.extention.setOnSafeClickListener
 import com.example.mobiledger.databinding.DialogFragmentAddCategoryBinding
 import com.example.mobiledger.databinding.SnackViewErrorBinding
 import com.example.mobiledger.domain.entities.ExpenseCategoryListEntity
@@ -70,7 +71,7 @@ class AddCategoryDialogFragment :
     private fun categoryAlreadyExist(): Boolean = oldList?.contains(getCategoryName()) ?: false
 
     private fun setOnClickListener() {
-        viewBinding.btnAddCategory.setOnClickListener {
+        viewBinding.btnAddCategory.setOnSafeClickListener {
             if(isValidCategoryName() && !categoryAlreadyExist()){
                 oldList?.add(getCategoryName())
                 if (isIncomeCategory) {
