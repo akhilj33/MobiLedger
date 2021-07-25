@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mobiledger.R
 import com.example.mobiledger.common.base.BaseFragment
+import com.example.mobiledger.common.extention.setOnSafeClickListener
 import com.example.mobiledger.databinding.FragmentOnboardingBinding
 import com.example.mobiledger.domain.entities.OnBoardingCarouselEntity
 
@@ -33,7 +34,7 @@ class OnBoardingFragment : BaseFragment<FragmentOnboardingBinding, OnBoardingNav
     }
 
     private fun setOnClickListener() {
-        viewBinding.btnNext.setOnClickListener {
+        viewBinding.btnNext.setOnSafeClickListener {
             navigator?.navigateToAuthScreen()
         }
     }

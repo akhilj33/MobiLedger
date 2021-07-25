@@ -91,11 +91,11 @@ class EditProfileFragment : BaseFragment<FragmentEditProfileBinding, BaseNavigat
 
 
     private fun setOnClickListener() {
-        viewBinding.btnBack.setOnClickListener {
+        viewBinding.btnBack.setOnSafeClickListener {
             activity?.onBackPressed()
         }
 
-        viewBinding.btnNameUpdate.setOnClickListener {
+        viewBinding.btnNameUpdate.setOnSafeClickListener {
             if (it.isEnabled) {
                 updateNameViewBasedOnValidation(isValidName())
                 if (isValidName()) {
@@ -104,7 +104,7 @@ class EditProfileFragment : BaseFragment<FragmentEditProfileBinding, BaseNavigat
             }
         }
 
-        viewBinding.btnEmailUpdate.setOnClickListener {
+        viewBinding.btnEmailUpdate.setOnSafeClickListener {
             if (it.isEnabled) {
                 updateEmailViewBasedOnValidation(viewBinding.emailLayout, isValidEmail())
                 if (isValidEmail()) {
@@ -113,7 +113,7 @@ class EditProfileFragment : BaseFragment<FragmentEditProfileBinding, BaseNavigat
             }
         }
 
-        viewBinding.btnContactUpdate.setOnClickListener {
+        viewBinding.btnContactUpdate.setOnSafeClickListener {
             if (it.isEnabled) {
                 updateContactNoViewBasedOnValidation(viewBinding.contactNumLayout, isValidPhone())
                 if (isValidPhone()) {
@@ -122,14 +122,14 @@ class EditProfileFragment : BaseFragment<FragmentEditProfileBinding, BaseNavigat
             }
         }
 
-        viewBinding.changePassword.setOnClickListener {
+        viewBinding.changePassword.setOnSafeClickListener {
             sendPasswordResetEmail()
         }
-        viewBinding.imgChangePassword.setOnClickListener {
+        viewBinding.imgChangePassword.setOnSafeClickListener {
             sendPasswordResetEmail()
         }
 
-        viewBinding.editImage.setOnClickListener {
+        viewBinding.editImage.setOnSafeClickListener {
             if (viewModel.oldPhoto.isNullOrEmpty()) handleProfilePicChange()
             else showUpdateProfilePicDialogFragment(requireActivity().supportFragmentManager)
         }

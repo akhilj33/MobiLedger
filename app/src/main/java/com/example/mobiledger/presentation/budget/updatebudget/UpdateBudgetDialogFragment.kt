@@ -10,6 +10,7 @@ import com.example.mobiledger.common.base.BaseDialogFragment
 import com.example.mobiledger.common.base.BaseNavigator
 import com.example.mobiledger.common.extention.disable
 import com.example.mobiledger.common.extention.enable
+import com.example.mobiledger.common.extention.setOnSafeClickListener
 import com.example.mobiledger.common.utils.DateUtils.getDateInMMMMyyyyFormat
 import com.example.mobiledger.databinding.FragmentUpdateBudgetDialogBinding
 import com.example.mobiledger.databinding.SnackViewErrorBinding
@@ -55,11 +56,11 @@ class UpdateBudgetDialogFragment :
 
     private fun setOnClickListener() {
         viewBinding.apply {
-            btnDelete.setOnClickListener {
+            btnDelete.setOnSafeClickListener {
                 viewModel.updateBudgetAmount(-viewModel.amount)
             }
 
-            btnUpdate.setOnClickListener {
+            btnUpdate.setOnSafeClickListener {
                 if (it.isEnabled && getAmount().isNotEmpty()) {
                     val amtChange = getAmount().toLong() - viewModel.amount
                     if (amtChange == 0L) dismiss()

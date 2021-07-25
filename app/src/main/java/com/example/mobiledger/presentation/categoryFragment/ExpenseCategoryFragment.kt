@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.mobiledger.R
 import com.example.mobiledger.common.base.BaseFragment
 import com.example.mobiledger.common.base.BaseNavigator
+import com.example.mobiledger.common.extention.setOnSafeClickListener
 import com.example.mobiledger.common.utils.showAddCategoryDialogFragment
 import com.example.mobiledger.databinding.FragmentExpenseCategoryBinding
 import com.example.mobiledger.domain.enums.TransactionType
@@ -78,7 +79,7 @@ class ExpenseCategoryFragment :
     }
 
     private fun setOnCLickListener() {
-        viewBinding.btnAddCategory.setOnClickListener {
+        viewBinding.btnAddCategory.setOnSafeClickListener {
             showAddCategoryDialogFragment(requireActivity().supportFragmentManager, list, false)
         }
     }

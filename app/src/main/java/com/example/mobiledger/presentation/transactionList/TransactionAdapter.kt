@@ -7,6 +7,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.chauthai.swipereveallayout.ViewBinderHelper
 import com.example.mobiledger.R
+import com.example.mobiledger.common.extention.setOnSafeClickListener
 import com.example.mobiledger.common.utils.DateUtils
 import com.example.mobiledger.databinding.HomeTransactionItemBinding
 import com.example.mobiledger.domain.enums.TransactionType
@@ -40,7 +41,7 @@ class TransactionAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     inner class ViewHolder(private val viewBinding: HomeTransactionItemBinding) : RecyclerView.ViewHolder(viewBinding.root) {
         fun bind(item: TransactionData) {
             viewBinding.apply {
-                deleteSwipeAction.setOnClickListener { }
+                deleteSwipeAction.setOnSafeClickListener { }
                 viewBinderHelper.setOpenOnlyOne(true)
                 viewBinderHelper.bind(swipelayout, item.id)
                 viewBinderHelper.closeLayout(item.id)

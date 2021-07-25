@@ -8,6 +8,7 @@ import android.view.inputmethod.InputMethodManager
 import androidx.core.content.ContextCompat
 import com.example.mobiledger.R
 import com.example.mobiledger.common.base.BaseFragment
+import com.example.mobiledger.common.utils.SafeClickListener
 import kotlin.math.absoluteValue
 import kotlin.math.roundToInt
 
@@ -41,6 +42,14 @@ fun View.enable() {
 
 fun View.disable() {
     this.isEnabled = false
+}
+
+fun View.setOnSafeClickListener(
+    onSafeClick: (View) -> Unit
+) {
+    setOnClickListener(SafeClickListener { v ->
+        onSafeClick(v)
+    })
 }
 
 @Suppress("DEPRECATION")

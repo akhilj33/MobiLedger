@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.mobiledger.R
 import com.example.mobiledger.common.base.BaseFragment
 import com.example.mobiledger.common.extention.gone
+import com.example.mobiledger.common.extention.setOnSafeClickListener
 import com.example.mobiledger.common.extention.visible
 import com.example.mobiledger.common.extention.showAlertDialog
 import com.example.mobiledger.common.utils.showAddNewTemplateDialogFragment
@@ -39,14 +40,14 @@ class BudgetTemplateFragment : BaseFragment<FragmentBudgetTemplateBinding, Budge
 
     private fun setOnClickListener() {
         viewBinding.apply {
-            btnBack.setOnClickListener {
+            btnBack.setOnSafeClickListener {
                 activity?.onBackPressed()
             }
-            btnNewTemplateEmpty.setOnClickListener {
+            btnNewTemplateEmpty.setOnSafeClickListener {
                 showAddNewTemplateDialogFragment(requireActivity().supportFragmentManager, viewModel.templateList)
             }
 
-            btnNewTemplate.setOnClickListener {
+            btnNewTemplate.setOnSafeClickListener {
                 showAddNewTemplateDialogFragment(requireActivity().supportFragmentManager, viewModel.templateList)
             }
         }

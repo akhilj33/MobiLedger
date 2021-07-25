@@ -10,10 +10,7 @@ import androidx.lifecycle.Observer
 import com.example.mobiledger.R
 import com.example.mobiledger.common.base.BaseDialogFragment
 import com.example.mobiledger.common.base.BaseNavigator
-import com.example.mobiledger.common.extention.disable
-import com.example.mobiledger.common.extention.enable
-import com.example.mobiledger.common.extention.invisible
-import com.example.mobiledger.common.extention.visible
+import com.example.mobiledger.common.extention.*
 import com.example.mobiledger.common.utils.DateUtils
 import com.example.mobiledger.common.utils.DateUtils.getDateInDDMMMMyyyyFormat
 import com.example.mobiledger.common.utils.JsonUtils.convertJsonStringToObject
@@ -108,19 +105,19 @@ class TransactionDetailDialogFragment :
 
     private fun setOnClickListeners() {
         viewBinding.apply {
-            dateTv.setOnClickListener {
+            dateTv.setOnSafeClickListener {
                 datePicker.show(requireActivity().supportFragmentManager, "tag")
             }
 
-            closeIv.setOnClickListener {
+            closeIv.setOnSafeClickListener {
                 dismiss()
             }
 
-            btnDelete.setOnClickListener {
+            btnDelete.setOnSafeClickListener {
                 viewModel.deleteTransaction()
             }
 
-            btnUpdate.setOnClickListener {
+            btnUpdate.setOnSafeClickListener {
                 if (it.isEnabled) {
                     if (checkAllFieldsSame()) dismiss()
                     else {

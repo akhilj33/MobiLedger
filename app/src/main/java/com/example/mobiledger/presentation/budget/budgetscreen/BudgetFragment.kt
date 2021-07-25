@@ -11,6 +11,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.mobiledger.R
 import com.example.mobiledger.common.base.BaseFragment
 import com.example.mobiledger.common.extention.gone
+import com.example.mobiledger.common.extention.setOnSafeClickListener
 import com.example.mobiledger.common.extention.visible
 import com.example.mobiledger.common.utils.DateUtils
 import com.example.mobiledger.common.utils.showAddBudgetDialogFragment
@@ -66,10 +67,10 @@ class BudgetFragment : BaseFragment<FragmentBudgetBinding, BudgetNavigator>(R.la
 
     private fun setOnClickListener() {
         viewBinding.apply {
-            monthNavigationBar.leftArrow.setOnClickListener { handleLeftClick() }
-            monthNavigationBar.rightArrow.setOnClickListener { handleRightClick() }
+            monthNavigationBar.leftArrow.setOnSafeClickListener { handleLeftClick() }
+            monthNavigationBar.rightArrow.setOnSafeClickListener { handleRightClick() }
 
-            tvResetBudget.setOnClickListener {
+            tvResetBudget.setOnSafeClickListener {
                 viewModel.resetBudget()
             }
         }

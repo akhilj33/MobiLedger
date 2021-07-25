@@ -9,10 +9,7 @@ import androidx.fragment.app.viewModels
 import com.example.mobiledger.R
 import com.example.mobiledger.common.base.BaseDialogFragment
 import com.example.mobiledger.common.base.BaseNavigator
-import com.example.mobiledger.common.extention.disable
-import com.example.mobiledger.common.extention.enable
-import com.example.mobiledger.common.extention.gone
-import com.example.mobiledger.common.extention.visible
+import com.example.mobiledger.common.extention.*
 import com.example.mobiledger.databinding.DialogFragmentAddBudgetBinding
 import com.example.mobiledger.databinding.SnackViewErrorBinding
 import com.example.mobiledger.presentation.OneTimeObserver
@@ -114,12 +111,12 @@ class EditBudgetTemplateDialogFragment :
         viewBinding.categorySpinnerTv.addTextChangedListener(categoryTextWatcher)
         viewBinding.amountTv.addTextChangedListener(amountTextWatcher)
 
-        viewBinding.btnDelete.setOnClickListener {
+        viewBinding.btnDelete.setOnSafeClickListener {
             viewModel.deleteBudgetTemplateCategory()
         }
 
 
-        viewBinding.btnUpdate.setOnClickListener {
+        viewBinding.btnUpdate.setOnSafeClickListener {
             if (it.isEnabled){
                 if (viewModel.isUpdateMaxLimit) {
                     if (!viewModel.isAddCategory) {
@@ -143,7 +140,7 @@ class EditBudgetTemplateDialogFragment :
             }
         }
 
-        viewBinding.btnSeBudget.setOnClickListener {
+        viewBinding.btnSeBudget.setOnSafeClickListener {
             if (it.isEnabled && viewModel.isAddCategory) {
                 if (doValidations()) {
                     addCategoryBudget()

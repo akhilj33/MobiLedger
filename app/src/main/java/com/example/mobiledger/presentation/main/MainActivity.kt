@@ -19,6 +19,7 @@ import androidx.core.content.ContextCompat
 import androidx.work.*
 import com.example.mobiledger.R
 import com.example.mobiledger.common.base.BaseActivity
+import com.example.mobiledger.common.extention.setOnSafeClickListener
 import com.example.mobiledger.common.extention.showAlertDialog
 import com.example.mobiledger.common.extention.showToast
 import com.example.mobiledger.common.utils.ConstantUtils
@@ -88,16 +89,16 @@ class MainActivity :
     }
 
     private fun setNavOnClickListeners() {
-        viewBinding.includeNav.homeView.setOnClickListener {
+        viewBinding.includeNav.homeView.setOnSafeClickListener {
             highlightTab(NavTab.HOME)
         }
-        viewBinding.includeNav.budgetView.setOnClickListener {
+        viewBinding.includeNav.budgetView.setOnSafeClickListener {
             highlightTab(NavTab.BUDGET())
         }
-        viewBinding.includeNav.statsView.setOnClickListener {
+        viewBinding.includeNav.statsView.setOnSafeClickListener {
             highlightTab(NavTab.STATS())
         }
-        viewBinding.includeNav.accountView.setOnClickListener {
+        viewBinding.includeNav.accountView.setOnSafeClickListener {
             highlightTab(
                 NavTab.PROFILE()
             )

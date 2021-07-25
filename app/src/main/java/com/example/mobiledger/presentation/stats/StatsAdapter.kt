@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mobiledger.R
+import com.example.mobiledger.common.extention.setOnSafeClickListener
 import com.example.mobiledger.common.extention.toAmount
 import com.example.mobiledger.databinding.StatsCategoryItemBinding
 import com.example.mobiledger.databinding.StatsChildRecyclerviewItemBinding
@@ -84,9 +85,9 @@ class StatsAdapter(private val onCategoryItemClick: (categoryNameList: List<Stri
                 tvAmount.text = item.amount.toAmount()
 
                 if (item.categoryType == TransactionType.Income)
-                    root.setOnClickListener { onCategoryItemClick(item.categoryList, item.amount) }
+                    root.setOnSafeClickListener { onCategoryItemClick(item.categoryList, item.amount) }
                 else if (item.categoryType == TransactionType.Expense)
-                    root.setOnClickListener { onCategoryItemClick(item.categoryList, 0L - item.amount) }
+                    root.setOnSafeClickListener { onCategoryItemClick(item.categoryList, 0L - item.amount) }
             }
         }
     }

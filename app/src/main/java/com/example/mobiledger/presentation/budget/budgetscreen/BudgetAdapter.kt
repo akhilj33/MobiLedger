@@ -76,7 +76,7 @@ class BudgetAdapter(
     inner class BudgetHeaderViewHolder(private val viewBinding: BudgetHeaderLayoutBinding) : RecyclerView.ViewHolder(viewBinding.root) {
         fun bind(headerData: HeaderData) {
             viewBinding.apply {
-                tvAddCategoryBudget.setOnClickListener { onAddBudgetCategoryClick() }
+                tvAddCategoryBudget.setOnSafeClickListener { onAddBudgetCategoryClick() }
                 tvHeader.text = context.resources.getString(headerData.headerString)
                 if (headerData.isSecondaryHeaderVisible) tvAddCategoryBudget.visible()
                 else tvAddCategoryBudget.gone()
@@ -89,7 +89,7 @@ class BudgetAdapter(
         fun bind(item: MonthlyBudgetOverviewData) {
             viewBinding.apply {
                 addColorChangeListenerToSlider(budgetAmountSeekBarID)
-                tvMaxBudgetAmount.setOnClickListener {
+                tvMaxBudgetAmount.setOnSafeClickListener {
                     onUpdateMonthlyLimitClick()
                 }
                 val percentSpent = (item.totalMonthlyExpense.toFloat() / item.maxBudget.toFloat() * 100)
@@ -101,7 +101,11 @@ class BudgetAdapter(
                 tvMaxBudgetAmount.text = context.getString(R.string.monthly_limit_amount, item.maxBudget.toAmount())
                 tvTotalBudgetAmount.text = item.totalBudget.toAmount()
                 val percent = (item.totalBudget.toFloat() / item.maxBudget.toFloat() * 100)
-                budgetAmountSeekBarID.value = (kotlin.math.min(percent, 100f))
+                budgetAmountSeekBarID.value = when {
+                    percent<0f -> 0f
+                    percent > 100f -> 100f
+                    else -> percent
+                }
             }
         }
     }
@@ -119,13 +123,18 @@ class BudgetAdapter(
         fun bind(item: BudgetCategoryData) {
             viewBinding.apply {
                 addColorChangeListenerToSlider(budgetCatAmountSeekBarID)
-                budgetCategoryRoot.setOnClickListener { onUpdateBudgetCategoryClick(item.categoryName, item.totalCategoryBudget) }
+                budgetCategoryRoot.setOnSafeClickListener { onUpdateBudgetCategoryClick(item.categoryName, item.totalCategoryBudget) }
                 tvBudgetAmount.text = item.totalCategoryBudget.toAmount()
                 tvCategoryName.text = item.categoryName
                 tvAmount.text = item.totalCategoryExpense.toAmount()
                 ivCategoryIcon.background = ContextCompat.getDrawable(context, item.categoryIcon)
                 val percent = (item.totalCategoryExpense.toFloat() / item.totalCategoryBudget.toFloat() * 100)
-                budgetCatAmountSeekBarID.value = (kotlin.math.min(percent, 100f))
+                budgetCatAmountSeekBarID.value =
+                    when {
+                        percent<0f -> 0f
+                        percent > 100f -> 100f
+                        else -> percent
+                    }
                 tvSpentPercent.text = percent.roundToOneDecimal().toPercent()
             }
         }
@@ -134,10 +143,10 @@ class BudgetAdapter(
     inner class BudgetEmptyViewHolder(private val viewBinding: BudgetEmptyItemBinding) : RecyclerView.ViewHolder(viewBinding.root) {
         fun bind() {
             viewBinding.apply {
-                btnMakeBudget.setOnClickListener {
+                btnMakeBudget.setOnSafeClickListener {
                     onSetMonthlyLimitBtnClick()
                 }
-                btnApplyTemplate.setOnClickListener {
+                btnApplyTemplate.setOnSafeClickListener {
                     onApplyTemplateClick()
                 }
             }
@@ -147,7 +156,7 @@ class BudgetAdapter(
     inner class BudgetCategoryEmptyViewHolder(private val viewBinding: BudgetCategoryEmptyItemBinding) : RecyclerView.ViewHolder(viewBinding.root) {
         fun bind() {
             viewBinding.apply {
-                btnAddCategoryBudget.setOnClickListener {
+                btnAddCategoryBudget.setOnSafeClickListener {
                     onAddBudgetCategoryClick()
                 }
             }
