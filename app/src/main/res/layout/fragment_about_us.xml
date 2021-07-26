@@ -131,13 +131,24 @@
                     android:textColor="@color/colorPrimaryDark" />
 
                 <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/email1"
+                    android:layout_width="@dimen/cdp_32"
+                    android:layout_height="@dimen/cdp_32"
+                    android:layout_below="@id/emailTv1"
+                    android:layout_marginStart="@dimen/cdp_16"
+                    android:layout_marginTop="@dimen/cdp_8"
+                    android:layout_toEndOf="@id/imgDev1"
+                    android:src="@drawable/ic_mail"
+                    android:layout_marginBottom="@dimen/cdp_8" />
+
+                <com.google.android.material.imageview.ShapeableImageView
                     android:id="@+id/logoFb1"
                     android:layout_width="@dimen/cdp_32"
                     android:layout_height="@dimen/cdp_32"
-                    android:layout_marginTop="@dimen/cdp_8"
-                    android:layout_marginStart="@dimen/cdp_16"
                     android:layout_below="@id/emailTv1"
-                    android:layout_toEndOf="@id/imgDev1"
+                    android:layout_marginStart="@dimen/cdp_16"
+                    android:layout_marginTop="@dimen/cdp_8"
+                    android:layout_toEndOf="@id/email1"
                     android:src="@drawable/ic_icons8_facebook" />
 
                 <com.google.android.material.imageview.ShapeableImageView
@@ -225,13 +236,24 @@
                     android:textColor="@color/colorPrimaryDark" />
 
                 <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/email2"
+                    android:layout_width="@dimen/cdp_32"
+                    android:layout_height="@dimen/cdp_32"
+                    android:layout_below="@id/emailTv2"
+                    android:layout_marginStart="@dimen/cdp_16"
+                    android:layout_marginTop="@dimen/cdp_8"
+                    android:layout_toEndOf="@id/imgDev2"
+                    android:src="@drawable/ic_mail"
+                    android:layout_marginBottom="@dimen/cdp_8" />
+
+                <com.google.android.material.imageview.ShapeableImageView
                     android:id="@+id/logoFb2"
                     android:layout_width="@dimen/cdp_32"
                     android:layout_height="@dimen/cdp_32"
-                    android:layout_marginTop="@dimen/cdp_8"
-                    android:layout_marginStart="@dimen/cdp_16"
                     android:layout_below="@id/emailTv2"
-                    android:layout_toEndOf="@id/imgDev2"
+                    android:layout_marginStart="@dimen/cdp_16"
+                    android:layout_marginTop="@dimen/cdp_8"
+                    android:layout_toEndOf="@id/email2"
                     android:src="@drawable/ic_icons8_facebook" />
 
                 <com.google.android.material.imageview.ShapeableImageView

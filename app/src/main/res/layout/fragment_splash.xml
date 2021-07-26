@@ -49,16 +49,17 @@
 
 
         <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/animation_view"
             android:layout_width="326dp"
             android:layout_height="290dp"
-            android:id="@+id/animation_view"
-            app:lottie_rawRes="@raw/money"
+            android:layout_marginTop="24dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.494"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/splashHeading"
             app:lottie_autoPlay="true"
             app:lottie_loop="true"
-            android:layout_marginTop="@dimen/cdp_48"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/splashHeading" />
+            app:lottie_rawRes="@raw/money" />
 
         <TextView
             android:id="@+id/tvHeading"

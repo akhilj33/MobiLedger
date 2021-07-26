@@ -69,7 +69,7 @@ class DailyReminderWorker(val context: Context, params: WorkerParameters) : Work
         val notificationBuilder = NotificationCompat.Builder(applicationContext, ConstantUtils.CHANNEL_ID_REMINDER)
             .setContentTitle(title)
             .setContentText(description)
-            .setSmallIcon(R.drawable.ic_launcher_background)
+            .setSmallIcon(R.mipmap.ic_launcher_round)
             .setContentIntent(resultPendingIntent)
 
         notificationManager.notify(notificationID, notificationBuilder.build())

@@ -35,11 +35,12 @@ class OnBoardingCarouselAdapter(
             context.resources.getString(item.carouselSubTitle)
 
         when (item.position) {
-            0 -> holder.binding.carouselIv.setImageResource(R.drawable.app_logo)
-            1 -> holder.binding.carouselIv.setImageResource(R.drawable.budget_icon_black)
-            2 -> holder.binding.carouselIv.setImageResource(R.drawable.calendar_icon)
-            3 -> holder.binding.carouselIv.setImageResource(R.drawable.cancel_icon)
-            4 -> holder.binding.carouselIv.setImageResource(R.drawable.delete_white)
+            0 -> holder.binding.carouselIv.setImageResource(R.drawable.home_ss)
+            1 -> holder.binding.carouselIv.setImageResource(R.drawable.budget_ss)
+            2 -> holder.binding.carouselIv.setImageResource(R.drawable.stats_ss)
+            3 -> holder.binding.carouselIv.setImageResource(R.drawable.profile_ss)
+            4 -> holder.binding.carouselIv.setImageResource(R.drawable.budget_template_ss)
+            5 -> holder.binding.carouselIv.setImageResource(R.drawable.category_ss)
         }
     }
 
