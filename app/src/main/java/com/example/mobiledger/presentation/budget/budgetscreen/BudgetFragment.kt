@@ -12,6 +12,7 @@ import com.example.mobiledger.R
 import com.example.mobiledger.common.base.BaseFragment
 import com.example.mobiledger.common.extention.gone
 import com.example.mobiledger.common.extention.setOnSafeClickListener
+import com.example.mobiledger.common.extention.showAlertDialog
 import com.example.mobiledger.common.extention.visible
 import com.example.mobiledger.common.utils.DateUtils
 import com.example.mobiledger.common.utils.showAddBudgetDialogFragment
@@ -71,10 +72,20 @@ class BudgetFragment : BaseFragment<FragmentBudgetBinding, BudgetNavigator>(R.la
             monthNavigationBar.rightArrow.setOnSafeClickListener { handleRightClick() }
 
             tvResetBudget.setOnSafeClickListener {
-                viewModel.resetBudget()
+                activity?.showAlertDialog(
+                    getString(R.string.reset_heading),
+                    getString(R.string.reset_budget_msg),
+                    getString(R.string.yes),
+                    getString(R.string.no),
+                    onCancelButtonClick,
+                    onContinueClick
+                )
             }
         }
     }
+
+    private val onCancelButtonClick = {}
+    private val onContinueClick = { viewModel.resetBudget() }
 
     private fun setUpObserver() {
 
@@ -138,7 +149,7 @@ class BudgetFragment : BaseFragment<FragmentBudgetBinding, BudgetNavigator>(R.la
             viewModel.monthlyLimit,
             viewModel.giveFinalExpenseList(),
             DateUtils.getDateInMMyyyyFormat(viewModel.getCurrentMonth()),
-            0, false
+            0, AddBudgetFragmentPurpose.ADD_MONTHLY_LIMIT.name
         )
     }
 
@@ -155,7 +166,7 @@ class BudgetFragment : BaseFragment<FragmentBudgetBinding, BudgetNavigator>(R.la
             viewModel.monthlyLimit,
             viewModel.giveFinalExpenseList(),
             DateUtils.getDateInMMyyyyFormat(viewModel.getCurrentMonth()),
-            viewModel.budgetTotal, false
+            viewModel.budgetTotal, AddBudgetFragmentPurpose.UPDATE_MONTHLY_LIMIT.name
         )
     }
 
@@ -175,7 +186,7 @@ class BudgetFragment : BaseFragment<FragmentBudgetBinding, BudgetNavigator>(R.la
             viewModel.monthlyLimit,
             viewModel.giveFinalExpenseList(),
             DateUtils.getDateInMMyyyyFormat(viewModel.getCurrentMonth()),
-            viewModel.budgetTotal, true
+            viewModel.budgetTotal, AddBudgetFragmentPurpose.ADD_CATEGORY_BUDGET.name
         )
     }
 

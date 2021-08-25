@@ -4,6 +4,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.mobiledger.common.extention.gone
 import com.example.mobiledger.common.extention.setOnSafeClickListener
 import com.example.mobiledger.common.utils.DateUtils
 import com.example.mobiledger.databinding.ItemBudgetTemplateListBinding
@@ -40,6 +41,7 @@ class ApplyTemplateRecyclerViewAdapter(
             viewBinding.apply {
                 tvTemplateName.text = newBudgetTemplateEntity.name
                 tvTemplateAmount.text = newBudgetTemplateEntity.maxBudgetLimit.toString()
+                ivDeleteIcon.gone()
                 tvTemplateDate.text = DateUtils.getDateInDDMMMMyyyyFormat(newBudgetTemplateEntity.transactionTime)
                 root.setOnSafeClickListener {
                     onTemplateItemClick(newBudgetTemplateEntity.id)

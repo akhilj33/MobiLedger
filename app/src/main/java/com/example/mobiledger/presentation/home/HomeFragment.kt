@@ -16,6 +16,7 @@ import com.example.mobiledger.common.utils.showTransactionDetailDialogFragment
 import com.example.mobiledger.databinding.FragmentHomeBinding
 import com.example.mobiledger.databinding.SnackViewErrorBinding
 import com.example.mobiledger.domain.entities.TransactionEntity
+import com.example.mobiledger.domain.enums.TransactionDetailScreenSource
 import com.example.mobiledger.presentation.OneTimeObserver
 
 class HomeFragment :
@@ -46,7 +47,6 @@ class HomeFragment :
 
     private fun setUpObservers() {
         activityViewModel.updateTransactionResultLiveData.observe(viewLifecycleOwner, OneTimeObserver {
-            logEvent(getString(R.string.transaction_added))
             refreshView()
         })
 
@@ -83,6 +83,7 @@ class HomeFragment :
         })
 
         activityViewModel.addTransactionResultLiveData.observe(viewLifecycleOwner, OneTimeObserver {
+            logEvent(getString(R.string.transaction_added))
             refreshView()
         })
     }
@@ -135,11 +136,15 @@ class HomeFragment :
     }
 
     private val onAllTransactionClicked = fun() {
-        navigator?.navigateToTransactionFragmentScreen(viewModel.transList)
+        navigator?.navigateToTransactionFragmentScreen(viewModel.transList, viewModel.currentMonth)
     }
 
     private val onTransactionItemClick = fun(transactionEntity: TransactionEntity) {
-        showTransactionDetailDialogFragment(transactionEntity, requireActivity().supportFragmentManager)
+        showTransactionDetailDialogFragment(
+            transactionEntity,
+            requireActivity().supportFragmentManager,
+            TransactionDetailScreenSource.HomeScreen
+        )
     }
 
     companion object {

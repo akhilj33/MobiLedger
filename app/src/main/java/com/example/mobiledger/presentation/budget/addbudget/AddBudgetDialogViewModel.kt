@@ -35,7 +35,7 @@ class AddBudgetDialogViewModel(
     lateinit var month: String
     var budgetTotal: Long = 0L
     var monthlyLimit: Long = 0L
-    var isCategoryBudget: Boolean = false
+    lateinit var purpose: String
 
     fun setMonthlyBudgetLimit(monthlyBudgetData: MonthlyBudgetData) {
         _isLoading.value = true

@@ -5,12 +5,14 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.widget.AutoCompleteTextView
+import androidx.core.os.bundleOf
+import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import com.example.mobiledger.R
 import com.example.mobiledger.common.base.BaseDialogFragment
 import com.example.mobiledger.common.base.BaseNavigator
 import com.example.mobiledger.common.extention.*
+import com.example.mobiledger.common.utils.ConstantUtils
 import com.example.mobiledger.common.utils.DateUtils
 import com.example.mobiledger.common.utils.DateUtils.getDateInDDMMMMyyyyFormat
 import com.example.mobiledger.common.utils.JsonUtils.convertJsonStringToObject
@@ -18,6 +20,9 @@ import com.example.mobiledger.common.utils.JsonUtils.convertToJsonString
 import com.example.mobiledger.databinding.SnackViewErrorBinding
 import com.example.mobiledger.databinding.TransactionDetailFragmentBinding
 import com.example.mobiledger.domain.entities.TransactionEntity
+import com.example.mobiledger.domain.enums.ProfilePicUpdateType
+import com.example.mobiledger.domain.enums.TransactionDetailScreenSource
+import com.example.mobiledger.domain.enums.TransactionDetailScreenSource.Companion.getTransactionDetailScreenSource
 import com.example.mobiledger.domain.enums.TransactionType
 import com.example.mobiledger.presentation.OneTimeObserver
 import com.example.mobiledger.presentation.addtransaction.SpinnerAdapter
@@ -34,12 +39,16 @@ class TransactionDetailDialogFragment :
     private val spinnerAdapter: SpinnerAdapter by lazy { SpinnerAdapter(requireContext()) }
     private val viewModel: TransactionDetailViewModel by viewModels { viewModelFactory }
 
+    private var newTransactionEntity: TransactionEntity? = null
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.apply {
             getString(TRANSACTION_ENTITY)?.let {
                 viewModel.oldTransactionEntity = convertJsonStringToObject<TransactionEntity>(it) ?: TransactionEntity()
             }
+            viewModel.sourceScreen = getTransactionDetailScreenSource(getString(SOURCE_SCREEN) as String)
         }
     }
 
@@ -86,7 +95,14 @@ class TransactionDetailDialogFragment :
         })
 
         viewModel.updateResultLiveData.observe(viewLifecycleOwner, OneTimeObserver{
-            activityViewModel.updateTransactionResult()
+            val isSuccess = it.first
+            val isDelete = it.second
+            if (viewModel.sourceScreen == TransactionDetailScreenSource.HomeScreen) activityViewModel.updateTransactionResult()
+            else{
+                setFragmentResult(ConstantUtils.TRANSACTION_DETAIL_REQUEST_KEY,
+                    bundleOf(Pair(ConstantUtils.TD_ENTITY_BUNDLE_KEY, convertToJsonString(newTransactionEntity?:viewModel.oldTransactionEntity)),
+                        Pair(ConstantUtils.TD_IS_DELETE_BUNDLE_KEY, isDelete)))
+            }
             dismiss()
         })
 
@@ -127,11 +143,11 @@ class TransactionDetailDialogFragment :
                             } else {
                                 viewModel.oldTransactionEntity.transactionTime
                             }
-                            val newTransactionEntity = TransactionEntity(
+                            newTransactionEntity = TransactionEntity(
                                 getName(), getAmount().toLong(), getCategory(), getDescription(),
                                 viewModel.oldTransactionEntity.transactionType, timeStamp
                             ).apply { id = viewModel.oldTransactionEntity.id }
-                            handleFieldChanges(newTransactionEntity)
+                            handleFieldChanges(newTransactionEntity as TransactionEntity)
                         }
                     }
                 }
@@ -292,10 +308,12 @@ class TransactionDetailDialogFragment :
 
     companion object {
         private const val TRANSACTION_ENTITY = "transaction_entity"
+        private const val SOURCE_SCREEN = "source_screen"
 
-        fun newInstance(transactionEntity: TransactionEntity) = TransactionDetailDialogFragment().apply {
+        fun newInstance(transactionEntity: TransactionEntity, sourceScreen: TransactionDetailScreenSource) = TransactionDetailDialogFragment().apply {
             arguments = Bundle().apply {
                 putString(TRANSACTION_ENTITY, convertToJsonString(transactionEntity))
+                putString(SOURCE_SCREEN, sourceScreen.source)
             }
         }
     }

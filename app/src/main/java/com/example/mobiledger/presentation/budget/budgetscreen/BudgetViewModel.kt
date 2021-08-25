@@ -238,3 +238,6 @@ private fun mapToCategoryBudgetData(budgetCategoryData: MonthlyCategoryBudget): 
         )
     }
 }
+
+enum class AddBudgetFragmentPurpose { ADD_CATEGORY_BUDGET, ADD_MONTHLY_LIMIT, UPDATE_MONTHLY_LIMIT }
+

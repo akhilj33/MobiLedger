@@ -9,11 +9,13 @@ import com.chauthai.swipereveallayout.ViewBinderHelper
 import com.example.mobiledger.R
 import com.example.mobiledger.common.extention.setOnSafeClickListener
 import com.example.mobiledger.common.utils.DateUtils
+import com.example.mobiledger.common.utils.DefaultCategoryUtils
 import com.example.mobiledger.databinding.HomeTransactionItemBinding
+import com.example.mobiledger.domain.entities.TransactionEntity
 import com.example.mobiledger.domain.enums.TransactionType
 import com.example.mobiledger.presentation.home.TransactionData
 
-class TransactionAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class TransactionAdapter(val onTransactionItemClick: (TransactionEntity) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private lateinit var context: Context
 
@@ -24,7 +26,6 @@ class TransactionAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         super.onAttachedToRecyclerView(recyclerView)
         context = recyclerView.context
     }
-
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -42,6 +43,7 @@ class TransactionAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         fun bind(item: TransactionData) {
             viewBinding.apply {
                 deleteSwipeAction.setOnSafeClickListener { }
+                transactionRoot.setOnSafeClickListener {onTransactionItemClick(item.transactionEntity)}
                 viewBinderHelper.setOpenOnlyOne(true)
                 viewBinderHelper.bind(swipelayout, item.id)
                 viewBinderHelper.closeLayout(item.id)
@@ -71,5 +73,25 @@ class TransactionAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         notifyDataSetChanged()
     }
 
+    fun deleteItem(transactionEntity: TransactionEntity) {
+        val index = transactionList.indexOfFirst { it.id == transactionEntity.id }
+        if(index != -1) {
+            transactionList.removeAt(index)
+            notifyItemRemoved(index)
+        }
+    }
 
+    fun updateItem(transactionEntity: TransactionEntity) {
+        val transactionData = with(transactionEntity){
+            TransactionData(id, name, amount.toString(), transactionType, category, this,
+                DefaultCategoryUtils.getCategoryIcon(category, transactionType)
+            )
+        }
+
+        val index = transactionList.indexOfFirst { it.id == transactionEntity.id }
+        if(index != -1) {
+            transactionList[index] = transactionData
+            notifyItemChanged(index)
+        }
+    }
 }

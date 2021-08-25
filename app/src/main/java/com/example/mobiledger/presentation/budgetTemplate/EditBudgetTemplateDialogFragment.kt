@@ -67,7 +67,7 @@ class EditBudgetTemplateDialogFragment :
         } else {
             if (viewModel.isUpdateMaxLimit) {
                 viewBinding.apply {
-                    textSetYourBudget.text = requireContext().getString(R.string.update_your_budget)
+                    textSetYourBudget.text = getString(R.string.update_your_budget)
                     spinnerCategory.gone()
                     btnUpdate.visible()
                     btnDelete.gone()
@@ -75,11 +75,12 @@ class EditBudgetTemplateDialogFragment :
                 }
             } else {
                 viewBinding.apply {
-                    textSetYourBudget.text = requireContext().getString(R.string.update_your_budget)
+                    textSetYourBudget.text = getString(R.string.update_category_budget, viewModel.category)
                     spinnerCategory.gone()
                     btnUpdate.visible()
                     btnDelete.visible()
                     btnSeBudget.gone()
+                    amountTv.setText(viewModel.oldBudget.toString())
                 }
             }
         }

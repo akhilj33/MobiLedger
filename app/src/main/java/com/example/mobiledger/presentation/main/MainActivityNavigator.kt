@@ -29,6 +29,7 @@ import com.example.mobiledger.presentation.stats.StatsNavigator
 import com.example.mobiledger.presentation.statsdetail.StatsDetailFragment
 import com.example.mobiledger.presentation.transactionList.TransactionListFragment
 import java.util.*
+import kotlin.collections.ArrayList
 
 class MainActivityNavigator constructor(
     @IdRes private val containerId: Int,
@@ -133,10 +134,10 @@ class MainActivityNavigator constructor(
         )
     }
 
-    override fun navigateToTransactionFragmentScreen(transactionList: ArrayList<TransactionData>) {
+    override fun navigateToTransactionFragmentScreen(transactionList: ArrayList<TransactionData>, monthYear: String) {
         FragmentTransactionHelper.replaceFragment(
             fragmentManager,
-            TransactionListFragment.newInstance(transactionList),
+            TransactionListFragment.newInstance(transactionList, monthYear),
             containerId, addToBackStack = true
         )
     }

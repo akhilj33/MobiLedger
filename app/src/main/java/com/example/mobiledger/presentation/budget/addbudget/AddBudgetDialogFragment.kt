@@ -18,6 +18,7 @@ import com.example.mobiledger.databinding.SnackViewErrorBinding
 import com.example.mobiledger.presentation.OneTimeObserver
 import com.example.mobiledger.presentation.addtransaction.SpinnerAdapter
 import com.example.mobiledger.presentation.budget.MonthlyBudgetData
+import com.example.mobiledger.presentation.budget.budgetscreen.AddBudgetFragmentPurpose
 import com.google.android.material.textfield.TextInputLayout
 import java.util.*
 
@@ -37,7 +38,7 @@ class AddBudgetDialogFragment :
             viewModel.monthlyLimit = it.getLong(KEY_MONTHLY_LIMIT)
             viewModel.month = it.getString(KEY_MONTH) as String
             viewModel.budgetTotal = it.getLong(KEY_BUDGET_TOTAL)
-            viewModel.isCategoryBudget = it.getBoolean(KEY_IS_ADD_CATEGORY)
+            viewModel.purpose = it.getString(KEY_PURPOSE) as String
         }
     }
 
@@ -52,9 +53,15 @@ class AddBudgetDialogFragment :
     }
 
     private fun handleUI() {
-        if (viewModel.isCategoryBudget) {
+        if (viewModel.purpose == AddBudgetFragmentPurpose.ADD_CATEGORY_BUDGET.name) {
             viewBinding.spinnerCategory.visible()
         } else {
+            if (viewModel.purpose == AddBudgetFragmentPurpose.ADD_MONTHLY_LIMIT.name)
+                viewBinding.textSetYourBudget.text = getString(R.string.set_monthly_limit)
+            else if (viewModel.purpose == AddBudgetFragmentPurpose.UPDATE_MONTHLY_LIMIT.name) {
+                viewBinding.textSetYourBudget.text = getString(R.string.update_monthly_limit)
+                viewBinding.amountTv.setText(viewModel.monthlyLimit.toString())
+            }
             viewBinding.spinnerCategory.gone()
         }
     }
@@ -85,12 +92,12 @@ class AddBudgetDialogFragment :
 
         viewBinding.btnSeBudget.setOnSafeClickListener {
 
-            when {
-                !viewModel.isCategoryBudget -> {
-                    addBudgetOverview()
+            when(viewModel.purpose) {
+                AddBudgetFragmentPurpose.ADD_CATEGORY_BUDGET.name -> {
+                    addCategoryBudget()
                 }
                 else -> {
-                    addCategoryBudget()
+                    addBudgetOverview()
                 }
             }
         }
@@ -145,7 +152,7 @@ class AddBudgetDialogFragment :
     /*---------------------------------------Validations------------------------------------------*/
 
     private fun doValidations(): Boolean {
-        return if (viewModel.isCategoryBudget) {
+        return if (viewModel.purpose == AddBudgetFragmentPurpose.ADD_CATEGORY_BUDGET.name) {
             updateAmountViewBasedOnValidation(viewBinding.amountLayout, isValidAmount())
             updateViewBasedOnValidation(viewBinding.spinnerCategory, isValidCategory())
             isValidCategory() && isValidAmount() && !isBudgetOverflow()
@@ -160,7 +167,7 @@ class AddBudgetDialogFragment :
         isValid: Boolean
     ) {
         if (isValid) {
-            if (viewModel.isCategoryBudget && isBudgetOverflow()){
+            if (viewModel.purpose == AddBudgetFragmentPurpose.ADD_CATEGORY_BUDGET.name && isBudgetOverflow()){
                 textInputLayout.error = getString(R.string.budget_overflow_error, (viewModel.monthlyLimit - viewModel.budgetTotal).toString())
             }
             else textInputLayout.error = null
@@ -181,19 +188,19 @@ class AddBudgetDialogFragment :
     }
 
     companion object {
-        private const val KEY_IS_ADD_CATEGORY = "KEY_IS_ADD_CATEGORY"
+        private const val KEY_PURPOSE = "KEY_PURPOSE"
         private const val KEY_LIST = "getList"
         private const val KEY_MONTHLY_LIMIT = "KEY_MONTHLY_LIMIT"
         private const val KEY_MONTH = "month"
         private const val KEY_BUDGET_TOTAL = "budgetTotal"
-        fun newInstance(monthlyLimit: Long, list: List<String>, month: String, budgetTotal: Long, isAddCategory: Boolean) =
+        fun newInstance(monthlyLimit: Long, list: List<String>, month: String, budgetTotal: Long, purpose: String) =
             AddBudgetDialogFragment().apply {
             arguments = Bundle().apply {
                 putLong(KEY_MONTHLY_LIMIT, monthlyLimit)
                 putStringArrayList(KEY_LIST, list as ArrayList<String>)
                 putString(KEY_MONTH, month)
                 putLong(KEY_BUDGET_TOTAL, budgetTotal)
-                putBoolean(KEY_IS_ADD_CATEGORY, isAddCategory)
+                putString(KEY_PURPOSE, purpose)
             }
         }
     }

@@ -4,5 +4,5 @@ import com.example.mobiledger.common.base.BaseNavigator
 
 interface HomeNavigator : BaseNavigator {
     fun navigateToProfileScreen()
-    fun navigateToTransactionFragmentScreen(arrayList: ArrayList<TransactionData>)
+    fun navigateToTransactionFragmentScreen(transactionList: ArrayList<TransactionData>, monthYear: String)
 }
