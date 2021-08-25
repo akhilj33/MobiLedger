@@ -59,6 +59,8 @@ class HomeViewModel(
     private var monthCount = 0
     var transList: ArrayList<TransactionData> = arrayListOf()
 
+    lateinit var currentMonth: String
+
     fun getHomeData(isPTR: Boolean) {
         _isLoading.value = true
         getUserName(isPTR)
@@ -272,7 +274,8 @@ class HomeViewModel(
     }
 
     private fun updateMonthLiveData() {
-        _monthNameLiveData.value = getDateInMMMMyyyyFormat(getCurrentMonth())
+        currentMonth = getDateInMMMMyyyyFormat(getCurrentMonth())
+        _monthNameLiveData.value = currentMonth
     }
 
     private fun getCurrentMonth(): Calendar = getCurrentDate().apply { add(Calendar.MONTH, monthCount) }

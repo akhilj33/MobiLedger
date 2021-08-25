@@ -34,3 +34,16 @@ enum class ProfilePicUpdateType(val type: String) {
         }
     }
 }
+
+enum class TransactionDetailScreenSource(val source: String) {
+    HomeScreen("home screen"), TransactionList("transaction list screen");
+
+    companion object {
+        fun getTransactionDetailScreenSource(source: String): TransactionDetailScreenSource {
+            return when (source) {
+                HomeScreen.source -> HomeScreen
+                else -> TransactionList
+            }
+        }
+    }
+}

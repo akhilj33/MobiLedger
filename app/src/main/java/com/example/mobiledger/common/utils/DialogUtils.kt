@@ -4,6 +4,7 @@ import androidx.fragment.app.FragmentManager
 import com.example.mobiledger.common.extention.getName
 import com.example.mobiledger.domain.entities.NewBudgetTemplateEntity
 import com.example.mobiledger.domain.entities.TransactionEntity
+import com.example.mobiledger.domain.enums.TransactionDetailScreenSource
 import com.example.mobiledger.presentation.addtransaction.AddTransactionDialogFragment
 import com.example.mobiledger.presentation.auth.ForgetPasswordDialogFragment
 import com.example.mobiledger.presentation.budget.MonthlyBudgetData
@@ -27,8 +28,12 @@ fun showAddTransactionDialogFragment(fragmentManager: FragmentManager) {
     )
 }
 
-fun showTransactionDetailDialogFragment(transactionEntity: TransactionEntity, fragmentManager: FragmentManager) {
-    val dialog = TransactionDetailDialogFragment.newInstance(transactionEntity)
+fun showTransactionDetailDialogFragment(
+    transactionEntity: TransactionEntity,
+    fragmentManager: FragmentManager,
+    sourceScreen: TransactionDetailScreenSource
+) {
+    val dialog = TransactionDetailDialogFragment.newInstance(transactionEntity, sourceScreen)
     dialog.isCancelable = true
     dialog.show(
         fragmentManager,
@@ -51,9 +56,9 @@ fun showAddBudgetDialogFragment(
     list: ArrayList<String>,
     month: String,
     budgetTotal: Long,
-    isAddCategory: Boolean
+    purpose: String
 ) {
-    val dialog = AddBudgetDialogFragment.newInstance(monthlyLimit, list, month, budgetTotal, isAddCategory)
+    val dialog = AddBudgetDialogFragment.newInstance(monthlyLimit, list, month, budgetTotal, purpose)
     dialog.show(
         fragmentManager,
         dialog.getName()

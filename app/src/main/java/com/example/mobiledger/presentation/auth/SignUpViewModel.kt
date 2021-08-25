@@ -49,9 +49,9 @@ class SignUpViewModel(
                             message = result.error.message
                         )
                     )
+                    _loadingState.value = false
                 }
             }
-            _loadingState.value = false
         }
     }
 

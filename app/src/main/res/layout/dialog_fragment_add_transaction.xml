@@ -199,18 +199,18 @@
             android:layout_height="wrap_content"
             android:visibility="gone"
             android:indeterminateTint="@color/colorAppBlue"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/btnSubmitTransaction"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:visibility="visible" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnSubmitTransaction"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/cdp_24"
             android:layout_marginBottom="@dimen/cdp_48"
-            android:layout_marginHorizontal="@dimen/cdp_48"
             android:text="@string/add_transaction"
             android:textSize="@dimen/csp_16"
             app:layout_constraintBottom_toBottomOf="parent"

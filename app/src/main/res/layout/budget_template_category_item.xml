@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/budgetCategoryRoot"
@@ -47,13 +48,6 @@
             app:layout_constraintGuide_percent="0.06" />
 
         <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/verticalStartGuideline70"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.7" />
-
-        <androidx.constraintlayout.widget.Guideline
             android:id="@+id/verticalEndGuideline"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -92,7 +86,6 @@
             android:maxLines="1"
             android:text="@string/category"
             app:layout_constraintBottom_toTopOf="@id/tvCategoryName"
-            app:layout_constraintEnd_toEndOf="@id/verticalStartGuideline70"
             app:layout_constraintStart_toEndOf="@id/thumbnail"
             app:layout_constraintTop_toTopOf="@id/horizontalStartGuideline_16dp" />
 
@@ -104,7 +97,8 @@
             android:layout_marginStart="@dimen/cdp_16"
             app:layout_constraintTop_toBottomOf="@id/textCategoryName"
             app:layout_constraintStart_toEndOf="@id/thumbnail"
-            app:layout_constraintEnd_toEndOf="@id/verticalStartGuideline70" />
+            app:layout_constraintBottom_toBottomOf="@id/thumbnail"
+            tools:text="dfcsdcsdc"/>
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tvBudget"
@@ -117,7 +111,6 @@
             android:text="@string/budget"
             android:textSize="@dimen/csp_18"
             app:layout_constraintBottom_toTopOf="@id/tvCategoryName"
-            app:layout_constraintStart_toEndOf="@id/verticalStartGuideline70"
             app:layout_constraintEnd_toEndOf="@id/verticalEndGuideline"
             app:layout_constraintTop_toTopOf="@id/horizontalStartGuideline_16dp" />
 
@@ -131,8 +124,9 @@
             android:maxLines="1"
             android:textSize="@dimen/csp_18"
             app:layout_constraintTop_toBottomOf="@id/tvBudget"
-            app:layout_constraintStart_toEndOf="@id/verticalStartGuideline70"
-            app:layout_constraintEnd_toEndOf="@id/verticalEndGuideline" />
+            app:layout_constraintEnd_toEndOf="@id/tvBudget"
+            app:layout_constraintBottom_toBottomOf="@id/thumbnail"
+            tools:text = "467564837"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>

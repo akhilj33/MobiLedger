@@ -11,6 +11,7 @@ import com.example.mobiledger.domain.AppResult
 import com.example.mobiledger.domain.entities.TransactionEntity
 import com.example.mobiledger.domain.entities.toMutableList
 import com.example.mobiledger.domain.enums.EditCategoryTransactionType
+import com.example.mobiledger.domain.enums.TransactionDetailScreenSource
 import com.example.mobiledger.domain.enums.TransactionType
 import com.example.mobiledger.domain.usecases.BudgetUseCase
 import com.example.mobiledger.domain.usecases.CategoryUseCase
@@ -36,11 +37,14 @@ class TransactionDetailViewModel(
     private val _loadingState = MutableLiveData<Boolean>(false)
     val loadingState: LiveData<Boolean> get() = _loadingState
 
-    val updateResultLiveData: LiveData<Event<Unit>> get() = _updateResultLiveData
-    private val _updateResultLiveData: MutableLiveData<Event<Unit>> = MutableLiveData()
+    //Live<Event<pair<isSuccess, isDelete/isRemove>>>
+    val updateResultLiveData: LiveData<Event<Pair<Boolean, Boolean>>> get() = _updateResultLiveData
+    private val _updateResultLiveData: MutableLiveData<Event<Pair<Boolean, Boolean>>> = MutableLiveData()
 
     lateinit var oldTransactionEntity: TransactionEntity
     var timeInMillis: Long? = null
+
+    lateinit var sourceScreen: TransactionDetailScreenSource
 
     fun getIncomeCategoryList() {
         _loadingState.value = true
@@ -125,7 +129,7 @@ class TransactionDetailViewModel(
                     budgetAmountUpdateJob
                 )
             )) {
-                is AppResult.Success -> _updateResultLiveData.value = Event(Unit)
+                is AppResult.Success -> _updateResultLiveData.value = Event(Pair(first = true, second = false))
                 is AppResult.Failure -> {
                     if (needToHandleAppError(result.error)) {
                         _errorLiveData.value = Event(
@@ -185,7 +189,7 @@ class TransactionDetailViewModel(
                     budgetAmountUpdateJob
                 )
             )) {
-                is AppResult.Success -> _updateResultLiveData.value = Event(Unit)
+                is AppResult.Success -> _updateResultLiveData.value = Event(Pair(first = true, second = false))
                 is AppResult.Failure -> {
                     if (needToHandleAppError(result.error)) {
                         _errorLiveData.value = Event(
@@ -201,6 +205,9 @@ class TransactionDetailViewModel(
         }
     }
 
+    /**
+     * Update Transaction Entity when date changes in different month
+     */
     fun updateDatabaseOnMonthYearChanged(monthYear: String, newTransactionEntity: TransactionEntity) {
         _loadingState.value = true
         val oldMonthYear =
@@ -210,7 +217,7 @@ class TransactionDetailViewModel(
             val addNewDataJob = async { addTransaction(monthYear, newTransactionEntity) }
 
             when (val result = getResultFromJobs(listOf(deleteOldDataJob, addNewDataJob))) {
-                is AppResult.Success -> _updateResultLiveData.value = Event(Unit)
+                is AppResult.Success -> _updateResultLiveData.value = Event(Pair(first = true, second = true))
                 is AppResult.Failure -> {
                     if (needToHandleAppError(result.error)) {
                         _errorLiveData.value = Event(
@@ -233,7 +240,7 @@ class TransactionDetailViewModel(
         _loadingState.value = true
         viewModelScope.launch {
             when (val result = transactionUseCase.updateMonthlyTransaction(monthYear, newTransactionEntity)) {
-                is AppResult.Success -> _updateResultLiveData.value = Event(Unit)
+                is AppResult.Success -> _updateResultLiveData.value = Event(Pair(first = true, second = false))
                 is AppResult.Failure -> {
                     if (needToHandleAppError(result.error)) {
                         _errorLiveData.value = Event(
@@ -254,7 +261,7 @@ class TransactionDetailViewModel(
             DateUtils.getDateInMMyyyyFormat(DateUtils.getCalendarFromMillis(oldTransactionEntity.transactionTime.toDate().time))
         viewModelScope.launch {
             when (val result = deleteOldTransaction(oldMonthYear)) {
-                is AppResult.Success -> _updateResultLiveData.value = Event(Unit)
+                is AppResult.Success -> _updateResultLiveData.value = Event(Pair(first = true, second = true))
                 is AppResult.Failure -> {
                     if (needToHandleAppError(result.error)) {
                         _errorLiveData.value = Event(

@@ -2,17 +2,20 @@ package com.example.mobiledger.presentation.budget.addbudget.applyTemplate
 
 import android.os.Bundle
 import android.view.View
+import android.view.View.OnLayoutChangeListener
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.mobiledger.R
 import com.example.mobiledger.common.base.BaseDialogFragment
 import com.example.mobiledger.common.extention.gone
-import com.example.mobiledger.common.extention.visible
 import com.example.mobiledger.common.extention.showAlertDialog
+import com.example.mobiledger.common.extention.visible
 import com.example.mobiledger.databinding.ApplyTemplateDialogLayoutBinding
 import com.example.mobiledger.databinding.SnackViewErrorBinding
 import com.example.mobiledger.presentation.OneTimeObserver
 import com.example.mobiledger.presentation.budgetTemplate.BudgetTemplateNavigator
+import com.google.android.material.bottomsheet.BottomSheetDialog
+
 
 class ApplyTemplateDialogFragment :
     BaseDialogFragment<ApplyTemplateDialogLayoutBinding, BudgetTemplateNavigator>(R.layout.apply_template_dialog_layout) {
@@ -65,9 +68,8 @@ class ApplyTemplateDialogFragment :
         })
 
         viewModel.templateApplied.observe(viewLifecycleOwner, OneTimeObserver {
-            it.let {
-                activityViewModel.templateApplied()
-            }
+            activityViewModel.templateApplied()
+            dismiss()
         })
 
     }
@@ -93,14 +95,51 @@ class ApplyTemplateDialogFragment :
         )
     }
 
-    private val onCancelButtonClick = {
-
-    }
+    private val onCancelButtonClick = {}
 
     private val onContinueClick = {
         viewModel.applyTemplate(viewModel.selectedId)
-
     }
+
+//    override fun onResume() {
+//        super.onResume()
+//        addGlobaLayoutListener(view)
+//    }
+
+    private fun addGlobaLayoutListener(view: View?) {
+        view?.addOnLayoutChangeListener(object : OnLayoutChangeListener {
+            override fun onLayoutChange(
+                v: View,
+                left: Int,
+                top: Int,
+                right: Int,
+                bottom: Int,
+                oldLeft: Int,
+                oldTop: Int,
+                oldRight: Int,
+                oldBottom: Int
+            ) {
+                setPeekHeight(v.measuredHeight)
+                v.removeOnLayoutChangeListener(this)
+            }
+        })
+    }
+
+    fun setPeekHeight(peekHeight: Int) {
+        (dialog as BottomSheetDialog).behavior.peekHeight = peekHeight
+//        val behavior = getBottomSheetBehaviour() ?: return
+//        behavior.peekHeight = peekHeight
+    }
+
+//    private fun getBottomSheetBehaviour(): BottomSheetBehavior<*>? {
+//        val layoutParams = (view?.parent as View).layoutParams as ConstraintLayout.LayoutParams
+//        val behavior = layoutParams.behavior
+//        if (behavior != null && behavior is BottomSheetBehavior<*>) {
+//            behavior.setBottomSheetCallback(mBottomSheetBehaviorCallback)
+//            return behavior
+//        }
+//        return null
+//    }
 
     companion object {
         private const val KEY_MONTH = "MONTH"

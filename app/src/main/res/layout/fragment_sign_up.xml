@@ -52,6 +52,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/name"
+                        android:inputType="textCapSentences"
                         android:textColorHint="@color/colorPrimary"
                         android:textSize="@dimen/csp_16" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -149,10 +150,11 @@
                     android:layout_height="wrap_content"
                     android:visibility="gone"
                     android:indeterminateTint="@color/colorAppBlue"
-                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintBottom_toTopOf="@id/btnSignup"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:visibility="visible"/>
 
                 <androidx.appcompat.widget.AppCompatCheckBox
                     android:id="@+id/checkBoxTAndC"

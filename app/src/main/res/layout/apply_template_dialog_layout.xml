@@ -30,7 +30,8 @@
             android:layout_marginTop="@dimen/cdp_16"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="@id/verticalStartGuideline"
-            app:layout_constraintEnd_toEndOf="@id/verticalEndGuideline" />
+            app:layout_constraintEnd_toEndOf="@id/verticalEndGuideline"
+            app:layout_constraintBottom_toTopOf="@id/rvBudgetTemplateList"/>
 
         <TextView
             android:id="@+id/tvNoTemplate"
@@ -53,6 +54,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/cdp_16"
             android:layout_marginBottom="@dimen/cdp_24"
+            app:layout_constraintVertical_weight="1"
             app:layout_constraintEnd_toEndOf="@id/verticalEndGuideline"
             app:layout_constraintStart_toStartOf="@id/verticalStartGuideline"
             app:layout_constraintTop_toBottomOf="@id/textTemplate"

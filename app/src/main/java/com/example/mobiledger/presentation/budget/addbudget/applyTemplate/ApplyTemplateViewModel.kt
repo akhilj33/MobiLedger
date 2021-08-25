@@ -16,8 +16,7 @@ import com.example.mobiledger.presentation.Event
 import com.example.mobiledger.presentation.budget.MonthlyBudgetData
 import com.example.mobiledger.presentation.budget.MonthlyCategoryBudget
 import com.example.mobiledger.presentation.budget.budgetscreen.BudgetViewModel
-import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import java.util.*
 
 class ApplyTemplateViewModel(
@@ -32,11 +31,7 @@ class ApplyTemplateViewModel(
     private val _errorLiveData: MutableLiveData<Event<ViewError>> = MutableLiveData()
     val errorLiveData: LiveData<Event<ViewError>> = _errorLiveData
 
-    private val _budgetTemplateCategoryList: MutableLiveData<Event<List<BudgetTemplateCategoryEntity>>> = MutableLiveData()
-
     private val _totalSum = MutableLiveData<Long>(0)
-
-    private val _budgetTemplateSummary: MutableLiveData<Event<NewBudgetTemplateEntity>> = MutableLiveData()
 
     private val _templateApplied: MutableLiveData<Event<Unit>> = MutableLiveData()
     val templateApplied: LiveData<Event<Unit>> get() = _templateApplied
@@ -47,8 +42,6 @@ class ApplyTemplateViewModel(
     var month = ""
     var selectedId = ""
     var totalSumVal: Long = 0
-    var maxLimit: Long = 0
-    var budgetCategoriesList = emptyList<BudgetTemplateCategoryEntity>()
     var existingBudgetCatList: ArrayList<String> = arrayListOf()
 
     fun getBudgetTemplateList() {
@@ -83,9 +76,7 @@ class ApplyTemplateViewModel(
         viewModelScope.launch {
             when (val result = budgetTemplateUseCase.getBudgetTemplateSummary(id)) {
                 is AppResult.Success -> {
-                    _budgetTemplateSummary.value = Event(result.data)
-                    maxLimit = Event(result.data).peekContent().maxBudgetLimit
-                    getBudgetTemplateCategoryList(id)
+                    getBudgetTemplateCategoryList(id, result.data.maxBudgetLimit)
                 }
                 is AppResult.Failure -> {
                     _errorLiveData.value = Event(
@@ -99,13 +90,11 @@ class ApplyTemplateViewModel(
         }
     }
 
-    private fun getBudgetTemplateCategoryList(id: String) {
+    private fun getBudgetTemplateCategoryList(id: String, maxBudgetLimit: Long) {
         viewModelScope.launch {
             when (val result = budgetTemplateUseCase.getBudgetTemplateCategoryList(id)) {
                 is AppResult.Success -> {
-                    _budgetTemplateCategoryList.value = Event(result.data)
-                    budgetCategoriesList = result.data
-                    getTotalAmount()
+                    getTotalAmount(maxBudgetLimit, result.data)
                 }
 
                 is AppResult.Failure -> {
@@ -120,7 +109,7 @@ class ApplyTemplateViewModel(
         }
     }
 
-    private fun getTotalAmount() {
+    private fun getTotalAmount(maxBudgetLimit: Long, budgetCategoriesList: List<BudgetTemplateCategoryEntity>) {
         viewModelScope.launch {
             var sum: Long = 0
             budgetCategoriesList.forEach {
@@ -129,11 +118,11 @@ class ApplyTemplateViewModel(
             }
             _totalSum.value = sum
             totalSumVal = sum
-            setMonthlyBudgetLimit(MonthlyBudgetData(maxLimit, totalSumVal))
+            setMonthlyBudgetLimit(MonthlyBudgetData(maxBudgetLimit, totalSumVal), budgetCategoriesList)
         }
     }
 
-    private fun setMonthlyBudgetLimit(monthlyBudgetData: MonthlyBudgetData) {
+    private fun setMonthlyBudgetLimit(monthlyBudgetData: MonthlyBudgetData, budgetCategoriesList: List<BudgetTemplateCategoryEntity>) {
         viewModelScope.launch {
             val setBudgetJob =
                 async { budgetUseCase.setMonthlyBudget(month, monthlyBudgetData) }
@@ -155,45 +144,46 @@ class ApplyTemplateViewModel(
 
     }
 
-    private fun addAllBudgetCategory(budgetCategoryList: List<BudgetTemplateCategoryEntity>) {
-        budgetCategoryList.forEach {
-            getMonthlyCategorySummary(it.category, it.categoryBudget)
+    private suspend fun addAllBudgetCategory(budgetCategoryList: List<BudgetTemplateCategoryEntity>) {
+        viewModelScope.launch{
+            val runningTask = budgetCategoryList.map {
+                async { getMonthlyCategorySummary(it.category, it.categoryBudget) }
+            }
+            runningTask.forEach {
+                it.await()
+            }
+            _templateApplied.value = Event(Unit)
+            _isLoading.value = false
         }
-        _templateApplied.value = Event(Unit)
-        _isLoading.value = false
     }
 
-    private fun getMonthlyCategorySummary(category: String, categoryBudget: Long) {
-        _isLoading.value = true
-        viewModelScope.launch {
-            when (val result = categoryUseCase.getMonthlyCategorySummary(month, category)) {
+    private suspend fun getMonthlyCategorySummary(category: String, categoryBudget: Long) {
+         withContext(Dispatchers.Main) {
+              when (val result = categoryUseCase.getMonthlyCategorySummary(month, category)) {
                 is AppResult.Success -> {
                     val categoryExpense = if (result.data != null) result.data.categoryAmount else 0L
-                    addCategoryBudgetToFirebase(
-                        category, categoryBudget, categoryExpense, month
-                    )
+                    return@withContext addCategoryBudgetToFirebase(category, categoryBudget, categoryExpense, month)
                 }
                 is AppResult.Failure -> {
-                    addCategoryBudgetToFirebase(category, categoryBudget, 0, month)
                     _errorLiveData.value = Event(
                         ViewError(
                             viewErrorType = ViewErrorType.NON_BLOCKING,
                             message = result.error.message
                         )
                     )
+                   return@withContext addCategoryBudgetToFirebase(category, categoryBudget, 0, month)
                 }
             }
         }
-
     }
 
-    private fun addCategoryBudgetToFirebase(category: String, categoryBudget: Long, categoryExpense: Long, month: String) {
-        viewModelScope.launch {
+    private suspend fun addCategoryBudgetToFirebase(category: String, categoryBudget: Long, categoryExpense: Long, month: String): Boolean {
+        return withContext(Dispatchers.Main) {
             when (val result = budgetUseCase.addCategoryBudget(
                 month, MonthlyCategoryBudget(category, categoryBudget, categoryExpense)
             )) {
                 is AppResult.Success -> {
-
+                    true
                 }
 
                 is AppResult.Failure -> {
@@ -203,6 +193,7 @@ class ApplyTemplateViewModel(
                             message = result.error.message
                         )
                     )
+                    false
                 }
             }
         }

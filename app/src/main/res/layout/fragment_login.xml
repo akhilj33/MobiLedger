@@ -156,10 +156,11 @@
             android:layout_height="wrap_content"
             android:visibility="gone"
             android:indeterminateTint="@color/colorAppBlue"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/btnLogin"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:visibility="visible"/>
 
         <include
             android:id="@+id/includeErrorView"

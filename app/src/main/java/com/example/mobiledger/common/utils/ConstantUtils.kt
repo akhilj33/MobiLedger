@@ -4,9 +4,13 @@ object ConstantUtils {
 
     // Request Key
     const val PROFILE_PIC_REQUEST_KEY = "PROFILE_PIC_REQUEST_KEY"
+    const val TRANSACTION_DETAIL_REQUEST_KEY = "TRANSACTION_DETAIL_REQUEST_KEY"
 
     // Bundle Key
     const val PROFILE_PIC_BUNDLE_KEY = "PROFILE_PIC_BUNDLE_KEY"
+    const val TD_IS_DELETE_BUNDLE_KEY = "TD_IS_DELETE_BUNDLE_KEY"
+    const val TD_ENTITY_BUNDLE_KEY = "TD_ENTITY_BUNDLE_KEY"
+
 
     const val APP_NAME = "MobiLedger"
     const val USERS = "Users"

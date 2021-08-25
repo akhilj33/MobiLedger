@@ -138,6 +138,8 @@
     <string name="date_created">Date Created: %1$s</string>
     <string name="template_already_exist">Template name already exists</string>
     <string name="reset_budget">Reset \u0020 </string>
+    <string name="reset_heading">Reset Budget</string>
+    <string name="reset_budget_msg">Are you sure you want to delete current budget setup?</string>
 
     <!-- NOTIFICATION -->
     <string name="channel_transaction">Transaction channel</string>
@@ -170,7 +172,8 @@
     <string name="budget_templates">Budget Templates</string>
     <string name="delete_budget_templates">Delete</string>
     <string name="delete_budget_templates_msg">Are you sure you want to delete this template?</string>
-    <string name="update_your_budget">Update Your Budget</string>
+    <string name="update_your_budget">Update Your Budget Limit</string>
+    <string name="update_category_budget">Update %1$s\'s Budget</string>
     <string name="apply">Apply</string>
     <string name="templates">Templates</string>
     <string name="apply_template_msg">Are you sure you want to apply this template?</string>
@@ -227,9 +230,12 @@
     <string name="monthly_limit_amount">%1$s \u0020 </string>
     <string name="percent_spent">You have already spent %1$s of your monthly limit </string>
     <string name="set_monthly_limit">Set Monthly Limit</string>
+    <string name="update_monthly_limit">Update Monthly Limit</string>
     <string name="category_budget_empty_msg">Please Add Category wise Budget by clicking below. \n\nYou can also create a new budget template from profile section for future references</string>
     <string name="get_started_with_google">Get started with Google</string>
     <string name="total_budget_set">Total Budget set: %1$s / %2$s (%3$s)</string>
+
+    <string name="transaction">Transactions - %1$s</string>
 
 
 </resources>
