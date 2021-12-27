@@ -23,8 +23,8 @@ class EditBudgetTemplateDialogViewModel(
     private val _isLoading: MutableLiveData<Boolean> = MutableLiveData(false)
     val isLoading: LiveData<Boolean> get() = _isLoading
 
-    private val _dataUpdatedResult: MutableLiveData<Event<Unit>> = MutableLiveData()
-    val dataUpdatedResult: LiveData<Event<Unit>> get() = _dataUpdatedResult
+    private val _dataUpdatedResult: MutableLiveData<Event<Long?>> = MutableLiveData()
+    val dataUpdatedResult: LiveData<Event<Long?>> get() = _dataUpdatedResult
 
     private val _dataAdded = MutableLiveData<Boolean>(false)
     val dataAdded: LiveData<Boolean> get() = _dataAdded
@@ -67,7 +67,7 @@ class EditBudgetTemplateDialogViewModel(
         viewModelScope.launch {
             when (val result = budgetTemplateUseCase.updateBudgetCategoryAmount(id, category, value)) {
                 is AppResult.Success -> {
-                    _dataUpdatedResult.value = Event(result.data)
+                    _dataUpdatedResult.value = Event(null)
                 }
                 is AppResult.Failure -> {
                     _errorLiveData.value = Event(
@@ -87,7 +87,7 @@ class EditBudgetTemplateDialogViewModel(
         viewModelScope.launch {
             when (val result = budgetTemplateUseCase.deleteCategoryFromBudgetTemplate(id, category)) {
                 is AppResult.Success -> {
-                    _dataUpdatedResult.value = Event(result.data)
+                    _dataUpdatedResult.value = Event(null)
                 }
                 is AppResult.Failure -> {
                     _errorLiveData.value = Event(
@@ -107,7 +107,7 @@ class EditBudgetTemplateDialogViewModel(
         viewModelScope.launch {
             when (val result = budgetTemplateUseCase.updateBudgetTemplateMaxLimit(id, value)) {
                 is AppResult.Success -> {
-                    _dataUpdatedResult.value = Event(result.data)
+                    _dataUpdatedResult.value = Event(value)
                 }
                 is AppResult.Failure -> {
                     _errorLiveData.value = Event(

@@ -93,7 +93,7 @@ fun showAddNewTemplateDialogFragment(
 fun showEditBudgetTemplateDialogFragment(
     fragmentManager: FragmentManager,
     templateId: String,
-    list: ArrayList<String>,
+    list: List<String>,
     category: String,
     oldBudget: Long,
     totalBudget: Long,

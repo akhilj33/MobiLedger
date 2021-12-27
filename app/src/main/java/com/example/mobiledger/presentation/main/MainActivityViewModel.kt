@@ -64,8 +64,8 @@ class MainActivityViewModel(
     private val _activateReminder: MutableLiveData<Event<Boolean>> = MutableLiveData(Event(false))
     val activateReminder: LiveData<Event<Boolean>> get() = _activateReminder
 
-    private val _updateBudgetTemplateScreen: MutableLiveData<Event<Unit>> = MutableLiveData()
-    val updateBudgetTemplateScreen: LiveData<Event<Unit>> = _updateBudgetTemplateScreen
+    private val _updateBudgetTemplateScreen: MutableLiveData<Event<Long?>> = MutableLiveData()
+    val updateBudgetTemplateScreen: LiveData<Event<Long?>> = _updateBudgetTemplateScreen
 
     private val _addNewBudgetTemplate: MutableLiveData<Event<Unit>> = MutableLiveData()
     val addNewBudgetTemplate: LiveData<Event<Unit>> = _addNewBudgetTemplate
@@ -130,8 +130,8 @@ class MainActivityViewModel(
         _updateBudgetResultLiveData.value = Event(Unit)
     }
 
-    fun updateUpdateBudgetFragment() {
-        _updateBudgetTemplateScreen.value = Event(Unit)
+    fun updateUpdateBudgetFragment(maxLimit: Long? = null) {
+        _updateBudgetTemplateScreen.value = Event(maxLimit)
     }
 
     fun addNewBudgetTemplate() {

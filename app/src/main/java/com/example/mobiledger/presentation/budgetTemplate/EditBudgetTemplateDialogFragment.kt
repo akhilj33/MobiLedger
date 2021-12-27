@@ -96,7 +96,7 @@ class EditBudgetTemplateDialogFragment :
         })
 
         viewModel.dataUpdatedResult.observe(viewLifecycleOwner, OneTimeObserver {
-            activityViewModel.updateUpdateBudgetFragment()
+            activityViewModel.updateUpdateBudgetFragment(it)
             dismiss()
         })
 
@@ -158,13 +158,23 @@ class EditBudgetTemplateDialogFragment :
         viewModel.addNewBudgetTemplateCategory(getCategoryText(), getAmountText().toLong())
     }
 
-    private fun getAmountText(): String = viewBinding.amountTv.text.toString()
+    private fun getAmountText(): String = viewBinding.amountTv.text.toString().trim()
     private fun getCategoryText(): String = viewBinding.categorySpinnerTv.text.toString()
 
     private fun isValidAmount(): Boolean = (getAmountText().isNotBlank() && getAmountText().toLong() >= 0)
     private fun isValidCategory(): Boolean = getCategoryText().isNotBlank()
-    private fun isBudgetOverflow(): Boolean = viewModel.budgetTotal + getAmountText().toLong() > viewModel.maxLimit
+    private fun isBudgetOverflow(): Boolean {
+        return  abc() - getAmountText().toLong() > 0L
+        }
+    private fun isMaxLimitUnderflow(): Boolean = getAmountText().toLong() < viewModel.budgetTotal
     private fun isMaxLimitChanged(): Boolean = viewModel.maxLimit!=getAmountText().toLong()
+
+    private fun abc(): Long {
+        return if(viewModel.isAddCategory)
+            viewModel.maxLimit - viewModel.budgetTotal
+        else
+            viewModel.maxLimit - (viewModel.budgetTotal + viewModel.oldBudget)
+    }
 
 /*---------------------------------------Text Watchers-----------------------------------------*/
 
@@ -175,11 +185,19 @@ class EditBudgetTemplateDialogFragment :
 
         override fun afterTextChanged(editable: Editable?) {
             if (isValidAmount()) {
-                if (viewModel.isUpdateMaxLimit && !isMaxLimitChanged()) viewBinding.btnUpdate.disable()
-                else{
-                    viewBinding.btnUpdate.enable()
-                    updateAmountViewBasedOnValidation(viewBinding.amountLayout, isValid = true)
+                if (viewModel.isUpdateMaxLimit){
+                    if (isMaxLimitUnderflow() || !isMaxLimitChanged()) viewBinding.btnUpdate.disable()
+                    else viewBinding.btnUpdate.enable()
                 }
+                else if (viewModel.isAddCategory){
+                    if (isBudgetOverflow()) viewBinding.btnSeBudget.disable()
+                    else viewBinding.btnSeBudget.enable()
+                }
+                else {
+                    if (isBudgetOverflow()) viewBinding.btnUpdate.disable()
+                    else viewBinding.btnUpdate.enable()
+                }
+                updateAmountViewBasedOnValidation(viewBinding.amountLayout, isValid = true)
             }
         }
     }
@@ -206,8 +224,8 @@ class EditBudgetTemplateDialogFragment :
             isValidCategory() && isValidAmount() && !isBudgetOverflow()
         } else {
             if (viewModel.isUpdateMaxLimit) {
-                updateViewBasedOnValidation(viewBinding.amountLayout, isValidAmount())
-                isValidAmount()
+                updateAmountViewBasedOnValidation(viewBinding.amountLayout, isValidAmount())
+                isValidAmount() && !isMaxLimitUnderflow()
             } else {
                 updateViewBasedOnValidation(viewBinding.amountLayout, isValidAmount())
                 isValidAmount() && !isBudgetOverflow()
@@ -220,9 +238,14 @@ class EditBudgetTemplateDialogFragment :
         isValid: Boolean
     ) {
         if (isValid) {
-            if (viewModel.isAddCategory && isBudgetOverflow()) {
-                textInputLayout.error = getString(R.string.budget_overflow_error, (viewModel.maxLimit - viewModel.budgetTotal).toString())
-            } else textInputLayout.error = null
+            if (viewModel.isUpdateMaxLimit){
+                if (isMaxLimitUnderflow())
+                    textInputLayout.error = getString(R.string.max_limit_underflow_error, viewModel.budgetTotal.toString())
+                else textInputLayout.error = null
+            }
+            else if (isBudgetOverflow())
+                textInputLayout.error = getString(R.string.budget_overflow_error, abc().toString())
+            else textInputLayout.error = null
         } else {
             textInputLayout.error = getString(R.string.field_required)
         }

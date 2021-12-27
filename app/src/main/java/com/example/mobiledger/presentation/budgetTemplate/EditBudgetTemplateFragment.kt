@@ -37,9 +37,9 @@ class EditBudgetTemplateFragment :
                 viewModel.id = it
             }
         }
-        viewModel.getBudgetTemplateCategoryList(viewModel.id)
         viewModel.getBudgetTemplateSummary(viewModel.id)
-        viewModel.getExpenseCategoryList()
+        viewModel.getBudgetTemplateCategoryList(viewModel.id)
+        viewModel.getLeftOverBudgetCategoryList()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -59,7 +59,7 @@ class EditBudgetTemplateFragment :
                     viewModel.giveFinalExpenseList(),
                     "",
                     0L,
-                    viewModel.totalSumVal,
+                    viewModel.budgetTemplateAmount.value?.peekContent()?:0L,
                     viewModel.maxLimit,
                     isAddCategory = true,
                     isUpdateMaxLimit = false
@@ -76,7 +76,7 @@ class EditBudgetTemplateFragment :
                     viewModel.giveFinalExpenseList(),
                     "",
                     0L,
-                    viewModel.totalSumVal,
+                    viewModel.budgetTemplateAmount.value?.peekContent()?:0L,
                     viewModel.maxLimit,
                     isAddCategory = false,
                     isUpdateMaxLimit = true
@@ -106,10 +106,10 @@ class EditBudgetTemplateFragment :
             }
         })
 
-        viewModel.budgetTemplateSummary.observe(viewLifecycleOwner, OneTimeObserver{
+        viewModel.budgetTemplateAmount.observe(viewLifecycleOwner, OneTimeObserver{
             it.let {
-                val totalBudget = viewModel.totalSumVal
-                val monthlyLimit = it.maxBudgetLimit
+                val totalBudget = it
+                val monthlyLimit = viewModel.maxLimit
                 val percent = ((totalBudget.toFloat() / monthlyLimit.toFloat())*100).roundToOneDecimal().toPercent().trim()
                 viewBinding.tvBudgetAmount.text = getString(R.string.total_budget_set, totalBudget.toString(), monthlyLimit.toString(), percent)
             }
@@ -117,6 +117,7 @@ class EditBudgetTemplateFragment :
 
         activityViewModel.updateBudgetTemplateScreen.observe(viewLifecycleOwner, OneTimeObserver {
             it.let {
+                it?.let { viewModel.maxLimit = it }
                 viewModel.refreshData()
             }
         })
@@ -130,7 +131,7 @@ class EditBudgetTemplateFragment :
             viewModel.giveFinalExpenseList(),
             category.category,
             category.categoryBudget,
-            viewModel.totalSumVal,
+            viewModel.budgetTemplateAmount.value?.peekContent()?:0L,
             viewModel.maxLimit,
             isAddCategory = false,
             isUpdateMaxLimit = false
