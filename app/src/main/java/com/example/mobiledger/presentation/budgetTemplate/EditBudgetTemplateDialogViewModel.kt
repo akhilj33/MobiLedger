@@ -23,8 +23,8 @@ class EditBudgetTemplateDialogViewModel(
     private val _isLoading: MutableLiveData<Boolean> = MutableLiveData(false)
     val isLoading: LiveData<Boolean> get() = _isLoading
 
-    private val _dataUpdatedResult: MutableLiveData<Event<Long?>> = MutableLiveData()
-    val dataUpdatedResult: LiveData<Event<Long?>> get() = _dataUpdatedResult
+    private val _dataUpdatedResult: MutableLiveData<Event<Pair<Boolean, Long?>>> = MutableLiveData()
+    val dataUpdatedResult: LiveData<Event<Pair<Boolean, Long?>>> get() = _dataUpdatedResult
 
     private val _dataAdded = MutableLiveData<Boolean>(false)
     val dataAdded: LiveData<Boolean> get() = _dataAdded
@@ -45,7 +45,6 @@ class EditBudgetTemplateDialogViewModel(
                 id, BudgetTemplateCategoryEntity(category, categoryBudget)
             )) {
                 is AppResult.Success -> {
-                    _isLoading.value = false
                     _dataAdded.value = true
                 }
 
@@ -68,7 +67,7 @@ class EditBudgetTemplateDialogViewModel(
             when (val result =
                 budgetTemplateUseCase.updateBudgetCategoryAmount(id, category, value)) {
                 is AppResult.Success -> {
-                    _dataUpdatedResult.value = Event(null)
+                    _dataUpdatedResult.value = Event(Pair(true, null))
                 }
                 is AppResult.Failure -> {
                     _errorLiveData.value = Event(
@@ -89,7 +88,7 @@ class EditBudgetTemplateDialogViewModel(
             when (val result =
                 budgetTemplateUseCase.deleteCategoryFromBudgetTemplate(id, category)) {
                 is AppResult.Success -> {
-                    _dataUpdatedResult.value = Event(null)
+                    _dataUpdatedResult.value = Event(Pair(true, null))
                 }
                 is AppResult.Failure -> {
                     _errorLiveData.value = Event(
@@ -109,7 +108,7 @@ class EditBudgetTemplateDialogViewModel(
         viewModelScope.launch {
             when (val result = budgetTemplateUseCase.updateBudgetTemplateMaxLimit(id, value)) {
                 is AppResult.Success -> {
-                    _dataUpdatedResult.value = Event(value)
+                    _dataUpdatedResult.value = Event(Pair(true, value))
                 }
                 is AppResult.Failure -> {
                     _errorLiveData.value = Event(

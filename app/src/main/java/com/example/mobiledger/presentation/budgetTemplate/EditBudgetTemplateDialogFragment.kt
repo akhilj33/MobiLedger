@@ -96,7 +96,7 @@ class EditBudgetTemplateDialogFragment :
         })
 
         viewModel.dataUpdatedResult.observe(viewLifecycleOwner, OneTimeObserver {
-            activityViewModel.updateUpdateBudgetFragment(it)
+            activityViewModel.updateUpdateBudgetFragment(it.second)
             dismiss()
         })
 

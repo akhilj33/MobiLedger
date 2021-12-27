@@ -29,19 +29,24 @@ import com.example.mobiledger.presentation.stats.StatsNavigator
 import com.example.mobiledger.presentation.statsdetail.StatsDetailFragment
 import com.example.mobiledger.presentation.transactionList.TransactionListFragment
 import java.util.*
-import kotlin.collections.ArrayList
 
 class MainActivityNavigator constructor(
     @IdRes private val containerId: Int,
-    private val fragmentManager: FragmentManager, private val openEmailClient: ((EmailEntity) -> Unit)
-) : HomeNavigator, LoginNavigator, SignUpNavigator, SplashNavigator, ProfileNavigator, BudgetNavigator, StatsNavigator,
+    private val fragmentManager: FragmentManager,
+    private val openEmailClient: ((EmailEntity) -> Unit)
+) : HomeNavigator, LoginNavigator, SignUpNavigator, SplashNavigator, ProfileNavigator,
+    BudgetNavigator, StatsNavigator,
     BudgetTemplateNavigator, OnBoardingNavigator, AboutUsNavigator {
 
 
     /*---------------------------------Main Activity-------------------------------------*/
 
     fun isDashBoardOnTopOfStack(): Boolean {
-        return FragmentTransactionHelper.isFragmentOnTopOfStack(fragmentManager, FragmentTagUtil.DASHBOARD_FRAGMENT_TAG, containerId)
+        return FragmentTransactionHelper.isFragmentOnTopOfStack(
+            fragmentManager,
+            FragmentTagUtil.DASHBOARD_FRAGMENT_TAG,
+            containerId
+        )
     }
 
     private fun popAllFragments() {
@@ -110,7 +115,11 @@ class MainActivityNavigator constructor(
         )
     }
 
-    override fun navigateToStatsDetailScreen(categoryNameList: List<String>, amount: Long, monthYear: Calendar) {
+    override fun navigateToStatsDetailScreen(
+        categoryNameList: List<String>,
+        amount: Long,
+        monthYear: Calendar
+    ) {
         FragmentTransactionHelper.replaceFragment(
             fragmentManager,
             StatsDetailFragment.newInstance(categoryNameList, amount, monthYear),
@@ -134,7 +143,10 @@ class MainActivityNavigator constructor(
         )
     }
 
-    override fun navigateToTransactionFragmentScreen(transactionList: ArrayList<TransactionData>, monthYear: String) {
+    override fun navigateToTransactionFragmentScreen(
+        transactionList: ArrayList<TransactionData>,
+        monthYear: String
+    ) {
         FragmentTransactionHelper.replaceFragment(
             fragmentManager,
             TransactionListFragment.newInstance(transactionList, monthYear),
@@ -142,10 +154,10 @@ class MainActivityNavigator constructor(
         )
     }
 
-    override fun navigateToEditBudgetTemplateScreen(id: String) {
+    override fun navigateToEditBudgetTemplateScreen(id: String, templateName: String) {
         FragmentTransactionHelper.replaceFragment(
             fragmentManager,
-            EditBudgetTemplateFragment.newInstance(id),
+            EditBudgetTemplateFragment.newInstance(id, templateName),
             containerId, addToBackStack = true
         )
     }

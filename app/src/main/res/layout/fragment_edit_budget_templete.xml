@@ -45,11 +45,11 @@
                     android:src="@drawable/baseline_arrow_white_24" />
 
                 <TextView
+                    android:id="@+id/tvTemplateName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/cdp_16"
                     android:layout_toEndOf="@id/btnBack"
-                    android:text="@string/budget_template"
                     android:textColor="@color/colorWhite"
                     android:textSize="@dimen/csp_20" />
 
@@ -58,13 +58,13 @@
                     style="@style/GelionSemiBoldWhite14"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/curved_bar_light_blue"
-                    android:paddingVertical="@dimen/cdp_4"
-                    android:paddingHorizontal="@dimen/cdp_10"
-                    android:drawableEnd="@drawable/edit_white_14"
-                    android:text="@string/edit"
                     android:layout_alignParentEnd="true"
-                    android:layout_marginEnd="@dimen/cdp_16"/>
+                    android:layout_marginEnd="@dimen/cdp_16"
+                    android:background="@drawable/curved_bar_light_blue"
+                    android:drawableEnd="@drawable/edit_white_14"
+                    android:paddingHorizontal="@dimen/cdp_10"
+                    android:paddingVertical="@dimen/cdp_4"
+                    android:text="@string/edit" />
 
             </RelativeLayout>
         </com.google.android.material.appbar.MaterialToolbar>
@@ -85,28 +85,28 @@
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tvNoTemplate"
+            style="@style/GelionSemiBoldBlue18"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/cdp_32"
+            android:layout_marginBottom="@dimen/cdp_48"
             android:text="@string/no_templates_categories_added"
-            style="@style/GelionSemiBoldBlue18"
             android:textAlignment="center"
             android:visibility="gone"
-            android:layout_marginTop="@dimen/cdp_32"
-            app:layout_constraintVertical_chainStyle="packed"
-            android:layout_marginBottom="@dimen/cdp_48"
-            app:layout_constraintTop_toBottomOf="@id/budgetTemplateToolbar"
             app:layout_constraintBottom_toTopOf="@id/bottomGuideline85"
+            app:layout_constraintEnd_toEndOf="@id/verticalEndGuideline"
             app:layout_constraintStart_toStartOf="@id/verticalStartGuideline"
-            app:layout_constraintEnd_toEndOf="@id/verticalEndGuideline" />
+            app:layout_constraintTop_toBottomOf="@id/budgetTemplateToolbar"
+            app:layout_constraintVertical_chainStyle="packed" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="@dimen/cdp_0"
             android:layout_height="@dimen/cdp_0"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            app:layout_constraintTop_toBottomOf="@id/budgetTemplateToolbar"
             app:layout_constraintBottom_toTopOf="@id/bottomGuideline85"
+            app:layout_constraintEnd_toEndOf="@id/verticalEndGuideline"
             app:layout_constraintStart_toStartOf="@id/verticalStartGuideline"
-            app:layout_constraintEnd_toEndOf="@id/verticalEndGuideline">
+            app:layout_constraintTop_toBottomOf="@id/budgetTemplateToolbar">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvBudgetTemplatesCategory"
@@ -114,9 +114,9 @@
                 android:layout_height="match_parent"
                 android:layout_marginTop="@dimen/cdp_16"
                 android:overScrollMode="never"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -124,46 +124,46 @@
             android:id="@+id/bottomView"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:layout_constraintTop_toBottomOf="@id/bottomGuideline"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/bottomGuideline" />
 
         <View
             android:id="@+id/budgetDetailView"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:background="@color/colorLightGrey"
-            app:layout_constraintTop_toBottomOf="@id/bottomGuideline85"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/bottomGuideline"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/bottomGuideline"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/bottomGuideline85" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tvBudgetAmount"
+            style="@style/GelionSemiBoldAccent12"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            tools:text="Total Budget set: 5000 / 50000 (10%)"
-            style="@style/GelionSemiBoldAccent12"
+            android:ellipsize="end"
             android:gravity="center"
             android:maxLines="1"
-            android:ellipsize="end"
             android:textSize="@dimen/csp_14"
             app:autoSizeMaxTextSize="@dimen/csp_14"
             app:autoSizeMinTextSize="@dimen/csp_10"
             app:autoSizeStepGranularity="2sp"
             app:autoSizeTextType="uniform"
-            app:layout_constraintTop_toTopOf="@id/budgetDetailView"
             app:layout_constraintBottom_toBottomOf="@id/budgetDetailView"
+            app:layout_constraintEnd_toEndOf="@id/verticalEndGuideline"
             app:layout_constraintStart_toStartOf="@id/verticalStartGuideline"
-            app:layout_constraintEnd_toEndOf="@id/verticalEndGuideline" />
+            app:layout_constraintTop_toTopOf="@id/budgetDetailView"
+            tools:text="Total Budget set: 5000 / 50000 (10%)" />
 
         <ProgressBar
             android:id="@+id/progressBar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="gone"
             android:indeterminateTint="@color/colorAppBlue"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -176,9 +176,9 @@
             android:layout_margin="@dimen/cdp_16"
             android:text="@string/add_category_budget"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/bottomGuideline"
+            app:layout_constraintEnd_toEndOf="@id/verticalEndGuideline"
             app:layout_constraintStart_toStartOf="@id/verticalStartGuideline"
-            app:layout_constraintEnd_toEndOf="@id/verticalEndGuideline"  />
+            app:layout_constraintTop_toBottomOf="@id/bottomGuideline" />
 
         <include
             android:id="@+id/includeErrorView"

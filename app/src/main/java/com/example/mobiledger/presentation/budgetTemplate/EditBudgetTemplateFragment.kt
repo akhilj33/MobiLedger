@@ -16,7 +16,10 @@ import com.example.mobiledger.presentation.budgetTemplate.budgetTemplateAdapters
 
 
 class EditBudgetTemplateFragment :
-    BaseFragment<FragmentEditBudgetTempleteBinding, BudgetTemplateNavigator>(R.layout.fragment_edit_budget_templete, StatusBarColor.BLUE) {
+    BaseFragment<FragmentEditBudgetTempleteBinding, BudgetTemplateNavigator>(
+        R.layout.fragment_edit_budget_templete,
+        StatusBarColor.BLUE
+    ) {
 
     private val viewModel: EditBudgetTemplateViewModel by viewModels { viewModelFactory }
 
@@ -36,6 +39,9 @@ class EditBudgetTemplateFragment :
             getString(KEY_ID)?.let {
                 viewModel.id = it
             }
+            getString(TEMPLATE_NAME)?.let {
+                viewModel.templateName = it
+            }
         }
         viewModel.getBudgetTemplateSummary(viewModel.id)
         viewModel.getBudgetTemplateCategoryList(viewModel.id)
@@ -47,6 +53,8 @@ class EditBudgetTemplateFragment :
         setUpObserver()
         setOnClickListener()
         initRecyclerView()
+        viewBinding.tvTemplateName.text =
+            viewModel.templateName ?: getString(R.string.budget_template)
     }
 
     private fun setOnClickListener() {
@@ -59,7 +67,7 @@ class EditBudgetTemplateFragment :
                     viewModel.giveFinalExpenseList(),
                     "",
                     0L,
-                    viewModel.budgetTemplateAmount.value?.peekContent()?:0L,
+                    viewModel.budgetTemplateAmount.value?.peekContent() ?: 0L,
                     viewModel.maxLimit,
                     isAddCategory = true,
                     isUpdateMaxLimit = false
@@ -76,7 +84,7 @@ class EditBudgetTemplateFragment :
                     viewModel.giveFinalExpenseList(),
                     "",
                     0L,
-                    viewModel.budgetTemplateAmount.value?.peekContent()?:0L,
+                    viewModel.budgetTemplateAmount.value?.peekContent() ?: 0L,
                     viewModel.maxLimit,
                     isAddCategory = false,
                     isUpdateMaxLimit = true
@@ -103,7 +111,7 @@ class EditBudgetTemplateFragment :
             }
         })
 
-        viewModel.budgetTemplateCategoryList.observe(viewLifecycleOwner, OneTimeObserver{
+        viewModel.budgetTemplateCategoryList.observe(viewLifecycleOwner, OneTimeObserver {
             it.let {
                 budgetTemplateCategoryRecyclerAdapter.addList(it)
                 if (it.isNotEmpty()) {
@@ -114,20 +122,26 @@ class EditBudgetTemplateFragment :
             }
         })
 
-        viewModel.budgetTemplateAmount.observe(viewLifecycleOwner, OneTimeObserver{
+        viewModel.budgetTemplateAmount.observe(viewLifecycleOwner, OneTimeObserver {
             it.let {
                 val totalBudget = it
                 val monthlyLimit = viewModel.maxLimit
-                val percent = ((totalBudget.toFloat() / monthlyLimit.toFloat())*100).roundToOneDecimal().toPercent().trim()
-                viewBinding.tvBudgetAmount.text = getString(R.string.total_budget_set, totalBudget.toString(), monthlyLimit.toString(), percent)
+                val percent =
+                    ((totalBudget.toFloat() / monthlyLimit.toFloat()) * 100).roundToOneDecimal()
+                        .toPercent().trim()
+                viewBinding.tvBudgetAmount.text = getString(
+                    R.string.total_budget_set,
+                    totalBudget.toString(),
+                    monthlyLimit.toString(),
+                    percent
+                )
             }
         })
 
         activityViewModel.updateBudgetTemplateScreen.observe(viewLifecycleOwner, OneTimeObserver {
-            it.let {
-                it?.let { viewModel.maxLimit = it }
-                viewModel.refreshData()
-            }
+            val maxLimit = it.second
+            maxLimit?.let { viewModel.maxLimit = maxLimit }
+            viewModel.refreshData()
         })
 
     }
@@ -139,7 +153,7 @@ class EditBudgetTemplateFragment :
             viewModel.giveFinalExpenseList(),
             category.category,
             category.categoryBudget,
-            viewModel.budgetTemplateAmount.value?.peekContent()?:0L,
+            viewModel.budgetTemplateAmount.value?.peekContent() ?: 0L,
             viewModel.maxLimit,
             isAddCategory = false,
             isUpdateMaxLimit = false
@@ -148,10 +162,12 @@ class EditBudgetTemplateFragment :
 
     companion object {
         private const val KEY_ID = "ID"
-        fun newInstance(id: String) = EditBudgetTemplateFragment()
+        private const val TEMPLATE_NAME = "TEMPLATE_NAME"
+        fun newInstance(id: String, templateName: String) = EditBudgetTemplateFragment()
             .apply {
                 arguments = Bundle().apply {
                     putString(KEY_ID, id)
+                    putString(TEMPLATE_NAME, templateName)
                 }
             }
     }

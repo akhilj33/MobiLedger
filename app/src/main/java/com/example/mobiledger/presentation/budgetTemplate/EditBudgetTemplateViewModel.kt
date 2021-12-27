@@ -8,13 +8,10 @@ import com.example.mobiledger.R
 import com.example.mobiledger.common.base.BaseViewModel
 import com.example.mobiledger.domain.AppResult
 import com.example.mobiledger.domain.entities.BudgetTemplateCategoryEntity
-import com.example.mobiledger.domain.entities.NewBudgetTemplateEntity
 import com.example.mobiledger.domain.usecases.BudgetTemplateUseCase
 import com.example.mobiledger.domain.usecases.CategoryUseCase
 import com.example.mobiledger.presentation.Event
 import kotlinx.coroutines.launch
-import java.util.*
-import kotlin.collections.ArrayList
 
 class EditBudgetTemplateViewModel(
     private val budgetTemplateUseCase: BudgetTemplateUseCase,
@@ -27,13 +24,16 @@ class EditBudgetTemplateViewModel(
     private val _errorLiveData: MutableLiveData<Event<ViewError>> = MutableLiveData()
     val errorLiveData: LiveData<Event<ViewError>> = _errorLiveData
 
-    private val _budgetTemplateCategoryList: MutableLiveData<Event<List<BudgetTemplateCategoryEntity>>> = MutableLiveData()
-    val budgetTemplateCategoryList: MutableLiveData<Event<List<BudgetTemplateCategoryEntity>>> = _budgetTemplateCategoryList
+    private val _budgetTemplateCategoryList: MutableLiveData<Event<List<BudgetTemplateCategoryEntity>>> =
+        MutableLiveData()
+    val budgetTemplateCategoryList: MutableLiveData<Event<List<BudgetTemplateCategoryEntity>>> =
+        _budgetTemplateCategoryList
 
     private val _budgetTemplateAmount: MutableLiveData<Event<Long>> = MutableLiveData()
     val budgetTemplateAmount: MutableLiveData<Event<Long>> = _budgetTemplateAmount
 
     lateinit var id: String
+    var templateName: String? = null
     var budgetCategoriesList = emptyList<BudgetTemplateCategoryEntity>()
     var maxLimit: Long = 0
 
