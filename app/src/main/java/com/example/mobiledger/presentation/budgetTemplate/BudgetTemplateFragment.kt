@@ -54,6 +54,14 @@ class BudgetTemplateFragment : BaseFragment<FragmentBudgetTemplateBinding, Budge
     }
 
     private fun setUpObserver() {
+        viewModel.loadingState.observe(viewLifecycleOwner, {
+            if (it) {
+                viewBinding.progressBar.visible()
+            } else {
+                viewBinding.progressBar.gone()
+            }
+        })
+
         viewModel.budgetTemplateList.observe(viewLifecycleOwner, OneTimeObserver{
             it.let {
                 budgetTemplateFragmentRecyclerAdapter.addList(it)

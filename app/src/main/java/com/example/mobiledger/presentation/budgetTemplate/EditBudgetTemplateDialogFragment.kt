@@ -163,17 +163,15 @@ class EditBudgetTemplateDialogFragment :
 
     private fun isValidAmount(): Boolean = (getAmountText().isNotBlank() && getAmountText().toLong() >= 0)
     private fun isValidCategory(): Boolean = getCategoryText().isNotBlank()
-    private fun isBudgetOverflow(): Boolean {
-        return  abc() - getAmountText().toLong() > 0L
-        }
+    private fun isBudgetOverflow() = getOverflowAmount() - getAmountText().toLong() < 0L
     private fun isMaxLimitUnderflow(): Boolean = getAmountText().toLong() < viewModel.budgetTotal
     private fun isMaxLimitChanged(): Boolean = viewModel.maxLimit!=getAmountText().toLong()
 
-    private fun abc(): Long {
+    private fun getOverflowAmount(): Long {
         return if(viewModel.isAddCategory)
             viewModel.maxLimit - viewModel.budgetTotal
         else
-            viewModel.maxLimit - (viewModel.budgetTotal + viewModel.oldBudget)
+            viewModel.maxLimit - (viewModel.budgetTotal - viewModel.oldBudget)
     }
 
 /*---------------------------------------Text Watchers-----------------------------------------*/
@@ -244,7 +242,7 @@ class EditBudgetTemplateDialogFragment :
                 else textInputLayout.error = null
             }
             else if (isBudgetOverflow())
-                textInputLayout.error = getString(R.string.budget_overflow_error, abc().toString())
+                textInputLayout.error = getString(R.string.budget_overflow_error, getOverflowAmount().toString())
             else textInputLayout.error = null
         } else {
             textInputLayout.error = getString(R.string.field_required)

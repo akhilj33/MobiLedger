@@ -39,8 +39,8 @@ class EditBudgetTemplateDialogViewModel(
     var isUpdateMaxLimit: Boolean = false
 
     fun addNewBudgetTemplateCategory(category: String, categoryBudget: Long) {
+        _isLoading.value = true
         viewModelScope.launch {
-            _isLoading.value = true
             when (val result = budgetTemplateUseCase.addBudgetTemplateCategory(
                 id, BudgetTemplateCategoryEntity(category, categoryBudget)
             )) {
@@ -65,7 +65,8 @@ class EditBudgetTemplateDialogViewModel(
     fun updateBudgetTemplateCategoryAmount(value: Long) {
         _isLoading.value = true
         viewModelScope.launch {
-            when (val result = budgetTemplateUseCase.updateBudgetCategoryAmount(id, category, value)) {
+            when (val result =
+                budgetTemplateUseCase.updateBudgetCategoryAmount(id, category, value)) {
                 is AppResult.Success -> {
                     _dataUpdatedResult.value = Event(null)
                 }
@@ -76,16 +77,17 @@ class EditBudgetTemplateDialogViewModel(
                             message = result.error.message
                         )
                     )
-                    _isLoading.value = false
                 }
             }
+            _isLoading.value = false
         }
     }
 
     fun deleteBudgetTemplateCategory() {
         _isLoading.value = true
         viewModelScope.launch {
-            when (val result = budgetTemplateUseCase.deleteCategoryFromBudgetTemplate(id, category)) {
+            when (val result =
+                budgetTemplateUseCase.deleteCategoryFromBudgetTemplate(id, category)) {
                 is AppResult.Success -> {
                     _dataUpdatedResult.value = Event(null)
                 }
@@ -96,9 +98,9 @@ class EditBudgetTemplateDialogViewModel(
                             message = result.error.message
                         )
                     )
-                    _isLoading.value = false
                 }
             }
+            _isLoading.value = false
         }
     }
 
@@ -116,9 +118,9 @@ class EditBudgetTemplateDialogViewModel(
                             message = result.error.message
                         )
                     )
-                    _isLoading.value = false
                 }
             }
+            _isLoading.value = false
         }
     }
 

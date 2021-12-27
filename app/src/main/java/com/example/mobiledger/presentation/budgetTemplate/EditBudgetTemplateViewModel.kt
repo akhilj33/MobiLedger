@@ -21,7 +21,7 @@ class EditBudgetTemplateViewModel(
     private val categoryUseCase: CategoryUseCase
 ) : BaseViewModel() {
 
-    private val _loadingState = MutableLiveData<Boolean>(false)
+    private val _loadingState = MutableLiveData(false)
     val loadingState: LiveData<Boolean> get() = _loadingState
 
     private val _errorLiveData: MutableLiveData<Event<ViewError>> = MutableLiveData()
@@ -63,12 +63,11 @@ class EditBudgetTemplateViewModel(
                     )
                 }
             }
+            _loadingState.value = false
         }
-        _loadingState.value = false
     }
 
     fun getBudgetTemplateSummary(id: String) {
-        _loadingState.value = true
         viewModelScope.launch {
             when (val result = budgetTemplateUseCase.getBudgetTemplateSummary(id)) {
                 is AppResult.Success -> {
@@ -85,7 +84,6 @@ class EditBudgetTemplateViewModel(
                 }
             }
         }
-        _loadingState.value = false
     }
 
     private fun getTotalAmount() {
@@ -99,7 +97,6 @@ class EditBudgetTemplateViewModel(
 
     //-------------------- GET BUDGET DATA --------------------
     fun getLeftOverBudgetCategoryList() {
-        _loadingState.value = true
         viewModelScope.launch {
             when (val result = categoryUseCase.getUserExpenseCategories()) {
                 is AppResult.Success -> {
@@ -115,7 +112,6 @@ class EditBudgetTemplateViewModel(
                     )
                 }
             }
-            _loadingState.value = false
         }
     }
 

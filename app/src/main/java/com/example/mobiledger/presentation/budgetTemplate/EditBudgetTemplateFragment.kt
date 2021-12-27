@@ -95,6 +95,14 @@ class EditBudgetTemplateFragment :
     }
 
     private fun setUpObserver() {
+        viewModel.loadingState.observe(viewLifecycleOwner, {
+            if (it) {
+                viewBinding.progressBar.visible()
+            } else {
+                viewBinding.progressBar.gone()
+            }
+        })
+
         viewModel.budgetTemplateCategoryList.observe(viewLifecycleOwner, OneTimeObserver{
             it.let {
                 budgetTemplateCategoryRecyclerAdapter.addList(it)
