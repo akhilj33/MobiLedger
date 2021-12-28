@@ -8,15 +8,18 @@ import com.example.mobiledger.R
 import com.example.mobiledger.common.base.BaseFragment
 import com.example.mobiledger.common.extention.gone
 import com.example.mobiledger.common.extention.setOnSafeClickListener
-import com.example.mobiledger.common.extention.visible
 import com.example.mobiledger.common.extention.showAlertDialog
+import com.example.mobiledger.common.extention.visible
 import com.example.mobiledger.common.utils.showAddNewTemplateDialogFragment
 import com.example.mobiledger.databinding.FragmentBudgetTemplateBinding
 import com.example.mobiledger.databinding.SnackViewErrorBinding
 import com.example.mobiledger.presentation.OneTimeObserver
 import com.example.mobiledger.presentation.budgetTemplate.budgetTemplateAdapters.BudgetTemplateFragmentRecyclerAdapter
 
-class BudgetTemplateFragment : BaseFragment<FragmentBudgetTemplateBinding, BudgetTemplateNavigator>(R.layout.fragment_budget_template, StatusBarColor.BLUE) {
+class BudgetTemplateFragment : BaseFragment<FragmentBudgetTemplateBinding, BudgetTemplateNavigator>(
+    R.layout.fragment_budget_template,
+    StatusBarColor.BLUE
+) {
 
     private val viewModel: BudgetTemplateViewModel by viewModels { viewModelFactory }
 
@@ -44,17 +47,31 @@ class BudgetTemplateFragment : BaseFragment<FragmentBudgetTemplateBinding, Budge
                 activity?.onBackPressed()
             }
             btnNewTemplateEmpty.setOnSafeClickListener {
-                showAddNewTemplateDialogFragment(requireActivity().supportFragmentManager, viewModel.templateList)
+                showAddNewTemplateDialogFragment(
+                    requireActivity().supportFragmentManager,
+                    viewModel.templateList
+                )
             }
 
             btnNewTemplate.setOnSafeClickListener {
-                showAddNewTemplateDialogFragment(requireActivity().supportFragmentManager, viewModel.templateList)
+                showAddNewTemplateDialogFragment(
+                    requireActivity().supportFragmentManager,
+                    viewModel.templateList
+                )
             }
         }
     }
 
     private fun setUpObserver() {
-        viewModel.budgetTemplateList.observe(viewLifecycleOwner, OneTimeObserver{
+        viewModel.loadingState.observe(viewLifecycleOwner, {
+            if (it) {
+                viewBinding.progressBar.visible()
+            } else {
+                viewBinding.progressBar.gone()
+            }
+        })
+
+        viewModel.budgetTemplateList.observe(viewLifecycleOwner, OneTimeObserver {
             it.let {
                 budgetTemplateFragmentRecyclerAdapter.addList(it)
                 if (it.isNotEmpty()) {
@@ -74,7 +91,7 @@ class BudgetTemplateFragment : BaseFragment<FragmentBudgetTemplateBinding, Budge
             }
         })
 
-        viewModel.dataDeleted.observe(viewLifecycleOwner, OneTimeObserver{
+        viewModel.dataDeleted.observe(viewLifecycleOwner, OneTimeObserver {
             it.let {
                 if (it) {
                     viewModel.refreshData()
@@ -86,25 +103,25 @@ class BudgetTemplateFragment : BaseFragment<FragmentBudgetTemplateBinding, Budge
     private fun initRecyclerView() {
         val linearLayoutManager = LinearLayoutManager(activity)
         viewBinding.rvBudgetTemplates.apply {
-                layoutManager = linearLayoutManager
-                adapter = budgetTemplateFragmentRecyclerAdapter
-            }
+            layoutManager = linearLayoutManager
+            adapter = budgetTemplateFragmentRecyclerAdapter
+        }
     }
 
-    private val onTemplateItemClick = fun(id: String) {
-        navigator?.navigateToEditBudgetTemplateScreen(id)
+    private val onTemplateItemClick = fun(id: String, templateName: String) {
+        navigator?.navigateToEditBudgetTemplateScreen(id, templateName)
     }
 
     private val onDeleteItemClick = fun(id: String) {
         viewModel.id = id
         activity?.showAlertDialog(
-                    getString(R.string.delete_budget_templates),
-                    getString(R.string.delete_budget_templates_msg),
-                    getString(R.string.yes),
-                    getString(R.string.no),
-                    onCancelButtonClick,
-                    onContinueClick
-                )
+            getString(R.string.delete_budget_templates),
+            getString(R.string.delete_budget_templates_msg),
+            getString(R.string.yes),
+            getString(R.string.no),
+            onCancelButtonClick,
+            onContinueClick
+        )
     }
 
     private val onCancelButtonClick = {

@@ -132,6 +132,7 @@
     <string name="transactions">transactions</string>
     <string name="update_budget_heading">Update %1$s Budget</string>
     <string name="budget_overflow_error">Monthly total budget exceeded your monthly limit. Enter value below ₹%1$s or increase your monthly limit.</string>
+    <string name="max_limit_underflow_error">Monthly limit can\'t be lower than your total budget. Enter value above or equal to ₹%1$s.</string>
     <string name="you_have_not_created_the_budget_for_this_month">You have not created the budget for this month</string>
     <string name="categories_budget">Categories Budget</string>
     <string name="monthly_limit_money">Monthly Limit: ₹%1$s</string>

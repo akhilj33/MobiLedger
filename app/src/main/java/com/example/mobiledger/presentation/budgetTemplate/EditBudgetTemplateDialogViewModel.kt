@@ -23,8 +23,8 @@ class EditBudgetTemplateDialogViewModel(
     private val _isLoading: MutableLiveData<Boolean> = MutableLiveData(false)
     val isLoading: LiveData<Boolean> get() = _isLoading
 
-    private val _dataUpdatedResult: MutableLiveData<Event<Unit>> = MutableLiveData()
-    val dataUpdatedResult: LiveData<Event<Unit>> get() = _dataUpdatedResult
+    private val _dataUpdatedResult: MutableLiveData<Event<Pair<Boolean, Long?>>> = MutableLiveData()
+    val dataUpdatedResult: LiveData<Event<Pair<Boolean, Long?>>> get() = _dataUpdatedResult
 
     private val _dataAdded = MutableLiveData<Boolean>(false)
     val dataAdded: LiveData<Boolean> get() = _dataAdded
@@ -39,13 +39,12 @@ class EditBudgetTemplateDialogViewModel(
     var isUpdateMaxLimit: Boolean = false
 
     fun addNewBudgetTemplateCategory(category: String, categoryBudget: Long) {
+        _isLoading.value = true
         viewModelScope.launch {
-            _isLoading.value = true
             when (val result = budgetTemplateUseCase.addBudgetTemplateCategory(
                 id, BudgetTemplateCategoryEntity(category, categoryBudget)
             )) {
                 is AppResult.Success -> {
-                    _isLoading.value = false
                     _dataAdded.value = true
                 }
 
@@ -65,9 +64,10 @@ class EditBudgetTemplateDialogViewModel(
     fun updateBudgetTemplateCategoryAmount(value: Long) {
         _isLoading.value = true
         viewModelScope.launch {
-            when (val result = budgetTemplateUseCase.updateBudgetCategoryAmount(id, category, value)) {
+            when (val result =
+                budgetTemplateUseCase.updateBudgetCategoryAmount(id, category, value)) {
                 is AppResult.Success -> {
-                    _dataUpdatedResult.value = Event(result.data)
+                    _dataUpdatedResult.value = Event(Pair(true, null))
                 }
                 is AppResult.Failure -> {
                     _errorLiveData.value = Event(
@@ -76,18 +76,19 @@ class EditBudgetTemplateDialogViewModel(
                             message = result.error.message
                         )
                     )
-                    _isLoading.value = false
                 }
             }
+            _isLoading.value = false
         }
     }
 
     fun deleteBudgetTemplateCategory() {
         _isLoading.value = true
         viewModelScope.launch {
-            when (val result = budgetTemplateUseCase.deleteCategoryFromBudgetTemplate(id, category)) {
+            when (val result =
+                budgetTemplateUseCase.deleteCategoryFromBudgetTemplate(id, category)) {
                 is AppResult.Success -> {
-                    _dataUpdatedResult.value = Event(result.data)
+                    _dataUpdatedResult.value = Event(Pair(true, null))
                 }
                 is AppResult.Failure -> {
                     _errorLiveData.value = Event(
@@ -96,9 +97,9 @@ class EditBudgetTemplateDialogViewModel(
                             message = result.error.message
                         )
                     )
-                    _isLoading.value = false
                 }
             }
+            _isLoading.value = false
         }
     }
 
@@ -107,7 +108,7 @@ class EditBudgetTemplateDialogViewModel(
         viewModelScope.launch {
             when (val result = budgetTemplateUseCase.updateBudgetTemplateMaxLimit(id, value)) {
                 is AppResult.Success -> {
-                    _dataUpdatedResult.value = Event(result.data)
+                    _dataUpdatedResult.value = Event(Pair(true, value))
                 }
                 is AppResult.Failure -> {
                     _errorLiveData.value = Event(
@@ -116,9 +117,9 @@ class EditBudgetTemplateDialogViewModel(
                             message = result.error.message
                         )
                     )
-                    _isLoading.value = false
                 }
             }
+            _isLoading.value = false
         }
     }
 

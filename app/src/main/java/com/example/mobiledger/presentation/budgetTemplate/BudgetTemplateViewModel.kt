@@ -16,7 +16,7 @@ class BudgetTemplateViewModel(
     private val budgetTemplateUseCase: BudgetTemplateUseCase
 ) : BaseViewModel() {
 
-    private val _loadingState = MutableLiveData<Boolean>(false)
+    private val _loadingState = MutableLiveData(false)
     val loadingState: LiveData<Boolean> get() = _loadingState
 
     private val _errorLiveData: MutableLiveData<Event<ViewError>> = MutableLiveData()
