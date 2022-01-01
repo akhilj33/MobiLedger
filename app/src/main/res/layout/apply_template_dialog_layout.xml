@@ -3,62 +3,32 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/verticalStartGuideline"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.04" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/verticalEndGuideline"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.96" />
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/textTemplate"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/templates"
             style="@style/GelionSemiBold18"
-            android:layout_marginTop="@dimen/cdp_16"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="@id/verticalStartGuideline"
-            app:layout_constraintEnd_toEndOf="@id/verticalEndGuideline"
-            app:layout_constraintBottom_toTopOf="@id/rvBudgetTemplateList"/>
+            android:layout_marginStart="@dimen/cdp_14"
+            android:layout_marginEnd="@dimen/cdp_14"
+            android:layout_marginTop="@dimen/cdp_16"/>
 
         <TextView
             android:id="@+id/tvNoTemplate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/cdp_48"
             android:text="@string/no_templates_added"
             style="@style/GelionSemiBoldBlue18"
             android:textAlignment="center"
             android:visibility="gone"
-            android:layout_marginTop="@dimen/cdp_24"
-            android:layout_marginBottom="@dimen/cdp_24"
-            app:layout_constraintTop_toBottomOf="@id/textTemplate"
-            app:layout_constraintStart_toStartOf="@id/verticalStartGuideline"
-            app:layout_constraintEnd_toEndOf="@id/verticalEndGuideline"
-            app:layout_constraintBottom_toBottomOf="parent" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvBudgetTemplateList"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/cdp_16"
-            android:layout_marginBottom="@dimen/cdp_24"
-            app:layout_constraintVertical_weight="1"
-            app:layout_constraintEnd_toEndOf="@id/verticalEndGuideline"
-            app:layout_constraintStart_toStartOf="@id/verticalStartGuideline"
-            app:layout_constraintTop_toBottomOf="@id/textTemplate"
-            app:layout_constraintBottom_toTopOf="@id/includeErrorView" />
+            android:layout_gravity="center_vertical|center_horizontal"
+            tools:visibility = "visible"/>
 
         <ProgressBar
             android:id="@+id/rvTemplateListProgressBar"
@@ -66,21 +36,28 @@
             android:layout_height="wrap_content"
             android:visibility="gone"
             android:indeterminateTint="@color/colorAppBlue"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/cdp_14"
+            tools:visibility="visible"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvBudgetTemplateList"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/csp_14"
+            android:layout_marginStart="@dimen/cdp_14"
+            android:layout_marginEnd="@dimen/cdp_14"
+            android:layout_weight="1"/>
 
         <include
             android:id="@+id/includeErrorView"
             layout="@layout/snack_view_error"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="@dimen/cdp_14"
             tools:visibility="visible" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
+
 </layout>
