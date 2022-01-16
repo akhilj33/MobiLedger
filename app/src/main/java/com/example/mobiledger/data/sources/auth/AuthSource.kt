@@ -78,8 +78,8 @@ class AuthSourceImpl(
     override suspend fun signInViaGoogle(idToken: String?): AppResult<Pair<Boolean, UserEntity>> {
         var response: Task<AuthResult>? = null
         var exception: Exception? = null
-        val credential = GoogleAuthProvider.getCredential(idToken, null)
         try {
+            val credential = GoogleAuthProvider.getCredential(idToken, null)
             response = firebaseAuth.signInWithCredential(credential)
             response.await()
         } catch (e: Exception) {

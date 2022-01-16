@@ -21,6 +21,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.material.textfield.TextInputLayout
+import kotlinx.coroutines.NonCancellable.isActive
 
 class LoginFragment : BaseFragment<FragmentLoginBinding, LoginNavigator>(R.layout.fragment_login, StatusBarColor.BLUE) {
 
@@ -94,8 +95,19 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, LoginNavigator>(R.layou
 
         val googleSignInClient = GoogleSignIn.getClient(requireActivity(), gso)
 
-        val signInIntent = googleSignInClient.signInIntent
-        activityResultLauncher.launch(signInIntent)
+        if (GoogleSignIn.getLastSignedInAccount(requireActivity()) != null) {
+            googleSignInClient.signOut().addOnCompleteListener {
+                if (isActive) {
+                    val signInIntent = googleSignInClient.signInIntent
+                    activityResultLauncher.launch(signInIntent)
+                }
+            }
+        } else {
+            val signInIntent = googleSignInClient.signInIntent
+            activityResultLauncher.launch(signInIntent)
+        }
+
+
     }
 
     private val activityResultLauncher =
